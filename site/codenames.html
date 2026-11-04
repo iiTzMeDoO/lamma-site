@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>كلمات سرية — لَمّة | Lamma</title>
+<meta name="description" content="متل كود نيمز: الشات بينضم، الستريمر بيقسم الفرق وبيختار السباي ماستر والكابتن، وبس الكابتن بيحسم.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="لَمّة | Lamma">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="https://lamma.sites.tab.bot/codenames.html">
+<meta property="og:title" content="كلمات سرية — لَمّة | Lamma">
+<meta property="og:description" content="متل كود نيمز: الشات بينضم، الستريمر بيقسم الفرق وبيختار السباي ماستر والكابتن، وبس الكابتن بيحسم.">
+<meta property="og:image" content="https://lamma.sites.tab.bot/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="كلمات سرية — لَمّة | Lamma">
+<meta name="twitter:image" content="https://lamma.sites.tab.bot/og.png">
+<link rel="canonical" href="https://lamma.sites.tab.bot/codenames.html">
+<link rel="icon" href="favicon.png">
+<link rel="preload" href="assets/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="games2.css">
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body class="gpage g-codenames" data-game="codenames" data-title-ar="كلمات سرية — لَمّة" data-title-en="Secret Words — Lamma">
+<a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المحتوى</a>
+<header class="top">
+  <a class="brand" href="./" data-keep aria-label="لَمّة LAMMA"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span><small data-i18n="brand_sub">كل ألعاب الشات بمكان واحد</small></a>
+  <a class="chan-chip" href="./" data-keep id="conn" data-state="connecting" title="Twitch"><span class="dot"></span><bdi data-chan>#iitzmedoo</bdi><span class="conn-tx" id="connTxt">…</span></a>
+  <div class="top-end">
+    <label class="switch ctrl-only"><input type="checkbox" id="demoToggle"><span class="track"><span class="knob"></span></span><span data-i18n="demo">تجربة</span></label>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" data-i18n-aria="sound" aria-label="صوت">🔊</button>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+<main id="main" class="gp">
+  <div class="gp-head">
+    <a class="back" href="./" data-keep>‹ <span data-i18n="all_games">كل الألعاب</span></a>
+    <h1><span class="gp-ico" aria-hidden="true" style="--c1:#ff4b4b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><path d="M14 17.5c1-1.6 2-2.4 3-2.4s2 .8 3 2.4c-1 1.6-2 2.4-3 2.4s-2-.8-3-2.4z"/><circle cx="17" cy="17.5" r=".9"/></svg></span> <span data-i18n="g_title">كلمات سرية</span></h1>
+    <p class="gp-how" data-i18n="g_how"></p>
+  </div>
+  <div class="gp-grid">
+    <section class="stage-wrap" aria-label="stage">
+      <div class="stage" id="stage">
+        <div class="kn2 camfit" id="gs" dir="ltr"></div>
+
+        <p class="wait-ctrl" id="waitCtrl" hidden data-i18n="waiting_ctrl">بانتظار لوحة التحكم</p>
+      </div>
+    </section>
+    <aside class="side" id="side">
+      <div class="card ctrl ctrl-only" id="ctrl">
+        <div class="w2-status" id="kStatus" aria-live="polite"></div>
+        <div class="btn-row"><button class="btn btn-main" id="kStart" type="button" data-i18n="k_start">ابدأ اللعبة</button></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost btn-sm" id="kEnd" type="button" data-i18n="k_endturn">إنهاء الدور</button>
+          <button class="btn btn-ghost btn-sm" id="kNew" type="button" data-i18n="k_newboard">لوح جديد</button>
+          <button class="btn btn-ghost btn-sm" id="kLobby" type="button" data-i18n="k_tolobby">رجوع للفرق</button>
+        </div>
+        <section class="k2-teams" aria-label="teams">
+          <div class="k2-head"><h3 data-i18n="k_teams">الفرق</h3><label class="check"><input type="checkbox" id="kOpen" checked><span data-i18n="k_open">!join مفتوح</span></label></div>
+          <div class="btn-row"><button class="btn btn-ghost btn-sm" id="kSplit" type="button" data-i18n="k_split">قسّم تلقائي</button><button class="btn btn-ghost btn-sm" id="kRoles" type="button" data-i18n="k_roles">أدوار عشوائية</button><button class="btn btn-ghost btn-sm" id="kClearT" type="button" data-i18n="k_clearteams">رجّع الكل للانتظار</button></div>
+          <p class="hint-box" data-i18n="k_drag_hint">اسحب الأسماء بين الأعمدة، أو استعمل الأزرار: 🔴 🔵 للفريق، 🕵️ سباي ماستر، ⭐ كابتن (هو اللي اختيارو بينحسب).</p>
+          <div class="k2-cols">
+            <div class="k2-col" data-team="" id="kColWait"><h4><span data-i18n="k_waiting">بالانتظار</span> <span class="cnt" id="kNWait">0</span></h4><ul class="k2-list" id="kListWait"></ul></div>
+            <div class="k2-col t-red" data-team="red"><h4><span data-i18n="k_red">الأحمر</span> <span class="cnt" id="kNRed">0</span></h4><ul class="k2-list" id="kListRed"></ul></div>
+            <div class="k2-col t-blue" data-team="blue"><h4><span data-i18n="k_blue">الأزرق</span> <span class="cnt" id="kNBlue">0</span></h4><ul class="k2-list" id="kListBlue"></ul></div>
+          </div>
+          <div class="k2-roles">
+            <div class="k2-role t-red">
+              <label class="fld"><span data-i18n="k_spy_red">سباي ماستر الأحمر</span><select id="kSpyRed"></select></label>
+              <label class="fld"><span data-i18n="k_cap_red">كابتن الأحمر</span><select id="kCapRed"></select></label>
+              <button class="btn btn-ghost btn-sm" id="kLinkRed" type="button" data-i18n="k_link">🔗 نسخ رابط السباي ماستر</button>
+            </div>
+            <div class="k2-role t-blue">
+              <label class="fld"><span data-i18n="k_spy_blue">سباي ماستر الأزرق</span><select id="kSpyBlue"></select></label>
+              <label class="fld"><span data-i18n="k_cap_blue">كابتن الأزرق</span><select id="kCapBlue"></select></label>
+              <button class="btn btn-ghost btn-sm" id="kLinkBlue" type="button" data-i18n="k_link">🔗 نسخ رابط السباي ماستر</button>
+            </div>
+          </div>
+          <p class="small muted" data-i18n="k_link_help">ابعت الرابط بالخاص للسباي ماستر بس (ديسكورد/واتساب). فيه المفتاح، فلا تحطو بالشات ولا عالستريم. كل لوح جديد إلو رابط جديد.</p>
+        </section>
+        <div class="kn-clue-row k2-clue"><label class="fld"><span data-i18n="k_clue">التلميح (إذا السباي ماستر قالو بالصوت)</span><input id="kClue" dir="auto" maxlength="30"></label><label class="fld"><span data-i18n="k_num">كم كلمة</span><select id="kNum"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option value="0">∞</option></select></label></div>
+        <div class="btn-row"><button class="btn btn-cy btn-sm" id="kClueBtn" type="button" data-i18n="k_setclue">حط التلميح</button></div>
+        <div class="secret kn-key-card" id="kKeyCard"><div class="sc-top"><span class="sc-lbl" data-i18n="k_key">المفتاح — إلك بس (ما بيطلع بالأوفرلي)</span><button class="btn btn-ghost btn-sm" id="kHide" type="button" data-i18n="c_hide">إخفاء</button></div><div class="kn-key" id="kKey"></div></div>
+        <details class="w2-more">
+          <summary data-i18n="w_settings">الإعدادات</summary>
+          <div class="fgrid">
+            <label class="fld"><span data-i18n="k_timer">وقت الدور</span><select id="kTimer"><option value="0" data-i18n="k_timer_off">بلا وقت</option><option value="60">60 ث</option><option value="90">90 ث</option><option value="120" selected>120 ث</option><option value="180">180 ث</option></select></label>
+            <label class="fld"><span data-i18n="k_tally">اقتراحات الشات</span><select id="kTally"><option value="1" selected data-i18n="k_tally_on">بتبين عالكروت</option><option value="0" data-i18n="k_tally_off">مخفية</option></select></label>
+          </div>
+          <label class="check"><input type="checkbox" id="kClick" checked><span data-i18n="k_click">الضغط عالكرت هون بيكشفو (إذا الكابتن قال بالصوت)</span></label>
+        </details>
+
+      </div>
+      <details class="card obs-card ctrl-only">
+        <summary><span data-i18n="obs_title">رابط OBS</span></summary>
+        <p class="small" data-i18n="obs_help"></p>
+        <div class="copy-row"><input id="obsUrl" readonly dir="ltr" aria-label="OBS URL"><button class="btn btn-ghost" id="obsCopy" type="button" data-i18n="copy">نسخ</button></div>
+        <p class="small muted" data-i18n="obs_dock"></p>
+      </details>
+      <details class="card cmd-card ctrl-only" open>
+        <summary data-i18n="cmds">أوامر الشات</summary>
+        <h4 data-i18n="cmds_all">للكل</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!join</bdi></code> <span data-i18n="k_cmd_join"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!pick</bdi> 7</code> <span data-i18n="k_cmd_pick"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!clue</bdi> word 2</code> <span data-i18n="k_cmd_clue"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!pass</bdi></code> <span data-i18n="k_cmd_pass"></span></li></ul>
+        <h4 data-i18n="cmds_mod">للستريمر والمودز</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!codenames</bdi></code> <span data-i18n="k_cmd_new"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!endturn</bdi></code> <span data-i18n="k_cmd_end"></span></li></ul>
+      </details>
+
+      <div class="card feed-card ctrl-only"><h3 data-i18n="chat_feed">الشات</h3><p class="muted small" id="feedEmpty" data-i18n="feed_empty"></p><ol class="feed" id="feed" aria-live="off"></ol></div>
+      <div class="card lb-card ctrl-only"><div class="lb-head"><h3 data-i18n="lb">الترتيب</h3><button class="btn btn-ghost btn-sm" id="lbReset" type="button" data-i18n="reset">تصفير</button></div><p class="muted small" id="lbEmpty" data-i18n="lb_empty"></p><ol class="lb" id="lb"></ol></div>
+    </aside>
+  </div>
+</main>
+<footer class="foot"><p data-i18n="footer">للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span> · <a href="https://www.twitch.tv/iitzmedoo" rel="noopener">twitch.tv/iitzmedoo</a></p></footer>
+<script src="core.js"></script>
+<script src="words.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="gate.js"></script>
+<script src="codenames.js"></script>
+</body>
+</html>

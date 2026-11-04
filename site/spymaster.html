@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>سباي ماستر — كلمات سرية — لَمّة | Lamma</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Private spymaster view for Secret Words. Keep this link to yourself.">
+<meta name="theme-color" content="#0d0d10">
+<meta property="og:title" content="لَمّة | Lamma">
+<meta property="og:image" content="https://lamma.sites.tab.bot/og.png">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="games2.css"><link rel="stylesheet" href="theme.css"><script src="theme.js"></script>
+</head>
+<body class="spy-page">
+<header class="top spy-top">
+  <a class="brand" href="./"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span></a>
+  <span class="spy-badge" id="spyBadge">🕵️</span>
+  <button class="lang-btn" id="langBtn" type="button">EN</button>
+</header>
+<main id="main" class="spy-main">
+  <h1 id="spyTitle">سباي ماستر</h1>
+  <p class="spy-warn" id="spyWarn">هالصفحة إلك بس. لا تشاركها ولا تفتحها عالستريم.</p>
+  <div class="spy-bad" id="spyBad" hidden></div>
+  <section class="spy-board" id="spyBoard" aria-label="key" dir="ltr"></section>
+  <p class="small muted" id="spyHelp">الكروت المكشوفة بتتعلّم لحالها لما الكابتن يكتب !pick بالشات. وإذا بدك، اضغط عكرت لتعلّمو بإيدك.</p>
+  <section class="card spy-clue">
+    <h2 id="spyClueT">التلميح</h2>
+    <p class="small muted" id="spyClueHelp">قول التلميح بالصوت للستريمر، أو اكتبو بشات تويتش هيك:</p>
+    <div class="spy-row"><input id="spyWord" dir="auto" maxlength="30" aria-label="clue"><select id="spyNum" aria-label="number"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option value="0">0</option></select><button class="btn btn-main btn-sm" id="spyCopy" type="button">نسخ</button></div>
+    <code class="spy-cmd" id="spyCmd" dir="ltr">!clue … 2</code>
+    <p class="small muted" id="spyLast"></p>
+  </section>
+  <p class="small muted"><span id="spyConn">…</span> · <bdi id="spyChan"></bdi></p>
+</main>
+<footer class="foot"><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA</p></footer>
+<script src="core.js"></script>
+<script src="spymaster.js"></script>
+</body>
+</html>

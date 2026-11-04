@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>المعركة — لَمّة | Lamma</title>
+<meta name="description" content="قسم المعركة: معركة الساحة بستايل ماينكرافت دنجن، لعبة الألوان، وألعاب تانية لشات تويتش.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="لَمّة | Lamma">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="https://lamma.sites.tab.bot/battle.html">
+<meta property="og:title" content="المعركة — لَمّة | Lamma">
+<meta property="og:description" content="قسم المعركة: معركة الساحة بستايل ماينكرافت دنجن، لعبة الألوان، وألعاب تانية لشات تويتش.">
+<meta property="og:image" content="https://lamma.sites.tab.bot/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="المعركة — لَمّة | Lamma">
+<meta name="twitter:image" content="https://lamma.sites.tab.bot/og.png">
+<link rel="canonical" href="https://lamma.sites.tab.bot/battle.html">
+<link rel="icon" href="favicon.png">
+<link rel="preload" href="assets/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="games2.css">
+<link rel="stylesheet" href="battle.css">
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body class="hub wheels-page battle-page" data-title-ar="المعركة — لَمّة" data-title-en="Battle — Lamma">
+<a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المحتوى</a>
+<header class="top">
+  <a class="brand" href="./" data-keep aria-label="لَمّة LAMMA"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span><small data-i18n="brand_sub">كل ألعاب الشات بمكان واحد</small></a>
+  <a class="chan-chip" href="./" data-keep id="conn" data-state="connecting" title="Twitch"><span class="dot"></span><bdi data-chan>#iitzmedoo</bdi><span class="conn-tx" id="connTxt">…</span></a>
+  <div class="top-end">
+    <label class="switch ctrl-only"><input type="checkbox" id="demoToggle"><span class="track"><span class="knob"></span></span><span data-i18n="demo">تجربة</span></label>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" data-i18n-aria="sound" aria-label="صوت">🔊</button>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+<main id="main">
+  <section class="games-sec wheels-sec" aria-labelledby="bTitle">
+    <a class="back" href="./" data-keep>‹ <span data-i18n="all_games">كل الألعاب</span></a>
+    <h1 id="bTitle" class="sec-t wl-title"><span class="gp-ico" aria-hidden="true" style="--c1:#5cd65c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l9-9"/><path d="M12.5 4.5c3-1.2 5.8-.6 7 .6-2.6-.4-5 .4-6.6 2"/><path d="M19.5 11.5c1.2-3 .6-5.8-.6-7 .4 2.6-.4 5-2 6.6"/><path d="M11 8l5 5"/></svg></span> <span data-i18n="bl_title">المعركة</span></h1>
+    <p class="wl-sub" data-i18n="bl_sub">اختار نوع المعركة. كل وضع إلو صفحتو ورابط OBS تبعو.</p>
+    <div class="gcards wcards btcards" id="battleCards">
+      <a class="gcard wcard btcard gc-battle-arena" href="battle-arena.html" data-keep style="--c1:#ff7a1a;--c2:#b3261e">
+        <canvas class="bt-art" data-art="battle-arena" width="480" height="240" aria-hidden="true"></canvas>
+        <span class="gc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/><path d="M9.5 6.5L21 18v3h-3L6.5 9.5" opacity=".0"/><path d="M14.5 6.5L18 3h3v3l-3.5 3.5"/><path d="M5 14l4 4"/><path d="M7 17l-3 3"/><path d="M3 19l2 2"/></svg></span><span class="tag tag-hot" data-i18n="tag_hot"></span>
+        <span class="gc-t" data-i18n="bl_battle-arena">معركة الساحة</span>
+        <span class="gc-d" data-i18n="bld_battle-arena">نظام كوكيرو بستايل ماينكرافت دنجن: الشات بيدخل بـ !دخول، إنت بتختار المقاتلين، وبيواجهو موجات موبز وبالآخر زعيم. كل مقاتل بيبين صحتو وقوتو وقتلاتو.</span>
+        <span class="gc-go" aria-hidden="true">←</span>
+      </a>
+      <a class="gcard wcard btcard gc-battle-colors" href="battle-colors.html" data-keep style="--c1:#22e6ff;--c2:#3b7bff">
+        <canvas class="bt-art" data-art="battle-colors" width="480" height="240" aria-hidden="true"></canvas>
+        <span class="gc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><path d="M3 9h4M10 12h4M17 7h4"/></svg></span><span class="tag tag-new" data-i18n="tag_new"></span>
+        <span class="gc-t" data-i18n="bl_battle-colors">لعبة الألوان</span>
+        <span class="gc-d" data-i18n="bld_battle-colors">متل Colorblind بكوكيرو: 20 عمود صوف بأرقام، بيطلع لون فوق، وكل واحد بيكتب رقم العمود. اللي غلط بيوقع. 5 جولات والألوان بتقرب من بعض أكتر كل مرة.</span>
+        <span class="gc-go" aria-hidden="true">←</span>
+      </a>
+      <a class="gcard wcard btcard gc-tnt" href="tnt.html" data-keep style="--c1:#ff4b4b;--c2:#8a1c1c">
+        <canvas class="bt-art" data-art="tnt" width="480" height="240" aria-hidden="true"></canvas>
+        <span class="gc-ico" aria-hidden="true">💣</span><span class="tag tag-new" data-i18n="tag_new"></span>
+        <span class="gc-t" data-i18n="bl_tnt">اهرب من الـTNT</span>
+        <span class="gc-d" data-i18n="bld_tnt">متل لعبة السيف بكوكيرو: الشات واقف عمنصة فوق الفراغ. الجهة اللي فيها ناس أكتر بيولّع فيها الـTNT وبتنفجر لما يخلص الوقت. !يمين و !يسار، وكل جولة أسرع. آخر واحد بيضل هو البطل.</span>
+        <span class="gc-go" aria-hidden="true">←</span>
+      </a>
+      <div class="gcard wcard btcard wcard-soon gc-hero" style="--c1:#ffd23d;--c2:#b07a10">
+        <canvas class="bt-art" data-art="hero" width="480" height="240" aria-hidden="true"></canvas>
+        <span class="gc-ico" aria-hidden="true">🗡️</span><span class="tag tag-soon" data-i18n="bt_soon">قريباً</span>
+        <span class="gc-t" data-i18n="bl_hero">المحارب</span>
+        <span class="gc-d" data-i18n="bld_hero">إنت بتتحكم بالبطل، والشات بينزل موبز عليك بـ !هجوم. عداد القتلات فوق.</span>
+      </div>
+      <div class="gcard wcard btcard wcard-soon gc-cave" style="--c1:#57d4e8;--c2:#2a5a7a">
+        <canvas class="bt-art" data-art="cave" width="480" height="240" aria-hidden="true"></canvas>
+        <span class="gc-ico" aria-hidden="true">⛏️</span><span class="tag tag-soon" data-i18n="bt_soon">قريباً</span>
+        <span class="gc-t" data-i18n="bl_cave">الكهف</span>
+        <span class="gc-d" data-i18n="bld_cave">غرفة ورا غرفة بكهف عميق، صناديق وكنوز وزعيم بالآخر.</span>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="foot"><p data-i18n="footer">للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span> · <a href="https://www.twitch.tv/iitzmedoo" rel="noopener">twitch.tv/iitzmedoo</a></p></footer>
+<script>window.LAMMA_BATTLE=[{"id": "battle-arena", "ar": "معركة الساحة", "en": "Arena Battle", "desc": "نظام كوكيرو بستايل ماينكرافت دنجن: الشات بيدخل بـ !دخول، إنت بتختار المقاتلين، وبيواجهو موجات موبز وبالآخر زعيم. كل مقاتل بيبين صحتو وقوتو وقتلاتو.", "desc_en": "Kukoro's raid system, Minecraft Dungeons style: chat joins with !join, you pick the squad, they face waves of mobs and a boss. Every fighter shows HP, power and kills."}, {"id": "battle-colors", "ar": "لعبة الألوان", "en": "Colour Floor", "desc": "متل Colorblind بكوكيرو: 20 عمود صوف بأرقام، بيطلع لون فوق، وكل واحد بيكتب رقم العمود. اللي غلط بيوقع. 5 جولات والألوان بتقرب من بعض أكتر كل مرة.", "desc_en": "Like Kukoro's Colorblind: 20 numbered wool columns, a target colour on top, everyone types a column number. Wrong column falls. 5 rounds, the colours get closer every time."}, {"id": "tnt", "ar": "اهرب من الـTNT", "en": "TNT Run", "desc": "متل لعبة السيف بكوكيرو: الشات واقف عمنصة فوق الفراغ. الجهة اللي فيها ناس أكتر بيولّع فيها الـTNT وبتنفجر لما يخلص الوقت. !يمين و !يسار، وكل جولة أسرع. آخر واحد بيضل هو البطل.", "desc_en": "Like Kukoro's Blade: chat stands on a platform over the void. The side with MORE people gets its TNT lit and blows when the timer runs out. !r and !l, faster every round. Last one standing wins."}, {"id": "hero", "ar": "المحارب", "en": "The Hero", "desc": "إنت بتتحكم بالبطل، والشات بينزل موبز عليك بـ !هجوم. عداد القتلات فوق.", "desc_en": "You control the hero, chat spawns as mobs with !attack. Kill counter on top."}, {"id": "cave", "ar": "الكهف", "en": "Cave Raid", "desc": "غرفة ورا غرفة بكهف عميق، صناديق وكنوز وزعيم بالآخر.", "desc_en": "Room after room in a deep cave, chests and loot, a boss at the end."}];</script>
+<script src="core.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="mc.js"></script>
+<script src="battle.js"></script>
+</body>
+</html>
