@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اهرب من الـTNT — لَمّة | Lamma</title>
+<meta name="description" content="متل لعبة السيف بكوكيرو: الشات واقف عمنصة فوق الفراغ. الجهة اللي فيها ناس أكتر بيولّع فيها الـTNT وبتنفجر لما يخلص الوقت. !يمين و !يسار، وكل جولة أسرع. آخر واحد بيضل هو البطل.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="لَمّة | Lamma">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="/battle/tnt.html">
+<meta property="og:title" content="اهرب من الـTNT — لَمّة | Lamma">
+<meta property="og:description" content="متل لعبة السيف بكوكيرو: الشات واقف عمنصة فوق الفراغ. الجهة اللي فيها ناس أكتر بيولّع فيها الـTNT وبتنفجر لما يخلص الوقت. !يمين و !يسار، وكل جولة أسرع. آخر واحد بيضل هو البطل.">
+<meta property="og:image" content="/shared/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="اهرب من الـTNT — لَمّة | Lamma">
+<meta name="twitter:image" content="/shared/img/og.png">
+<link rel="canonical" href="/battle/tnt.html">
+<link rel="icon" href="/shared/img/favicon.png">
+<link rel="preload" href="/shared/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/shared/css/styles.css">
+<link rel="stylesheet" href="/shared/css/games2.css">
+<link rel="stylesheet" href="/shared/css/layout.css">
+<link rel="stylesheet" href="/battle/battle.css">
+<link rel="stylesheet" href="/shared/css/theme.css">
+<script src="/shared/js/theme.js"></script>
+</head>
+<body class="gpage g-tnt" data-game="tnt" data-title-ar="اهرب من الـTNT — لَمّة" data-title-en="TNT Run — Lamma">
+<a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المحتوى</a>
+<header class="top">
+  <a class="brand" href="/" data-keep aria-label="لَمّة LAMMA"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span><small data-i18n="brand_sub">كل ألعاب الشات بمكان واحد</small></a>
+  <a class="chan-chip" href="/" data-keep id="conn" data-state="connecting" title="Twitch"><span class="dot"></span><bdi data-chan>#iitzmedoo</bdi><span class="conn-tx" id="connTxt">…</span></a>
+  <div class="top-end">
+    <label class="switch ctrl-only"><input type="checkbox" id="demoToggle"><span class="track"><span class="knob"></span></span><span data-i18n="demo">تجربة</span></label>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" data-i18n-aria="sound" aria-label="صوت">🔊</button>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+<main id="main" class="gp">
+  <div class="gp-head">
+    <a class="back" href="/battle/" data-keep>‹ <span data-i18n="all_battle">كل المعركة</span></a>
+    <h1><span class="gp-ico" aria-hidden="true" style="--c1:#ff4b4b">💣</span> <span data-i18n="g_title">اهرب من الـTNT</span></h1>
+    <p class="gp-how" data-i18n="g_how"></p>
+  </div>
+  <div class="gp-grid">
+    <section class="stage-wrap" aria-label="stage">
+      <div class="stage" id="stage">
+        <div class="btg tng" id="gs">
+          <div class="w2-fixlogo bt-logo" id="btLogo" aria-label="لَمّة LAMMA"></div>
+          <div class="lay-el lay-arena" data-lay="field"><div class="lay-c"><div class="ba-floor"><canvas id="tnCanvas" aria-label="TNT platform"></canvas></div></div></div>
+          <div class="lay-el" data-lay="round"><div class="lay-c"><div class="bt-box tn-round" id="tnRoundBox">
+            <div class="tn-rt"><b id="tnRound"></b><span id="tnAlive"></span><span class="tn-warn" id="tnWarn"></span></div>
+            <div class="bt-ring" id="tnRing"><span id="tnTime"></span></div>
+          </div></div></div>
+          <div class="lay-el" data-lay="join"><div class="lay-c"><div class="bt-box bt-join" id="tnJoin"></div></div></div>
+          <div class="tn-info" id="tnInfo" hidden aria-live="polite"></div>
+          <div class="bt-banner" id="tnBanner" hidden aria-live="polite"></div>
+          <div class="bt-win" id="tnWin" hidden aria-live="polite"></div>
+        </div>
+
+        <p class="wait-ctrl" id="waitCtrl" hidden data-i18n="waiting_ctrl">بانتظار لوحة التحكم</p>
+      </div>
+    </section>
+    <aside class="side" id="side">
+      <div class="card ctrl ctrl-only" id="ctrl">
+        <div class="w2-status bt-status" id="tnStatus" aria-live="polite"></div>
+        <div class="btn-row"><button class="btn btn-main" id="tnGo" type="button" data-i18n="tn_start">ابدأ اللعبة</button><button class="btn btn-ghost" id="tnPause" type="button" data-i18n="tn_pause">وقف مؤقت</button></div>
+        <div class="btn-row"><button class="btn btn-ghost btn-sm" id="tnNew" type="button" data-i18n="tn_new">لعبة جديدة (نفس اللاعبين)</button><button class="btn btn-ghost btn-sm" id="tnDemoAdd" type="button" data-i18n="tn_demo">ضيف 40 لاعب تجربة</button><button class="btn btn-danger btn-sm" id="tnClear" type="button" data-i18n="tn_clear">مسح الكل</button></div>
+        <p class="hint-box"><span data-i18n="tn_hint">الشات بيدخل بـ !دخول. بالجولة: !يمين أو !يسار (!r / !l). الجهة اللي فيها ناس أكتر هي اللي بتنفجر، فخبّو حالكن بالجهة الفاضية.</span> <b class="cnt" id="tnN">0</b></p>
+        <details class="w2-more w2-set" open>
+          <summary data-i18n="bt_settings">الإعدادات</summary>
+          <div class="sgrp">
+            <div class="srow tmr" id="tnSecsRow"><span class="srow-l" data-i18n="tn_secs">وقت الجولة</span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_manual" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input id="tnSecs" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="tn_secs" aria-label=""></div></div>
+            <label class="srow"><span class="srow-l" data-i18n="tn_zones">عدد الجهات</span><select id="tnZones" class="ssel"><option value="2" data-i18n="tn_z2">جهتين (يمين / يسار)</option><option value="3" data-i18n="tn_z3">تلات جهات (+ النص)</option></select></label>
+            <label class="srow"><span class="srow-l" data-i18n="tn_speed">الجولات بتسرع</span><select id="tnSpeed" class="ssel"><option value="0" data-i18n="tn_sp0">لا</option><option value="1" data-i18n="tn_sp1">شوي</option><option value="2" data-i18n="tn_sp2">عادي</option><option value="3" data-i18n="tn_sp3">كتير</option></select></label>
+          </div>
+          <details class="w2-xtra" id="tnXtra">
+            <summary><span data-i18n="bt_more">خيارات زيادة</span></summary>
+            <div class="sgrp">
+              <label class="srow sw"><span class="srow-l" data-i18n="tn_jit">وقت عشوائي ±5 ث (متل كوكيرو)</span><input type="checkbox" role="switch" id="tnJit" checked></label>
+              <div class="srow tmr" id="tnAutoRow"><span class="srow-l" data-i18n="tn_auto">الجولة الجاية لحالها</span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_manual" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input id="tnAuto" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="tn_auto" aria-label=""></div></div>
+              <div class="srow tmr" id="tnJoinRow"><span class="srow-l" data-i18n="bt_join_t">وقت الدخول</span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_nolimit" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input id="tnJoinT" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="bt_join_t" aria-label=""></div></div>
+              <label class="srow"><span class="srow-l" data-i18n="bt_map">الخريطة</span><select id="tnMap" class="ssel"><option value="plains" data-i18n="map_plains">سهول</option><option value="desert" data-i18n="map_desert">صحراء</option><option value="nether" data-i18n="map_nether">النذر</option><option value="end" data-i18n="map_end">النهاية</option><option value="cave" data-i18n="map_cave">الكهف</option></select></label>
+              <label class="srow sw"><span class="srow-l" data-i18n="tn_names">أسامي فوق الراس</span><input type="checkbox" role="switch" id="tnNames" checked></label>
+              <label class="srow sw"><span class="srow-l" data-i18n="bt_av">صور تويتش على الراس</span><input type="checkbox" role="switch" id="tnAv" checked></label>
+            </div>
+          </details>
+        </details>
+
+      </div>
+      <details class="card obs-card ctrl-only">
+        <summary><span data-i18n="obs_title">رابط OBS</span></summary>
+        <p class="small" data-i18n="obs_help"></p>
+        <div class="copy-row"><input id="obsUrl" readonly dir="ltr" aria-label="OBS URL"><button class="btn btn-ghost" id="obsCopy" type="button" data-i18n="copy">نسخ</button></div>
+        <p class="small muted" data-i18n="obs_dock"></p>
+      </details>
+      <details class="card cmd-card ctrl-only" open>
+        <summary data-i18n="cmds">أوامر الشات</summary>
+        <h4 data-i18n="cmds_all">للكل</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!join</bdi> · <bdi class="cmd-i" dir="rtl">!دخول</bdi></code> <span data-i18n="bt_c_join"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!l</bdi> · <bdi class="cmd-i" dir="ltr">!r</bdi> · <bdi class="cmd-i" dir="rtl">!يسار</bdi> · <bdi class="cmd-i" dir="rtl">!يمين</bdi></code> <span data-i18n="bt_c_lr"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!m</bdi> · <bdi class="cmd-i" dir="rtl">!نص</bdi></code> <span data-i18n="bt_c_m"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!getinfo</bdi> · <bdi class="cmd-i" dir="rtl">!معلومات</bdi></code> <span data-i18n="bt_c_info"></span></li></ul>
+        <h4 data-i18n="cmds_mod">للستريمر والمودز</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!start</bdi> · <bdi class="cmd-i" dir="rtl">!ابدأ</bdi></code> <span data-i18n="bt_c_cstart"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!next</bdi> · <bdi class="cmd-i" dir="rtl">!التالي</bdi></code> <span data-i18n="bt_c_cnext"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!pause</bdi> · <bdi class="cmd-i" dir="rtl">!وقف</bdi></code> <span data-i18n="bt_c_pause"></span></li></ul>
+      </details>
+
+    </aside>
+  </div>
+</main>
+<footer class="foot"><p data-i18n="footer">للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span> · <a href="https://www.twitch.tv/iitzmedoo" rel="noopener">twitch.tv/iitzmedoo</a></p></footer>
+<script src="/shared/js/core.js"></script>
+<script src="/shared/js/words.js"></script>
+<script src="/shared/js/app.js"></script>
+<script src="/shared/js/auth.js"></script>
+<script src="/shared/js/layout.js"></script><script src="/shared/js/avatars.js"></script><script src="/battle/btrpg.js"></script><script src="/shared/js/mc.js"></script><script src="/battle/btcore.js"></script><script src="/shared/js/gate.js"></script>
+<script src="/battle/tnt.js"></script>
+</body>
+</html>

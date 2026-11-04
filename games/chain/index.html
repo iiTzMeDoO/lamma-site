@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>سلسلة كلمات — لَمّة | Lamma</title>
+<meta name="description" content="كل كلمة لازم تبلش بآخر حرف من اللي قبلها.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="لَمّة | Lamma">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="/games/chain/">
+<meta property="og:title" content="سلسلة كلمات — لَمّة | Lamma">
+<meta property="og:description" content="كل كلمة لازم تبلش بآخر حرف من اللي قبلها.">
+<meta property="og:image" content="/shared/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="سلسلة كلمات — لَمّة | Lamma">
+<meta name="twitter:image" content="/shared/img/og.png">
+<link rel="canonical" href="/games/chain/">
+<link rel="icon" href="/shared/img/favicon.png">
+<link rel="preload" href="/shared/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/shared/css/styles.css">
+<link rel="stylesheet" href="/shared/css/games2.css">
+<link rel="stylesheet" href="/shared/css/theme.css">
+<script src="/shared/js/theme.js"></script>
+</head>
+<body class="gpage g-chain" data-game="chain" data-title-ar="سلسلة كلمات — لَمّة" data-title-en="Word Chain — Lamma">
+<a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المحتوى</a>
+<header class="top">
+  <a class="brand" href="/" data-keep aria-label="لَمّة LAMMA"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span><small data-i18n="brand_sub">كل ألعاب الشات بمكان واحد</small></a>
+  <a class="chan-chip" href="/" data-keep id="conn" data-state="connecting" title="Twitch"><span class="dot"></span><bdi data-chan>#iitzmedoo</bdi><span class="conn-tx" id="connTxt">…</span></a>
+  <div class="top-end">
+    <label class="switch ctrl-only"><input type="checkbox" id="demoToggle"><span class="track"><span class="knob"></span></span><span data-i18n="demo">تجربة</span></label>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" data-i18n-aria="sound" aria-label="صوت">🔊</button>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+<main id="main" class="gp">
+  <div class="gp-head">
+    <a class="back" href="/" data-keep>‹ <span data-i18n="all_games">كل الألعاب</span></a>
+    <h1><span class="gp-ico" aria-hidden="true" style="--c1:#3dffd0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span> <span data-i18n="g_title">سلسلة كلمات</span></h1>
+    <p class="gp-how" data-i18n="g_how"></p>
+  </div>
+  <div class="gp-grid">
+    <section class="stage-wrap" aria-label="stage">
+      <div class="stage" id="stage">
+        <div class="gstage" id="gs"></div>
+
+        <p class="wait-ctrl" id="waitCtrl" hidden data-i18n="waiting_ctrl">بانتظار لوحة التحكم</p>
+      </div>
+    </section>
+    <aside class="side" id="side">
+      <div class="card ctrl ctrl-only" id="ctrl">
+        <div class="fgrid">
+          <label class="fld"><span data-i18n="ch_lang">اللغة</span><select id="chnLang"><option value="ar" data-i18n="ar_only">عربي</option><option value="en" data-i18n="en_only">English</option></select></label>
+          <label class="fld"><span data-i18n="ch_time">وقت كل كلمة (ث)</span><select id="chnTime"><option>10</option><option selected>15</option><option>25</option></select></label>
+        </div>
+        <div class="btn-row"><button class="btn btn-main" id="chnStart" type="button" data-i18n="ch_start">ابدأ السلسلة</button><button class="btn btn-ghost" id="chnUndo" type="button" data-i18n="ch_undo" disabled>ارفض آخر كلمة</button></div>
+        <div class="btn-row"><button class="btn btn-danger btn-sm" id="chnStop" type="button" data-i18n="stop" disabled>وقّف</button></div>
+        <p class="hint-box" data-i18n="ch_tip"></p>
+
+      </div>
+      <details class="card obs-card ctrl-only">
+        <summary><span data-i18n="obs_title">رابط OBS</span></summary>
+        <p class="small" data-i18n="obs_help"></p>
+        <div class="copy-row"><input id="obsUrl" readonly dir="ltr" aria-label="OBS URL"><button class="btn btn-ghost" id="obsCopy" type="button" data-i18n="copy">نسخ</button></div>
+        <p class="small muted" data-i18n="obs_dock"></p>
+      </details>
+      <details class="card cmd-card ctrl-only" open>
+        <summary data-i18n="cmds">أوامر الشات</summary>
+        <h4 data-i18n="cmds_all">للكل</h4><ul class="cmds"><li><code dir="ltr">…</code> <span data-i18n="ch_cmd_word"></span></li></ul>
+        <h4 data-i18n="cmds_mod">للستريمر والمودز</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!chain</bdi></code> <span data-i18n="ch_cmd_start"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!stop</bdi></code> <span data-i18n="c_cmd_stop"></span></li></ul>
+      </details>
+
+      <div class="card feed-card ctrl-only"><h3 data-i18n="chat_feed">الشات</h3><p class="muted small" id="feedEmpty" data-i18n="feed_empty"></p><ol class="feed" id="feed" aria-live="off"></ol></div>
+      <div class="card lb-card ctrl-only"><div class="lb-head"><h3 data-i18n="lb">الترتيب</h3><button class="btn btn-ghost btn-sm" id="lbReset" type="button" data-i18n="reset">تصفير</button></div><p class="muted small" id="lbEmpty" data-i18n="lb_empty"></p><ol class="lb" id="lb"></ol></div>
+    </aside>
+  </div>
+</main>
+<footer class="foot"><p data-i18n="footer">للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span> · <a href="https://www.twitch.tv/iitzmedoo" rel="noopener">twitch.tv/iitzmedoo</a></p></footer>
+<script src="/shared/js/core.js"></script>
+<script src="/shared/js/words.js"></script>
+<script src="/shared/js/app.js"></script>
+<script src="/shared/js/auth.js"></script>
+
+<script src="/games/chain/chain.js"></script>
+</body>
+</html>

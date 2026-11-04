@@ -1,0 +1,98 @@
+/* layout.css — the on-stage layout editor (layout.js) and the background toggle. Editor chrome is in px (it must stay
+   finger-sized on a phone, where the stage font is tiny); the pieces themselves stay in em so control and OBS match. */
+.lay-root{position:absolute;inset:0}
+.wh2.lay-root{display:block;padding:0;gap:0}
+.lay-el{position:absolute;box-sizing:border-box;font-size:calc(var(--ls,1) * 1em);min-width:0}
+.lay-el.lay-off{display:none!important}
+.lay-el>.lay-c{width:100%;min-width:0}
+.lay-box>.lay-c{height:100%}
+.lay-box>.lay-c>*{height:100%;box-sizing:border-box}
+/* ---------- edit mode ---------- */
+.lay-h{display:none}
+.lay-editing .lay-el{outline:2px dashed rgba(170,176,224,.75);outline-offset:3px;cursor:move;touch-action:none;user-select:none;-webkit-user-select:none;min-height:30px}
+.lay-editing .lay-el:hover{outline-color:#c9ccf0}
+.lay-editing .lay-el.lay-sel{z-index:60!important;outline:2px solid #e9eaff;box-shadow:0 0 0 5px rgba(134,140,188,.25)}
+.lay-editing .lay-el.lay-moving{opacity:.92}
+.lay-editing .lay-el .lay-c{pointer-events:none}
+.lay-editing .lay-h{display:block;position:absolute;inset:0;pointer-events:none;z-index:40;font-size:12px}
+.lay-tag{position:absolute;top:4px;left:4px;font:800 11px/1.6 var(--body,system-ui);padding:0 8px;background:#9aa0d0;color:#0c0c10;border-radius:6px;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.lay-x{position:absolute;top:3px;left:auto;right:auto;width:24px;height:24px;border-radius:50%;border:0;background:#e0707a;color:#fff;font:900 16px/24px system-ui;padding:0;cursor:pointer;pointer-events:auto;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.lay-g{position:absolute;width:16px;height:16px;box-sizing:border-box;background:#fff;border:2px solid #868cbc;border-radius:5px;pointer-events:auto;touch-action:none;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.g-nw{left:-6px;top:-6px;cursor:nwse-resize}.g-se{right:-6px;bottom:-6px;cursor:nwse-resize}
+.g-ne{right:-6px;top:-6px;cursor:nesw-resize}.g-sw{left:-6px;bottom:-6px;cursor:nesw-resize}
+.g-n,.g-s{width:34px;height:12px;left:calc(50% - 17px);cursor:ns-resize;border-radius:8px;background:var(--g2-acc-l,#c9ccf0)}.g-n{top:-7px}.g-s{bottom:-7px}
+.g-e,.g-w{width:12px;height:34px;top:calc(50% - 17px);cursor:ew-resize;border-radius:8px;background:var(--g2-acc-l,#c9ccf0)}.g-e{right:-7px}.g-w{left:-7px}
+.lay-edge:hover{background:#fff;transform:scale(1.12)}
+@media (pointer:coarse){.lay-g{width:22px;height:22px}.g-n,.g-s{width:40px;height:18px;left:calc(50% - 20px)}.g-e,.g-w{width:18px;height:40px;top:calc(50% - 20px)}.lay-x{width:28px;height:28px;line-height:28px}}
+.lay-editing .lay-c:empty::before{content:attr(data-ph);display:block;padding:.45em .9em;border-radius:.7em;background:rgba(154,160,208,.14);border:.07em dashed rgba(154,160,208,.5);color:#c9ccf0;font-weight:800;text-align:center}
+.stage.lay-editing{box-shadow:0 0 0 2px rgba(154,160,208,.5),0 20px 60px rgba(0,0,0,.5)}
+/* ---------- bar above the stage ---------- */
+.lay-bar{display:flex;flex-direction:column;gap:8px;margin:0 0 10px}
+.lay-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between}
+.lay-seg{display:inline-flex;padding:3px;border-radius:12px;background:rgba(20,20,26,.8);border:1px solid var(--g2-line,rgba(154,160,208,.24))}
+.lay-seg .seg{border:0;background:transparent;color:var(--mut,#a6a8ba);font:800 .86rem/1 var(--body,system-ui);padding:8px 14px;border-radius:9px;cursor:pointer}
+.lay-seg .seg.on{background:var(--g2-acc,#868cbc);color:#0c0c10}
+.lay-items{justify-content:flex-start}
+.lay-chip{border:1px solid var(--g2-line2,rgba(154,160,208,.45));background:rgba(20,20,26,.8);color:var(--mut,#a6a8ba);font:800 .82rem/1 var(--body,system-ui);padding:8px 12px;border-radius:99px;cursor:pointer}
+.lay-chip.on{background:rgba(134,140,188,.22);color:#fff;border-color:var(--g2-acc,#868cbc)}
+.lay-chip.lay-reset{margin-inline-start:auto;border-style:dashed}
+.lay-help{margin:0;font-size:.82rem;color:var(--mut,#a6a8ba)}
+.lay-card h3{margin:0 0 4px}.lay-card p{margin:0 0 10px;font-size:.86rem;color:var(--mut,#a6a8ba)}
+html.obs .lay-bar,html.obs .lay-card,html.obs .lay-h{display:none!important}
+/* ---------- background ---------- */
+html:not(.obs) body .stage.lay-nobg{background-color:#24242c;background-image:conic-gradient(#33333e 25%,#24242c 0 50%,#33333e 0 75%,#24242c 0);background-size:26px 26px;box-shadow:none}
+html.obs body .stage.lay-nobg{background:transparent!important}
+html.obs body .stage.lay-bg{
+ background:
+  repeating-linear-gradient(-14deg,rgba(255,255,255,.014) 0 2px,transparent 2px 11px),
+  radial-gradient(70% 70% at 50% 0%,rgba(var(--glow,134,140,188),.13),transparent 70%),
+  linear-gradient(165deg,#17171c,#0b0b0e 70%)!important}
+.lay-tb{position:absolute;top:4px;left:4px;display:flex;gap:4px;align-items:center;max-width:calc(100% - 8px)}
+.lay-tb .lay-tag,.lay-tb .lay-x{position:static}
+.lay-tb .lay-x{flex:0 0 auto}
+.lay-tb .lay-tag{max-width:none;min-width:0}
+/* only the selected piece carries resize grips and the × (keeps a phone-sized stage readable); the rest show outline + name */
+.lay-editing .lay-el:not(.lay-sel) .lay-g,.lay-editing .lay-el:not(.lay-sel) .lay-x{display:none}
+.stage.lay-small.lay-editing .lay-el:not(.lay-sel) .lay-tag{opacity:.75;font-size:9px;padding:0 5px}
+/* snap guides while dragging (editor only) */
+.lay-guides{position:absolute;inset:0;pointer-events:none;z-index:80;display:none}
+.lay-gl{position:absolute;display:block;background:#ff4fd8;box-shadow:0 0 6px rgba(255,79,216,.9)}
+.lay-gl.v{top:0;bottom:0;width:1px;margin-left:-.5px}
+.lay-gl.h{left:0;right:0;height:1px;margin-top:-.5px}
+.lay-gl.k-mid{background:#3dd6ff;box-shadow:0 0 6px rgba(61,214,255,.9)}
+.lay-gl.k-wheel{background:#ffd23d;box-shadow:0 0 8px rgba(255,210,61,.95);width:2px;margin-left:-1px}
+.lay-gl.h.k-wheel{width:auto;height:2px;margin-left:0;margin-top:-1px}
+.lay-ring{position:absolute;display:block;transform:translate(-50%,-50%);border-radius:50%;border:3px dashed #ffd23d;box-shadow:0 0 18px rgba(255,210,61,.6),inset 0 0 18px rgba(255,210,61,.35)}
+.lay-dot{position:absolute;display:block;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#ffd23d;box-shadow:0 0 0 4px rgba(255,210,61,.35)}
+html.obs .lay-guides{display:none!important}
+.lay-box .w2-banner{min-height:0}
+.lay-box .w2-ev{display:flex;align-items:center;justify-content:center}
+
+/* ---------- stack piece: one panel, sections share its height, dividers between them ---------- */
+.lay-stack>.lay-c{height:100%}
+.lay-stack .lay-sec{position:relative;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.lay-stack .lay-sec.sec-off{display:none!important}
+.lay-stack.lay-empty{display:none}
+.lay-div{flex:0 0 auto;height:.9em;margin:0 .6em;position:relative;cursor:row-resize;touch-action:none}
+.lay-div::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--g2-line2,rgba(154,160,208,.45)) 18%,var(--g2-line2,rgba(154,160,208,.45)) 82%,transparent)}
+.lay-div i{position:absolute;left:50%;top:50%;width:34px;height:8px;margin:-4px 0 0 -17px;border-radius:6px;background:var(--g2-acc,#868cbc);opacity:0;transition:opacity .15s;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.lay-div:hover i,.lay-div.on i,.lay-editing .lay-div i{opacity:.95}
+.lay-div.on::before{background:var(--g2-acc-l,#c9ccf0);height:2px}
+html.obs .lay-div{cursor:default}
+.lay-sx{display:none}
+.lay-editing .lay-sec{outline:1px dashed rgba(170,176,224,.4);outline-offset:-2px;border-radius:.6em}
+.lay-editing .lay-el.lay-sel .lay-sx{display:block;position:absolute;bottom:3px;inset-inline-end:4px;z-index:45;width:19px;height:19px;border-radius:50%;border:0;background:#e0707a;color:#fff;font:900 13px/19px system-ui;padding:0;cursor:pointer;pointer-events:auto;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.lay-editing .lay-el.lay-sel .lay-sec:hover::after{content:attr(data-sec-name);position:absolute;bottom:5px;inset-inline-end:27px;font:800 10px/1.5 var(--body,system-ui);padding:0 6px;border-radius:5px;background:rgba(154,160,208,.85);color:#0c0c10;pointer-events:none}
+.lay-editing .lay-el.lay-sel .lay-div{cursor:row-resize}
+.lay-editing .lay-el .lay-c .lay-div,.lay-editing .lay-el .lay-c .lay-sx{pointer-events:auto}
+.lay-chip-sec{font-size:.78rem;padding:7px 10px;border-style:dotted}
+/* ---------- fullscreen button (bottom-left of the stage) ---------- */
+.lay-fs{position:absolute;left:1.6%;bottom:2.2%;z-index:90;width:34px;height:34px;border-radius:10px;border:1px solid var(--g2-line2,rgba(154,160,208,.45));background:rgba(12,12,16,.72);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;opacity:.55;transition:opacity .15s,transform .15s;backdrop-filter:blur(6px)}
+.lay-fs:hover,.lay-fs:focus-visible{opacity:1;transform:scale(1.06)}
+.lay-fs svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.lay-fs .fs-out,.lay-fs.on .fs-in{display:none}.lay-fs.on .fs-out{display:block}
+html.obs .lay-fs{display:none!important}
+.stage-wrap.lay-fson{display:flex;align-items:center;justify-content:center;background:#000;position:static}
+.stage-wrap.lay-fson>.lay-bar{display:none}
+.stage-wrap.lay-fson>.stage{width:min(100vw,calc(100vh * 16 / 9));border-radius:0;border:0}
+@media (max-width:640px){.lay-fs{width:26px;height:26px;border-radius:8px}.lay-fs svg{width:15px;height:15px}}

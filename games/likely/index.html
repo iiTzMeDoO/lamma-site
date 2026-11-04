@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مين الأرجح؟ — لَمّة | Lamma</title>
+<meta name="description" content=""مين الأرجح…؟" والشات بيصوت على أسماء.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="لَمّة | Lamma">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="/games/likely/">
+<meta property="og:title" content="مين الأرجح؟ — لَمّة | Lamma">
+<meta property="og:description" content=""مين الأرجح…؟" والشات بيصوت على أسماء.">
+<meta property="og:image" content="/shared/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="مين الأرجح؟ — لَمّة | Lamma">
+<meta name="twitter:image" content="/shared/img/og.png">
+<link rel="canonical" href="/games/likely/">
+<link rel="icon" href="/shared/img/favicon.png">
+<link rel="preload" href="/shared/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/shared/css/styles.css">
+<link rel="stylesheet" href="/shared/css/games2.css">
+<link rel="stylesheet" href="/shared/css/theme.css">
+<script src="/shared/js/theme.js"></script>
+</head>
+<body class="gpage g-likely" data-game="likely" data-title-ar="مين الأرجح؟ — لَمّة" data-title-en="Most Likely — Lamma">
+<a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المحتوى</a>
+<header class="top">
+  <a class="brand" href="/" data-keep aria-label="لَمّة LAMMA"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span><small data-i18n="brand_sub">كل ألعاب الشات بمكان واحد</small></a>
+  <a class="chan-chip" href="/" data-keep id="conn" data-state="connecting" title="Twitch"><span class="dot"></span><bdi data-chan>#iitzmedoo</bdi><span class="conn-tx" id="connTxt">…</span></a>
+  <div class="top-end">
+    <label class="switch ctrl-only"><input type="checkbox" id="demoToggle"><span class="track"><span class="knob"></span></span><span data-i18n="demo">تجربة</span></label>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" data-i18n-aria="sound" aria-label="صوت">🔊</button>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+<main id="main" class="gp">
+  <div class="gp-head">
+    <a class="back" href="/" data-keep>‹ <span data-i18n="all_games">كل الألعاب</span></a>
+    <h1><span class="gp-ico" aria-hidden="true" style="--c1:#ff7ab8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><path d="M2.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.6c.5-.1 1-.1 1.5-.1 2.2 0 4 1.5 4.5 4.5"/></svg></span> <span data-i18n="g_title">مين الأرجح؟</span></h1>
+    <p class="gp-how" data-i18n="g_how"></p>
+  </div>
+  <div class="gp-grid">
+    <section class="stage-wrap" aria-label="stage">
+      <div class="stage" id="stage">
+        <div class="gstage" id="gs"></div>
+
+        <p class="wait-ctrl" id="waitCtrl" hidden data-i18n="waiting_ctrl">بانتظار لوحة التحكم</p>
+      </div>
+    </section>
+    <aside class="side" id="side">
+      <div class="card ctrl ctrl-only" id="ctrl">
+        <label class="fld"><span data-i18n="l_prompt">السؤال</span><input id="lQ" dir="auto" maxlength="140"></label>
+        <div class="btn-row"><button class="btn btn-ghost btn-sm" id="lShuffle" type="button" data-i18n="l_another">سؤال تاني 🎲</button><button class="btn btn-ghost btn-sm" id="lFromChat" type="button" data-i18n="l_fromchat">أسماء من الشات</button></div>
+        <div class="fgrid">
+          <label class="fld"><span>!1</span><input id="lO1" dir="auto" maxlength="40"></label><label class="fld"><span>!2</span><input id="lO2" dir="auto" maxlength="40"></label>
+          <label class="fld"><span>!3</span><input id="lO3" dir="auto" maxlength="40"></label><label class="fld"><span>!4</span><input id="lO4" dir="auto" maxlength="40"></label>
+        </div>
+        <label class="fld"><span data-i18n="v_dur">المدة (ث)</span><select id="lDur"><option>20</option><option selected>30</option><option>45</option></select></label>
+        <div class="btn-row"><button class="btn btn-main" id="lStart" type="button" data-i18n="v_start">ابدأ التصويت</button><button class="btn btn-ghost" id="lEnd" type="button" data-i18n="v_end" disabled>إنهاء</button></div>
+        <p class="hint-box" data-i18n="l_tip"></p>
+
+      </div>
+      <details class="card obs-card ctrl-only">
+        <summary><span data-i18n="obs_title">رابط OBS</span></summary>
+        <p class="small" data-i18n="obs_help"></p>
+        <div class="copy-row"><input id="obsUrl" readonly dir="ltr" aria-label="OBS URL"><button class="btn btn-ghost" id="obsCopy" type="button" data-i18n="copy">نسخ</button></div>
+        <p class="small muted" data-i18n="obs_dock"></p>
+      </details>
+      <details class="card cmd-card ctrl-only" open>
+        <summary data-i18n="cmds">أوامر الشات</summary>
+        <h4 data-i18n="cmds_all">للكل</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!1</bdi> … <bdi class="cmd-i" dir="ltr">!4</bdi></code> <span data-i18n="v_cmd_vote"></span></li></ul>
+        <h4 data-i18n="cmds_mod">للستريمر والمودز</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!likely</bdi></code> <span data-i18n="l_cmd_start"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!stop</bdi></code> <span data-i18n="c_cmd_stop"></span></li></ul>
+      </details>
+
+      <div class="card feed-card ctrl-only"><h3 data-i18n="chat_feed">الشات</h3><p class="muted small" id="feedEmpty" data-i18n="feed_empty"></p><ol class="feed" id="feed" aria-live="off"></ol></div>
+      <div class="card lb-card ctrl-only"><div class="lb-head"><h3 data-i18n="lb">الترتيب</h3><button class="btn btn-ghost btn-sm" id="lbReset" type="button" data-i18n="reset">تصفير</button></div><p class="muted small" id="lbEmpty" data-i18n="lb_empty"></p><ol class="lb" id="lb"></ol></div>
+    </aside>
+  </div>
+</main>
+<footer class="foot"><p data-i18n="footer">للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span> · <a href="https://www.twitch.tv/iitzmedoo" rel="noopener">twitch.tv/iitzmedoo</a></p></footer>
+<script src="/shared/js/core.js"></script>
+<script src="/shared/js/words.js"></script>
+<script src="/shared/js/app.js"></script>
+<script src="/shared/js/auth.js"></script>
+<script src="/games/likely/poll.js"></script>
+<script src="/games/likely/likely.js"></script>
+</body>
+</html>
