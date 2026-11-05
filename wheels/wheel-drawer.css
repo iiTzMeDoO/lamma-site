@@ -7,12 +7,14 @@ html:not(.obs) body.g-wheel-pick footer.foot{display:none}
 html:not(.obs) body.g-wheel-pick .gp{max-width:none;margin:0;padding:0}
 html:not(.obs) body.g-wheel-pick .gp-grid{display:block}
 
-/* الستيج بيملا الشاشة كلها (بنفس الخلفية، بلا أشرطة)، والمحتوى 16:9 بالنص: نفس توزيع OBS بالضبط */
+/* الخلفية بتملا الشاشة كلها، والمحتوى 16:9 بالنص بين الهيدر والشريط التحتي (ما بيتغطى): نفس توزيع OBS بالضبط */
 html:not(.obs) body.g-wheel-pick .stage-wrap{position:fixed;inset:0;top:0;z-index:1;display:block;height:auto;background:var(--bg)}
 html:not(.obs) body.g-wheel-pick .stage-wrap>.stage{position:absolute;inset:0;width:auto;height:auto;aspect-ratio:auto;
   border:0;border-radius:0;box-shadow:none;container-type:size}
 html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{box-sizing:border-box;margin:auto;
-  width:min(100cqw,calc(100cqh * 16 / 9));height:min(100cqh,calc(100cqw * 9 / 16))}
+  inset:var(--hdr,64px) 0 var(--dock-h) 0;
+  width:min(100cqw,calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));
+  height:min(calc(100cqh - var(--hdr,64px) - var(--dock-h)),calc(100cqw * 9 / 16))}
 html:not(.obs) body.g-wheel-pick .stage-wrap>.lay-bar{display:none}
 /* أزرار الشاشة الكاملة القديمة (جوا الستيج) مش لازمة: بالشريط التحتي زر شاشة كاملة للصفحة كلها */
 html:not(.obs) body.g-wheel-pick .stage .lay-fs,html:not(.obs) body.g-wheel-pick .stage .w-fs-gear{display:none!important}
