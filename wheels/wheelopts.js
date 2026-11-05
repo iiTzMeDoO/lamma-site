@@ -8,7 +8,7 @@
    - pickerModel(P): what the on-screen kick list shows for a published wheel state (open or closed, the chooser, numbered cards). */
 (function(root){
 'use strict';
-var DEF={sh:false,shStart:1,picker:true,pick:20,dur:6,auto:7,join:0,fin:true,finTo:3,fa:false,vip:false,fd:true};
+var DEF={sh:false,shStart:1,picker:true,pick:20,dur:6,auto:0,join:0,fin:true,finTo:3,fa:false,vip:false,fd:true};
 var LIM={pick:[3,600],dur:[2,120],auto:[1,600],join:[5,3600]};
 var LET={pick:'p',dur:'d',auto:'a',join:'j'};
 function clampT(k,v){v=Math.round(+v);if(!isFinite(v)||v<=0)return 0;var l=LIM[k];return Math.max(l[0],Math.min(l[1],v));}

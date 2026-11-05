@@ -78,4 +78,14 @@
       for(var i=0;i<ms.length;i++){var t=ms[i].target;if(t.classList&&t.classList.contains('lay-el')){anchorAll();return;}}
     }).observe(gs,{subtree:true,attributes:true,attributeFilter:['style']});
   }
+
+  /* أقسام الإعدادات: بتتذكر شو كان مفتوح */
+  (function(){
+    var K='lamma-wgrp',gr=document.querySelectorAll('.w2-set>.w2-grp'),st={};
+    try{st=JSON.parse(localStorage.getItem(K)||'{}')||{};}catch(e){}
+    gr.forEach(function(d,i){
+      if(st[i]!=null)d.open=!!st[i];
+      d.addEventListener('toggle',function(){st[i]=d.open?1:0;try{localStorage.setItem(K,JSON.stringify(st));}catch(e){}});
+    });
+  })();
 })();

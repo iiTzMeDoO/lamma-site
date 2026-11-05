@@ -23,9 +23,9 @@ A.strings({
   w_m_elim:'إقصاء',w_m_classic:'كلاسيك (اللي بتوقف عليه بيربح)',
   w_entries:'الأسماء (كل اسم بسطر)',w_open:'الشات بيقدر يدخل بـ !دخول أو !join',w_remove:'شيل الفائز بعد الدورة',w_dur:'مدة الدورة',w_dur_none:'بدون وقت (لحد ما توقفها)',w_nolimit:'بدون وقت',w_custom:'وقت مخصص',w_join_t:'وقت الدخول',w_join_left:'الدخول بيسكّر بعد {s} ث',w_stop_spin:'وقّف العجلة ⏹',w_skip:'تخطّي الدور',w_picker_on:'قائمة الطرد الكبيرة عالشاشة',w_sh_on:'إضافة شيلدات 🛡️',w_pk_title:'{x} اختار مين يطلع',w_pk_click:'اضغط على اسم لتطردو',w_pk_out:'برّا!',w_pk_safe:'محمي 🛡️',w_pk_pass:'ما حدا طلع',w_pk_nolimit:'بدون وقت',w_ev_pass:'⏭️ {x} تخطّى الدور، ما حدا طلع',w_cmd_skip:'تخطّي الدور (ما حدا بيطلع)',w_st_choose_nl:'{x} عم يختار (بدون وقت)',w_st_endless:'عم تلف… اضغط وقّف العجلة',w_title_l:'العنوان بنص العجلة',w_chatcols:'الشرايح بلون اسم كل واحد بالشات',w_avatar:'صورة القناة بنص العجلة',w_click_kick:'اضغط على أي اسم بالقائمة لتطرده',
   w_spin:'لفّ العجلة',w_spin_final:'اللفة الأخيرة 🏆',w_shuffle:'خلط',w_clear:'مسح الكل',w_clear_q:'تمسح كل الأسماء؟',w_new:'جولة جديدة (الكل يرجع)',
-  w_pause:'إيقاف مؤقت',w_resume:'كمّل',w_rand:'اختيار عشوائي عنو',w_undo:'تراجع',w_add_names:'إضافة أسماء بإيدك',w_more_opts:'خيارات زيادة',w_add:'ضيف',w_settings:'الإعدادات',
+  w_pause:'إيقاف مؤقت',w_resume:'كمّل',w_rand:'اختيار عشوائي عنو',w_undo:'تراجع',w_add_names:'إضافة أسماء بإيدك',w_g_turn:'الدور',w_g_join:'الدخول',w_g_final:'النهائي',w_g_look:'الشكل',w_more_opts:'خيارات زيادة',w_add:'ضيف',w_settings:'الإعدادات',
   w_shields:'شيلد لكل واحد بالبداية',w_pick:'وقت الاختيار',w_timeout:'إذا خلص الوقت',w_to_random:'طرد عشوائي',w_to_streamer:'الستريمر بيختار',w_to_skip:'ما حدا بيطلع',w_fin_auto:'لفّ تلقائي بالنهائي',w_fin_dock:'النتيجة باللوحة اليسار',w_fs_set:'الإعدادات',w_vip:'الـVIP بيتحكموا بالعجلة',w_reset:'↺ ريسيت',w_reset_q:'متأكد؟ اكبس كمان مرة',
-  w_auto:'اللفة الجاية لحالها',w_auto_off:'يدوي',w_in:'بالعجلة',w_out:'برا العجلة',
+  w_auto:'لفّ تلقائي بعد كل طرد',w_auto_off:'يدوي',w_in:'بالعجلة',w_out:'برا العجلة',
   w_choose_hint:'وقت الاختيار: اضغط ✖ جنب أي اسم (أو على اسمو بالقائمة عالشاشة) لتختار عنو. برّا وقت الاختيار: ✖ بيطرد مباشرة و↩ بيرجّع مباشرة.',
   w_lay_event_ph:'سطر الأحداث (طرد، رجعة)',w_join:'اكتب !دخول أو !join',w_closed:'العجلة مسكّرة',w_count:'{n} بالعجلة',w_empty:'العجلة فاضية',w_winner:'الفائز!',w_spinning:'عم تلف…',
   w_final:'اللفة الأخيرة! اللي بتوقف عليه بيربح 🏆',w_ready:'جاهزين للفة الجاية',w_ready_final:'ضلّو اثنين… اللفة الجاية بتحدد الفائز',
@@ -40,9 +40,9 @@ A.strings({
   w_m_elim:'Elimination',w_m_classic:'Classic (landed name wins)',
   w_entries:'Names (one per line)',w_open:'Chat can join with !join',w_remove:'Remove the winner after a spin',w_dur:'Spin time',w_dur_none:'No limit (until you stop it)',w_nolimit:'No limit',w_custom:'Custom',w_join_t:'Join window',w_join_left:'Joining closes in {s}s',w_stop_spin:'Stop the wheel ⏹',w_skip:'Skip the turn',w_picker_on:'Big kick list on screen',w_sh_on:'Add shields 🛡️',w_pk_title:'{x}, pick who leaves',w_pk_click:'Click a name to kick it',w_pk_out:'OUT!',w_pk_safe:'Protected 🛡️',w_pk_pass:'Nobody left',w_pk_nolimit:'No time limit',w_ev_pass:'⏭️ {x} skipped, nobody left',w_cmd_skip:'skip the turn (nobody leaves)',w_st_choose_nl:'{x} is choosing (no time limit)',w_st_endless:'Spinning… press Stop the wheel',w_title_l:'Title in the wheel centre',w_chatcols:'Slices in each viewer\'s chat colour',w_avatar:'Channel picture in the wheel centre',w_click_kick:'Click a name in the list to kick it',
   w_spin:'Spin the wheel',w_spin_final:'Final spin 🏆',w_shuffle:'Shuffle',w_clear:'Clear all',w_clear_q:'Clear every name?',w_new:'New round (everyone back)',
-  w_pause:'Pause',w_resume:'Resume',w_rand:'Random pick for them',w_undo:'Undo',w_add_names:'Add names by hand',w_more_opts:'More options',w_add:'Add',w_settings:'Settings',
+  w_pause:'Pause',w_resume:'Resume',w_rand:'Random pick for them',w_undo:'Undo',w_add_names:'Add names by hand',w_g_turn:'Turn',w_g_join:'Joining',w_g_final:'Final',w_g_look:'Look & feel',w_more_opts:'More options',w_add:'Add',w_settings:'Settings',
   w_shields:'Shields each at start',w_pick:'Pick time',w_timeout:'When time runs out',w_to_random:'Random kick',w_to_streamer:'Streamer picks',w_to_skip:'Nobody leaves',w_fin_auto:'Auto-spin in the final',w_fin_dock:'Score in the left panel',w_fs_set:'Settings',w_vip:'VIPs control the wheel',w_reset:'↺ Reset',w_reset_q:'Sure? Tap again',
-  w_auto:'Next spin by itself',w_auto_off:'Manual',w_in:'On the wheel',w_out:'Out of the wheel',
+  w_auto:'Auto-spin after each kick',w_auto_off:'Manual',w_in:'On the wheel',w_out:'Out of the wheel',
   w_choose_hint:'During a pick: press ✖ next to a name (or click it in the on-screen list) to choose for them. Outside a pick: ✖ removes directly and ↩ brings back directly.',
   w_join:'Type !join',w_closed:'The wheel is closed',w_count:'{n} on the wheel',w_empty:'The wheel is empty',w_winner:'Winner!',w_spinning:'Spinning…',
   w_final:'Final spin! Whoever it lands on wins 🏆',w_ready:'Ready for the next spin',w_ready_final:'Two left… the next spin picks the winner',
@@ -132,7 +132,7 @@ function add(name,color,user,sh){
   if(S.entries.some(dup)||S.out.some(dup))return false;
   S.entries.push({n:name,c:color||'',u:user||'',sh:sh==null?startShields():sh});return true;
 }
-function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,v:17}));if(A.updateObsUrl)A.updateObsUrl();}}
+function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,v:18}));if(A.updateObsUrl)A.updateObsUrl();}}
 /* join window: joining closes by itself N s after it opens (0 = stays open) */
 function openJoin(on){S.open=!!on;S.joinUntil=S.open&&S.joinSecs>0?Date.now()+S.joinSecs*1000:0;}
 function event(type,x,y){S.ev={t:type,x:x||'',y:y||''};S.evT=Date.now();}
@@ -643,7 +643,7 @@ if(!A.obs){
   S.mode=FIX||(sv.mode==='classic'?'classic':'elim');
   if(FIX){var seg=$('wModeSeg');if(seg&&seg.parentNode)seg.parentNode.removeChild(seg);}
   (sv.w||[]).forEach(function(e){if(e&&e.n)S.wins.push({n:String(e.n).slice(0,32),c:e.c||'',u:e.u||''})});/* saved before v13: shields were always on (sh = shields each, 0 = none) and timers had no "no limit"; shields now start OFF */
-  var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:sv.auto==null?OD.auto:sv.auto,join:sv.join==null?OD.join:sv.join,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
+  var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:(sv.v>=18&&sv.auto!=null)?sv.auto:OD.auto,join:sv.join==null?OD.join:sv.join,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
   S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;
   (sv.e||[]).forEach(function(e){add(e.n,e.c,e.u,S.shOn?(e.sh==null?S.shStart:e.sh):0)});
   (sv.o||[]).forEach(function(e){S.out.push({n:e.n,c:e.c,u:e.u,sh:S.shOn?e.sh|0:0})});
@@ -666,7 +666,7 @@ if(!A.obs){
   (function(){var x=$('wXtra');if(!x)return;var XK='lamma-wxtra';try{x.open=localStorage.getItem(XK)==='1';}catch(e){}
     x.addEventListener('toggle',function(){try{localStorage.setItem(XK,x.open?'1':'0');}catch(e){}});})();
   tmr('wPick','pick',20,function(){if(S.phase==='choose'&&!S.paused&&!S.streamerPicks)S.deadline=S.pickSecs>0?Date.now()+S.pickSecs*1000:0;});
-  tmr('whDur','dur',6);tmr('wAuto','auto',7);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
+  tmr('whDur','dur',6);tmr('wAuto','auto',10);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
   $('wShOn').addEventListener('change',function(){snap();S.shOn=this.checked;S.entries.forEach(function(e){e.sh=startShields()});S.out.forEach(function(e){e.sh=0});save();changed();});
   $('wPickerOn').addEventListener('change',function(){S.picker=this.checked;save();changed();});
   (function(){var fo=$('wFinOn'),ft=$('wFinTo');if(!fo||!ft)return;fo.checked=S.finOn;ft.value=String(S.finTo);

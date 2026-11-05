@@ -91,31 +91,32 @@
         </details>
         <details class="w2-more w2-set" open>
           <summary data-i18n="w_settings">الإعدادات</summary>
-          <div class="sgrp">
+          <details class="w2-grp" open><summary data-i18n="w_g_turn">الدور</summary><div class="sgrp">
             <div class="srow tmr elim-only"><span class="srow-l" data-i18n="w_pick"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_nolimit" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="wPickMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_nolimit"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="wPick" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_pick" aria-label=""></div></div>
-              <div class="srow tmr"><span class="srow-l" data-i18n="w_dur"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_dur_none" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="whDurMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_dur_none"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="whDur" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_dur" aria-label=""></div></div>
-              <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_sh_on"></span><input type="checkbox" role="switch" id="wShOn"></label>
-              <label class="srow sh-only elim-only"><span class="srow-l" data-i18n="w_shields">شيلد لكل واحد بالبداية</span><select id="wShields" class="ssel"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select></label>
-              <label class="srow sw classic-only"><span class="srow-l" data-i18n="w_remove"></span><input type="checkbox" role="switch" id="whRemove"></label>
-          </div>
-          <details class="w2-xtra" id="wXtra">
-              <summary><span data-i18n="w_more_opts">خيارات زيادة</span></summary>
-              <div class="sgrp">
+            <label class="srow elim-only"><span class="srow-l" data-i18n="w_timeout">إذا خلص الوقت</span><select id="wTimeout" class="ssel"><option value="streamer" data-i18n="w_to_streamer" selected>الستريمر بيختار</option><option value="random" data-i18n="w_to_random">طرد عشوائي</option><option value="skip" data-i18n="w_to_skip">ما حدا بيطلع</option></select></label>
+            <div class="srow tmr"><span class="srow-l" data-i18n="w_dur"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_dur_none" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="whDurMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_dur_none"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="whDur" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_dur" aria-label=""></div></div>
+            <div class="srow tmr elim-only"><span class="srow-l" data-i18n="w_auto"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_auto_off" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="wAutoMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_auto_off"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="wAuto" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_auto" aria-label=""></div></div>
+            <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_sh_on"></span><input type="checkbox" role="switch" id="wShOn"></label>
+            <label class="srow sh-only elim-only"><span class="srow-l" data-i18n="w_shields">شيلد لكل واحد بالبداية</span><select id="wShields" class="ssel"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select></label>
+            <label class="srow sw classic-only"><span class="srow-l" data-i18n="w_remove"></span><input type="checkbox" role="switch" id="whRemove"></label>
+          </div></details>
+          <details class="w2-grp"><summary data-i18n="w_g_join">الدخول</summary><div class="sgrp">
             <label class="srow sw"><span class="srow-l" data-i18n="w_open"></span><input type="checkbox" role="switch" id="whOpen" checked></label>
-              <div class="srow tmr"><span class="srow-l" data-i18n="w_join_t"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_nolimit" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="wJoinMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_nolimit"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="wJoin" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_join_t" aria-label=""></div></div>
-              <div class="srow tmr elim-only"><span class="srow-l" data-i18n="w_auto"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_auto_off" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="wAutoMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_auto_off"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="wAuto" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_auto" aria-label=""></div></div>
-              <label class="srow elim-only"><span class="srow-l" data-i18n="w_timeout">إذا خلص الوقت</span><select id="wTimeout" class="ssel"><option value="streamer" data-i18n="w_to_streamer" selected>الستريمر بيختار</option><option value="random" data-i18n="w_to_random">طرد عشوائي</option><option value="skip" data-i18n="w_to_skip">ما حدا بيطلع</option></select></label>
-              <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_fin_on"></span><input type="checkbox" role="switch" id="wFinOn" checked></label>
-              <label class="srow elim-only"><span class="srow-l" data-i18n="w_fin_to"></span><select id="wFinTo" class="ssel"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
-              <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_fin_auto"></span><input type="checkbox" role="switch" id="wFinAuto"></label>
-              <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_fin_dock"></span><input type="checkbox" role="switch" id="wFinDock"></label>
-              <label class="srow sw"><span class="srow-l" data-i18n="w_vip"></span><input type="checkbox" role="switch" id="wVip"></label>
-              <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_picker_on"></span><input type="checkbox" role="switch" id="wPickerOn" checked></label>
-              <label class="srow sw"><span class="srow-l" data-i18n="w_chatcols"></span><input type="checkbox" role="switch" id="whChatCols"></label>
-              <label class="srow sw"><span class="srow-l" data-i18n="w_avatar"></span><input type="checkbox" role="switch" id="whAvatar"></label>
-              <label class="srow srow-title"><span class="srow-l" data-i18n="w_title_l">العنوان بنص العجلة</span><input id="whTitle" class="sinp" dir="auto" maxlength="40" placeholder="لَمّة"></label>
-              </div>
-          </details>
+            <div class="srow tmr"><span class="srow-l" data-i18n="w_join_t"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_nolimit" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="wJoinMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_nolimit"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="wJoin" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_join_t" aria-label=""></div></div>
+            <label class="srow sw"><span class="srow-l" data-i18n="w_vip"></span><input type="checkbox" role="switch" id="wVip"></label>
+          </div></details>
+          <details class="w2-grp elim-only"><summary data-i18n="w_g_final">النهائي</summary><div class="sgrp">
+            <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_fin_on"></span><input type="checkbox" role="switch" id="wFinOn" checked></label>
+            <label class="srow elim-only"><span class="srow-l" data-i18n="w_fin_to"></span><select id="wFinTo" class="ssel"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+            <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_fin_auto"></span><input type="checkbox" role="switch" id="wFinAuto"></label>
+            <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_fin_dock"></span><input type="checkbox" role="switch" id="wFinDock"></label>
+          </div></details>
+          <details class="w2-grp"><summary data-i18n="w_g_look">الشكل</summary><div class="sgrp">
+            <label class="srow sw elim-only"><span class="srow-l" data-i18n="w_picker_on"></span><input type="checkbox" role="switch" id="wPickerOn" checked></label>
+            <label class="srow sw"><span class="srow-l" data-i18n="w_chatcols"></span><input type="checkbox" role="switch" id="whChatCols"></label>
+            <label class="srow sw"><span class="srow-l" data-i18n="w_avatar"></span><input type="checkbox" role="switch" id="whAvatar"></label>
+            <label class="srow srow-title"><span class="srow-l" data-i18n="w_title_l">العنوان بنص العجلة</span><input id="whTitle" class="sinp" dir="auto" maxlength="40" placeholder="لَمّة"></label>
+          </div></details>
         </details>
         <div class="btn-row"><button class="btn btn-ghost btn-sm" id="wNew" type="button" data-i18n="w_new">جولة جديدة (الكل يرجع)</button><button class="btn btn-ghost btn-sm" id="whShuffle" type="button" data-i18n="w_shuffle">خلط</button><button class="btn btn-danger btn-sm w-reset" id="whClear" type="button" data-i18n="w_reset">↺ ريسيت</button></div>
 

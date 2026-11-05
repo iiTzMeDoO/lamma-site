@@ -71,3 +71,22 @@ html[dir=rtl] .fs-dock .dock-btn,html[dir=rtl] .fs-dock .dock-status{direction:r
   .fs-dock .dock-btn{padding:0 12px}
 }
 .fs-dock .dock-fs{padding:0 12px;font-size:1.05rem}
+
+/* ---------- الإعدادات: أقسام بعناوين بدل قائمة وحدة طويلة ---------- */
+html:not(.obs) body.g-wheel-pick .w2-set{padding:6px 12px}
+html:not(.obs) body.g-wheel-pick .w2-set>summary{padding:6px 2px 8px;font-size:1rem}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp{margin-top:0;border-top:1px solid var(--line);padding:0}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;
+  padding:11px 2px;margin:0;font-weight:800;font-size:.92rem;color:var(--lav,#d6d9f6)}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>summary::-webkit-details-marker{display:none}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>summary::after{content:'';margin-inline-start:auto;width:7px;height:7px;
+  border-inline-end:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);transition:transform .15s}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp[open]>summary::after{transform:rotate(-135deg)}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp[open]>summary{padding-bottom:6px}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>.sgrp{padding-bottom:10px}
+/* صفوف أرحب وحقول بعرض موحّد وما بتنقص */
+html:not(.obs) body.g-wheel-pick .w2-set .srow{min-height:42px;padding:4px 2px;gap:.9rem}
+html:not(.obs) body.g-wheel-pick .w2-set .ssel{min-width:10.5rem;max-width:12.5rem;height:32px;padding-inline:10px 28px;text-overflow:ellipsis}
+html:not(.obs) body.g-wheel-pick .w2-set .sinp{width:10.5rem;height:32px}
+html:not(.obs) body.g-wheel-pick .w2-set .tmr-row input{height:32px;min-height:32px}
+html:not(.obs) body.g-wheel-pick .w2-set .tsb{height:30px}
