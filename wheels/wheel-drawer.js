@@ -60,4 +60,22 @@
   ['mousemove','mousedown','touchstart','keydown','wheel'].forEach(function(ev){document.addEventListener(ev,wake,{passive:true});});
   document.addEventListener('focusin',wake);
   arm();
+
+  /* كل عنصر بيلزق بالحافة الأقرب: يسار أو يمين (حسب مكانو بالتوزيع). العجلة بتضل بالنص */
+  function anchorAll(){
+    if(!gs)return;
+    gs.querySelectorAll('.lay-el').forEach(function(n){
+      if(n.getAttribute('data-lay')==='wheel'){n.removeAttribute('data-anchor');return;}
+      var l=parseFloat(n.style.left),w=parseFloat(n.style.width);if(isNaN(l)||isNaN(w))return;
+      var c=l+w/2,a=c<38?'l':(c>62?'r':'');
+      if(a){if(n.getAttribute('data-anchor')!==a)n.setAttribute('data-anchor',a);}else if(n.hasAttribute('data-anchor'))n.removeAttribute('data-anchor');
+    });
+  }
+  if(gs){
+    var logo=document.getElementById('whLogo');if(logo)logo.setAttribute('data-anchor','r');
+    anchorAll();
+    if(window.MutationObserver)new MutationObserver(function(ms){
+      for(var i=0;i<ms.length;i++){var t=ms[i].target;if(t.classList&&t.classList.contains('lay-el')){anchorAll();return;}}
+    }).observe(gs,{subtree:true,attributes:true,attributeFilter:['style']});
+  }
 })();

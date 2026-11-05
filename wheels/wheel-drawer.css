@@ -15,6 +15,12 @@ html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{box-sizing:border-box;m
   inset:var(--hdr,64px) 0 var(--dock-h) 0;
   width:min(100cqw,calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));
   height:min(calc(100cqh - var(--hdr,64px) - var(--dock-h)),calc(100cqw * 9 / 16))}
+/* على الشاشات العريضة: المحتوى بيضل بحجمو الطبيعي (نفس شكل OBS)، بس اللي على اليسار بيلزق بحافة الشاشة اليسار،
+   واللي على اليمين (اللوغو) بحافة اليمين، والعجلة بالنص. بوضع "تعديل الشكل" بيرجعوا لمكانهم بالصندوق 16:9 مشان السحب يضبط. */
+html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{
+  --m:calc((100cqw - min(100cqw, calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9))) / 2)}
+html:not(.obs) body.g-wheel-pick .stage:not(.lay-editing) .wh2 [data-anchor=l]{translate:calc(var(--m) * -1) 0}
+html:not(.obs) body.g-wheel-pick .stage:not(.lay-editing) .wh2 [data-anchor=r]{translate:var(--m) 0}
 html:not(.obs) body.g-wheel-pick .stage-wrap>.lay-bar{display:none}
 /* أزرار الشاشة الكاملة القديمة (جوا الستيج) مش لازمة: بالشريط التحتي زر شاشة كاملة للصفحة كلها */
 html:not(.obs) body.g-wheel-pick .stage .lay-fs,html:not(.obs) body.g-wheel-pick .stage .w-fs-gear{display:none!important}
