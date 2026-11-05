@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="/shared/css/games2.css">
 <link rel="stylesheet" href="/shared/css/layout.css">
 <link rel="stylesheet" href="/shared/css/theme.css">
+<link rel="stylesheet" href="/wheels/wheel-drawer.css">
 <script src="/shared/js/theme.js"></script>
 </head>
 <body class="gpage g-wheel g-wheel-pick" data-game="wheel" data-wmode="elim" data-title-ar="عجلة الشخصنة — لَمّة" data-title-en="Personal Wheel — Lamma">
@@ -63,7 +64,8 @@
         <p class="wait-ctrl" id="waitCtrl" hidden data-i18n="waiting_ctrl">بانتظار لوحة التحكم</p>
       </div>
     </section>
-    <aside class="side" id="side">
+    <aside class="side" id="side" aria-label="settings">
+      <div class="drawer-head"><div class="dh-t"><b data-i18n="g_title">عجلة الشخصنة</b><a href="/wheels/" data-keep>‹ <span data-i18n="all_wheels">كل العجلات</span></a></div><button class="drawer-x" id="drawerClose" type="button" aria-label="✕">✕</button></div>
       <div class="card ctrl ctrl-only" id="ctrl">
         <div class="w2-mode" id="wModeSeg" role="radiogroup" aria-label="mode">
           <button class="seg on" type="button" data-wmode="elim" data-i18n="w_m_elim">إقصاء</button>
@@ -133,6 +135,7 @@
     </aside>
   </div>
 </main>
+<div class="fs-dock ctrl-only"><button class="dock-btn" id="drawerBtn" type="button" aria-expanded="false" aria-controls="side"><span aria-hidden="true">⚙</span><span data-i18n="w_settings">الإعدادات</span></button><span class="dock-status" id="dockStatus" aria-live="polite"></span><div class="dock-quick" id="dockQuick"></div></div>
 <footer class="foot"><p data-i18n="footer">للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span> · <a href="https://www.twitch.tv/iitzmedoo" rel="noopener">twitch.tv/iitzmedoo</a></p></footer>
 <script src="/shared/js/core.js"></script>
 <script src="/shared/js/words.js"></script>
@@ -140,5 +143,6 @@
 <script src="/shared/js/auth.js"></script>
 <script src="/shared/js/layout.js"></script><script src="/shared/js/avatars.js"></script><script src="/wheels/wheelcmds.js"></script><script src="/wheels/wheelopts.js"></script><script src="/shared/js/gate.js"></script>
 <script src="/wheels/wheel.js"></script>
+<script src="/wheels/wheel-drawer.js"></script>
 </body>
 </html>

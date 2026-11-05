@@ -1,0 +1,58 @@
+/* عجلة الشخصنة: الستيج بيملا الشاشة، والإعدادات درج من اليسار بينفتح بزر تحت.
+   كل القواعد مقيّدة بـ body.g-wheel-pick وبتتعطّل بوضع OBS (?obs=1). */
+:root{--dock-h:56px}
+html:not(.obs) body.g-wheel-pick{overflow:hidden;height:100vh;height:100dvh}
+html:not(.obs) body.g-wheel-pick .gp-head,
+html:not(.obs) body.g-wheel-pick footer.foot{display:none}
+html:not(.obs) body.g-wheel-pick .gp{max-width:none;margin:0;padding:0}
+html:not(.obs) body.g-wheel-pick .gp-grid{display:block}
+
+/* الستيج: أكبر 16:9 بيناسب الشاشة (نفس نسبة الـ OBS فالتوزيع ما بيتغير) */
+html:not(.obs) body.g-wheel-pick .stage-wrap{position:relative;top:0;display:flex;align-items:center;justify-content:center;
+  height:calc(100vh - var(--hdr,64px) - var(--dock-h));height:calc(100dvh - var(--hdr,64px) - var(--dock-h));background:var(--bg)}
+html:not(.obs) body.g-wheel-pick .stage-wrap>.stage{width:min(100%,calc((100vh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));
+  width:min(100%,calc((100dvh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));border-radius:0;border-width:0}
+html:not(.obs) body.g-wheel-pick .stage-wrap>.lay-bar{display:none}
+/* الشاشة الكاملة الحقيقية (زر ⛶) بتضل زي ما كانت */
+html:not(.obs) body.g-wheel-pick .stage-wrap.lay-fson{height:100vh;height:100dvh}
+html:not(.obs) body.g-wheel-pick .stage-wrap.lay-fson>.stage{width:min(100vw,calc(100vh * 16 / 9))}
+
+/* الدرج */
+html:not(.obs) body.g-wheel-pick .side{position:fixed;top:var(--hdr,64px);bottom:var(--dock-h);left:0;right:auto;
+  width:min(430px,94vw);z-index:60;display:flex!important;flex-direction:column;gap:12px;padding:12px;
+  overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border-right:1px solid var(--line2);
+  box-shadow:14px 0 40px -10px rgba(0,0,0,.6);
+  transform:translateX(-104%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+html:not(.obs) body.g-wheel-pick.drawer-open .side{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 2px 4px}
+.drawer-head .dh-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.drawer-head .dh-t b{font-family:var(--disp);font-weight:400;font-size:1.25rem;line-height:1.2}
+.drawer-head .dh-t a{color:var(--mut);font-size:.85rem;text-decoration:none}
+.drawer-head .dh-t a:hover{color:var(--txt,#fff)}
+.drawer-x{flex:none;width:34px;height:34px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:inherit;font-size:16px;line-height:1;cursor:pointer}
+.drawer-x:hover{background:var(--card2)}
+
+/* شريط تحت + زر الإعدادات */
+.fs-dock{position:fixed;left:0;right:0;bottom:0;height:var(--dock-h);z-index:61;display:flex;align-items:center;justify-content:flex-start;direction:ltr;gap:12px;
+  padding:0 14px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.fs-dock .dock-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--line2);
+  background:var(--card);color:inherit;font:inherit;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s}
+.fs-dock .dock-btn:hover{background:var(--card2)}
+.fs-dock .dock-btn[aria-expanded=true]{background:var(--card2);border-color:var(--ta2,var(--cy))}
+html.obs .fs-dock,html.obs .drawer-head{display:none!important}
+
+/* التحكم السريع بالشريط: نسخ مرايا لأزرار القائمة (الزر الأصلي هو اللي بيشتغل) */
+html[dir=rtl] .fs-dock .dock-btn,html[dir=rtl] .fs-dock .dock-status{direction:rtl}
+.fs-dock .dock-btn{flex:none;white-space:nowrap}
+.fs-dock .dock-status{flex:1 1 0;min-width:0;text-align:center;color:var(--mut);font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fs-dock .dock-quick{flex:none;display:flex;align-items:center;gap:8px}
+.fs-dock .dock-quick .dock-btn{padding:0 14px}
+.fs-dock .dock-quick .dock-main{background:linear-gradient(180deg,var(--ta2,var(--cy)),var(--ta,var(--vio)));color:var(--tink,#0d0d14);border-color:transparent;font-weight:800;padding:0 22px}
+.fs-dock .dock-quick .dock-main:hover{filter:brightness(1.08)}
+.fs-dock .dock-btn:disabled{opacity:.45;cursor:not-allowed}
+@media (max-width:760px){
+  .fs-dock{overflow-x:auto;gap:8px;padding:0 8px}
+  .fs-dock .dock-status{display:none}
+  .fs-dock .dock-quick{margin-inline-start:auto}
+  .fs-dock .dock-btn{padding:0 12px}
+}
