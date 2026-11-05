@@ -32,4 +32,32 @@
     }
     sync();setInterval(sync,250);
   }
+
+  /* حجم الخط بيتحسب من عرض منطقة الـ16:9 (مش من الستيج الكامل) */
+  var gs=document.getElementById('gs');
+  function fitGs(){if(gs&&gs.clientWidth)gs.style.fontSize=Math.max(6.5,gs.clientWidth/60)+'px';}
+  if(gs){fitGs();if(window.ResizeObserver)new ResizeObserver(fitGs).observe(gs);else window.addEventListener('resize',fitGs);}
+  /* شاشة كاملة للصفحة كلها (الهيدر والشريط والدرج بيضلوا شغّالين) */
+  var fb=document.getElementById('dockFs'),de=document.documentElement;
+  function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
+  if(fb){
+    if(!(de.requestFullscreen||de.webkitRequestFullscreen))fb.hidden=true;
+    var lbl=function(){var ar=de.lang!=='en',on=!!fsEl(),t=on?(ar?'اطلع من الشاشة الكاملة':'Exit fullscreen'):(ar?'شاشة كاملة':'Fullscreen');
+      fb.title=t;fb.setAttribute('aria-label',t);fb.setAttribute('aria-pressed',String(on));};
+    fb.addEventListener('click',function(){
+      if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}
+      var r=de.requestFullscreen||de.webkitRequestFullscreen,pr=r&&r.call(de);if(pr&&pr.catch)pr.catch(function(){});});
+    document.addEventListener('fullscreenchange',lbl);document.addEventListener('webkitfullscreenchange',lbl);
+    if(window.MutationObserver)new MutationObserver(lbl).observe(de,{attributes:true,attributeFilter:['lang']});
+    lbl();
+  }
+  /* الواجهة بتختفي بعد 3 ثواني بلا حركة وبترجع بأي حركة أو لمسة */
+  var idleT=null;
+  function arm(){clearTimeout(idleT);idleT=setTimeout(function(){
+    if(b.classList.contains('drawer-open')||document.querySelector('header.top:hover,.fs-dock:hover,#side:hover,header.top:focus-within,.fs-dock:focus-within')){arm();return;}
+    b.classList.add('ui-idle');},3000);}
+  function wake(){b.classList.remove('ui-idle');arm();}
+  ['mousemove','mousedown','touchstart','keydown','wheel'].forEach(function(ev){document.addEventListener(ev,wake,{passive:true});});
+  document.addEventListener('focusin',wake);
+  arm();
 })();

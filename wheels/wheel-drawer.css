@@ -7,15 +7,21 @@ html:not(.obs) body.g-wheel-pick footer.foot{display:none}
 html:not(.obs) body.g-wheel-pick .gp{max-width:none;margin:0;padding:0}
 html:not(.obs) body.g-wheel-pick .gp-grid{display:block}
 
-/* الستيج: أكبر 16:9 بيناسب الشاشة (نفس نسبة الـ OBS فالتوزيع ما بيتغير) */
-html:not(.obs) body.g-wheel-pick .stage-wrap{position:relative;top:0;display:flex;align-items:center;justify-content:center;
-  height:calc(100vh - var(--hdr,64px) - var(--dock-h));height:calc(100dvh - var(--hdr,64px) - var(--dock-h));background:var(--bg)}
-html:not(.obs) body.g-wheel-pick .stage-wrap>.stage{width:min(100%,calc((100vh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));
-  width:min(100%,calc((100dvh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));border-radius:0;border-width:0}
+/* الستيج بيملا الشاشة كلها (بنفس الخلفية، بلا أشرطة)، والمحتوى 16:9 بالنص: نفس توزيع OBS بالضبط */
+html:not(.obs) body.g-wheel-pick .stage-wrap{position:fixed;inset:0;top:0;z-index:1;display:block;height:auto;background:var(--bg)}
+html:not(.obs) body.g-wheel-pick .stage-wrap>.stage{position:absolute;inset:0;width:auto;height:auto;aspect-ratio:auto;
+  border:0;border-radius:0;box-shadow:none;container-type:size}
+html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{box-sizing:border-box;margin:auto;
+  width:min(100cqw,calc(100cqh * 16 / 9));height:min(100cqh,calc(100cqw * 9 / 16))}
 html:not(.obs) body.g-wheel-pick .stage-wrap>.lay-bar{display:none}
-/* الشاشة الكاملة الحقيقية (زر ⛶) بتضل زي ما كانت */
-html:not(.obs) body.g-wheel-pick .stage-wrap.lay-fson{height:100vh;height:100dvh}
-html:not(.obs) body.g-wheel-pick .stage-wrap.lay-fson>.stage{width:min(100vw,calc(100vh * 16 / 9))}
+/* أزرار الشاشة الكاملة القديمة (جوا الستيج) مش لازمة: بالشريط التحتي زر شاشة كاملة للصفحة كلها */
+html:not(.obs) body.g-wheel-pick .stage .lay-fs,html:not(.obs) body.g-wheel-pick .stage .w-fs-gear{display:none!important}
+
+/* الهيدر والشريط التحتي بيطفوا فوق الستيج وبيختفوا لما تخلّي الماوس ساكن */
+html:not(.obs) body.g-wheel-pick header.top{position:fixed;top:0;left:0;right:0}
+html:not(.obs) body.g-wheel-pick header.top,.fs-dock{transition:opacity .3s ease,transform .3s ease}
+html:not(.obs) body.g-wheel-pick.ui-idle:not(.drawer-open) header.top{opacity:0;pointer-events:none;transform:translateY(-100%)}
+html:not(.obs) body.g-wheel-pick.ui-idle:not(.drawer-open) .fs-dock{opacity:0;pointer-events:none;transform:translateY(100%)}
 
 /* الدرج */
 html:not(.obs) body.g-wheel-pick .side{position:fixed;top:var(--hdr,64px);bottom:var(--dock-h);left:0;right:auto;
@@ -56,3 +62,4 @@ html[dir=rtl] .fs-dock .dock-btn,html[dir=rtl] .fs-dock .dock-status{direction:r
   .fs-dock .dock-quick{margin-inline-start:auto}
   .fs-dock .dock-btn{padding:0 12px}
 }
+.fs-dock .dock-fs{padding:0 12px;font-size:1.05rem}
