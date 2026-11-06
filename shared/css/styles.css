@@ -620,3 +620,30 @@ html[dir=rtl] .lvp-bar i{margin-inline-start:0}
  .auth-box .auth-who bdi{max-width:6.5em}
  .auth-out{padding:.45em .6em}
 }
+
+/* ---------- «حسابي» / profiles (Nov 2026): header chip link, leaderboard row links, equipped frames + name colours ---------- */
+a.auth-who{text-decoration:none;cursor:pointer;transition:border-color .15s,background .15s}
+a.auth-who:hover,a.auth-who[aria-current=page]{border-color:rgba(154,160,208,.55);background:rgba(134,140,188,.16)}
+.lmn-profile{text-decoration:none}
+.lvp-row{padding:0}
+.lvp-link{display:flex;align-items:center;gap:10px;flex:1;min-width:0;padding:8px 10px;border-radius:12px;color:inherit;text-decoration:none;transition:background .15s}
+.lvp-link:hover{background:rgba(134,140,188,.08)}
+.lvp-me{flex-wrap:wrap}.lvp-me .lvp-who{min-width:180px}.lvp-mine{flex-shrink:0}
+/* frames: rings drawn with box-shadow (works on round pictures that clip their image) — --fw = ring width */
+.pf-fr{--fw:2px;position:relative}
+.lvp-av.pf-fr{--fw:3px}
+.pf-fr-bronze{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.6) #c27b3f,0 0 0 calc(var(--fw)*2) #6e3f1b}
+.pf-fr-silver{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.6) #d5d9e6,0 0 0 calc(var(--fw)*2) #7d8396}
+.pf-fr-gold{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.6) #f2c94c,0 0 0 calc(var(--fw)*2) #8a6a1c,0 0 calc(var(--fw)*5) rgba(242,201,76,.45)}
+.pf-fr-emerald{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.6) #3ddc97,0 0 0 calc(var(--fw)*2) #146b47,0 0 calc(var(--fw)*5) rgba(61,220,151,.4)}
+.pf-fr-diamond{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.6) #c4f3ff,0 0 0 calc(var(--fw)*2) #4fb3d4,0 0 calc(var(--fw)*6) rgba(143,211,255,.6);animation:pfGlow 2.6s ease-in-out infinite}
+.pf-fr-champion{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.5) #f2c94c,0 0 0 calc(var(--fw)*2) #0b0b0f,0 0 0 calc(var(--fw)*2.7) #9AA0D0,0 0 calc(var(--fw)*5) rgba(242,201,76,.35)}
+.pf-fr-legend{box-shadow:0 0 0 calc(var(--fw)*.6) #0b0b0f,0 0 0 calc(var(--fw)*1.6) #ffa04d,0 0 0 calc(var(--fw)*2.1) #c2341a,0 0 calc(var(--fw)*7) rgba(255,106,43,.6);animation:pfGlow 1.8s ease-in-out infinite}
+@keyframes pfGlow{50%{filter:brightness(1.18) saturate(1.1)}}
+@media(prefers-reduced-motion:reduce){.pf-fr-diamond,.pf-fr-legend{animation:none}}
+.pf-nc-periwinkle{color:#9AA0D0!important}.pf-nc-steel{color:#b9c2d6!important}.pf-nc-ice{color:#8fd3ff!important}.pf-nc-emerald{color:#3ddc97!important}
+.pf-nc-coral{color:#ff7a6b!important}.pf-nc-gold{color:#f2c94c!important}
+.pf-nc-aurora{background:linear-gradient(90deg,#5ee0d0,#8fd3ff 50%,#9AA0D0);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+/* footer (Nov 2026): one copyright line, no Twitch link */
+.foot-cr{color:#5d6070;font-size:.8rem;font-weight:600;letter-spacing:.01em}
+.foot .foot-by{color:#9AA0D0;font-weight:800}

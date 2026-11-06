@@ -613,7 +613,7 @@ api.panel=panel;
    streamer's minimum level (Kukoro-style); no skin / not written / level too low → Steve. The control page sends the chosen
    names with every publish so the OBS overlay draws the same skins. ---------- */
 var STEVE={skin:'#b98a68',hair:'#3b2416',pants:'#3a37a0',shirt:'#12a3a3',style:0,steve:1};
-var SKN={map:null,remote:null,cache:{}};
+var SKN={map:null,remote:null,cache:{},seen:{}};
 function chan(){return (typeof window!=='undefined'&&window.App&&window.App.channel)||'';}
 function lsGet(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -625,14 +625,19 @@ api.setSkin=function(user,name){name=String(name||'').trim().replace(/^@/,'');va
   if(!name){if(m[user]){delete m[user];lsSet('lamma-skins-'+chan(),m);}return 'cleared';}
   if(!/^[A-Za-z0-9_]{3,16}$/.test(name))return 'bad';if(xpLevel(user)<api.skinMinLv())return 'level';
   m[user]=name;lsSet('lamma-skins-'+chan(),m);return 'ok';};
-api.skinMap=function(){var m=skMap(),out={},min=api.skinMinLv(),n=0;Object.keys(m).forEach(function(u){if(n<400&&xpLevel(u)>=min){out[u]=m[u];n++;}});return out;};
+function chatSkins(){var m=skMap(),out={},min=api.skinMinLv(),n=0;Object.keys(m).forEach(function(u){if(n<400&&xpLevel(u)>=min){out[u]=m[u];n++;}});return out;}
+/* what the control page publishes: the !سكن picks + the profile skins drawn on this page, so the OBS overlay draws them too */
+api.skinMap=function(){var out=chatSkins(),n=Object.keys(out).length;Object.keys(SKN.seen).forEach(function(u){if(n>=400||out[u])return;var s=profSkin(u);if(s){out[u]=s;n++;}});return out;};
 function avg(d,x,y,w,h){var r=0,g=0,b=0,n=0;for(var j=y;j<y+h;j++)for(var i=x;i<x+w;i++){var k=(j*64+i)*4;if(d[k+3]<128)continue;r+=d[k];g+=d[k+1];b+=d[k+2];n++;}if(!n)return null;var t=function(v){var s=Math.round(v/n).toString(16);return s.length<2?'0'+s:s;};return '#'+t(r)+t(g)+t(b);}
 function loadSkin(name){var c=SKN.cache[name];if(c)return c;c=SKN.cache[name]={look:null,face:null};if(typeof Image==='undefined')return c;
   var img=new Image();img.crossOrigin='anonymous';img.onload=function(){try{var cv=document.createElement('canvas');cv.width=64;cv.height=64;var g=cv.getContext('2d');g.drawImage(img,0,0);var d=g.getImageData(0,0,64,64).data;
     var f=document.createElement('canvas');f.width=8;f.height=8;var fg=f.getContext('2d');fg.imageSmoothingEnabled=false;fg.drawImage(img,8,8,8,8,0,0,8,8);fg.drawImage(img,40,8,8,8,0,0,8,8);
     var legY=img.height===32?20:20;c.look={skin:avg(d,9,13,6,2)||STEVE.skin,hair:avg(d,8,0,8,8)||STEVE.hair,shirt:avg(d,20,20,8,6)||STEVE.shirt,pants:avg(d,4,legY+4,4,8)||STEVE.pants,style:0};c.face=f;}catch(e){c.look=null;}};
   img.onerror=function(){c.look=null;};img.src='https://mc-heads.net/skin/'+encodeURIComponent(name);return c;}
-function skinNameOf(u){var m=SKN.remote||api.skinMap();return m[u]||'';}
+/* «حسابي»: a viewer who equipped a fighter skin on their profile gets it here when they did not pick one with !سكن
+   (profile skins are earned with site levels / wins, so the streamer's minimum level is not asked again) */
+function profSkin(u){var P=typeof window!=='undefined'&&window.LammaProfile;if(!P||!u)return '';try{var n=P.skinOf(u)||'';SKN.seen[u]=n;return n;}catch(e){return '';}}
+function skinNameOf(u){if(SKN.remote)return SKN.remote[u]||'';var m=chatSkins();return m[u]||profSkin(u);}
 api.lookOf=function(u,color){var n=skinNameOf(u);if(!n)return STEVE;var c=loadSkin(n);return c.look||STEVE;};
 api.skinFace=function(u){var n=skinNameOf(u);if(!n)return null;var c=loadSkin(n);return c.face||null;};
 api.STEVE=STEVE;

@@ -13,7 +13,12 @@
    STORAGE (pluggable): always LOCAL (localStorage "lamma-levels", works today, this device only); and SUPABASE as well once
    SUPABASE_URL + SUPABASE_ANON_KEY are filled in auth-config.js — plain fetch to Supabase REST, all writes through the
    add_xp_batch() SQL function (supabase/schema.sql), queued in localStorage and retried if offline.
-   Honest limit: a game that runs in the browser can't fully stop cheating; the SQL function clamps every call and every hour. */
+   Honest limit: a game that runs in the browser can't fully stop cheating; the SQL function clamps every call and every hour.
+
+   PER-GAME STATS (for «حسابي» /profile/): every closed round also counts, per game (the page's data-game, or its path):
+   viewers → played / wins / XP per game + win streak; hosts → rounds hosted / players hosted / XP per game.
+   The XP rules above are unchanged. Profiles + cosmetics (frames, name colours, banners, fighter skins) = window.LammaProfile,
+   at the end of this file. */
 (function(){
 'use strict';
 var A=window.App;
@@ -39,6 +44,29 @@ function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function clean(s,n){return String(s==null?'':s).replace(/[\u0000-\u001f\u007f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,n||40)}
 function safeImg(u){return typeof u==='string'&&/^https:\/\/[^\s"'<>]{1,300}$/.test(u)?u:''}
 var ID_RE=/^(twitch|discord|google|guest):[^\s:<>"']{1,64}$/;
+/* the games, as the profile lists them (key = the page's data-game) */
+var GAMES=[
+  {k:'fast',ar:'أسرع واحد',en:'Fastest Typer',ic:'⚡',href:'/games/fast/'},
+  {k:'trivia',ar:'أسئلة سريعة',en:'Quick Trivia',ic:'❓',href:'/games/trivia/'},
+  {k:'guess',ar:'خمّن الرقم',en:'Guess the Number',ic:'🔢',href:'/games/guess/'},
+  {k:'charades',ar:'تمثيل',en:'Charades',ic:'🎭',href:'/games/charades/'},
+  {k:'chain',ar:'سلسلة كلمات',en:'Word Chain',ic:'🔗',href:'/games/chain/'},
+  {k:'codenames',ar:'كلمات سرية',en:'Secret Words',ic:'🕵️',href:'/games/codenames/'},
+  {k:'likely',ar:'مين الأرجح؟',en:'Most Likely',ic:'🗳️',href:'/games/likely/'},
+  {k:'wheel-classic',ar:'العجلة الكلاسيك',en:'Classic Wheel',ic:'🎡',href:'/wheels/wheel-classic.html'},
+  {k:'wheel',ar:'عجلة الشخصنة',en:'Personal Wheel',ic:'🎯',href:'/wheels/wheel-pick.html'},
+  {k:'battle-arena',ar:'معركة الساحة',en:'Arena Battle',ic:'⚔️',href:'/battle/battle-arena.html'},
+  {k:'battle-colors',ar:'لعبة الألوان',en:'Colour Floor',ic:'🎨',href:'/battle/battle-colors.html'},
+  {k:'hero',ar:'المحارب',en:'The Perfect Warrior',ic:'🛡️',href:'/battle/hero.html'},
+  {k:'tnt',ar:'اهرب من الـTNT',en:'TNT Run',ic:'💣',href:'/battle/tnt.html'}];
+var GAME_KEYS=GAMES.map(function(g){return g.k});
+function gameKey(){
+  var g=(A&&A.game)||(document.body&&document.body.getAttribute('data-game'))||'';
+  if(GAME_KEYS.indexOf(g)<0){var p=location.pathname,m=p.match(/^\/games\/([a-z]+)/)||p.match(/^\/battle\/([a-z-]+)\.html/)||p.match(/^\/wheels\/(wheel-classic)\.html/);
+    g=m?m[1]:(/^\/wheels\/wheel-pick/.test(p)?'wheel':'');}
+  return GAME_KEYS.indexOf(g)>=0?g:'';
+}
+var GAME=gameKey();
 
 var Local={
   name:'local',
@@ -49,9 +77,11 @@ var Local={
   add:function(items){
     var d=Local.load(),now=new Date().toISOString();
     items.forEach(function(it){
-      var tb=it.kind==='streamer'?d.streamers:d.players,r=tb[it.id]||{id:it.id,display:it.display||it.id,avatar:'',provider:it.id.split(':')[0],xp:0,level:1,rounds:0};
-      r.display=it.display||r.display;if(it.avatar)r.avatar=it.avatar;r.xp+=Math.max(0,Math.min(XP.maxPerCall,it.amount|0));r.level=levelFor(r.xp);
-      r.rounds=(r.rounds||0)+(it.rounds|0);r.updated_at=now;tb[it.id]=r;
+      var tb=it.kind==='streamer'?d.streamers:d.players,r=tb[it.id]||{id:it.id,display:it.display||it.id,avatar:'',provider:it.id.split(':')[0],xp:0,level:1,rounds:0,since:now};
+      var amt=Math.max(0,Math.min(XP.maxPerCall,it.amount|0));
+      r.display=it.display||r.display;if(it.avatar)r.avatar=it.avatar;r.xp+=amt;r.level=levelFor(r.xp);
+      r.rounds=(r.rounds||0)+(it.rounds|0);r.updated_at=now;if(!r.since)r.since=now;tb[it.id]=r;
+      statLocal(r,it,amt,now);
     });
     Local.save(d);return Promise.resolve(true);
   },
@@ -59,6 +89,20 @@ var Local={
     return Promise.resolve(Object.keys(tb).map(function(k){return tb[k]}).sort(function(a,b){return b.xp-a.xp||String(a.display).localeCompare(String(b.display))}).slice(0,n||50))},
   get:function(kind,id){var d=Local.load(),tb=kind==='streamer'?d.streamers:d.players;return tb[id]||null}
 };
+/* per-game counters on a local record:
+   viewer  r.games[g] = {p: rounds played, w: rounds won, x: XP, t: last played}  + r.played, r.wins, r.streak, r.best
+   host    r.host[g]  = {p: rounds hosted, n: players hosted, x: XP, t}          + r.hosted, r.hostedPlayers
+   (a streamer record keeps its hosting in r.host too; a friends-mode host is a player record with r.host) */
+function statLocal(r,it,amt,now){
+  var g=GAME_KEYS.indexOf(it.game)>=0?it.game:'';if(!g)return;
+  if(it.host){r.host=r.host||{};var h=r.host[g]||(r.host[g]={p:0,n:0,x:0,t:''});
+    h.p+=Math.min(1,it.rounds|0);h.n+=Math.max(0,Math.min(XP.streamer.maxPlayers,it.players|0));h.x+=amt;h.t=now;
+    r.hosted=(r.hosted||0)+Math.min(1,it.rounds|0);r.hostedPlayers=(r.hostedPlayers||0)+Math.max(0,Math.min(XP.streamer.maxPlayers,it.players|0));return}
+  if(!it.played)return;
+  r.games=r.games||{};var s=r.games[g]||(r.games[g]={p:0,w:0,x:0,t:''});
+  s.p++;s.x+=amt;s.t=now;r.played=(r.played||0)+1;
+  if(it.won){s.w++;r.wins=(r.wins||0)+1;r.streak=(r.streak||0)+1;r.best=Math.max(r.best||0,r.streak)}else r.streak=0;
+}
 var Supa={
   name:'supabase',on:SB_ON,
   /* the legacy "anon" key is a JWT and also goes as Bearer; a new "sb_publishable_…" key goes in apikey only */
@@ -66,7 +110,8 @@ var Supa={
   add:function(items){
     if(!SB_ON||!items.length||!window.fetch)return Promise.resolve(false);
     return fetch(SB_URL+'/rest/v1/rpc/add_xp_batch',{method:'POST',headers:Supa.h(),body:JSON.stringify({items:items.map(function(it){
-      return {kind:it.kind,id:it.id,display:it.display||'',avatar:it.avatar||'',amount:it.amount|0,rounds:it.rounds|0}})})})
+      var o={kind:it.kind,id:it.id,display:it.display||'',avatar:it.avatar||'',amount:it.amount|0,rounds:it.rounds|0};
+      if(it.game){o.game=it.game;o.played=it.played?1:0;o.won=it.won?1:0;o.players=it.players|0;o.host=it.host?1:0}return o})})})
       .then(function(r){if(!r.ok)throw new Error('supabase '+r.status);return true});
   },
   top:function(kind,n){
@@ -78,8 +123,25 @@ var Supa={
   getOne:function(kind,id){
     if(!SB_ON||!window.fetch)return Promise.reject(new Error('off'));
     var t=kind==='streamer'?'streamers':'players';
-    return fetch(SB_URL+'/rest/v1/'+t+'?select=id,display,avatar,xp,level&id=eq.'+encodeURIComponent(id)+'&limit=1',{headers:Supa.h()})
+    return fetch(SB_URL+'/rest/v1/'+t+'?select=*&id=eq.'+encodeURIComponent(id)+'&limit=1',{headers:Supa.h()})
       .then(function(r){if(!r.ok)throw new Error('supabase '+r.status);return r.json()}).then(function(a){return a&&a[0]||null});
+  },
+  /* the profile page: per-game rows (kind viewer | streamer) */
+  stats:function(id){
+    if(!SB_ON||!window.fetch)return Promise.reject(new Error('off'));
+    return fetch(SB_URL+'/rest/v1/game_stats?select=kind,game,played,wins,xp,players,last_at&id=eq.'+encodeURIComponent(id),{headers:Supa.h()})
+      .then(function(r){if(!r.ok)throw new Error('supabase '+r.status);return r.json()});
+  },
+  profiles:function(ids){
+    if(!SB_ON||!window.fetch||!ids.length)return Promise.reject(new Error('off'));
+    var list=ids.map(function(i){return '"'+String(i).replace(/["\\]/g,'')+'"'}).join(',');
+    return fetch(SB_URL+'/rest/v1/profiles?select=*&id=in.('+encodeURIComponent(list)+')',{headers:Supa.h()})
+      .then(function(r){if(!r.ok)throw new Error('supabase '+r.status);return r.json()});
+  },
+  saveProfile:function(p){
+    if(!SB_ON||!window.fetch)return Promise.reject(new Error('off'));
+    return fetch(SB_URL+'/rest/v1/rpc/save_profile',{method:'POST',headers:Supa.h(),body:JSON.stringify(p)})
+      .then(function(r){if(!r.ok)throw new Error('supabase '+r.status);return r.json()});
   }
 };
 /* the online queue: merged per kind+id, sent in one request, kept until Supabase says OK */
@@ -87,7 +149,8 @@ function qLoad(){try{var q=JSON.parse(lsGet(QKEY)||'[]');return Array.isArray(q)
 function enqueue(items){
   if(!SB_ON||!items.length)return;
   var q=qLoad(),by={};q.forEach(function(it){by[it.kind+'|'+it.id]=it});
-  items.forEach(function(it){var k=it.kind+'|'+it.id,o=by[k];if(o){o.amount+=it.amount;o.rounds=(o.rounds|0)+(it.rounds|0);o.display=it.display||o.display;o.avatar=it.avatar||o.avatar}else{o={kind:it.kind,id:it.id,display:it.display,avatar:it.avatar||'',amount:it.amount,rounds:it.rounds|0};by[k]=o;q.push(o)}});
+  items.forEach(function(it){if(it.game){q.push(it);return}  /* a round with per-game stats travels as it is */
+    var k=it.kind+'|'+it.id,o=by[k];if(o&&!o.game){o.amount+=it.amount;o.rounds=(o.rounds|0)+(it.rounds|0);o.display=it.display||o.display;o.avatar=it.avatar||o.avatar}else{o={kind:it.kind,id:it.id,display:it.display,avatar:it.avatar||'',amount:it.amount,rounds:it.rounds|0};by[k]=o;q.push(o)}});
   lsSet(QKEY,JSON.stringify(q.slice(-300)));flushSoon(800);
 }
 var flushT=0,flushing=false;
@@ -95,7 +158,7 @@ function flushSoon(ms){clearTimeout(flushT);flushT=setTimeout(flush,ms||0)}
 function flush(){
   if(flushing||!SB_ON)return;var q=qLoad();if(!q.length)return;
   /* the server clamps each call to maxPerCall: split bigger sums into several items */
-  var send=[];q.slice(0,100).forEach(function(it){var left=it.amount|0,r=it.rounds|0;while(left>0||r>0){var a=Math.min(XP.maxPerCall,Math.max(0,left));send.push({kind:it.kind,id:it.id,display:it.display,avatar:it.avatar,amount:a,rounds:Math.min(r,1)});left-=a;r=Math.max(0,r-1);if(send.length>=150)break;}});
+  var send=[];q.slice(0,100).forEach(function(it){if(it.game){send.push(it);return}var left=it.amount|0,r=it.rounds|0;while(left>0||r>0){var a=Math.min(XP.maxPerCall,Math.max(0,left));send.push({kind:it.kind,id:it.id,display:it.display,avatar:it.avatar,amount:a,rounds:Math.min(r,1)});left-=a;r=Math.max(0,r-1);if(send.length>=150)break;}});
   flushing=true;
   Supa.add(send).then(function(){flushing=false;var cur=qLoad();lsSet(QKEY,JSON.stringify(cur.slice(Math.min(100,q.length))));if(cur.length>100)flushSoon(1500);emit()},
     function(){flushing=false;flushSoon(30000)});
@@ -161,12 +224,14 @@ function closeRound(){
   var ids=Object.keys(r.p);if(!ids.length)return;
   var local=[],online=[],h=host();
   ids.forEach(function(id){var p=r.p[id];
-    var it={kind:'player',id:id,display:p.display,avatar:'',amount:XP.viewer.play+p.win};local.push(it);
+    var it={kind:'player',id:id,display:p.display,avatar:'',amount:XP.viewer.play+p.win};
+    if(GAME){it.game=GAME;it.played=1;it.won=p.win>0?1:0}local.push(it);
     if(h&&h.online)online.push(it)});
   if(h){
     var hostOk=r.explicit||Date.now()-lastAutoHost>XP.autoRoundSec*1000;
     if(hostOk){lastAutoHost=Date.now();
       var n=Math.min(XP.streamer.maxPlayers,ids.length),hit={kind:h.kind,id:h.id,display:h.display,avatar:h.avatar,amount:XP.streamer.round+XP.streamer.perPlayer*n,rounds:1};
+      if(GAME){hit.game=GAME;hit.host=1;hit.players=n}
       local.push(hit);if(h.online)online.push(hit)}
   }
   Local.add(local);enqueue(online);emit();
@@ -195,6 +260,12 @@ function L(k){var l=A&&A.lang?A.lang():'ar';return (STR[l]||STR.ar)[k]}
 function badge(level,cls){var b=document.createElement('span');b.className='lv-badge'+(cls?' '+cls:'');b.textContent='Lv'+(level||1);b.title=L('lv')+' '+(level||1);b.setAttribute('dir','ltr');return b}
 /* auth.js calls this on the header "signed in as" chip */
 function decorate(chip){
+  /* «حسابي»: the chip opens /profile/ and wears the equipped frame, name colour and custom picture */
+  try{var P=window.LammaProfile,pid=P&&P.myId(),pp=pid?P.deco(pid):{},av=chip.querySelector('.auth-av'),nm=chip.querySelector('bdi');
+    if(av){P.applyFrame(av,pp.frame);if(pp.avatar&&P.imgOk(pp.avatar)){var im=av.querySelector('img');if(!im){while(av.firstChild)av.removeChild(av.firstChild);im=document.createElement('img');im.alt='';av.appendChild(im)}im.src=pp.avatar}}
+    if(nm)P.applyColor(nm,pp.name_color);
+    if(location.pathname.indexOf('/profile')===0&&!/[?&]id=/.test(location.search))chip.setAttribute('aria-current','page');
+  }catch(e){}
   var me=mine();var b=badge(me?me.level:1,'lv-me');if(me){var p=progress(me.xp);b.title=L('lv')+' '+p.level+' · '+me.xp+' '+L('xp')}
   chip.appendChild(b);
   if(SB_ON){var x=meIds()[0];if(x)Supa.getOne(x.kind,x.id).then(function(r){if(r&&r.level){b.textContent='Lv'+r.level;b.title=L('lv')+' '+r.level+' · '+r.xp+' '+L('xp')}},function(){})}
@@ -219,10 +290,163 @@ function emit(){
   fns.forEach(function(f){try{f()}catch(e){console.error(e)}});try{window.dispatchEvent(new CustomEvent('lamma-levels'))}catch(e){}}
 window.addEventListener('storage',function(e){if(e.key===LKEY)emit()});
 
+
+/* =====================================================================================================================
+   PROFILES + COSMETICS — window.LammaProfile (used by /profile/, the leaderboard rows, the header chip and the arena skins)
+   A profile id is the same id the levels use: "twitch:<login>" for Twitch (viewers from chat included), else "<provider>:<id>".
+   Saved on this device ("lamma-profiles"); with Supabase also online through save_profile() (supabase/schema.sql), which
+   re-checks every unlock against the XP / wins it holds. Honest limit: with the public key only, the server can't tell WHO
+   calls save_profile, so it can't strongly tie an edit to the owner (same as the XP note above).
+
+   UNLOCK RULES (one place — change them here AND in schema.sql's lamma_unlocked()):
+   level = the best of the person's viewer / streamer level · wins = rounds won as a viewer (all games)            */
+var COS={
+  frame:[
+    {k:'none',ar:'بلا إطار',en:'No frame',req:{}},
+    {k:'bronze',ar:'برونزي',en:'Bronze',req:{lv:3}},
+    {k:'silver',ar:'فضي',en:'Silver',req:{lv:5}},
+    {k:'gold',ar:'ذهبي',en:'Gold',req:{lv:10}},
+    {k:'emerald',ar:'زمردي',en:'Emerald',req:{lv:15}},
+    {k:'diamond',ar:'ماسي',en:'Diamond',req:{lv:20}},
+    {k:'champion',ar:'بطل',en:'Champion',req:{wins:10}},
+    {k:'legend',ar:'أسطورة',en:'Legend',req:{wins:50}}],
+  color:[
+    {k:'default',ar:'الافتراضي',en:'Default',req:{},c:'#eceefa'},
+    {k:'periwinkle',ar:'لون لَمّة',en:'Lamma',req:{},c:'#9AA0D0'},
+    {k:'steel',ar:'فولاذي',en:'Steel',req:{lv:2},c:'#b9c2d6'},
+    {k:'ice',ar:'ثلجي',en:'Ice',req:{lv:4},c:'#8fd3ff'},
+    {k:'emerald',ar:'زمردي',en:'Emerald',req:{lv:6},c:'#3ddc97'},
+    {k:'coral',ar:'مرجاني',en:'Coral',req:{lv:8},c:'#ff7a6b'},
+    {k:'gold',ar:'ذهبي',en:'Gold',req:{lv:10},c:'#f2c94c'},
+    {k:'aurora',ar:'شفق',en:'Aurora',req:{lv:20},c:'#5ee0d0'}],
+  banner:[
+    {k:'night',ar:'ليل',en:'Night',req:{}},
+    {k:'grid',ar:'شبكة',en:'Grid',req:{}},
+    {k:'waves',ar:'موج',en:'Waves',req:{lv:2}},
+    {k:'steel',ar:'فولاذ',en:'Steel',req:{lv:3}},
+    {k:'aurora',ar:'شفق',en:'Aurora',req:{lv:5}},
+    {k:'emerald',ar:'زمرد',en:'Emerald',req:{lv:8}},
+    {k:'ember',ar:'جمر',en:'Ember',req:{lv:12}},
+    {k:'gold',ar:'ذهب',en:'Gold',req:{lv:15}}],
+  /* the fighter skin in «معركة الساحة» (official Minecraft head accounts on mc-heads.net); "mc" = your own Minecraft name */
+  skin:[
+    {k:'steve',ar:'ستيف',en:'Steve',req:{},mc:''},
+    {k:'alex',ar:'أليكس',en:'Alex',req:{},mc:'MHF_Alex'},
+    {k:'villager',ar:'قروي',en:'Villager',req:{wins:1},mc:'MHF_Villager'},
+    {k:'zombie',ar:'زومبي',en:'Zombie',req:{wins:3},mc:'MHF_Zombie'},
+    {k:'skeleton',ar:'هيكل عظمي',en:'Skeleton',req:{wins:5},mc:'MHF_Skeleton'},
+    {k:'creeper',ar:'كريبر',en:'Creeper',req:{wins:10},mc:'MHF_Creeper'},
+    {k:'enderman',ar:'إندرمان',en:'Enderman',req:{wins:25},mc:'MHF_Enderman'},
+    {k:'blaze',ar:'بليز',en:'Blaze',req:{wins:50},mc:'MHF_Blaze'},
+    {k:'mc',ar:'سكن حسابك في ماينكرافت',en:'Your own Minecraft skin',req:{lv:10},mc:'*'}]
+};
+function cosItem(type,k){var l=COS[type]||[];for(var i=0;i<l.length;i++)if(l[i].k===k)return l[i];return null}
+/* {ok, have, need, pct, by:'lv'|'wins'} for one item at this level / wins */
+function unlockState(it,lv,wins){
+  var r=it&&it.req||{};
+  if(r.lv&&r.lv>1)return {ok:lv>=r.lv,have:lv,need:r.lv,pct:Math.min(1,(lv-1)/(r.lv-1)),by:'lv'};
+  if(r.wins)return {ok:wins>=r.wins,have:wins,need:r.wins,pct:Math.min(1,wins/r.wins),by:'wins'};
+  return {ok:true,have:0,need:0,pct:1,by:''};
+}
+var MC_NAME=/^[A-Za-z0-9_]{3,16}$/;
+/* a stored skin value: a key from COS.skin, or "mc:<MinecraftName>" */
+function skinKey(v){v=String(v||'');return v.indexOf('mc:')===0?'mc':v}
+function skinMc(v){v=String(v||'');if(v.indexOf('mc:')===0){var n=v.slice(3);return MC_NAME.test(n)?n:''}var it=cosItem('skin',v);return it&&it.mc!=='*'?it.mc:''}
+function isBuiltinBanner(v){return /^b:[a-z]+$/.test(String(v||''))&&!!cosItem('banner',String(v).slice(2))}
+function imgOk(v,max){v=String(v||'');if(!v)return true;
+  if(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(v))return v.length<=(max||200000);
+  return /^https:\/\/[^\s"'<>()]{1,300}$/.test(v)}
+
+var PKEY='lamma-profiles',PCACHE={};
+function pAll(){try{var d=JSON.parse(lsGet(PKEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
+function pLocal(id){return pAll()[id]||null}
+function pSaveLocal(id,p){var d=pAll();d[id]=p;try{localStorage.setItem(PKEY,JSON.stringify(d));return true}catch(e){return false}}
+function myId(){var s=sess();if(!s)return '';return s.provider+':'+(s.provider==='twitch'?String(s.login).toLowerCase():s.id)}
+/* this device's records for an id, merged into one view: {player, host, level, wins} */
+function localView(id){
+  var d=Local.load(),pl=d.players[id]||null,st=d.streamers[id]||null,host={games:{},hosted:0,players:0,xp:st?st.xp:0};
+  [st&&st.host,pl&&pl.host].forEach(function(h){if(!h)return;Object.keys(h).forEach(function(g){var a=host.games[g]||(host.games[g]={p:0,n:0,x:0,t:''}),b=h[g];a.p+=b.p|0;a.n+=b.n|0;a.x+=b.x|0;if(b.t>a.t)a.t=b.t;host.hosted+=b.p|0;host.players+=b.n|0})});
+  if(st&&!st.host&&st.rounds)host.hosted=Math.max(host.hosted,st.rounds);  // rounds from before the per-game counters
+  return {player:pl,streamer:st,host:host,level:Math.max(pl?pl.level:0,st?st.level:0,1),wins:pl?(pl.wins|0):0,since:[pl&&pl.since,st&&st.since].filter(Boolean).sort()[0]||''};
+}
+/* the same view from Supabase rows */
+function serverView(pl,st,rows){
+  var v={player:pl?{id:pl.id,display:pl.display,avatar:pl.avatar,xp:pl.xp|0,level:pl.level||levelFor(pl.xp),played:pl.played|0,wins:pl.wins|0,streak:pl.streak|0,best:pl.best_streak|0,since:pl.created_at||'',games:{}}:null,
+    streamer:st?{id:st.id,display:st.display,avatar:st.avatar,xp:st.xp|0,level:st.level||levelFor(st.xp),rounds:st.rounds|0,since:st.created_at||''}:null,host:{games:{},hosted:0,players:0,xp:st?st.xp|0:0}};
+  (rows||[]).forEach(function(r){if(GAME_KEYS.indexOf(r.game)<0)return;
+    if(r.kind==='viewer'){if(!v.player)v.player={id:'',xp:0,level:1,played:0,wins:0,streak:0,best:0,games:{}};v.player.games[r.game]={p:r.played|0,w:r.wins|0,x:r.xp|0,t:r.last_at||''}}
+    else{v.host.games[r.game]={p:r.played|0,n:r.players|0,x:r.xp|0,t:r.last_at||''};v.host.hosted+=r.played|0;v.host.players+=r.players|0}});
+  if(st&&!v.host.hosted)v.host.hosted=st.rounds|0;
+  v.level=Math.max(v.player?v.player.level:0,v.streamer?v.streamer.level:0,1);v.wins=v.player?v.player.wins:0;
+  v.since=[v.player&&v.player.since,v.streamer&&v.streamer.since].filter(Boolean).sort()[0]||'';
+  return v;
+}
+/* everything the profile page shows for one id → Promise<{id, profile, view, source}> */
+function loadProfile(id){
+  var lp=pLocal(id),lv=localView(id);
+  function local(extra){return Object.assign({id:id,profile:lp||{},view:lv,source:'local'},extra||{})}
+  if(!SB_ON)return Promise.resolve(local());
+  var tw=/^twitch:/.test(id);
+  return Promise.all([Supa.getOne('player',id).catch(function(){return null}),tw?Supa.getOne('streamer',id).catch(function(){return null}):Promise.resolve(null),
+      Supa.stats(id),Supa.profiles([id]).then(function(a){return a&&a[0]||null})]).then(function(r){
+    if(!r[0]&&!r[1]&&!r[2].length&&!r[3])return local({empty:true});
+    var sp=r[3]||{};PCACHE[id]=sp;
+    var prof=Object.assign({},sp);if(lp&&lp.updated_at&&(!sp.updated_at||lp.updated_at>sp.updated_at))prof=Object.assign(prof,lp);
+    return {id:id,profile:prof,view:serverView(r[0],r[1],r[2]),source:'supabase'};
+  },function(){return local({error:true})});
+}
+/* clamp a profile to what this level / wins unlock (the server does the same) */
+function sanitize(p,lv,wins){
+  var o={};
+  o.bio=clean(p.bio,160);
+  o.fav_game=GAME_KEYS.indexOf(p.fav_game)>=0?p.fav_game:'';
+  o.avatar=imgOk(p.avatar,200000)?String(p.avatar||''):'';
+  var b=String(p.banner||'');o.banner=isBuiltinBanner(b)?(unlockState(cosItem('banner',b.slice(2)),lv,wins).ok?b:''):(imgOk(b,200000)?b:'');
+  ['frame','color'].forEach(function(t){var f=t==='color'?'name_color':'frame',it=cosItem(t,p[f]);o[f]=it&&unlockState(it,lv,wins).ok&&it.k!=='none'&&it.k!=='default'?it.k:''});
+  var sk=String(p.skin||''),si=cosItem('skin',skinKey(sk));o.skin=si&&unlockState(si,lv,wins).ok&&si.k!=='steve'&&(si.k!=='mc'||skinMc(sk))?sk:'';
+  return o;
+}
+function saveProfile(patch){
+  var id=myId();if(!id)return Promise.reject(new Error('signed-out'));
+  var cur=pLocal(id)||{},v=localView(id);
+  function finish(lv,wins){
+    var p=sanitize(Object.assign({},cur,patch),lv,wins);p.updated_at=new Date().toISOString();p.since=cur.since||p.updated_at;
+    var s=sess();p.display=clean(s&&(s.display||s.login),40);
+    if(!pSaveLocal(id,p))return Promise.reject(new Error('quota'));
+    PCACHE[id]=p;LCACHE[id]=p;emitP(id);
+    if(!SB_ON)return Promise.resolve({profile:p,online:false});
+    return Supa.saveProfile({p_id:id,p_display:p.display,p_avatar:p.avatar,p_banner:p.banner,p_bio:p.bio,p_frame:p.frame,p_name_color:p.name_color,p_skin:p.skin,p_fav_game:p.fav_game})
+      .then(function(row){var r=Array.isArray(row)?row[0]:row;if(r&&r.id){PCACHE[id]=r}return {profile:p,online:true,server:r}},function(e){return {profile:p,online:false,error:String(e&&e.message||e)}});
+  }
+  if(!SB_ON)return finish(v.level,v.wins);
+  return loadProfile(id).then(function(x){return finish(Math.max(v.level,x.view.level),Math.max(v.wins,x.view.wins))},function(){return finish(v.level,v.wins)});
+}
+/* the cosmetics shown next to a name elsewhere (leaderboard rows, header, arena): cached, fetched in batches */
+var want={},wantT=0,LCACHE={};
+function lc(id){var l=LCACHE[id];if(l===undefined)l=LCACHE[id]=pLocal(id)||null;return l}
+function deco(id){
+  if(!id)return {};var p=PCACHE[id];if(p!==undefined)return p||{};
+  if(SB_ON&&!want[id]){want[id]=1;if(!wantT)wantT=setTimeout(fetchWanted,250)}
+  return lc(id)||{};
+}
+function fetchWanted(){wantT=0;var ids=Object.keys(want).filter(function(i){return PCACHE[i]===undefined}).slice(0,60);want={};if(!ids.length)return;
+  ids.forEach(function(i){PCACHE[i]=lc(i)});
+  Supa.profiles(ids).then(function(rows){(rows||[]).forEach(function(r){if(r&&r.id){var lp=pLocal(r.id);PCACHE[r.id]=lp&&lp.updated_at>(r.updated_at||'')?lp:r}});emitP()},function(){});}
+var pfns=[];function onProfile(f){pfns.push(f)}
+function emitP(id){pfns.forEach(function(f){try{f(id)}catch(e){console.error(e)}});try{window.dispatchEvent(new CustomEvent('lamma-profile',{detail:id||''}))}catch(e){}}
+function applyFrame(el,frame){if(!el)return;el.className=el.className.replace(/\s*pf-fr(-[a-z]+)?/g,'');if(frame&&frame!=='none'&&cosItem('frame',frame))el.className+=' pf-fr pf-fr-'+frame}
+function applyColor(el,c){if(!el)return;el.className=el.className.replace(/\s*pf-nc-[a-z]+/g,'');if(c&&c!=='default'&&cosItem('color',c))el.className+=' pf-nc-'+c}
+function profileUrl(id){return '/profile/?id='+encodeURIComponent(id)}
+/* the arena: the fighter skin a viewer equipped on their profile (used when they did not pick one with !سكن) */
+function skinOf(login){var id='twitch:'+String(login||'').toLowerCase();var p=deco(id);return p&&p.skin?skinMc(p.skin):''}
+window.addEventListener('storage',function(e){if(e.key===PKEY){PCACHE={};LCACHE={};emitP()}});
+window.LammaProfile={COS:COS,GAMES:GAMES,game:GAME,item:cosItem,unlockState:unlockState,skinMc:skinMc,skinKey:skinKey,isBuiltinBanner:isBuiltinBanner,imgOk:imgOk,
+  myId:myId,local:pLocal,localView:localView,load:loadProfile,save:saveProfile,sanitize:sanitize,deco:deco,onChange:onProfile,applyFrame:applyFrame,applyColor:applyColor,url:profileUrl,skinOf:skinOf};
+
 window.LammaLevels={XP:XP,levelFor:levelFor,xpFor:xpFor,progress:progress,backend:SB_ON?'supabase':'local',online:SB_ON,
   roundStart:roundStart,roundEnd:roundEnd,chat:chat,played:played,win:win,flush:flush,
   top:top,mine:mine,localLevel:localLevel,local:Local,supabase:Supa,host:host,canRecord:canRecord,
-  badge:badge,decorate:decorate,onChange:onChange};
+  badge:badge,decorate:decorate,onChange:onChange,games:GAMES,game:GAME};
 if(A&&!A.obs){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',navLink);else navLink();
   if(A.onLang)A.onLang(navLink);

@@ -68,7 +68,7 @@ var BASE={
   obs_title:'رابط OBS',obs_help:'ضع هذا الرابط كـ Browser Source في OBS (1920×1080). الرابط لا يعرض أي سر: لا الكلمة ولا المفتاح.',copy:'نسخ',copied:'تم النسخ ✓',
   obs_dock:'اجعل هذه الصفحة نفسها Custom Browser Dock داخل OBS (Docks ← Custom Browser Docks) حتى يعمل الأوفرلي معك خطوة بخطوة.',
   cmds:'أوامر الشات',cmds_mod:'للستريمر والمشرفين',cmds_all:'للجميع',
-  waiting_ctrl:'بانتظار لوحة التحكم',footer:'للتسلية فقط — بلا مراهنات وبلا أموال حقيقية. يُقرأ الشات قراءةً فقط، دون أي تسجيل دخول.',
+  waiting_ctrl:'بانتظار لوحة التحكم',footer_c:'حقوق النشر ©',footer_r:'لَمّة. جميع الحقوق محفوظة — صُنع بواسطة',
   winner:'الفائز',start:'ابدأ',stop:'أوقف',next:'التالي',skip_btn:'تخطّي',seconds:'ث',players:'لاعب',round:'جولة',timeup:'انتهى الوقت!',
   live:'مباشر',offline:'أوفلاين'},
  en:{brand_sub:'All your chat games in one place',skip:'Skip to content',sound:'Sound',lang_btn:'ع',all_games:'All games',all_wheels:'All wheels',all_battle:'All battle modes',
@@ -77,7 +77,7 @@ var BASE={
   obs_title:'OBS link',obs_help:'Add this link as a Browser Source in OBS (1920×1080). It never shows a secret: not the word, not the key.',copy:'Copy',copied:'Copied ✓',
   obs_dock:'Run this control page as a Custom Browser Dock inside OBS (Docks → Custom Browser Docks) so the overlay follows you step by step.',
   cmds:'Chat commands',cmds_mod:'Streamer & mods',cmds_all:'Everyone',
-  waiting_ctrl:'Waiting for the control panel',footer:'Just for fun — no betting, no real money. Chat is read-only, no login needed.',
+  waiting_ctrl:'Waiting for the control panel',footer_c:'Copyright ©',footer_r:'Lamma. All rights reserved — Made by',
   winner:'Winner',start:'Start',stop:'Stop',next:'Next',skip_btn:'Skip',seconds:'s',players:'players',round:'Round',timeup:'Time\'s up!',
   live:'Live',offline:'Offline'}
 };

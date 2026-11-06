@@ -156,14 +156,14 @@ function canControl(ch){
 
 /* ---------- page UI (header box, sign-in chooser, lock screen over the control panel) ---------- */
 var A=window.App;
-var STR={ar:{in:'سجّل الدخول بتويتش',out:'خروج',as:'داخل كـ',gate_t:'لوحة التحكم لصاحب القناة',gate_in:'سجّل الدخول بحساب تويتش الخاص بالقناة لفتح لوحة التحكم.',gate_other:'أنت مسجّل الدخول بحساب',gate_other2:'ولوحة تحكم قناة',gate_other3:'تفتح لصاحبها فقط.',mine:'افتح لقناتي',off:'تسجيل الدخول غير مفعّل بعدُ',safe:'لا نطلب أي صلاحيات، نتأكد فقط من هويتك. يبقى التوكن في متصفحك.',
+var STR={ar:{in:'سجّل الدخول بتويتش',out:'خروج',as:'داخل كـ',my_profile:'حسابي',gate_t:'لوحة التحكم لصاحب القناة',gate_in:'سجّل الدخول بحساب تويتش الخاص بالقناة لفتح لوحة التحكم.',gate_other:'أنت مسجّل الدخول بحساب',gate_other2:'ولوحة تحكم قناة',gate_other3:'تفتح لصاحبها فقط.',mine:'افتح لقناتي',off:'تسجيل الدخول غير مفعّل بعدُ',safe:'لا نطلب أي صلاحيات، نتأكد فقط من هويتك. يبقى التوكن في متصفحك.',
   signin:'تسجيل الدخول',choose_t:'سجّل الدخول',choose_sub:'اختر الطريقة التي تناسبك. نأخذ اسمك وصورتك فقط.',
   p_twitch:'تويتش',p_discord:'ديسكورد',p_google:'جوجل',p_guest:'ضيف',
   d_twitch:'للستريمرز: لوحة تحكم قناتك',d_discord:'العب مع أصحابك بلا بث',d_google:'بحساب جوجل',d_guest:'اكتب اسمك فقط، بلا حساب',
   not_set:'غير مفعّل بعدُ (يحتاج Client ID)',guest_ph:'اسمك الظاهر',guest_go:'ادخل',guest_bad:'اكتب اسمًا من حرفين على الأقل',close:'إغلاق',
   friends:'العب مع أصحابك بلا بث',friends_t:'العب مع أصحابك',friends_in:'سجّل الدخول بأي طريقة لفتح لوحة التحكم لغرفتك.',
   friends_on:'بلا بث',stream_back:'العودة إلى وضع البث',or:'أو'},
- en:{in:'Login with Twitch',out:'Log out',as:'Signed in as',gate_t:'Control panel is for the channel owner',gate_in:'Sign in with the channel\'s Twitch account to open the control panel.',gate_other:'You are signed in as',gate_other2:'and the control panel for',gate_other3:'opens only for its owner.',mine:'Open my channel',off:'Login is not switched on yet',safe:'No permissions requested, we only check who you are. The token stays in your browser.',
+ en:{in:'Login with Twitch',out:'Log out',as:'Signed in as',my_profile:'My profile',gate_t:'Control panel is for the channel owner',gate_in:'Sign in with the channel\'s Twitch account to open the control panel.',gate_other:'You are signed in as',gate_other2:'and the control panel for',gate_other3:'opens only for its owner.',mine:'Open my channel',off:'Login is not switched on yet',safe:'No permissions requested, we only check who you are. The token stays in your browser.',
   signin:'Sign in',choose_t:'Sign in',choose_sub:'Pick whichever suits you. We only take your name and picture.',
   p_twitch:'Twitch',p_discord:'Discord',p_google:'Google',p_guest:'Guest',
   d_twitch:'For streamers: your channel\'s control panel',d_discord:'Play with friends, no stream',d_google:'With your Google account',d_guest:'Just type a name, no account',
@@ -245,7 +245,7 @@ function render(){
     else{
       box.hidden=false;
       if(isGame()&&mode()==='friends'){var fm=btn('auth-mode',[frIcon(),mk('span','',[L('friends_on')])],function(){setMode('stream');render()});fm.title=L('stream_back');fm.setAttribute('aria-label',L('friends_on')+' — '+L('stream_back'));box.appendChild(fm)}
-      if(u){var w=mk('span','auth-who p-'+u.provider,[avatarEl(u),bdi(u.display||u.login),mk('span','auth-pv',[ICON[u.provider]()])]);w.title=L('as')+' '+(u.display||u.login)+' · '+L('p_'+u.provider);if(window.LammaLevels)try{LammaLevels.decorate(w,u)}catch(e){}box.appendChild(w);box.appendChild(outBtn())}
+      if(u){var w=mk('a','auth-who p-'+u.provider,[avatarEl(u),bdi(u.display||u.login),mk('span','auth-pv',[ICON[u.provider]()])]);w.href='/profile/';w.title=L('as')+' '+(u.display||u.login)+' · '+L('p_'+u.provider)+' — '+L('my_profile');if(window.LammaLevels)try{LammaLevels.decorate(w,u)}catch(e){}box.appendChild(w);box.appendChild(outBtn())}
       else{var si=btn('tw-btn auth-in',[inIcon(),mk('span','',[L('signin')])],openChooser);si.setAttribute('aria-label',L('signin'));si.setAttribute('aria-haspopup','dialog');box.appendChild(si)}
     }
   }
@@ -286,6 +286,7 @@ function boot(){
   if(!A||A.obs)return; // overlays stay tokenless and read-only
   render();if(A.onLang)A.onLang(render);
   window.addEventListener('lamma-auth',render);
+  window.addEventListener('lamma-profile',render); // «حسابي»: a new frame / colour / picture shows on the header chip at once
   window.addEventListener('storage',function(e){if(e.key===SESS||e.key===MODE)render()});
   var t=twTok(),s=session();
   // Twitch asks apps to re-check a token at least hourly

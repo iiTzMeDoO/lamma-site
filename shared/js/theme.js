@@ -129,7 +129,15 @@ function menuEnsure(){
     lrow.addEventListener('click',function(){lb.click()});
     add('lang',lrow,1);
   }
+  /* «حسابي / My profile»: the person's own profile page (/profile/) */
+  var prow=el('a','lmn-row lmn-profile');prow.href='/profile/';
+  prow.appendChild(el('span','lmn-ico')).appendChild(svgIcon(['M12 12.5a4.2 4.2 0 1 0 0-8.4 4.2 4.2 0 0 0 0 8.4z','M4.5 20.2c1.2-3.6 4.1-5.4 7.5-5.4s6.3 1.8 7.5 5.4']));
+  var pt=el('span','lmn-txt');pt.appendChild(el('span','lmn-lab'));var psub=pt.appendChild(el('small','lmn-sub'));prow.appendChild(pt);
+  prow.addEventListener('click',function(){close(true)});
+  if(location.pathname.indexOf('/profile')===0&&!/[?&]id=/.test(location.search))prow.setAttribute('aria-current','page');
+  add('profile',prow,0.5);  // first row
   function relabel(){
+    prow.querySelector('.lmn-lab').textContent=L('حسابي','My profile');psub.textContent=L('الإحصائيات والسكنات','Stats and skins');
     ttl.textContent=L('القائمة','Menu');x.setAttribute('aria-label',L('إغلاق القائمة','Close menu'));
     b.setAttribute('aria-label',L('القائمة','Menu'));b.title=b.getAttribute('aria-label');d.setAttribute('aria-label',L('القائمة','Menu'));
     if(lrow){lrow.querySelector('.lmn-lab').textContent=L('اللغة','Language');lsub.textContent=L('العربية','English');

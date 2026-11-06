@@ -7,7 +7,7 @@ A.strings({
   lv_streamers:'أفضل الستريمرز',lv_viewers:'أفضل المشاهدين',lv_empty:'لا أحد هنا بعد. شغّل جولة في أي لعبة وستظهر الأسماء.',
   lv_local:'على هذا الجهاز فقط',lv_local_why:'لوحة أونلاين تجمع كل الأجهزة تعمل بعد ربط Supabase (ملف الإعداد).',lv_online:'أونلاين · من كل الأجهزة',
   lv_online_empty:'اللوحة الأونلاين فارغة بعدُ، فهذه بيانات هذا الجهاز.',lv_loading:'جارٍ التحميل…',lv_xp:'نقطة خبرة',lv_rounds:'جولة',
-  lv_me:'مستواك',lv_next:'للمستوى التالي',lv_rules_t:'كيف تُحسب النقاط؟',
+  lv_me:'مستواك',lv_myprofile:'حسابي',lv_next:'للمستوى التالي',lv_rules_t:'كيف تُحسب النقاط؟',
   r_play:'المشاهد: +{a} لكل جولة يشارك فيها',r_win:'الفوز: +{a}، و+{b} لكل نقطة إضافية تعطيها اللعبة (حتى {c} في الجولة)',
   r_host:'الستريمر: +{a} لكل جولة تنتهي بلاعب واحد على الأقل، و+{b} لكل مشاهد شارك (حتى {c} مشاهدًا)',
   r_friends:'مع الأصحاب بلا بث: نقاط التشغيل تذهب إلى مستوى المضيف نفسه',r_curve:'المستوى n يحتاج 100 × (n−1)^1.5 نقطة: المستوى 2 = 100، 3 = 283، 5 = 800، 10 = 2700'},
@@ -15,7 +15,7 @@ A.strings({
   lv_streamers:'Top Streamers',lv_viewers:'Top Viewers',lv_empty:'Nobody here yet. Run a round in any game and names will show up.',
   lv_local:'On this device only',lv_local_why:'An online board across all devices works once Supabase is connected (setup file).',lv_online:'Online · all devices',
   lv_online_empty:'The online board is still empty, so this is this device\'s data.',lv_loading:'Loading…',lv_xp:'XP',lv_rounds:'rounds',
-  lv_me:'Your level',lv_next:'to next level',lv_rules_t:'How is XP counted?',
+  lv_me:'Your level',lv_myprofile:'My profile',lv_next:'to next level',lv_rules_t:'How is XP counted?',
   r_play:'Viewer: +{a} for every round they take part in',r_win:'Winning: +{a}, plus +{b} for every extra point the game gives (up to {c} per round)',
   r_host:'Streamer: +{a} for every round that ends with at least one player, plus +{b} per viewer who played (up to {c} viewers)',
   r_friends:'With friends, no stream: hosting XP goes to the host\'s own level',r_curve:'Level n needs 100 × (n−1)^1.5 XP: level 2 = 100, 3 = 283, 5 = 800, 10 = 2700'}
@@ -38,7 +38,12 @@ function row(r,i){
   var nm=mk('span','lvp-nm',[mk('bdi','',[r.display||r.id])]);
   var meta=mk('span','lvp-meta',[num(r.xp)+' '+A.t('lv_xp')]);
   if(kind==='streamer'&&r.rounds)meta.appendChild(document.createTextNode(' · '+num(r.rounds)+' '+A.t('lv_rounds')));
-  return mk('li','lvp-row',[mk('span','lvp-rk',[String(i+1)]),avatar(r),mk('span','lvp-who',[mk('span','lvp-line',[nm,LV.badge(lv)]),bar(r.xp),meta])]);
+  /* «حسابي»: every row opens that person's profile and wears their equipped frame + name colour */
+  var av=avatar(r),P=window.LammaProfile,d=P?P.deco(r.id):{};
+  if(P){P.applyFrame(av,d.frame);P.applyColor(nm,d.name_color);if(d.avatar&&P.imgOk(d.avatar)){var im=av.querySelector('img');if(!im){A.clear(av);im=document.createElement('img');im.alt='';im.width=40;im.height=40;av.appendChild(im)}im.src=d.avatar}}
+  var a=mk('a','lvp-link',[mk('span','lvp-rk',[String(i+1)]),av,mk('span','lvp-who',[mk('span','lvp-line',[nm,LV.badge(lv)]),bar(r.xp),meta])]);
+  a.href=P?P.url(r.id):'/profile/?id='+encodeURIComponent(r.id);
+  return mk('li','lvp-row',[a]);
 }
 /* public Twitch avatars for rows that have none (one request for the whole page, cached for this tab) */
 function fetchAvatars(rows){
@@ -67,8 +72,10 @@ function me(){
   var box=$('lvMe'),m=LV.mine(),s=window.LammaAuth&&LammaAuth.session();A.clear(box);
   if(!s){box.hidden=true;return}
   var xp=m?m.xp:0,p=LV.progress(xp);box.hidden=false;
-  box.appendChild(avatar({id:'me',display:s.display||s.login,avatar:s.avatar}));
+  var P=window.LammaProfile,pd=P?P.deco(P.myId()):{},mav=avatar({id:'me',display:s.display||s.login,avatar:pd.avatar||s.avatar});if(P)P.applyFrame(mav,pd.frame);
+  box.appendChild(mav);
   box.appendChild(mk('div','lvp-who',[mk('span','lvp-line',[mk('small','muted',[A.t('lv_me')]),mk('span','lvp-nm',[mk('bdi','',[s.display||s.login])]),LV.badge(p.level)]),bar(xp),mk('span','lvp-meta',[num(xp)+' '+A.t('lv_xp')+' · '+num(Math.max(0,p.to-xp))+' '+A.t('lv_next')])]));
+  var go=mk('a','btn btn-ghost btn-sm lvp-mine',[A.t('lv_myprofile')]);go.href='/profile/';box.appendChild(go);
 }
 function rules(){
   var X=LV.XP,ul=$('lvRules');A.clear(ul);
@@ -81,6 +88,7 @@ $('lvList').parentNode.parentNode.querySelector('.lvp-tabs').addEventListener('k
 if(/[?&]tab=viewers/.test(location.search))kind='player';
 A.onLang(function(){draw();me();rules()});
 LV.onChange(function(){if(last&&last.source==='local')load();me()});
+if(window.LammaProfile)LammaProfile.onChange(function(){draw();me()});
 A.boot();
 setKind(kind);
 })();
