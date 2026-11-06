@@ -25,5 +25,13 @@ window.LAMMA_AUTH_CONFIG = {
   GUEST: true,
 
   /* optional: Twitch logins (lower case) allowed to run another channel's panel, e.g. {'iitzmedoo':['some_mod']} */
-  TWITCH_MODS: {}
+  TWITCH_MODS: {},
+
+  /* Levels + «لوحة الصدارة» online (optional). Empty = levels still work, saved on each device only.
+     Supabase → your project → Project Settings → API (Data API):
+       SUPABASE_URL      = "Project URL"            e.g. https://abcdefghijkl.supabase.co
+       SUPABASE_ANON_KEY = "anon" "public" key      (the long key marked public; NEVER the service_role / secret key)
+     Run supabase/schema.sql once in the SQL editor first. Steps in SETUP_SUPABASE_AR.txt. */
+  SUPABASE_URL: '',
+  SUPABASE_ANON_KEY: ''
 };

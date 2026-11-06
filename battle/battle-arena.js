@@ -73,13 +73,14 @@ var lastT=performance.now(),pubAt=0,joinEnd=0;
 function engine(){return A.runsEngine();}
 setInterval(function(){var now=performance.now(),dt=(now-lastT)/1000;lastT=now;if(!engine())return;
   var ph=E.phase;E.step(dt);if(E.phase!==ph&&(E.phase==='won'||E.phase==='lost'||E.phase==='break'))save();
+  if(E.phase!==ph&&(E.phase==='won'||E.phase==='lost')){var sq=E.squad.map(function(u){return [u,(E.waiting[u]||{}).name||u]});A.roundEnd({players:sq,winners:E.phase==='won'?sq:[]});}
   P=E.pub();if(now-pubAt>120){pubAt=now;A.publish(P);}
   if(E.phase==='lobby'&&joinEnd&&Date.now()>=joinEnd){joinEnd=0;startBattle();}
 },33);
 A.onMirror(function(s){if(s&&s.f)P=s;});
 if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(el&&!el.hidden&&$('stage').contains(ev.target))closeInfo();},true);
 A.allowSolo();
-function startBattle(){applyCfg();if(!E.start()){status(T('ba_need'));return;}A.sfx('start');P=E.pub();A.publish(P);hud(true);}
+function startBattle(){applyCfg();if(!E.start()){status(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);}
 function pauseT(){if(!E.inRaid())return;E.paused=!E.paused;P=E.pub();A.publish(P);hud(true);}
 function toLobby(){var keep=E.squad.slice();E.reset();E.squad=keep;V={};P=E.pub();A.publish(P);hud(true);}
 A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);

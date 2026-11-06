@@ -43,10 +43,10 @@ A.obsExtra(function(){return '&pk='+CFG.pick+'&rd='+CFG.rounds+'&map='+CFG.map+'
 
 /* ---------- engine (control page, or the overlay on its own) ---------- */
 function engine(){return A.runsEngine();}
-function startGame(){if(!G.order.length){flash(T('bc_need'));return;}apply();G.start();S.deadline=CFG.pick>0?Date.now()+CFG.pick*1000:0;S.paused=false;A.sfx('start');changed();}
+function startGame(){if(!G.order.length){flash(T('bc_need'));return;}apply();G.start();A.roundStart();S.deadline=CFG.pick>0?Date.now()+CFG.pick*1000:0;S.paused=false;A.sfx('start');changed();}
 function reveal(){var r=G.reveal();if(!r)return;S.deadline=0;A.sfx(r.fall.length?'boom':'win');
   banner(r.fall.length?T('bc_fell',{n:r.fall.length}):T('bc_safe'));
-  if(r.end){S.nextAt=0;A.later?0:0;setTimeout(function(){A.sfx('win');A.confetti($('stage'),90);},900);}
+  if(r.end){A.roundEnd({players:G.order.map(function(u){return [u,(G.players[u]||{}).name]}),winners:G.winners.map(function(u){return [u,(G.players[u]||{}).name]})});S.nextAt=0;A.later?0:0;setTimeout(function(){A.sfx('win');A.confetti($('stage'),90);},900);}
   else S.nextAt=CFG.auto>0?Date.now()+CFG.auto*1000+1600:0;
   changed();}
 function nextRound(){if(G.phase!=='reveal')return;G.nextRound();S.nextAt=0;S.deadline=CFG.pick>0?Date.now()+CFG.pick*1000:0;if(G.isLast())banner(T('bc_lastr'),true);A.sfx('go');changed();}

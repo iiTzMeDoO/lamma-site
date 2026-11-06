@@ -146,6 +146,8 @@ function revokeTwitch(){
   if(t&&ON.twitch&&window.fetch){try{fetch('https://id.twitch.tv/oauth2/revoke',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'client_id='+encodeURIComponent(TWITCH_CLIENT_ID)+'&token='+encodeURIComponent(t.token)})}catch(e){}}
 }
 function logout(){revokeTwitch();LS.del(SESS);changed();location.reload()}
+/* switchAccount(): sign out here and open the sign-in chooser straight away (the home page's «تبديل الحساب») */
+function switchAccount(){revokeTwitch();LS.del(SESS);changed();setTimeout(openChooser,0)}
 function allowed(u,ch){if(!u||u.provider!=='twitch')return false;ch=String(ch||'').toLowerCase();var l=String(u.login||'').toLowerCase();return l===ch||(MODS[ch]||[]).indexOf(l)>=0}
 function canControl(ch){
   if(mode()==='friends')return !!session()||!anyOn;
@@ -243,7 +245,7 @@ function render(){
     else{
       box.hidden=false;
       if(isGame()&&mode()==='friends'){var fm=btn('auth-mode',[frIcon(),mk('span','',[L('friends_on')])],function(){setMode('stream');render()});fm.title=L('stream_back');fm.setAttribute('aria-label',L('friends_on')+' — '+L('stream_back'));box.appendChild(fm)}
-      if(u){var w=mk('span','auth-who p-'+u.provider,[avatarEl(u),bdi(u.display||u.login),mk('span','auth-pv',[ICON[u.provider]()])]);w.title=L('as')+' '+(u.display||u.login)+' · '+L('p_'+u.provider);box.appendChild(w);box.appendChild(outBtn())}
+      if(u){var w=mk('span','auth-who p-'+u.provider,[avatarEl(u),bdi(u.display||u.login),mk('span','auth-pv',[ICON[u.provider]()])]);w.title=L('as')+' '+(u.display||u.login)+' · '+L('p_'+u.provider);if(window.LammaLevels)try{LammaLevels.decorate(w,u)}catch(e){}box.appendChild(w);box.appendChild(outBtn())}
       else{var si=btn('tw-btn auth-in',[inIcon(),mk('span','',[L('signin')])],openChooser);si.setAttribute('aria-label',L('signin'));si.setAttribute('aria-haspopup','dialog');box.appendChild(si)}
     }
   }
@@ -290,6 +292,6 @@ function boot(){
   if(t&&s&&s.provider==='twitch'&&ON.twitch&&Date.now()-(t.checked||0)>50*60*1000)validate(t.token).then(render,function(){SS.del(KEY);LS.del(SESS);render()});
 }
 window.LammaAuth={enabled:enabled,clientId:TWITCH_CLIENT_ID,providers:ON,user:user,session:session,login:login,signIn:signIn,guest:guest,logout:logout,finish:finish,allowed:allowed,
-  redirectUri:redirectUri,authorizeUrl:authorizeUrl,open:openChooser,mode:mode,setMode:setMode,canControl:canControl};
+  redirectUri:redirectUri,authorizeUrl:authorizeUrl,open:openChooser,mode:mode,setMode:setMode,canControl:canControl,switchAccount:switchAccount};
 if(A){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot()}
 })();

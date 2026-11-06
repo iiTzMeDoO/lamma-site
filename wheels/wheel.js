@@ -184,6 +184,7 @@ function landed(){
 }
 function finishWin(who){
   S.phase='win';S.winner={n:who.n,c:who.c||''};S.chooser=null;
+  if(S.mode==='elim')S.entries.concat(S.out).forEach(function(e){if(e.u)A.xpPlay(e.u,e.n)}); /* levels: the whole elimination game is one round */
   if(who.u&&S.mode==='elim')A.award(who.u,who.n,3);
   if(S.mode==='classic'){S.wins.unshift({n:who.n,c:who.c||'',u:who.u||''});if(S.wins.length>30)S.wins.length=30;S.last={n:who.n,u:who.u||'',removed:false};if(who.u)A.award(who.u,who.n,1);save();}
   A.sfx('win');changed();A.confetti($('stage'),140);

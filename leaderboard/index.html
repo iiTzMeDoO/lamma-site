@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة الصدارة — لَمّة | Lamma</title>
+<meta name="description" content="لوحة الصدارة في لَمّة: أفضل الستريمرز وأفضل المشاهدين، بالمستوى ونقاط الخبرة من كل الألعاب.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="لَمّة | Lamma">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="https://lamma-site-seven.vercel.app/leaderboard/">
+<meta property="og:title" content="لوحة الصدارة — لَمّة | Lamma">
+<meta property="og:description" content="أفضل الستريمرز وأفضل المشاهدين، بالمستوى ونقاط الخبرة من كل الألعاب.">
+<meta property="og:image" content="https://lamma-site-seven.vercel.app/shared/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://lamma-site-seven.vercel.app/leaderboard/">
+<link rel="icon" href="/shared/img/favicon.png">
+<link rel="preload" href="/shared/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/shared/css/styles.css">
+<link rel="stylesheet" href="/shared/css/theme.css">
+<script src="/shared/js/theme.js"></script>
+</head>
+<body class="lbpage" data-title-ar="لوحة الصدارة — لَمّة" data-title-en="Leaderboard — Lamma">
+<a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المحتوى</a>
+<header class="top">
+  <a class="brand" href="/" aria-label="لَمّة LAMMA"><span class="logo" aria-hidden="true"><span class="logo-ar">لَمّة</span><span class="logo-en">LAMMA</span></span><small data-i18n="brand_sub">كل ألعاب الشات بمكان واحد</small></a>
+  <div class="top-end">
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" data-i18n-aria="sound" aria-label="صوت" hidden>🔊</button>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Switch to English">EN</button>
+  </div>
+</header>
+<main id="main" class="lvp">
+  <div class="lvp-head">
+    <a class="back" href="/">‹ <span data-i18n="all_games">كل الألعاب</span></a>
+    <h1 data-i18n="lv_title">لوحة الصدارة</h1>
+    <p class="muted" data-i18n="lv_sub">المستويات من كل الألعاب: المشاهدون يكسبون نقاط خبرة باللعب والفوز، والستريمرز بتشغيل الجولات.</p>
+  </div>
+  <div class="lvp-me" id="lvMe" hidden></div>
+  <div class="lvp-tabs" role="tablist" aria-label="leaderboard">
+    <button class="lvp-tab on" type="button" role="tab" id="tabS" aria-selected="true" aria-controls="lvList" data-kind="streamer" data-i18n="lv_streamers">أفضل الستريمرز</button>
+    <button class="lvp-tab" type="button" role="tab" id="tabV" aria-selected="false" aria-controls="lvList" data-kind="player" data-i18n="lv_viewers">أفضل المشاهدين</button>
+  </div>
+  <div class="card lvp-card">
+    <p class="lvp-src" id="lvSrc"></p>
+    <ol class="lvp-list" id="lvList" role="tabpanel" aria-labelledby="tabS"></ol>
+    <p class="muted lvp-empty" id="lvEmpty" hidden data-i18n="lv_empty">لا أحد هنا بعد. شغّل جولة في أي لعبة وستظهر الأسماء.</p>
+  </div>
+  <details class="card lvp-rules"><summary data-i18n="lv_rules_t">كيف تُحسب النقاط؟</summary><ul id="lvRules"></ul></details>
+</main>
+<footer class="foot"><p data-i18n="footer">للتسلية فقط — بلا مراهنات وبلا أموال حقيقية.</p><p class="foot-sm"><span lang="ar">لَمّة</span> · LAMMA · <span id="year">2026</span></p></footer>
+<script src="/shared/js/core.js"></script>
+<script src="/shared/js/app.js"></script>
+<script src="/shared/js/auth-config.js"></script><script src="/shared/js/auth.js"></script><script src="/shared/js/levels.js"></script>
+<script src="/leaderboard/leaderboard.js"></script>
+</body>
+</html>

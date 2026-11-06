@@ -51,7 +51,7 @@ function pub(){
 
 function newWord(){
   clearTimeout(S.timer);
-  var x=pick();S.item=x.it;S.catOf=x.c;S.phase='live';S.round++;S.guesses=[];S.winner=null;S.reveal='';
+  A.roundStart();var x=pick();S.item=x.it;S.catOf=x.c;S.phase='live';S.round++;S.guesses=[];S.winner=null;S.reveal='';
   S.startedAt=Date.now();S.endsAt=S.startedAt+S.dur*1000;
   A.sfx('start');changed();A.poke();
 }
@@ -59,7 +59,7 @@ function skip(){if(S.phase!=='live')return;S.round--;newWord();}
 function endRound(winner){
   if(S.phase!=='live')return;
   S.phase='end';S.reveal=shown();S.winner=winner||null;
-  if(winner){A.award(winner.user,winner.n,winner.pts);A.sfx('win');}else A.sfx('bad');
+  if(winner){A.award(winner.user,winner.n,winner.pts);A.sfx('win');}else A.sfx('bad');A.roundEnd();
   changed();if(winner)A.confetti($('stage'),80);
   if(winner&&S.auto){clearTimeout(S.timer);S.timer=setTimeout(function(){if(S.phase==='end')newWord();},5000);}
 }

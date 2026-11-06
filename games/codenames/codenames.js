@@ -67,7 +67,7 @@ function startGame(){
   if(!members('red').length||!members('blue').length){alert(A.t('k_need'));return;}
   ['red','blue'].forEach(function(t){var m=members(t);if(S.spy[t]!=='@me'&&m.indexOf(S.spy[t])<0)S.spy[t]=m.length>1?m[0]:'@me';if(m.indexOf(S.cap[t])<0||S.cap[t]===S.spy[t])S.cap[t]=m.filter(function(u){return u!==S.spy[t]})[0]||m[0];});
   if(!S.words.length||S.phase==='over'||S.rev.some(Boolean))newBoard();
-  S.phase='clue';S.turn=S.first;beginTurn();A.sfx('start');save();changed();
+  S.phase='clue';S.turn=S.first;beginTurn();A.roundStart();A.sfx('start');save();changed();
 }
 function beginTurn(){S.clue=null;S.left=0;S.tally={};S.voters={};S.deadline=S.timer>0?Date.now()+S.timer*1000:0;}
 function endTurn(why){if(S.phase!=='clue'&&S.phase!=='guess')return;event(why==='timeout'?'timeout':'end',{tm:S.turn});S.turn=other(S.turn);S.phase='clue';beginTurn();save();changed();}
@@ -90,6 +90,7 @@ function reveal(i,by){
 function gameOver(team,why){
   S.phase='over';S.winner=team;S.why=why;S.deadline=0;A.sfx('win');
   members(team).forEach(function(u){A.award(u,S.players[u].n,2)});
+  A.roundEnd({players:members('red').concat(members('blue')).map(function(u){return [u,S.players[u].n]})});
   save();changed();A.confetti($('stage'),130);
 }
 setInterval(function(){

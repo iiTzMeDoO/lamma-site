@@ -60,20 +60,20 @@ function nextItem(){
   return {kind:'words',show:wd.w.split('|')[0],ans:wd.w.split('|')};
 }
 function startRound(){
-  S.item=nextItem();S.phase='live';S.round++;S.winner=null;S.users={};S.tally={};S.deadline=Date.now()+S.time*1000;S.nextAt=0;
+  A.roundStart();S.item=nextItem();S.phase='live';S.round++;S.winner=null;S.users={};S.tally={};S.deadline=Date.now()+S.time*1000;S.nextAt=0;
   if(S.mode!=='adhkar')A.sfx('start');
   changed();
 }
 function start(mode){if(mode)S.mode=mode;S.round=0;save();startRound();}
 function endRound(phase,winner){
-  S.phase=phase;S.winner=winner||null;S.deadline=0;
+  S.phase=phase;S.winner=winner||null;S.deadline=0;A.roundEnd({players:Object.keys(S.users||{}).map(function(u){return [u]})});
   if(winner){S.hist.unshift({n:winner.n,c:winner.c,mode:S.mode});if(S.hist.length>12)S.hist.length=12;}
   var more=S.rounds===0||S.round<S.rounds;
   if(!more){S.phase=phase;S.finished=true;}else S.finished=false;
   if(more&&S.gap>0)S.nextAt=Date.now()+S.gap*1000;
   changed();
 }
-function stop(){S.phase='idle';S.item=null;S.deadline=0;S.nextAt=0;S.round=0;changed();}
+function stop(){if(S.phase==='live')A.roundEnd({players:Object.keys(S.users||{}).map(function(u){return [u]})});S.phase='idle';S.item=null;S.deadline=0;S.nextAt=0;S.round=0;changed();}
 function skip(){if(S.phase==='idle'&&!S.item)return;S.nextAt=0;startRound();}
 function reveal(){if(S.phase!=='live')return;endRound('reveal',null);}
 setInterval(function(){

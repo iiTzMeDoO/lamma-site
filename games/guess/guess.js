@@ -35,12 +35,12 @@ var hidden=false;
 function save(){if(!A.obs)A.LS.set('lamma-guess-'+A.channel,JSON.stringify({max:S.max,cd:S.cd,per:S.per,pts:S.pts,outside:S.outside}));}
 function start(max){
   if(max)S.max=Math.max(10,Math.min(1000000,max|0));
-  S.on=true;S.secret=1+Math.floor(Math.random()*S.max);S.lo=1;S.hi=S.max;S.count=0;S.users={};S.last=[];S.winner=null;S.revealed=null;S.ignored=0;S.startedAt=Date.now();
+  A.roundStart();S.on=true;S.secret=1+Math.floor(Math.random()*S.max);S.lo=1;S.hi=S.max;S.count=0;S.users={};S.last=[];S.winner=null;S.revealed=null;S.ignored=0;S.startedAt=Date.now();
   if(!A.obs)A.clear($('gIgnored'));
   A.sfx('start');save();changed();
 }
-function stop(){S.on=false;changed();}
-function reveal(){if(!S.secret)return;S.revealed=S.secret;S.on=false;A.sfx('bad');changed();}
+function stop(){S.on=false;A.roundEnd({players:Object.keys(S.users||{}).map(function(u){return [u]})});changed();}
+function reveal(){if(!S.secret)return;S.revealed=S.secret;S.on=false;A.roundEnd({players:Object.keys(S.users||{}).map(function(u){return [u]})});A.sfx('bad');changed();}
 function ignore(m,v,why){S.ignored++;if(A.obs)return;var ul=$('gIgnored');var li=el('li');li.appendChild(A.nameEl(m.name,m.color));li.appendChild(document.createTextNode(': '+v+' — '+A.t('ig_'+why)));ul.insertBefore(li,ul.firstChild);while(ul.children.length>30)ul.removeChild(ul.lastChild);}
 A.onChat(function(m){
   if(!A.runsEngine())return;
@@ -58,7 +58,7 @@ A.onChat(function(m){
   if(S.outside&&(v<S.lo||v>S.hi)){ignore(m,v,'out');return;}
   u.n++;u.t=now;u.last=v;S.count++;
   var h=C.hint(v,S.secret);
-  if(h==='win'){S.on=false;S.winner={n:m.name,c:m.color,v:v,count:S.count};S.revealed=v;S.lo=S.hi=v;A.award(m.user,m.name,S.pts);A.sfx('win');changed();A.confetti($('stage'),120);return;}
+  if(h==='win'){S.on=false;S.winner={n:m.name,c:m.color,v:v,count:S.count};S.revealed=v;S.lo=S.hi=v;A.award(m.user,m.name,S.pts);A.roundEnd({players:Object.keys(S.users||{}).map(function(u){return [u]})});A.sfx('win');changed();A.confetti($('stage'),120);return;}
   if(h==='higher')S.lo=Math.max(S.lo,v+1);else S.hi=Math.min(S.hi,v-1);
   S.last.unshift({n:m.name,c:m.color,v:v,h:h});if(S.last.length>8)S.last.length=8;
   A.sfx('pop');changed();

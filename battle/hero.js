@@ -62,16 +62,16 @@ function streamerIn(){if(!CFG.streamer||!ME||G.players[ME])return;G.join(ME,A.ch
 function engine(){return A.runsEngine();}
 var lastT=performance.now(),pubAt=0,joinEnd=0;
 setInterval(function(){var now=performance.now(),dt=(now-lastT)/1000;lastT=now;if(!engine())return;var n0=G.evId;G.step(dt);
-  if(G.evId!==n0){G.ev.forEach(function(e){if(e.id>n0&&e.k==='ko'&&!G.players[e.w].bot){var x={};x[e.w]=8;addXp(x);}});}
+  if(G.evId!==n0){G.ev.forEach(function(e){if(e.id>n0&&e.k==='ko'&&!G.players[e.w].bot){var x={};x[e.w]=8;addXp(x);A.xpWin(e.w,G.players[e.w].name,1);}});}
   P=G.pub();if(now-pubAt>100){pubAt=now;A.publish(P);}
   if(G.phase==='lobby'&&joinEnd&&Date.now()>=joinEnd){joinEnd=0;startGame();}
 },50);
 A.onMirror(function(s){if(s&&s.p)P=s;});
 A.allowSolo();
-function startGame(){apply();if(G.phase==='end'){newGame();}streamerIn();if(!G.start()){status(T('hr_need'));return;}A.sfx('start');P=G.pub();A.publish(P);hud(true);}
+function startGame(){apply();if(G.phase==='end'){newGame();}streamerIn();if(!G.start()){status(T('hr_need'));return;}A.roundStart();A.sfx('start');P=G.pub();A.publish(P);hud(true);}
 function pauseT(){if(G.phase==='lobby'||G.phase==='end')return;G.paused=!G.paused;P=G.pub();A.publish(P);hud(true);}
 function go(){if(G.phase==='lobby'||G.phase==='end'){startGame();return;}G.next();P=G.pub();A.publish(P);hud(true);}
-function endGame(){if(G.stop()){A.sfx('win');P=G.pub();A.publish(P);hud(true);}}
+function endGame(){if(G.stop()){A.roundEnd({players:Object.keys(G.players).filter(function(u){return !G.players[u].bot}).map(function(u){return [u,G.players[u].name]})});A.sfx('win');P=G.pub();A.publish(P);hud(true);}}
 function newGame(){var keep=Object.keys(G.players).filter(function(u){return !G.players[u].bot}).map(function(u){var p=G.players[u];return [u,p.name,p.color,p.letters];});G.reset();apply();keep.forEach(function(k){G.join(k[0],k[1],k[2]);G.setStats(k[0],k[3]);});V={};P=G.pub();A.publish(P);hud(true);}
 function clearAll(){G.reset();apply();V={};P=G.pub();A.publish(P);hud(true);}
 A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);if(!c)return;

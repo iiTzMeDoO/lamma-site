@@ -543,3 +543,92 @@ html[dir=rtl] .auth-who{padding:.25em .3em .25em .6em}
 .auth-mode{display:inline-flex;align-items:center;gap:.35em;font:inherit;font-size:.78rem;font-weight:700;color:#9AA0D0;background:rgba(134,140,188,.08);border:1px dashed rgba(154,160,208,.35);border-radius:99px;padding:.35em .7em;cursor:pointer}
 .auth-mode svg{width:1.05em;height:1.05em}
 @media(max-width:600px){.auth-mode span{display:none}.auth-prov{padding:10px 12px}}
+
+/* ---------- home: «قناتك» card / start buttons (replaces the old channel box) ---------- */
+body.hub:not(.has-twitch) .chan-chip{display:none}
+body.hub:not(.has-twitch) .top-end,body.lbpage .top-end{margin-inline-start:auto}
+.ch-box{max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ch-card{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),#16161c;border:1px solid rgba(154,160,208,.28);box-shadow:0 10px 40px rgba(0,0,0,.4);text-align:start}
+.ch-av{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid #868CBC;background:linear-gradient(180deg,#b1b6e0,#868CBC);color:#0d0d14;font-weight:900;font-size:1.3rem}
+.ch-av img{width:100%;height:100%;object-fit:cover;display:block}
+.ch-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ch-k{color:#9AA0D0;font-weight:800;font-size:.78rem;letter-spacing:.02em}
+.ch-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.ch-name{font-size:1.15rem;font-weight:900;color:#eceefa;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.ch-live{font-size:.82rem;color:#8b8ea3;font-weight:700}
+.ch-live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#5d6070;margin-inline-end:6px;vertical-align:middle}
+.ch-live.on{color:#ff6b6b}
+.ch-live.on::before{background:#ff4b4b;box-shadow:0 0 8px #ff4b4b}
+.ch-url{font-size:.8rem;color:#71749A;text-decoration:none}
+.ch-url:hover{color:#9AA0D0;text-decoration:underline}
+.ch-switch{flex-shrink:0;font:inherit;font-size:.8rem;font-weight:700;color:#c9cce6;background:rgba(134,140,188,.08);border:1px solid rgba(154,160,208,.3);border-radius:10px;padding:.5em .8em;cursor:pointer}
+.ch-switch:hover{background:rgba(134,140,188,.18)}
+.ch-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.ch-acts .tw-btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+.ch-fr.on{border-color:#9AA0D0;background:rgba(134,140,188,.2)}
+.ch-note{margin:0;max-width:520px}
+.ch-ok{color:#9AA0D0;font-weight:700}
+@media(max-width:480px){.ch-card{flex-wrap:wrap}.ch-switch{width:100%}.ch-acts{flex-direction:column;width:100%}.ch-acts>*{justify-content:center}}
+
+/* ---------- levels: badge, header link ---------- */
+.lv-badge{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-width:2.6em;padding:.12em .45em;border-radius:7px;font-size:.72rem;font-weight:900;line-height:1.3;letter-spacing:.02em;color:#0d0d14;background:linear-gradient(180deg,#b1b6e0,#868CBC);font-family:'Cairo',system-ui,sans-serif;unicode-bidi:isolate}
+.auth-who .lv-badge{font-size:.66rem;margin-inline-start:.15em}
+.lb .lv-badge{margin-inline-start:-4px}
+.lv-nav{display:inline-grid;place-items:center;color:#c9cce6;text-decoration:none}
+.lv-nav svg{width:19px;height:19px}
+.lv-nav[aria-current=page]{border-color:#9AA0D0;color:#fff}
+.lv-teaser{margin:2px 0 10px}
+.lv-more{color:#9AA0D0;font-weight:800;text-decoration:none}
+.lv-more:hover{text-decoration:underline}
+
+/* ---------- «لوحة الصدارة» page ---------- */
+.lvp{max-width:820px;margin:0 auto;padding:22px clamp(14px,3vw,28px) 40px}
+.lvp-head h1{font-family:var(--disp);font-weight:400;font-size:clamp(1.8rem,5vw,2.6rem);margin:6px 0 2px;color:#eceefa}
+.lvp-head p{margin:0 0 16px}
+.lvp-head .back{color:#9AA0D0;text-decoration:none;font-weight:700}
+.lvp-me{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:14px;border-radius:16px;background:#16161c;border:1px solid rgba(154,160,208,.3)}
+.lvp-tabs{display:flex;gap:6px;padding:5px;border-radius:14px;background:#111116;border:1px solid #25263a;margin-bottom:12px}
+.lvp-tab{flex:1;min-height:42px;font:inherit;font-weight:800;color:#8b8ea3;background:transparent;border:0;border-radius:10px;cursor:pointer}
+.lvp-tab.on{color:#0d0d14;background:linear-gradient(180deg,#b1b6e0,#868CBC 60%,#7a80b0)}
+.lvp-tab:not(.on):hover{color:#c9cce6;background:rgba(134,140,188,.1)}
+.lvp-card{padding:12px}
+.lvp-src{margin:0 0 10px;font-size:.85rem;color:#8b8ea3}
+.lvp-src b{color:#c9cce6}
+.lvp-src.local b{display:inline-block;padding:.1em .55em;border-radius:7px;background:rgba(93,96,112,.35);border:1px solid #5d6070}
+.lvp-src.online b{color:#9AA0D0}
+.lvp-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.lvp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:#0f0f14;border:1px solid #25263a}
+.lvp-rk{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#1c1c24;color:#c9cce6;font-weight:900;font-size:.85rem;flex-shrink:0}
+.lvp-row:nth-child(1) .lvp-rk{background:#d6d9f6;color:#0d0d14}
+.lvp-row:nth-child(2) .lvp-rk{background:#9AA0D0;color:#0d0d14}
+.lvp-row:nth-child(3) .lvp-rk{background:#71749A;color:#0d0d14}
+.lvp-av{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;background:linear-gradient(180deg,#b1b6e0,#868CBC);color:#0d0d14;font-weight:900}
+.lvp-av img{width:100%;height:100%;object-fit:cover;display:block}
+.lvp-who{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.lvp-line{display:flex;align-items:center;gap:8px;min-width:0}
+.lvp-nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;color:#eceefa}
+.lvp-tag{margin-inline-start:6px;font-size:.7rem;font-weight:700;color:#8b8ea3;border:1px solid #5d6070;border-radius:6px;padding:0 .4em}
+.lvp-bar{display:block;height:6px;border-radius:99px;background:#22232e;overflow:hidden}
+.lvp-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#71749A,#9AA0D0)}
+html[dir=rtl] .lvp-bar i{margin-inline-start:0}
+.lvp-meta{font-size:.75rem;color:#8b8ea3}
+.lvp-empty{text-align:center;padding:18px 6px;margin:0}
+.lvp-rules{margin-top:14px;padding:12px 16px}
+.lvp-rules summary{cursor:pointer;font-weight:800;color:#c9cce6}
+.lvp-rules ul{margin:10px 0 0;padding-inline-start:1.2em;color:#9a9db3;font-size:.9rem;display:grid;gap:4px}
+
+/* phones: when signed in, the top bar wraps onto a second row instead of pushing buttons off-screen */
+@media(max-width:600px){
+ .top{flex-wrap:wrap;row-gap:8px}
+ .top-end{flex-wrap:wrap;justify-content:flex-end;margin-inline-start:auto;min-width:0;max-width:100%}
+ .top .chan-chip{min-width:0;max-width:100%}
+ .auth-box{flex-wrap:wrap;min-width:0}
+ .lv-nav svg{width:17px;height:17px}
+}
+@media(max-width:600px){
+ .top-end{gap:6px}
+ .top-end .icon-btn,.top-end .lang-btn,.top-end .theme-btn{height:34px;min-width:34px}
+ .top-end .lang-btn{padding:0 9px}
+ .auth-box .auth-who bdi{max-width:6.5em}
+ .auth-out{padding:.45em .6em}
+}

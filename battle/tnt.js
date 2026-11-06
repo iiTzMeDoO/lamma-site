@@ -56,14 +56,14 @@ var P=G.pub();
 function engine(){return A.runsEngine();}
 var lastT=performance.now(),pubAt=0,joinEnd=0,tick=0;
 setInterval(function(){var now=performance.now(),dt=(now-lastT)/1000;lastT=now;if(!engine())return;var ph=G.phase,r=G.round;G.step(dt);
-  if(G.phase!==ph||G.round!==r){if(G.phase==='boom'){var xp={};G.alive().forEach(function(u){xp[u]=5;});addXp(xp);}if(G.phase==='end'){var xw={};G.winners.forEach(function(u){xw[u]=50;});addXp(xw);save();}}
+  if(G.phase!==ph||G.round!==r){if(G.phase==='boom'){var xp={};G.alive().forEach(function(u){xp[u]=5;});addXp(xp);}if(G.phase==='end'){var xw={};G.winners.forEach(function(u){xw[u]=50;});addXp(xw);save();A.roundEnd({players:G.order.map(function(u){return [u,(G.players[u]||{}).name]}),winners:G.winners.map(function(u){return [u,(G.players[u]||{}).name]})});}}
   if(G.phase==='fuse'&&G.end){var left=Math.ceil(G.end-G.t);if(left<=5&&left>0&&left!==tick){tick=left;A.sfx('tick');}}
   P=G.pub();if(now-pubAt>110){pubAt=now;A.publish(P);}
   if(G.phase==='lobby'&&joinEnd&&Date.now()>=joinEnd){joinEnd=0;startGame();}
 },50);
 A.onMirror(function(s){if(s&&s.p)P=s;});
 A.allowSolo();
-function startGame(){apply();if(!G.start()){status(T('tn_need'));return;}A.sfx('start');P=G.pub();A.publish(P);hud(true);}
+function startGame(){apply();if(!G.start()){status(T('tn_need'));return;}A.roundStart();A.sfx('start');P=G.pub();A.publish(P);hud(true);}
 function pauseT(){if(G.phase!=='fuse'&&G.phase!=='boom')return;G.paused=!G.paused;P=G.pub();A.publish(P);hud(true);}
 function go(){if(G.phase==='lobby'||G.phase==='end'){startGame();return;}G.next();P=G.pub();A.publish(P);hud(true);}
 function newGame(){var keep=G.order.map(function(u){var p=G.players[u];return [u,p.name,p.color];});G.reset();apply();keep.forEach(function(k){G.join(k[0],k[1],k[2]);});V={};P=G.pub();A.publish(P);hud(true);}

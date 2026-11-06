@@ -8,8 +8,12 @@ var LS={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:v}c
 /* one-time migration: keys were "allin1-*" before the rename to Lamma; copy them so settings/leaderboards carry over */
 (function(){try{var ks=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('allin1-')===0)ks.push(k)}ks.forEach(function(k){var nk='lamma-'+k.slice(7);if(localStorage.getItem(nk)==null)localStorage.setItem(nk,localStorage.getItem(k))})}catch(e){}})();
 var qCh=C.safeChannel(Q.get('channel'));
+/* signed in with Twitch → your own channel is the default (set from the session, never typed). ?channel= still opens a
+   channel read-only for overlays / viewer links; the control panel stays locked to that channel's owner (auth.js + gate.js). */
+var sessCh=(function(){try{var s=JSON.parse(localStorage.getItem('lamma-session')||'null');if(s&&s.provider==='twitch'&&(!s.exp||Date.now()<s.exp))return C.safeChannel(s.login)}catch(e){}return ''})();
+if(sessCh&&document.body&&document.body.classList.contains('hub'))qCh=''; /* the home page always shows your own channel */
 if(qCh)LS.set('lamma-channel',qCh);
-var CHANNEL=qCh||C.safeChannel(LS.get('lamma-channel',''))||'iitzmedoo';
+var CHANNEL=qCh||sessCh||C.safeChannel(LS.get('lamma-channel',''))||'iitzmedoo';
 var OBS=Q.get('obs')==='1';
 var GAME=document.body.getAttribute('data-game')||'';
 if(OBS){document.documentElement.classList.add('obs');}
@@ -107,6 +111,7 @@ function onChat(f){chatFns.push(f)}
 function dispatch(m){
   stats.parsed++;stats.last=m.name+': '+m.text;
   pushFeed(m);
+  if(window.LammaLevels)try{LammaLevels.chat(m)}catch(e){}
   for(var i=0;i<chatFns.length;i++){try{chatFns[i](m)}catch(e){console.error(e)}}
 }
 function isCtrl(m){return !!(m&&(m.mod||m.broadcaster||m.host))}
@@ -177,11 +182,17 @@ function pushFeed(m){
 /* ---------- leaderboard (localStorage, per channel) ---------- */
 var LBKEY='lamma-lb-'+CHANNEL;
 function loadBoard(){try{return JSON.parse(LS.get(LBKEY,'{}'))||{}}catch(e){return {}}}
-function award(user,name,pts){if(!user)return;var b=C.addPoint(loadBoard(),user,name,pts==null?1:pts);LS.set(LBKEY,JSON.stringify(b));renderBoard();}
+function award(user,name,pts){if(!user)return;var b=C.addPoint(loadBoard(),user,name,pts==null?1:pts);LS.set(LBKEY,JSON.stringify(b));renderBoard();xpWin(user,name,pts==null?1:pts);}
+/* levels (levels.js): every game's winners already pass through award(); rounds are marked with roundStart / roundEnd */
+function lv(){return window.LammaLevels||null}
+function xpWin(user,name,pts){var l=lv();if(l&&pts>0)try{l.win(user,name,pts)}catch(e){console.error(e)}}
+function xpPlay(user,name){var l=lv();if(l)try{l.played(user,name)}catch(e){console.error(e)}}
+function roundStart(){var l=lv();if(l)try{l.roundStart()}catch(e){console.error(e)}}
+function roundEnd(o){var l=lv();if(l)try{l.roundEnd(o)}catch(e){console.error(e)}}
 function top(n){return C.topN(loadBoard(),n||10)}
 function renderBoard(){
   var ol=$('lb');if(!ol)return;clear(ol);var rows=top(10);
-  rows.forEach(function(r,i){var li=el('li');li.appendChild(el('span','rk',String(i+1)));li.appendChild(nameEl(r.name));li.appendChild(el('span','pt',r.pts+' '+t('pts')));ol.appendChild(li);});
+  rows.forEach(function(r,i){var li=el('li');li.appendChild(el('span','rk',String(i+1)));li.appendChild(nameEl(r.name));var l=lv(),lvl=l?l.localLevel((/^demo_/.test(r.user)?'demo:'+r.user.slice(5):'twitch:'+r.user)):0;if(lvl)li.appendChild(l.badge(lvl));li.appendChild(el('span','pt',r.pts+' '+t('pts')));ol.appendChild(li);});
   var e=$('lbEmpty');if(e)e.hidden=rows.length>0;
 }
 window.addEventListener('storage',function(e){if(e.key===LBKEY)renderBoard();});
@@ -307,7 +318,7 @@ function boot(){
 window.App={C:C,Q:Q,$:$,el:el,rich:rich,setRich:setRich,clear:clear,nameEl:nameEl,readable:readable,strings:strings,t:t,lang:function(){return lang},onLang:function(f){langFns.push(f)},setLang:setLang,
   channel:CHANNEL,obs:OBS,game:GAME,onChat:onChat,dispatch:dispatch,isCtrl:isCtrl,stats:stats,
   demo:function(){return demo},setDemo:setDemo,say:say,bot:bot,BOTS:BOTS,later:later,clearLater:clearLater,onDemo:onDemo,poke:poke,
-  award:award,top:top,renderBoard:renderBoard,publish:publish,onMirror:onMirror,onMode:onMode,mode:function(){return mode},allowSolo:allowSolo,runsEngine:runsEngine,
+  award:award,top:top,xpWin:xpWin,xpPlay:xpPlay,roundStart:roundStart,roundEnd:roundEnd,renderBoard:renderBoard,publish:publish,onMirror:onMirror,onMode:onMode,mode:function(){return mode},allowSolo:allowSolo,runsEngine:runsEngine,
   sfx:sfx,confetti:confetti,obsUrl:obsUrl,obsExtra:obsExtra,updateObsUrl:updateObsUrl,fixCmds:fixCmds,copyText:copyText,channelInfo:channelInfo,LS:LS,boot:boot,
   start:function(){ // called by each page after it registered its handlers
     boot();

@@ -10,10 +10,10 @@ window.Poll=function(cfg){
   function start(q,opts,dur){
     clearTimeout(S.t);opts=(opts||[]).map(function(o){return String(o).trim().slice(0,60)}).filter(Boolean).slice(0,cfg.max||4);
     if(!q||opts.length<2)return false;
-    S.q=String(q).slice(0,140);S.opts=opts;S.votes={};S.phase='live';S.round++;S.dur=dur||0;S.endsAt=dur?Date.now()+dur*1000:0;A.sfx('start');changed();A.poke();
+    A.roundStart();S.q=String(q).slice(0,140);S.opts=opts;S.votes={};S.phase='live';S.round++;S.dur=dur||0;S.endsAt=dur?Date.now()+dur*1000:0;A.sfx('start');changed();A.poke();
     if(dur)S.t=setTimeout(end,dur*1000);return true;
   }
-  function end(){if(S.phase!=='live')return;clearTimeout(S.t);S.phase='end';A.sfx('win');changed();if(cfg.onEnd)cfg.onEnd(S,counts());}
+  function end(){if(S.phase!=='live')return;clearTimeout(S.t);S.phase='end';A.roundEnd({players:Object.keys(S.votes).map(function(u){return [u]})});A.sfx('win');changed();if(cfg.onEnd)cfg.onEnd(S,counts());}
   function stop(){clearTimeout(S.t);S.phase='idle';changed();A.clearLater();}
   A.onChat(function(m){if(!A.runsEngine())return;var cmd=C.parseCmd(m.text);
     if(cmd&&A.isCtrl(m)){if(cfg.onCmd&&cfg.onCmd(cmd,api))return;if(cmd.cmd==='stop'){stop();return;}if(cmd.cmd==='end'){end();return;}}
