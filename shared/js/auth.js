@@ -50,7 +50,7 @@ function allowed(u,ch){if(!u)return false;ch=String(ch||'').toLowerCase();return
 
 /* ---------- page UI (header button + gate over the control panel) ---------- */
 var A=window.App;
-var STR={ar:{in:'سجّل دخول بتويتش',out:'خروج',as:'داخل كـ',gate_t:'لوحة التحكم لصاحب القناة',gate_in:'سجّل دخول بحساب تويتش تبع القناة لتفتح لوحة التحكم.',gate_other:'أنت داخل بحساب',gate_other2:'ولوحة تحكم قناة',gate_other3:'بتفتح بس لصاحبها.',mine:'افتح لقناتي',off:'تسجيل الدخول مش مفعّل لسا',safe:'ما منطلب أي صلاحيات، بس منتأكد مين أنت. التوكن بيضل بمتصفحك.'},
+var STR={ar:{in:'سجّل الدخول بتويتش',out:'خروج',as:'داخل كـ',gate_t:'لوحة التحكم لصاحب القناة',gate_in:'سجّل الدخول بحساب تويتش الخاص بالقناة لفتح لوحة التحكم.',gate_other:'أنت مسجّل الدخول بحساب',gate_other2:'ولوحة تحكم قناة',gate_other3:'تفتح لصاحبها فقط.',mine:'افتح لقناتي',off:'تسجيل الدخول غير مفعّل بعدُ',safe:'لا نطلب أي صلاحيات، نتأكد فقط من هويتك. يبقى التوكن في متصفحك.'},
          en:{in:'Login with Twitch',out:'Log out',as:'Signed in as',gate_t:'Control panel is for the channel owner',gate_in:'Sign in with the channel\'s Twitch account to open the control panel.',gate_other:'You are signed in as',gate_other2:'and the control panel for',gate_other3:'opens only for its owner.',mine:'Open my channel',off:'Login is not switched on yet',safe:'No permissions requested, we only check who you are. The token stays in your browser.'}};
 function L(k){var l=A&&A.lang?A.lang():'ar';return (STR[l]||STR.ar)[k]}
 function svgEl(paths,fill){var NS='http://www.w3.org/2000/svg',s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 24 24');s.setAttribute('aria-hidden','true');

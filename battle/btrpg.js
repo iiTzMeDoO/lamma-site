@@ -17,10 +17,10 @@ var FAM={undead:{ar:'الموتى',en:'Undead',ic:'💀'},arthropod:{ar:'الح�
 /* res: damage TAKEN multiplier per type (0 immune · .5 resists · 1.5 weak). trait: what it does in a duel (see TRAIT). */
 var MOBS={
  zombie:{fam:'undead',atk:'melee',hp:40,dmg:6,def:.05,agi:.05,crit:.06,res:{poison:0,fire:1.5,magic:1.25},trait:'',ar:'زومبي',en:'Zombie'},
- husk:{fam:'undead',atk:'melee',hp:46,dmg:7,def:.06,agi:.05,crit:.06,res:{poison:0,fire:1.25},trait:'hunger',ar:'زومبي الصحرا',en:'Husk'},
+ husk:{fam:'undead',atk:'melee',hp:46,dmg:7,def:.06,agi:.05,crit:.06,res:{poison:0,fire:1.25},trait:'hunger',ar:'زومبي الصحراء',en:'Husk'},
  drowned:{fam:'undead',atk:'arrow',hp:42,dmg:7,def:.05,agi:.07,crit:.08,res:{poison:0,fire:.5,magic:1.3},trait:'',ar:'الغريق',en:'Drowned'},
  skeleton:{fam:'undead',atk:'arrow',hp:32,dmg:7,def:.03,agi:.08,crit:.1,res:{arrow:.5,poison:0,blast:1.5,melee:1.2},trait:'',ar:'هيكل',en:'Skeleton'},
- stray:{fam:'undead',atk:'arrow',hp:34,dmg:6,def:.04,agi:.08,crit:.1,res:{arrow:.5,poison:0,fire:1.6},trait:'slow',ar:'الهيكل التايه',en:'Stray'},
+ stray:{fam:'undead',atk:'arrow',hp:34,dmg:6,def:.04,agi:.08,crit:.1,res:{arrow:.5,poison:0,fire:1.6},trait:'slow',ar:'الهيكل التائه',en:'Stray'},
  wskel:{fam:'undead',atk:'melee',hp:56,dmg:9,def:.1,agi:.07,crit:.1,res:{fire:0,poison:0,blast:1.4},trait:'wither',ar:'هيكل الذابل',en:'Wither skeleton'},
  zpiglin:{fam:'undead',atk:'melee',hp:50,dmg:8,def:.08,agi:.06,crit:.08,res:{fire:0,poison:0},trait:'anger',ar:'خنزير الزومبي',en:'Zombified piglin'},
  phantom:{fam:'undead',atk:'melee',hp:30,dmg:7,def:.02,agi:.18,crit:.1,res:{melee:.8,arrow:1.6,poison:0},trait:'swoop',ar:'الشبح',en:'Phantom'},
@@ -60,42 +60,42 @@ var BOSSES={
 };
 var TRAIT={
  '':{ar:'',en:''},
- hunger:{ar:'ضربتو بتجوّعك: هجومك ينزل 10%',en:'Its hits starve you: your attack −10%'},
- slow:{ar:'سهمو بيبطّئك: تفاديك بينقص للنص',en:'Its arrows slow you: your dodge is halved'},
- wither:{ar:'ذبول: بيخسرك صحة 3 أدوار',en:'Wither: you lose HP for 3 turns'},
- anger:{ar:'كل ما تضربو بيعصّب: +10% ضرر',en:'Every hit makes it angrier: +10% damage'},
- swoop:{ar:'بينقض من فوق: دايماً بيضرب أول',en:'Swoops down: always strikes first'},
- web:{ar:'شبكة: تفاديك ينزل 50%',en:'Web: your dodge −50%'},
- poison:{ar:'سم: بيخسرك صحة 3 أدوار',en:'Poison: you lose HP for 3 turns'},
- swarm:{ar:'سرب: بيضرب مرتين',en:'Swarm: hits twice'},
- blink:{ar:'بيختفي: تفادي عالي',en:'Blinks: high dodge'},
- burn:{ar:'بيحرقك: نار 3 أدوار',en:'Sets you on fire for 3 turns'},
- gold:{ar:'معو دهب: غنيمة أكتر',en:'Carries gold: more loot'},
- split:{ar:'بينقسم: بيرجع مرة بنص صحتو',en:'Splits: comes back once at half HP'},
- knock:{ar:'ضربة قوية: ممكن يدوخك دور',en:'Heavy blow: may stun you for a turn'},
- teleport:{ar:'بينتقل: السهام ما بتلمسو',en:'Teleports: arrows never touch it'},
- levitate:{ar:'بيطيّرك: ما بتقدر تتفادى ضربتو الجاية',en:'Levitates you: you cannot dodge its next hit'},
- fangs:{ar:'أنياب سحرية: بتخترق الدرع',en:'Magic fangs: ignore armour'},
- potion:{ar:'بتشرب جرعة شفاء مرة',en:'Drinks a healing potion once'},
- roar:{ar:'زئير: كل 3 أدوار بيدوخك',en:'Roar: stuns you every 3rd turn'},
- explode:{ar:'بينفجر بالدور التالت: ضرر ×2.5',en:'Explodes on its 3rd turn: ×2.5 damage'},
- thorns:{ar:'أشواك: بيرجعلك 20% من ضربك بالسيف',en:'Thorns: reflects 20% of melee damage'},
- lifesteal:{ar:'بيمص الصحة: بيرجع 30% من ضربتو',en:'Lifesteal: heals 30% of its hits'},
- sonic:{ar:'صرخة صوتية كل 3 أدوار: ما بتنصد ولا بتتفادى',en:'Sonic boom every 3rd turn: cannot be dodged or blocked'}
+ hunger:{ar:'ضربته تجوّعك: ينخفض هجومك 10%',en:'Its hits starve you: your attack −10%'},
+ slow:{ar:'سهمه يبطّئك: تفاديك ينقص إلى النصف',en:'Its arrows slow you: your dodge is halved'},
+ wither:{ar:'ذبول: يخسرك صحة 3 أدوار',en:'Wither: you lose HP for 3 turns'},
+ anger:{ar:'كلما ضربته يغضب: +10% ضرر',en:'Every hit makes it angrier: +10% damage'},
+ swoop:{ar:'ينقض من فوق: يضرب أولًا دائمًا',en:'Swoops down: always strikes first'},
+ web:{ar:'شبكة: تفاديك ينخفض 50%',en:'Web: your dodge −50%'},
+ poison:{ar:'سم: يفقدك الصحة 3 أدوار',en:'Poison: you lose HP for 3 turns'},
+ swarm:{ar:'سرب: يضرب مرتين',en:'Swarm: hits twice'},
+ blink:{ar:'يختفي: تفادٍ عالٍ',en:'Blinks: high dodge'},
+ burn:{ar:'يحرقك: نار 3 أدوار',en:'Sets you on fire for 3 turns'},
+ gold:{ar:'معه ذهب: غنيمة أكثر',en:'Carries gold: more loot'},
+ split:{ar:'ينقسم: يعود مرة بنصف صحته',en:'Splits: comes back once at half HP'},
+ knock:{ar:'ضربة قوية: قد تُدوّخك دورًا',en:'Heavy blow: may stun you for a turn'},
+ teleport:{ar:'ينتقل: السهام لا تلمسه',en:'Teleports: arrows never touch it'},
+ levitate:{ar:'يقذفك: لا يمكنك تفادي ضربته التالية',en:'Levitates you: you cannot dodge its next hit'},
+ fangs:{ar:'أنياب سحرية: تخترق الدرع',en:'Magic fangs: ignore armour'},
+ potion:{ar:'تشرب جرعة شفاء مرة واحدة',en:'Drinks a healing potion once'},
+ roar:{ar:'زئير: كل 3 أدوار يصيبك بالدوار',en:'Roar: stuns you every 3rd turn'},
+ explode:{ar:'ينفجر في الدور الثالث: ضرر ×2.5',en:'Explodes on its 3rd turn: ×2.5 damage'},
+ thorns:{ar:'أشواك: يعيد إليك 20% من ضربات سيفك',en:'Thorns: reflects 20% of melee damage'},
+ lifesteal:{ar:'امتصاص الصحة: يستعيد 30% من ضرباته',en:'Lifesteal: heals 30% of its hits'},
+ sonic:{ar:'صرخة صوتية كل 3 أدوار: لا يمكن صدّها ولا تفاديها',en:'Sonic boom every 3rd turn: cannot be dodged or blocked'}
 };
 var PHASE2={
- armour:{ar:'درع الذابل: السهام ما بتأثر + بيضرب مرتين',en:'Wither armour: immune to arrows + hits twice'},
- crystal:{ar:'بلورة النهاية: بيرجعلو 15% + ضرر أكتر',en:'End crystal: heals 15% + hits harder'},
+ armour:{ar:'درع الذابل: السهام لا تؤثر + يضرب مرتين',en:'Wither armour: immune to arrows + hits twice'},
+ crystal:{ar:'بلورة النهاية: يستعيد 15% + ضرر أكبر',en:'End crystal: heals 15% + hits harder'},
  rage:{ar:'غضب: ضرر +40%',en:'Rage: +40% damage'},
- summon:{ar:'بيستدعي زومبي: ضربة زيادة كل دور',en:'Summons zombies: an extra hit every turn'},
+ summon:{ar:'يستدعي زومبي: ضربة إضافية كل دور',en:'Summons zombies: an extra hit every turn'},
  charge:{ar:'هجمة: ضرر ×2 كل 3 أدوار',en:'Charge: ×2 damage every 3rd turn'},
- totem:{ar:'طوطم الخلود: بيقوم مرة من الموت',en:'Totem of undying: rises once from death'},
- storm:{ar:'عاصفة نار: بيضرب مرتين',en:'Fire storm: hits twice'},
- fatigue:{ar:'إرهاق: هجومك ينزل 25%',en:'Mining fatigue: your attack −25%'}
+ totem:{ar:'طوطم الخلود: ينهض مرة من الموت',en:'Totem of undying: rises once from death'},
+ storm:{ar:'عاصفة نار: يضرب مرتين',en:'Fire storm: hits twice'},
+ fatigue:{ar:'إرهاق: ينخفض هجومك 25%',en:'Mining fatigue: your attack −25%'}
 };
 var CLASSES={
  warrior:{ar:'محارب',en:'Warrior',ic:'⚔️',atk:'melee',hp:110,a:11,def:.12,spd:6,agi:.07,crit:.12,w:'sword'},
- archer:{ar:'رامي',en:'Archer',ic:'🏹',atk:'arrow',hp:90,a:11,def:.06,spd:7,agi:.1,crit:.2,w:'bow'},
+ archer:{ar:'رامي السهام',en:'Archer',ic:'🏹',atk:'arrow',hp:90,a:11,def:.06,spd:7,agi:.1,crit:.2,w:'bow'},
  mage:{ar:'ساحر',en:'Mage',ic:'✨',atk:'magic',hp:80,a:13,def:.04,spd:5,agi:.08,crit:.14,w:'staff'},
  tank:{ar:'دبابة',en:'Tank',ic:'🛡️',atk:'melee',hp:140,a:8,def:.25,spd:3,agi:.04,crit:.08,w:'axe'},
  rogue:{ar:'نينجا',en:'Rogue',ic:'🗡️',atk:'melee',hp:85,a:10,def:.06,spd:9,agi:.18,crit:.25,w:'dagger'},
@@ -109,14 +109,14 @@ var CLASS_WORDS={warrior:['محارب','warrior','fighter'],archer:['رامي','
 var PERKS={
  slayer:{ic:'⚔️',v1:1.5,v2:1.8,ar:'ضرر {v} على {f}',en:'{v} damage to {f}'},
  ward:{ic:'🛡️',v1:.7,v2:.55,ar:'ضرر {f} عليك {v}',en:'{f} damage on you {v}'},
- oddcrit:{ic:'🎯',v1:1,v2:1,ar:'كريت أكيد على {f} لما صحتك فردية',en:'100% crit on {f} when your HP is odd'},
- laststand:{ic:'❤️',v1:1,v2:2,ar:'بتنجى من ضربة قاتلة من {f} ({n})',en:'Survive a deadly hit from {f} ({n})'},
- avenger:{ic:'😡',v1:3,v2:4,ar:'ضرر {v} على {f} اللي قتل حدا من فريقك',en:'{v} damage to {f} that killed a teammate'},
- first:{ic:'⚡',v1:1,v2:1,ar:'دايماً بتضرب أول على {f}',en:'Always strike first against {f}'},
- hunter:{ic:'💨',v1:.2,v2:.3,ar:'تفادي {p}+ قدام {f}',en:'+{p} dodge against {f}'},
- feast:{ic:'🍖',v1:.25,v2:.4,ar:'بترجع {p} صحة لما تقتل {f}',en:'Heal {p} when you defeat {f}'},
- harden:{ic:'🪨',v1:.1,v2:.15,ar:'كل {f} بتقتلو: دفاع {p}+ بهالغزوة',en:'Each {f} you defeat: +{p} defence this raid'},
- counter:{ic:'🔁',v1:2,v2:2.5,ar:'لما تتفادى {f}، ضربتك الجاية {v}',en:'Dodge {f} → your next hit {v}'}
+ oddcrit:{ic:'🎯',v1:1,v2:1,ar:'ضربة حرجة مؤكدة على {f} عندما تكون صحتك فردية',en:'100% crit on {f} when your HP is odd'},
+ laststand:{ic:'❤️',v1:1,v2:2,ar:'تنجو من ضربة قاتلة من {f} ({n})',en:'Survive a deadly hit from {f} ({n})'},
+ avenger:{ic:'😡',v1:3,v2:4,ar:'ضرر {v} على {f} الذي قتل أحدًا من فريقك',en:'{v} damage to {f} that killed a teammate'},
+ first:{ic:'⚡',v1:1,v2:1,ar:'يضرب دائمًا أولًا على {f}',en:'Always strike first against {f}'},
+ hunter:{ic:'💨',v1:.2,v2:.3,ar:'تفادي {p}+ أمام {f}',en:'+{p} dodge against {f}'},
+ feast:{ic:'🍖',v1:.25,v2:.4,ar:'تعيد {p} صحة عندما تقتل {f}',en:'Heal {p} when you defeat {f}'},
+ harden:{ic:'🪨',v1:.1,v2:.15,ar:'كل {f} تقتله: دفاع {p}+ في هذه الغزوة',en:'Each {f} you defeat: +{p} defence this raid'},
+ counter:{ic:'🔁',v1:2,v2:2.5,ar:'عندما تتفادى {f}، تكون ضربتك التالية {v}',en:'Dodge {f} → your next hit {v}'}
 };
 var PERKK=Object.keys(PERKS);
 var ARMOUR=[
@@ -153,19 +153,19 @@ var WPN_ENCH={
  raid:{ar:'كاسر الغزاة',en:'Raid Breaker',fam:'illager',m:1.5}
 };
 var ITEMS={
- heal:{ar:'جرعة شفاء',en:'Healing potion',ic:'❤️',d:{ar:'لما صحتك تنزل تحت 35%: +40%',en:'Below 35% HP: +40%'}},
+ heal:{ar:'جرعة شفاء',en:'Healing potion',ic:'❤️',d:{ar:'عندما تنخفض صحتك إلى ما دون 35%: +40%',en:'Below 35% HP: +40%'}},
  strength:{ar:'جرعة قوة',en:'Strength potion',ic:'💪',d:{ar:'ضدّ الزعيم: ضرر ×1.3',en:'Against a boss: ×1.3 damage'}},
- totem:{ar:'طوطم الخلود',en:'Totem of undying',ic:'🗿',d:{ar:'بتقوم مرة من الموت بـ30%',en:'Rise once from death at 30%'}},
- apple:{ar:'تفاحة دهب',en:'Golden apple',ic:'🍎',d:{ar:'+20% صحة كاملة',en:'+20% max HP'}},
+ totem:{ar:'طوطم الخلود',en:'Totem of undying',ic:'🗿',d:{ar:'تنهض مرة من الموت بـ30%',en:'Rise once from death at 30%'}},
+ apple:{ar:'تفاحة ذهبية',en:'Golden apple',ic:'🍎',d:{ar:'+20% صحة كاملة',en:'+20% max HP'}},
  fireres:{ar:'جرعة ضد النار',en:'Fire resistance',ic:'🧯',d:{ar:'مناعة من النار',en:'Immune to fire'}}
 };
 var EVENTS={
  night:{ar:'ليل',en:'Night',ic:'🌙',d:{ar:'الموتى +25% ضرر',en:'Undead +25% damage'}},
- rain:{ar:'مطر',en:'Rain',ic:'🌧️',d:{ar:'النار نص قوتها',en:'Fire at half power'}},
+ rain:{ar:'مطر',en:'Rain',ic:'🌧️',d:{ar:'النار نصف قوتها',en:'Fire at half power'}},
  fog:{ar:'ضباب',en:'Fog',ic:'🌫️',d:{ar:'الكل +10% تفادي',en:'Everyone +10% dodge'}},
- spring:{ar:'نبع شفاء',en:'Healing spring',ic:'💧',d:{ar:'الفريق بيرجعلو 25%',en:'The party heals 25%'}},
- treasure:{ar:'كنز',en:'Treasure',ic:'💎',d:{ar:'غنيمة دبل',en:'Double loot'}},
- hot:{ar:'أرض حامية',en:'Hot floor',ic:'♨️',d:{ar:'5 نار عكل مقاتل بيطلع',en:'5 fire damage to each fighter who walks out'}},
+ spring:{ar:'نبع شفاء',en:'Healing spring',ic:'💧',d:{ar:'يستعيد الفريق 25%',en:'The party heals 25%'}},
+ treasure:{ar:'كنز',en:'Treasure',ic:'💎',d:{ar:'غنيمة مضاعفة',en:'Double loot'}},
+ hot:{ar:'أرض حامية',en:'Hot floor',ic:'♨️',d:{ar:'5 نيران لكل مقاتل يظهر',en:'5 fire damage to each fighter who walks out'}},
  blood:{ar:'قمر الدم',en:'Blood moon',ic:'🔴',d:{ar:'الوحوش +20% ضرر، +50% خبرة',en:'Enemies +20% damage, +50% XP'}}
 };
 var EVENTK=Object.keys(EVENTS);

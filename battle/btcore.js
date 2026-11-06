@@ -11,10 +11,10 @@ function norm(s){return String(s||'').normalize('NFC').replace(/[\u200B-\u200F\u
   .replace(/[\u0660-\u0669]/g,function(d){return String(d.charCodeAt(0)-0x0660)}).replace(/[\u06F0-\u06F9]/g,function(d){return String(d.charCodeAt(0)-0x06F0)})
   .replace(/^\uFF01/,'!').toLowerCase().replace(/\s+/g,' ').trim();}
 var CMDS={
-  cancel:['cancel','الغي','الغاء','ألغي'],stats:['stats','احصائيات','إحصائيات','ستات','حروف'],heal:['heal','علاج','عالج','داوي'],end:['end','خلص','انهاء'],cls:['class','صنف','كلاس'],
-  join:['join','دخول','ادخل','play'],leave:['leave','خروج','اطلع'],jump:['jump','قفز','اختارني','pickme'],hide:['hide','اختبي','اختبئ','اخفي'],
-  vote:['vote','صوت'],power:['power','قوه','قوة','p'],focus:['focus','ركز'],info:['info','معلومات','getinfo','معلوماتي'],
-  start:['start','ابدا','ابدأ','ابدء'],pause:['pause','وقف','stop'],next:['next','التالي','الجاي'],boss:['boss','زعيم'],reset:['reset','جديد','newgame']
+  cancel:['cancel','الغي','الغاء','ألغي','إلغاء','الغ','تراجع'],stats:['stats','احصائيات','إحصائيات','ستات','حروف'],heal:['heal','علاج','عالج','داوي'],end:['end','خلص','انهاء','إنهاء','انه'],cls:['class','صنف','كلاس'],
+  join:['join','دخول','ادخل','play','انضم'],leave:['leave','خروج','اطلع','اخرج','غادر'],jump:['jump','قفز','اخترني','اختارني','pickme','تطوع'],hide:['hide','اختبي','اختبئ','اخفي'],
+  vote:['vote','صوت'],power:['power','قوه','قوة','p'],focus:[],info:['info','معلومات','getinfo','معلوماتي'],
+  start:['start','ابدا','ابدأ','ابدء'],pause:['pause','وقف','stop','أوقف','اوقف','ايقاف','إيقاف'],next:['next','التالي','الجاي'],boss:['boss','زعيم'],reset:['reset','جديد','newgame'],skin:['skin','سكن','سكين']
 };
 var CMAP={};Object.keys(CMDS).forEach(function(k){CMDS[k].forEach(function(w){CMAP[norm(w)]=k;});});
 function cmd(text){var n=norm(text);if(n.charAt(0)!=='!')return null;var body=n.slice(1).trim();if(!body)return null;var sp=body.indexOf(' ');var w=sp<0?body:body.slice(0,sp);var arg=sp<0?'':body.slice(sp+1).trim();var k=CMAP[w];return k?{k:k,arg:arg}:null;}
@@ -88,9 +88,9 @@ function partySlot(i,n){var cols=n<=6?2:n<=12?3:4,rows=Math.ceil(n/cols);var c=i
 function enemySlot(i,n,boss){if(boss)return [.79,.58];var cols=n<=3?1:n<=8?2:3,rows=Math.ceil(n/cols);var c=i%cols,r=Math.floor(i/cols);
   var x=.7+c*(cols>2?.1:.15)+(r%2)*.03,y=rows<=1?.6:.3+r*(.6/Math.max(1,rows-1));return [Math.round(x*1000)/1000,Math.round(y*1000)/1000];}
 function Arena(opt){opt=opt||{};this.seed=opt.seed||((Date.now()%1e9)|0);this.r=rng(this.seed);
-  this.cfg={waves:5,diff:'normal',squadMax:10,map:'nether',boss:'auto',autoPower:true,autoFight:false,breakSecs:4,pickSecs:1.6,events:true,loot:true,infoSecs:7,speak:true};if(opt.cfg)for(var k in opt.cfg)this.cfg[k]=opt.cfg[k];
+  this.cfg={waves:5,diff:'normal',squadMax:10,map:'nether',boss:'auto',autoPower:true,pwTurns:3,autoFight:false,breakSecs:4,pickSecs:1.6,events:true,loot:true,infoSecs:7,speak:true};if(opt.cfg)for(var k in opt.cfg)this.cfg[k]=opt.cfg[k];
   this.levels={};this.xp={};this.gear={};this.cls={};this.waiting={};this.order=[];this.squad=[];this.infoQ=[];this.info=null;this.says={};this.reset();}
-Arena.prototype.reset=function(){this.phase='lobby';this.wave=0;this.f=[];this.m=[];this.ev=[];this.evId=0;this.feed=[];this.t=0;this.nextAt=0;this.pickAt=0;this.duel=null;this.result='';this.idN=0;this.paused=false;this.voted={};this.event='';this.rooms=[];this.bossN=0;this.roomKills={};this.roomGold=0;};
+Arena.prototype.reset=function(){this.card=null;this.phase='lobby';this.wave=0;this.f=[];this.m=[];this.ev=[];this.evId=this.evId||0; /* event ids never restart: a view that saw id 120 last game ignored every new event below 120 → no damage numbers, no sounds (Mohammad #14) */this.feed=[];this.t=0;this.nextAt=0;this.pickAt=0;this.duel=null;this.result='';this.idN=0;this.paused=false;this.voted={};this.event='';this.rooms=[];this.bossN=0;this.roomKills={};this.roomGold=0;};
 Arena.prototype.level=function(){return this.levels[this.cfg.map]||1;};
 Arena.prototype.emit=function(e){e.id=++this.evId;e.t=Math.round(this.t*100)/100;this.ev.push(e);if(this.ev.length>80)this.ev.splice(0,this.ev.length-80);return e;};
 Arena.prototype.join=function(user,name,color){if(!user)return false;var w=this.waiting[user];if(w){w.name=name||w.name;if(color)w.color=color;return false;}this.waiting[user]={user:user,name:name||user,color:color||'',jump:false,hide:false,votes:0,at:this.order.length};this.order.push(user);return true;};
@@ -124,13 +124,22 @@ Arena.prototype.addF=function(u,i){var w=this.waiting[u]||{name:u};
   this.applySheet(f);f.hp=f.max;this.f.push(f);return f;};
 Arena.prototype.relayout=function(){var n=this.f.length;this.f.forEach(function(f){var p=partySlot(f.slot,n);f.hx=p[0];f.hy=p[1];if(f.st==='idle'||f.st==='dead'){f.nx=p[0];f.ny=p[1];}});
   var ms=this.m;ms.forEach(function(m){var p=enemySlot(m.slot,ms.length,m.boss);m.hx=p[0];m.hy=p[1];if(m.st==='idle'){m.nx=p[0];m.ny=p[1];}});};
-Arena.prototype.start=function(){if(this.inRaid())return false;if(!this.autoFill())return false;var s=this,keep=this.squad.slice();this.reset();this.squad=keep;
+Arena.prototype.start=function(){if(this.inRaid())return false;if(!this.autoFill())return false;var s=this,keep=this.squad.slice();this.reset();this.squad=keep;this.startLv=this.level();
   this.squad.forEach(function(u,i){s.addF(u,i);});this.relayout();this.phase='break';this.nextAt=this.t+1.2;this.emit({k:'start'});return true;};
 Arena.prototype.bossKind=function(){if(this.cfg.boss&&this.cfg.boss!=='auto'&&BOSSTAT[this.cfg.boss])return this.cfg.boss;var L=MAPBOSS[this.cfg.map]||MAPBOSS.plains;return L[(this.level()-1+this.bossN)%L.length];};
 Arena.prototype.isBossWave=function(w){return this.cfg.waves>0?w===this.cfg.waves:(w%5===0);};
-Arena.prototype.spawnMob=function(kind,boss,slot){var st=boss?BOSSTAT[kind]:MOBSTAT[kind];if(!st)return null;var d=DIFF[this.cfg.diff]||1,L=this.level(),w=this.wave,n=this.f.length;
+/* Mohammad #20: the same difficulty should feel the same with 3 players or 16. Measured in Node (120 raids per point, 5 waves, auto fight):
+   before this, «عادي» won 3% of raids with 3 players, 27% with 4, 80% with 6 and 100% with 16. These multipliers (enemy HP ×k, damage ×√k)
+   were fitted so «عادي» wins ≈65% at every party size; the other levels keep their gap. */
+var PARTYK=[[1,.5],[2,.58],[3,.58],[4,.8],[5,.97],[6,1.03],[8,1.03],[10,1],[12,1.1],[16,1.17],[24,1.3]];
+function partyK(n){n=Math.max(1,n||1);for(var i=1;i<PARTYK.length;i++){var a=PARTYK[i-1],b=PARTYK[i];if(n<=b[0])return a[1]+(b[1]-a[1])*(n-a[0])/(b[0]-a[0]);}return PARTYK[PARTYK.length-1][1];}
+var DIFFK={hard:[[1,1],[3,1],[4,1.04],[6,.98],[8,.96],[10,.92],[12,.9],[16,.88],[24,.85]],hell:[[1,.96],[3,.96],[4,.97],[6,.83],[8,.845],[10,.84],[12,.8],[16,.73],[24,.68]]};
+function lerpT(T,n){n=Math.max(1,n||1);for(var i=1;i<T.length;i++){var a=T[i-1],b=T[i];if(n<=b[0])return a[1]+(b[1]-a[1])*(n-a[0])/(b[0]-a[0]);}return T[T.length-1][1];}
+function partyKD(n,diff){var k=partyK(n);if(DIFFK[diff])k*=lerpT(DIFFK[diff],n);return k;}
+api.partyK=partyKD;
+Arena.prototype.spawnMob=function(kind,boss,slot){var st=boss?BOSSTAT[kind]:MOBSTAT[kind];if(!st)return null;var d=DIFF[this.cfg.diff]||1,L=this.level(),w=this.wave,n=this.f.length,pk=this.cfg.partyScale===false?1:partyKD(n,this.cfg.diff);
   var hp=boss?st.hp*.2*(1+n*.32)*(1+(L-1)*.045)*d:st.hp*1.9*(1+(L-1)*.045+(w-1)*.06)*d;
-  var dmg=boss?(9+st.dmg*.75)*(1+(L-1)*.03)*d:(6+st.dmg*.8)*(1+(L-1)*.03+(w-1)*.04)*d;
+  var dmg=boss?(9+st.dmg*.75)*(1+(L-1)*.03)*d:(6+st.dmg*.8)*(1+(L-1)*.03+(w-1)*.04)*d;hp*=pk;dmg*=Math.sqrt(pk);
   var m={id:++this.idN,k:boss?'boss:'+kind:kind,kind:kind,boss:boss?1:0,slot:slot||0,nx:0,ny:0,hp:Math.round(hp),max:Math.round(hp),dmg:Math.round(dmg*10)/10,agi:st.agi,lv:9+L+w+(boss?5:0),scale:st.scale||1,st:'idle',frozen:0,
     fam:st.fam,atkT:st.atk,atk2:st.atk2||'',def:st.def||0,crit:st.crit||0,res:st.res,trait:st.trait||'',p2:st.p2||'',phase2:0,turns:0,dot:null,stun:0,anger:0,splitUsed:0,healed:0,totemUsed:0,killedMate:0};
   this.m.push(m);if(boss)this.emit({k:'boss',kind:kind});return m;};
@@ -144,8 +153,13 @@ Arena.prototype.startWave=function(){this.wave++;var kinds=MAPMOBS[this.cfg.map]
     if(this.cfg.events&&this.wave>1&&this.r()<.35)this.event=BTR.EVENTK[Math.floor(this.r()*BTR.EVENTK.length)];}
   this.rooms[this.wave-1]=this.event;
   if(this.event==='spring')this.alive().forEach(function(x){x.hp=Math.min(x.max,x.hp+Math.round(x.max*.25));});
-  this.relayout();this.f.forEach(function(f){f.pwUsed=0;});this.toPick();this.emit({k:'wave',w:this.wave,boss:boss?1:0,n:this.m.length,e:this.event});};
-Arena.prototype.toPick=function(){this.phase='pick';this.duel=null;this.pickAt=this.cfg.autoFight?this.t+(this.cfg.pickSecs||1.6):0;};
+  this.relayout();this.toPick(); /* Nov 4: the power keeps charging across waves (no free refill) */this.card={w:this.wave,boss:boss?1:0,e:this.event,at:this.t};this.emit({k:'wave',w:this.wave,boss:boss?1:0,n:this.m.length,e:this.event});};
+/* the wave screen (name + what is coming) stays until the streamer / a mod skips it, or after cfg.cardSecs when that is set */
+Arena.prototype.skipCard=function(){if(!this.card)return false;this.card=null;if(this.phase==='pick')this.toPick();return true;};
+Arena.prototype.toPick=function(){this.phase='pick';this.duel=null;this.pickAt=this.cfg.autoFight?this.t+(this.cfg.pickSecs||1.6):0;
+  /* the next enemy walks to the middle as soon as the turn starts, so the streamer sees who is coming before choosing a fighter (Mohammad, Nov 4) */
+  var nm=this.frontEnemy(null);this.m.forEach(function(m){if(m.st==='ready'&&m!==nm){m.st='back';m.nx=m.hx;m.ny=m.hy;m.backT=0;}});
+  if(nm&&nm.hp>0){nm.st='ready';nm.nx=DUELM[0]+(nm.boss?.03:0);nm.ny=DUELM[1];}};
 Arena.prototype.alive=function(){return this.f.filter(function(f){return f.alive});};
 /* who "التالي" sends: !قفز first, then most votes, then the healthiest; never someone who typed !اختبي unless nobody else is left */
 Arena.prototype.nextFighter=function(){var c=this.alive().slice().sort(function(a,b){return (a.hide-b.hide)||(b.jump-a.jump)||(b.votes-a.votes)||((b.hp/b.max)-(a.hp/a.max))||(a.slot-b.slot);});return c.length?c[0].u:null;};
@@ -156,8 +170,8 @@ Arena.prototype.frontEnemy=function(f){var ms=this.m.filter(function(m){return m
 function hasPerk(f,t,fam){return (f.perks||[]).some(function(p){return p.t===t&&p.f===fam});}
 function perkV(f,t,fam){var v=0;(f.perks||[]).forEach(function(p){if(p.t===t&&p.f===fam)v=BTR.perkVal(p);});return v;}
 /* the streamer sends ONE fighter into the middle: a 1v1 duel with the front enemy */
-Arena.prototype.send=function(user){if(this.phase!=='pick'||this.paused)return false;user=user||this.nextFighter();var f=this.fOf(user);if(!f||!f.alive)return false;var m=this.frontEnemy(f);if(!m)return false;
-  f.st='out';f.nx=DUELF[0];f.ny=DUELF[1];m.st='out';m.nx=DUELM[0]+(m.boss?.03:0);m.ny=DUELM[1];f.pwUsed=0;f.shield=0;m.frozen=0;f.dot=null;f.stun=0;f.slowed=0;f.noDodge=0;f.weak=1;f.buffNext=0;
+Arena.prototype.send=function(user){if(this.phase!=='pick'||this.paused)return false;this.card=null;user=user||this.nextFighter();var f=this.fOf(user);if(!f||!f.alive)return false;var m=this.frontEnemy(f);if(!m)return false;
+  this.m.forEach(function(o){if(o!==m&&o.st==='ready'){o.st='back';o.nx=o.hx;o.ny=o.hy;o.backT=0;}});f.st='out';f.nx=DUELF[0];f.ny=DUELF[1];m.st='out';m.nx=DUELM[0]+(m.boss?.03:0);m.ny=DUELM[1];f.pwAuto=0; /* Nov 4: no refill at duel start — the heart fills slowly over the fighter's turns */f.shield=0;m.frozen=0;f.dot=null;f.stun=0;f.slowed=0;f.noDodge=0;f.weak=1;f.buffNext=0;
   var w=this.waiting[user];if(w){w.jump=false;w.votes=0;}f.jump=0;f.votes=0;var s=this;Object.keys(this.voted).forEach(function(k){if(s.voted[k]===user)delete s.voted[k];});
   var first;if(hasPerk(f,'first',m.fam))first='f';else if(m.trait==='swoop')first='m';else first=this.r()<(.55+(f.agi-m.agi)+(f.spd-5)*.02)?'f':'m';
   this.duel={f:f.id,m:m.id,turn:first,next:this.t+WALK,hits:0,end:0};this.phase='duel';this.emit({k:'send',fid:f.id,mid:m.id,name:f.name,c:f.color,u:f.u});
@@ -189,7 +203,7 @@ Arena.prototype.strike=function(att,def,mult,how,opt){opt=opt||{};var s=this,isF
 /* damage over time / statuses */
 function applyDot(s,to,k,d){var t=k==='burn'?'fire':k==='poison'?'poison':'magic';var rm=to.res&&to.res[t]!=null?to.res[t]:1;if(rm===0){s.emit({k:'immune',to:to.id,how:k});return;}to.dot={k:k,n:3,d:Math.max(1,Math.round(d*rm))};s.emit({k:'status',to:to.id,st:k});}
 function tickDot(s,x){if(!x.dot||x.hp<=0)return;x.hp=Math.max(0,x.hp-x.dot.d);s.emit({k:'hit',a:x.u?'m':'f',from:x.id,to:x.id,n:x.dot.d,how:x.dot.k,dot:1});if(--x.dot.n<=0)x.dot=null;}
-Arena.prototype.firePower=function(f){var d=this.duel;if(!d||d.f!==f.id||f.pwUsed||d.end)return false;var m=this.byId(d.m);if(!m)return false;var p=POWERS[f.pw],pow=1+(f.lv-10)*.06;f.pwUsed=1;
+Arena.prototype.firePower=function(f){var d=this.duel;if(!d||d.f!==f.id||f.pwUsed||d.end)return false;var m=this.byId(d.m);if(!m)return false;var p=POWERS[f.pw],pow=1+(f.lv-10)*.06;f.pwUsed=1;f.pwc=0;
   this.emit({k:'power',p:p,fid:f.id,mid:m.id,name:f.name,c:f.color,u:f.u});
   if(p==='bolt')this.strike(f,m,2.3*pow,'bolt');else if(p==='fire'){this.strike(f,m,2*pow,'fire');if(m.hp>0)applyDot(this,m,'burn',4+f.lv*.3);}else if(p==='tnt'){this.strike(f,m,2.7*pow,'tnt');f.hp=Math.max(1,f.hp-Math.round(f.max*.08));}
   else if(p==='arrows'){for(var i=0;i<3;i++)this.strike(f,m,.75*pow,'arrows');}else if(p==='shield')f.shield=2;else if(p==='heal'){f.hp=Math.min(f.max,f.hp+Math.round(f.max*.4));f.dot=null;}else if(p==='freeze')m.frozen=2;
@@ -239,15 +253,20 @@ Arena.prototype.endDuel=function(){var d=this.duel,f=this.byId(d.f),m=this.byId(
   this.toPick();};
 Arena.prototype.summonBoss=function(){if(!this.inRaid()||this.phase==='duel')return false;if(this.m.some(function(m){return m.boss}))return false;
   var target=this.cfg.waves>0?this.cfg.waves:Math.ceil((this.wave+1)/5)*5;this.wave=target-1;this.startWave();return true;};
-Arena.prototype.next=function(){if(this.phase==='break'){this.nextAt=this.t;return true;}if(this.phase==='pick')return this.send(this.nextFighter());return false;};
+/* Mohammad #13: at the end of a level — «إعادة المرحلة» replays the same level, «المستوى التالي» goes one level up (after a win) */
+Arena.prototype.again=function(next){if(this.phase!=='won'&&this.phase!=='lost')return false;var lv=this.startLv||this.level();if(next&&this.phase!=='won')return false;
+  this.levels[this.cfg.map]=Math.max(1,next?lv+1:lv);this.phase='lobby';return this.start();};
+Arena.prototype.next=function(){if(this.phase==='won')return this.again(true);if(this.phase==='lost')return this.again(false);if(this.card)return this.skipCard();if(this.phase==='break'){this.nextAt=this.t;return true;}if(this.phase==='pick')return this.send(this.nextFighter());return false;};
 /* the fighter's turn */
-Arena.prototype.fTurn=function(f,m){if(f.dot){tickDot(this,f);this.checkEnd();if(this.duel.end)return;}
+Arena.prototype.fTurn=function(f,m){/* Mohammad #12: after use the power recharges over N of the fighter's turns, then is ready again */
+  if(f.pwUsed){f.pwc=(f.pwc||0)+1;if(f.pwc>=(+this.cfg.pwTurns||3)){f.pwUsed=0;f.pwc=0;this.emit({k:'pwready',fid:f.id,u:f.u});}}
+  if(f.dot){tickDot(this,f);this.checkEnd();if(this.duel.end)return;}
   if(f.hp<f.max*.35&&f.gear.items.indexOf('heal')>=0){this.useItem(f,'heal');f.hp=Math.min(f.max,f.hp+Math.round(f.max*.4));}
   if(f.stun>0){f.stun--;this.emit({k:'stun',to:f.id});return;}
   f.strength=m.boss&&f.gear.items.indexOf('strength')>=0&&this.useItem(f,'strength')?1.3:(f.strength||1);
   var r=this.strike(f,m,1);
   if(r&&!r.dodge&&r.n>0&&m.hp>0){if(f.atkT==='poison')applyDot(this,m,'poison',2+f.atk*.25);if(f.gear.we==='fireasp')applyDot(this,m,'burn',2+f.atk*.2);if(f.gear.we==='knock'&&this.r()<.15){m.stun=1;}}
-  if(this.cfg.autoPower&&!f.pwUsed&&!this.duel.end&&(f.hp<f.max*.4||this.duel.hits>=5)&&f.u.indexOf('demo_')!==0)this.firePower(f);};
+  if(this.cfg.autoPower&&!f.pwUsed&&!f.pwAuto&&!this.duel.end&&(f.hp<f.max*.4||this.duel.hits>=5)&&f.u.indexOf('demo_')!==0){f.pwAuto=1;this.firePower(f);}};
 /* the enemy's turn: traits and boss phases */
 Arena.prototype.mTurn=function(m,f){if(m.dot){tickDot(this,m);this.checkEnd();if(this.duel.end)return;}
   if(m.frozen>0){m.frozen--;this.emit({k:'frozen',to:m.id});return;}if(m.stun>0){m.stun--;this.emit({k:'stun',to:m.id});return;}
@@ -265,14 +284,17 @@ Arena.prototype.mTurn=function(m,f){if(m.dot){tickDot(this,m);this.checkEnd();if
     if(tr==='lifesteal')m.hp=Math.min(m.max,m.hp+Math.round(r.n*.3));}
   if(tr==='roar'&&m.turns%3===0){f.stun=1;this.emit({k:'special',to:m.id,sp:'roar'});}
   if(p2==='fatigue'&&!f.fatigued){f.fatigued=1;f.weak=Math.max(.6,f.weak*.75);}
-  if((tr==='swarm'||p2==='armour'||p2==='storm'||p2==='summon')&&f.hp>0)this.strike(m,f,tr==='swarm'?.6:p2==='summon'?.45:.7,'',{type:p2==='armour'?'blast':type});};
+  /* Mohammad #19: a second hit never lands on top of the first — it is queued and lands a beat later (the summoned zombie strikes AFTER the king) */
+  if((tr==='swarm'||p2==='armour'||p2==='storm'||p2==='summon')&&f.hp>0&&this.duel){var ex={at:this.t+.6,mult:tr==='swarm'?.6:p2==='summon'?.45:.7,type:p2==='armour'?'blast':type,src:p2==='summon'?'minion':tr==='swarm'?'swarm':p2||'second'};
+    this.duel.extra=ex;this.duel.next=Math.max(this.duel.next,ex.at+.55);}};
 Arena.prototype.step=function(dt){dt=Math.min(dt,.1);if(this.paused)return;this.tickSide(dt);if(!this.inRaid())return;this.t+=dt;var s=this;
   this.f.forEach(function(f){if(f.st==='back'&&Math.abs(f.nx-f.hx)<1e-6)f.backT=(f.backT||0)+dt;if(f.backT>WALK){f.st='idle';f.backT=0;}});
   this.m.forEach(function(m){if(m.st==='back'){m.backT=(m.backT||0)+dt;if(m.backT>WALK){m.st='idle';m.backT=0;}}});
   if(this.phase==='break'){if(this.nextAt&&this.t>=this.nextAt){this.nextAt=0;this.startWave();}return;}
-  if(this.phase==='pick'){if(this.cfg.autoFight&&this.pickAt&&this.t>=this.pickAt)this.send(this.nextFighter());return;}
+  if(this.phase==='pick'){if(this.card){var cs=+this.cfg.cardSecs>0?+this.cfg.cardSecs:(this.cfg.autoFight?4:0);if(cs>0&&this.t>=this.card.at+cs)this.skipCard();return;}if(this.cfg.autoFight&&this.pickAt&&this.t>=this.pickAt)this.send(this.nextFighter());return;}
   var d=this.duel;if(!d)return;
   if(d.end){if(this.t>=d.end)this.endDuel();return;}
+  if(d.extra&&this.t>=d.extra.at){var ex=d.extra;d.extra=null;var fx=this.byId(d.f),mx=this.byId(d.m);if(fx&&mx&&fx.hp>0&&mx.hp>0){this.emit({k:'extra',from:mx.id,to:fx.id,src:ex.src});this.strike(mx,fx,ex.mult,'',{type:ex.type});this.checkEnd();}return;}
   if(this.t<d.next)return;d.next=this.t+TURN;d.hits++;var f=this.byId(d.f),m=this.byId(d.m);if(!f||!m){this.duel=null;this.toPick();return;}
   if(d.hits===1){f.st='duel';m.st='duel';}
   if(d.turn==='f'){this.fTurn(f,m);d.turn='m';}else{this.mTurn(m,f);d.turn='f';}
@@ -287,6 +309,7 @@ Arena.prototype.mobCard=function(m,kind,boss){var S=boss?BOSSTAT[kind]:MOBSTAT[k
   var d0=DIFF[this.cfg.diff]||1,L0=this.level(),bhp=Math.round(boss?S.hp*.2*(1+Math.max(1,this.f.length||this.squad.length)*.32)*(1+(L0-1)*.045)*d0:S.hp*1.9*(1+(L0-1)*.045)*d0);
   return {t:'m',kind:kind,boss:boss?1:0,id:m?m.id:0,lv:m?m.lv:9+L0+(boss?5:0),hp:m?m.hp:bhp,max:m?m.max:bhp,dmg:m?Math.round(m.dmg):Math.round(boss?(9+S.dmg*.75)*d0:(6+S.dmg*.8)*d0),def:Math.round(S.def*100),agi:Math.round(S.agi*100),crit:Math.round(S.crit*100),fam:S.fam,atkT:S.atk,atk2:S.atk2||'',res:S.res,trait:S.trait||'',p2:S.p2||'',phase2:m?m.phase2:0};};
 /* !getinfo [name]: the asker, a candidate / fighter by name, or an enemy (in this room, else from the bestiary) */
+Arena.prototype.closeInfo=function(){if(!this.info)return false;this.info=null;return true;};
 Arena.prototype.askInfo=function(user,arg,name,color){var a=norm(arg).replace(/^@/,''),c=null,self=this;
   if(a){var tu=null;this.order.forEach(function(u){var w=self.waiting[u];if(!tu&&(norm(w.name)===a||u===a))tu=u;});if(tu)c=this.cardFor(tu);
     if(!c){var bk=/^(زعيم|boss)$/.test(a)?(this.m.find(function(m){return m.boss})||{}).kind||'':bossFromWord(a);if(bk){var bm=this.m.find(function(m){return m.boss&&m.kind===bk});c=this.mobCard(bm,bk,true);}}
@@ -298,9 +321,9 @@ Arena.prototype.enemyInfo=function(id){var m=this.byId(id);if(!m||m.u)return fal
 Arena.prototype.say=function(user,text){if(!this.cfg.speak||!this.waiting[user])return false;var t=String(text||'').replace(/\s+/g,' ').trim();if(!t||t.charAt(0)==='!')return false;if(t.length>40)t=t.slice(0,39)+'…';this.says[user]={txt:t,until:(this.ct||0)+4};return true;};
 Arena.prototype.pub=function(){var s=this,r3=function(v){return Math.round(v*1000)/1000},d=this.duel;
   return {ph:this.phase,w:this.wave,ws:this.cfg.waves,map:this.cfg.map,lv:this.level(),pa:this.paused?1:0,af:this.cfg.autoFight?1:0,ev2:this.event,rooms:this.rooms.slice(),
-  f:this.f.map(function(f){return [f.id,f.u,f.name,f.color,r3(f.nx),r3(f.ny),f.hp,f.max,f.lv,f.pw,f.alive,f.kills,f.st,f.jump,f.votes,f.hide,f.pwUsed,f.shield,f.cls,f.atkT,f.gear.a,f.gear.w,f.dot?f.dot.k:'',f.stun,f.gear.ae,f.gear.we];}),
+  f:this.f.map(function(f){return [f.id,f.u,f.name,f.color,r3(f.nx),r3(f.ny),f.hp,f.max,f.lv,f.pw,f.alive,f.kills,f.st,f.jump,f.votes,f.hide,f.pwUsed,f.shield,f.cls,f.atkT,f.gear.a,f.gear.w,f.dot?f.dot.k:'',f.stun,f.gear.ae,f.gear.we,f.pwUsed?Math.max(1,(+s.cfg.pwTurns||3)-(f.pwc||0)):0,(+s.cfg.pwTurns||3)];}),
   m:this.m.map(function(m){return [m.id,m.k,r3(m.nx),r3(m.ny),m.hp,m.max,m.lv,m.boss,m.scale,m.mid?1:0,m.st,m.frozen,m.fam,m.phase2,m.trait,m.dot?m.dot.k:''];}),
-  d:d?[d.f,d.m,d.end?1:0]:null,ev:this.ev.slice(-40),feed:this.feed.slice(-6),gi:this.info,say:Object.keys(this.says).map(function(u){return [u,s.says[u].txt];}),
+  d:d?[d.f,d.m,d.end?1:0]:null,wc:this.card&&this.phase==='pick'?[this.card.w,this.card.boss,this.card.e,(+this.cfg.cardSecs>0||this.cfg.autoFight)?Math.max(0,Math.ceil(this.card.at+(+this.cfg.cardSecs>0?+this.cfg.cardSecs:4)-this.t)):-1]:null,ev:this.ev.slice(-40),feed:this.feed.slice(-6),gi:this.info,say:Object.keys(this.says).map(function(u){return [u,s.says[u].txt];}),
   q:this.queue().slice(0,60).map(function(u){var w=s.waiting[u];return [u,w.name,w.color,w.jump?1:0,w.hide?1:0,w.votes];}),sq:this.squad.map(function(u){var w=s.waiting[u]||{name:u};return [u,w.name,w.color||'',lvlOf(s.xp[u]),POWERS.indexOf(powerOf(u)),BTR.classOf(u,s.cls[u])];}),nq:this.order.length};};
 api.partySlot=partySlot;api.enemySlot=enemySlot;api.DUELF=DUELF;api.DUELM=DUELM;api.Arena=Arena;api.POWERS=POWERS;api.MOBSTAT=MOBSTAT;api.BOSSTAT=BOSSTAT;api.MAPMOBS=MAPMOBS;api.MAPBOSS=MAPBOSS;api.powerOf=powerOf;api.lvlOf=lvlOf;api.BTR=BTR;api.mobFromWord=mobFromWord;
 
@@ -310,7 +333,7 @@ var ZMAP={};Object.keys(ZW).forEach(function(z){ZW[z].forEach(function(w){ZMAP[n
 /* "!يمين" → 1, "!l" → 0, "!نص" → 2 (only when there are 3 zones) */
 function zoneCmd(text,zones){var n=norm(text);if(n.charAt(0)!=='!')return -1;var w=n.slice(1).trim().split(' ')[0];var z=ZMAP[w];if(z==null)return -1;if(z===2&&zones<3)return -1;return z;}
 function Tnt(opt){opt=opt||{};this.seed=opt.seed||((Date.now()%1e9)|0);this.r=rng(this.seed);this.cfg={zones:2,secs:25,jitter:true,speed:.9,minSecs:8,boomSecs:2.6,autoNext:true};if(opt.cfg)for(var k in opt.cfg)this.cfg[k]=opt.cfg[k];this.wins={};this.reset();}
-Tnt.prototype.reset=function(){this.players={};this.order=[];this.phase='lobby';this.round=0;this.winners=[];this.last=null;this.t=0;this.end=0;this.nextAt=0;this.len=0;this.paused=false;this.ev=[];this.evId=0;this.info=null;this.infoQ=[];};
+Tnt.prototype.reset=function(){this.players={};this.order=[];this.phase='lobby';this.round=0;this.winners=[];this.last=null;this.t=0;this.end=0;this.nextAt=0;this.len=0;this.paused=false;this.ev=[];this.evId=this.evId||0; /* event ids never restart: a view that saw id 120 last game ignored every new event below 120 → no damage numbers, no sounds (Mohammad #14) */this.info=null;this.infoQ=[];};
 Tnt.prototype.emit=function(e){e.id=++this.evId;this.ev.push(e);if(this.ev.length>30)this.ev.shift();return e;};
 Tnt.prototype.join=function(user,name,color){if(!user)return false;var p=this.players[user];if(p){p.name=name||p.name;if(color)p.color=color;return false;}if(this.phase!=='lobby')return false;
   this.players[user]={user:user,name:name||user,color:color||'',zone:strHashT(user)%this.cfg.zones,alive:true,out:0,moved:0};this.order.push(user);return true;};
@@ -359,7 +382,7 @@ function heroParse(arg){var a=String(arg||'').toUpperCase().replace(/[^A-Z]/g,''
 var HBOTS=['zombie','skeleton','husk','spider','creeper','piglin','wskel','enderman'];
 function Hero(opt){opt=opt||{};this.seed=opt.seed||((Date.now()%1e9)|0);this.r=rng(this.seed);
   this.cfg={turn:.7,brk:4,respawn:true,heal:.5,bots:false,streamer:'',boss:1,month:''};if(opt.cfg)for(var k in opt.cfg)this.cfg[k]=opt.cfg[k];this.reset();}
-Hero.prototype.reset=function(){this.players={};this.queue=[];this.champ=null;this.foe=null;this.phase='lobby';this.t=0;this.nextAt=0;this.duel=null;this.ev=[];this.evId=0;this.info=null;this.infoQ=[];this.rec=null;this.round=0;this.paused=false;this.botN=0;this.atk=null;};
+Hero.prototype.reset=function(){this.players={};this.queue=[];this.champ=null;this.foe=null;this.phase='lobby';this.t=0;this.nextAt=0;this.duel=null;this.ev=[];this.evId=this.evId||0; /* event ids never restart: a view that saw id 120 last game ignored every new event below 120 → no damage numbers, no sounds (Mohammad #14) */this.info=null;this.infoQ=[];this.rec=null;this.round=0;this.paused=false;this.botN=0;this.atk=null;};
 Hero.prototype.emit=Tnt.prototype.emit;
 Hero.prototype.month=function(){return this.cfg.month||monthKey();};
 Hero.prototype.stats=function(p){var m=this.month(),s={};HSTATS.forEach(function(k,i){s[k]=p.fixed?p.fixed[i]:heroVal(p.user,i,p.letters.charAt(i),m);});return s;};
@@ -414,6 +437,59 @@ Hero.prototype.pub=function(){var s=this,ids=[];if(this.champ)ids.push(this.cham
     p:ids.map(function(u){var p=s.players[u];return [u,p.name,p.color,Math.round(p.hp),p.max,p.kills,p.state,p.letters,p.bot||''];}),
     rec:this.rec?[this.rec.u,this.rec.n,this.rec.c,this.rec.k]:null,left:this.nextAt?Math.max(0,Math.round((this.nextAt-this.t)*10)/10):0,ev:this.ev.slice(-14),gi:this.info};};
 api.Hero=Hero;api.heroVal=heroVal;api.heroLetters=heroLetters;api.heroParse=heroParse;api.monthKey=monthKey;
+
+/* ---------- الكهف / Cave Raid: the old Block Brawl cave mode, rebuilt (party.js → its own page). Rounds against the cave boss:
+   dodge (the boss swings a giant blade at one side: !يسار / !يمين), counters (he summons mobs: pick the right gear !1 sword vs
+   zombies, !2 bow vs skeletons, !3 shield vs creepers, !4 water bucket vs endermen — a rumour tells you one that is NOT coming),
+   chests (3 chests, one is TNT: !1 !2 !3), and the final (he swings until one is left). Players who do nothing keep their spot /
+   a default from their name. Nobody is ever wiped out by one move: if everyone would fall, the boss misses. ---------- */
+var CKINDS=['dodge','counters','chests'],CGEAR=['sword','bow','shield','bucket'],CMOB=['zombie','skeleton','creeper','enderman'];
+function Cave(opt){opt=opt||{};this.seed=opt.seed||((Date.now()%1e9)|0);this.r=rng(this.seed);this.cfg={secs:15,rounds:0,finalAt:3,showSecs:3.4,autoNext:true};if(opt.cfg)for(var k in opt.cfg)this.cfg[k]=opt.cfg[k];this.wins={};this.reset();}
+Cave.prototype.reset=function(){this.players={};this.order=[];this.phase='lobby';this.round=0;this.kind='';this.t=0;this.end=0;this.len=0;this.nextAt=0;this.paused=false;this.winners=[];this.last=null;this.ev=[];this.evId=this.evId||0; /* event ids never restart: a view that saw id 120 last game ignored every new event below 120 → no damage numbers, no sounds (Mohammad #14) */this.info=null;this.infoQ=[];this.rumor=-1;this.secret=null;};
+Cave.prototype.emit=Tnt.prototype.emit;
+Cave.prototype.def=function(u,kind){var h=strHashT(u+'#'+kind+'#'+this.round);return kind==='dodge'||kind==='final'?h%2:kind==='chests'?h%3:h%4;};
+Cave.prototype.join=function(user,name,color){if(!user)return false;var p=this.players[user];if(p){p.name=name||p.name;if(color)p.color=color;return false;}if(this.phase!=='lobby')return false;
+  this.players[user]={user:user,name:name||user,color:color||'',alive:true,out:0,pick:-1,side:strHashT(user)%2};this.order.push(user);return true;};
+Cave.prototype.leave=function(user){var p=this.players[user];if(!p)return false;if(this.phase==='lobby'){delete this.players[user];this.order.splice(this.order.indexOf(user),1);}else{p.alive=false;p.out=p.out||this.round;}return true;};
+Cave.prototype.alive=function(){var s=this;return this.order.filter(function(u){return s.players[u].alive});};
+Cave.prototype.kindOf=function(r){var al=this.alive().length;if(al<=this.cfg.finalAt||(this.cfg.rounds>0&&r>=this.cfg.rounds))return 'final';return CKINDS[(r-1)%CKINDS.length];};
+Cave.prototype.start=function(){if(this.phase!=='lobby'&&this.phase!=='end')return false;if(this.order.length<2)return false;var s=this;this.order.forEach(function(u){var p=s.players[u];p.alive=true;p.out=0;});this.winners=[];this.round=0;this.emit({k:'start'});this.nextRound();return true;};
+Cave.prototype.nextRound=function(){var s=this;this.round++;this.kind=this.kindOf(this.round);this.alive().forEach(function(u){var p=s.players[u];p.pick=(s.kind==='dodge'||s.kind==='final')?p.side:-1;});
+  this.secret=this.kind==='counters'?(function(){var a=[0,1,2,3],out=[];for(var i=0;i<2;i++){out.push(a.splice(Math.floor(s.r()*a.length),1)[0]);}return out;})():this.kind==='chests'?Math.floor(this.r()*3):(this.kind==='dodge'||this.kind==='final')?Math.floor(this.r()*2):null;
+  this.rumor=-1;if(this.kind==='counters'){var no=[0,1,2,3].filter(function(i){return s.secret.indexOf(i)<0});this.rumor=no[Math.floor(this.r()*no.length)];}
+  var b=+this.cfg.secs;this.len=b>0?Math.max(5,b-(this.kind==='final'?Math.min(5,this.round):0)):0;this.end=this.len?this.t+this.len:0;this.phase='pick';this.nextAt=0;this.emit({k:'round',r:this.round,kind:this.kind,rumor:this.rumor});};
+Cave.prototype.choose=function(user,v){var p=this.players[user];if(!p||!p.alive||this.phase!=='pick')return false;var k=this.kind,n=(k==='dodge'||k==='final')?2:k==='chests'?3:4;if(!(v>=0&&v<n))return false;
+  p.pick=v;if(k==='dodge'||k==='final')p.side=v;return true;};
+Cave.prototype.resolve=function(){if(this.phase!=='pick')return false;var s=this,k=this.kind,al=this.alive(),hit=[];
+  al.forEach(function(u){var p=s.players[u];var v=p.pick>=0?p.pick:s.def(u,k);p.pick=v;
+    var dies=(k==='dodge'||k==='final')?v===s.secret:k==='chests'?v===s.secret:s.secret.indexOf(v===0?0:v===1?1:v===2?2:3)<0;
+    if(dies)hit.push(u);});
+  var missed=false;
+  if(k==='final'){ /* the final blade hits the MORE crowded side (Kukoro's blade rule); everyone on one side → it catches half of them */
+    var c=[0,0];al.forEach(function(u){c[s.players[u].pick]++;});var side=c[0]===c[1]?this.secret:(c[0]>c[1]?0:1);this.secret=side;
+    hit=al.filter(function(u){return s.players[u].pick===side;});
+    if(hit.length===al.length){var sh=hit.slice(),keep=[];for(var i=0;i<Math.floor(sh.length/2);i++)keep.push(sh.splice(Math.floor(s.r()*sh.length),1)[0]);if(!keep.length&&sh.length)keep.push(sh.pop());hit=sh;}}
+  else if(hit.length===al.length&&al.length>0){missed=true;hit=[];}
+  hit.forEach(function(u){var p=s.players[u];p.alive=false;p.out=s.round;});
+  this.last={r:this.round,kind:k,secret:this.secret,out:hit.slice(0,60),n:hit.length,missed:missed};this.emit({k:'resolve',r:this.round,kind:k,secret:this.secret,n:hit.length,out:hit.slice(0,60),missed:missed?1:0});
+  this.phase='show';this.end=0;this.nextAt=this.t+(+this.cfg.showSecs||3.4);var left=this.alive();
+  if(left.length<=1||(this.cfg.rounds>0&&this.round>=this.cfg.rounds&&k==='final'&&false)){this.finish();}return true;};
+Cave.prototype.finish=function(){var s=this;this.winners=this.alive();this.winners.forEach(function(u){s.wins[u]=(s.wins[u]||0)+1;});this.phase='end';this.nextAt=0;this.emit({k:'end',w:this.winners.slice()});};
+Cave.prototype.next=function(){if(this.phase==='lobby'||this.phase==='end')return this.start();if(this.phase==='pick')return this.resolve();if(this.phase==='show'){this.nextAt=0;this.nextRound();return true;}return false;};
+Cave.prototype.step=function(dt){if(this.info&&this.t>=this.info.until)this.info=null;if(!this.info&&this.infoQ.length){var q=this.infoQ.shift();q.until=this.t+6;this.info=q;}
+  if(this.paused)return;this.t+=dt;if(this.phase==='pick'&&this.end&&this.t>=this.end)this.resolve();
+  else if(this.phase==='show'&&this.nextAt&&this.t>=this.nextAt&&this.cfg.autoNext){this.nextAt=0;this.nextRound();}};
+Cave.prototype.askInfo=function(user){var p=this.players[user];if(!p)return false;if((this.info&&this.info.u===user)||this.infoQ.some(function(q){return q.u===user}))return false;if(this.infoQ.length>=5)return false;
+  this.infoQ.push({u:user,name:p.name,c:p.color,alive:p.alive?1:0,out:p.out,round:this.round,wins:this.wins[user]||0});if(!this.info)this.step(0);return true;};
+Cave.prototype.counts=function(){var k=this.kind,n=(k==='dodge'||k==='final')?2:k==='chests'?3:k==='counters'?4:2,c=[];for(var i=0;i<n;i++)c.push(0);var s=this;this.alive().forEach(function(u){var v=s.players[u].pick;if(v>=0&&v<n)c[v]++;});return c;};
+Cave.prototype.pub=function(){var s=this;return {ph:this.phase,r:this.round,kind:this.kind,left:this.end?Math.max(0,Math.round((this.end-this.t)*10)/10):0,len:this.len,pa:this.paused?1:0,rumor:this.rumor,
+  sec:this.phase==='show'||this.phase==='end'?this.secret:null,c:this.counts(),
+  p:this.order.slice(0,400).map(function(u){var p=s.players[u];return [u,p.name,p.color,p.pick,p.alive?1:0,p.out,p.side];}),last:this.last,win:this.winners.slice(0,30),ev:this.ev.slice(-12),gi:this.info};};
+function caveCmd(text,kind){var n=norm(text);if(n.charAt(0)!=='!')return -1;var w=n.slice(1).trim().split(' ')[0];
+  if(kind==='dodge'||kind==='final'){if(/^(a|l|left|يسار|شمال|يسار)$/.test(w))return 0;if(/^(d|r|right|يمين)$/.test(w))return 1;return -1;}
+  if(kind==='counters'){var g={'1':0,'sword':0,'سيف':0,'2':1,'bow':1,'قوس':1,'3':2,'shield':2,'درع':2,'4':3,'bucket':3,'water':3,'سطل':3,'مي':3,'ماء':3};return g[w]!=null?g[w]:-1;}
+  if(kind==='chests'){var c={'1':0,'2':1,'3':2};return c[w]!=null?c[w]:-1;}return -1;}
+api.Cave=Cave;api.caveCmd=caveCmd;api.CGEAR=CGEAR;api.CMOB=CMOB;
 if(typeof document==='undefined')return;
 /* ---------- the LEFT SIDE PANEL (Kukoro's, in Lamma's design): chat commands + how to play + CAM HERE frame + buttons.
    One layout "stack" piece (movable / resizable / hideable, sections hideable); the OBS overlay shows the commands and the cam
@@ -422,7 +498,7 @@ function panel(o){var A=root.App,$=A.$;var gs=o.root;var EN=function(){return A.
   /* the streamer's own panel: texts, command list, colour, opacity, cam frame — saved per channel + page, carried to OBS as &pn= */
   var PKEY='lamma-btp-'+(o.key||'bt')+'-'+A.channel,PD={t1:'',t2:'',sh:'',hw:'',cm:null,ac:'#868CBC',op:94,cs:'r',ca:'f'},PC={};
   function pcLoad(){var v=null;try{if(A.obs){var q=A.Q.get('pn');if(q)v=JSON.parse(decodeURIComponent(escape(atob(q.replace(/-/g,'+').replace(/_/g,'/')))));}else v=JSON.parse(localStorage.getItem(PKEY)||'null');}catch(e){v=null;}
-    PC={};Object.keys(PD).forEach(function(k){PC[k]=v&&v[k]!=null?v[k]:PD[k];});}
+    PC={};Object.keys(PD).forEach(function(k){PC[k]=v&&v[k]!=null?v[k]:PD[k];});PC.cs='r';PC.ca='f';/* the cam frame's shape and size options were removed (Mohammad, Nov 4) */}
   function pcDiff(){var d={};Object.keys(PD).forEach(function(k){if(JSON.stringify(PC[k])!==JSON.stringify(PD[k]))d[k]=PC[k];});return d;}
   function pcSave(){if(A.obs)return;var d=pcDiff();try{if(Object.keys(d).length)localStorage.setItem(PKEY,JSON.stringify(d));else localStorage.removeItem(PKEY);}catch(e){}A.updateObsUrl&&A.updateObsUrl();}
   A.obsExtra&&A.obsExtra(function(){var d=pcDiff();if(!Object.keys(d).length)return '';return '&pn='+btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');});
@@ -431,7 +507,11 @@ function panel(o){var A=root.App,$=A.$;var gs=o.root;var EN=function(){return A.
   function pcStyle(){var st=o.stage||gs,c=hex2(PC.ac),op=Math.max(0,Math.min(100,+PC.op))/100;function a(x){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+x+')';}
     var li=c.map(function(v){return Math.round(v+(255-v)*.55)});st.style.setProperty('--pac','rgb('+c.join(',')+')');st.style.setProperty('--pal','rgb('+li.join(',')+')');
     st.style.setProperty('--pa1',a(.16));st.style.setProperty('--pa2',a(.4));st.style.setProperty('--pa3',a(.62));st.style.setProperty('--pb1','rgba(22,22,28,'+op+')');st.style.setProperty('--pb2','rgba(11,11,15,'+op+')');}
-  function cmdsList(){return PC.cm?PC.cm.map(function(c){return [c[0],c[0],c[1]||'',c[1]||'']}):o.cmds;}
+  /* the panel lists only the game's REAL commands: the streamer can reorder them, hide one, or reword its short hint — never add or rename (a typed-in command did nothing) */
+  function cmdIdx(w){w=String(w||'').trim();for(var i=0;i<o.cmds.length;i++){if(o.cmds[i][0]===w||o.cmds[i][1]===w)return i;}return -1;}
+  function cmState(){var out=[],seen={};(PC.cm||[]).forEach(function(c){var i=typeof c[0]==='number'?c[0]:cmdIdx(c[0]);if(i<0||i>=o.cmds.length||seen[i])return;seen[i]=1;var dh=[o.cmds[i][2],o.cmds[i][3]];var hn=c[1]&&dh.indexOf(c[1])<0?c[1]:'';out.push([i,hn,c[2]?1:0]);});
+    o.cmds.forEach(function(c,i){if(!seen[i])out.push([i,'',0]);});return out;}
+  function cmdsList(){if(!PC.cm)return o.cmds;return cmState().filter(function(s){return !s[2]}).map(function(s){var c=o.cmds[s[0]];return [c[0],c[1],s[1]||c[2],s[1]||c[3]];});}
   var wrap=document.createElement('div');wrap.className='lay-el';wrap.setAttribute('data-lay','panel');var lc=document.createElement('div');lc.className='lay-c';wrap.appendChild(lc);
   var box=document.createElement('div');box.className='btp';lc.appendChild(box);
   function sec(id){var s=document.createElement('section');s.className='btp-sec btp-'+id;s.setAttribute('data-sec',id);box.appendChild(s);return s;}
@@ -464,8 +544,8 @@ function panel(o){var A=root.App,$=A.$;var gs=o.root;var EN=function(){return A.
     var ul=document.createElement('ul');ul.className='btp-list';cmdsList().forEach(function(x){cmdRow(x,ul,true)});sC.appendChild(ul);
     head(sH,'🎮',PC.t2||'طريقة اللعب',PC.t2||'HOW TO PLAY');var p=document.createElement('p');p.className='btp-how';p.textContent=PC.sh||L(o.short);sH.appendChild(p);
     if(!A.obs){var row=document.createElement('div');row.className='btp-row';
-      var b1=document.createElement('button');b1.type='button';b1.className='btp-b';b1.textContent=EN()?'Read more':'اقرا أكتر';b1.addEventListener('click',function(){openModal(EN()?'How to play':'طريقة اللعب',function(c){(PC.hw?PC.hw.split(/\n+/).filter(Boolean):(EN()?o.how[1]:o.how[0])).forEach(function(s){var pp=document.createElement('p');pp.textContent=s;c.appendChild(pp);});});});
-      var b2=document.createElement('button');b2.type='button';b2.className='btp-b';b2.textContent='🎛 '+(EN()?'CONTROLS':'التحكم');b2.addEventListener('click',function(){openModal(EN()?'Controls (streamer & mods)':'التحكم (الستريمر والمودز)',function(c){var u2=document.createElement('ul');u2.className='btp-list big';o.ctrl.forEach(function(x){cmdRow(x,u2)});c.appendChild(u2);});});
+      var b1=document.createElement('button');b1.type='button';b1.className='btp-b';b1.textContent=EN()?'Read more':'اقرأ المزيد';b1.addEventListener('click',function(){openModal(EN()?'How to play':'طريقة اللعب',function(c){(PC.hw?PC.hw.split(/\n+/).filter(Boolean):(EN()?o.how[1]:o.how[0])).forEach(function(s){var pp=document.createElement('p');pp.textContent=s;c.appendChild(pp);});});});
+      var b2=document.createElement('button');b2.type='button';b2.className='btp-b';b2.textContent='🎛 '+(EN()?'CONTROLS':'التحكم');b2.addEventListener('click',function(){openModal(EN()?'Controls (streamer & mods)':'التحكم (الستريمر والمشرفين)',function(c){var u2=document.createElement('ul');u2.className='btp-list big';o.ctrl.forEach(function(x){cmdRow(x,u2)});c.appendChild(u2);});});
       row.appendChild(b1);row.appendChild(b2);sH.appendChild(row);}
     var cw=document.createElement('div');cw.className='btp-camw ar-'+PC.ca;var cam=document.createElement('div');cam.className='btp-cam sh-'+PC.cs;var cl=document.createElement('span');cl.textContent='📷 '+(EN()?'CAM HERE':'مكان الكاميرا');cam.appendChild(cl);cw.appendChild(cam);sK.appendChild(cw);
     if(!A.obs){var br=document.createElement('div');br.className='btp-bar';
@@ -478,11 +558,17 @@ function panel(o){var A=root.App,$=A.$;var gs=o.root;var EN=function(){return A.
       var sb=ib('',EN()?'Sound':'الصوت',function(){var s=$('soundBtn');if(s)s.click();setTimeout(sync,30);},'btp-snd');
       sB.appendChild(br);}
     sync();}
-  function sync(){if(pBtn){var pd=o.isPaused&&o.isPaused();pBtn.textContent=pd?('▶ '+(EN()?'RESUME':'كمّل')):(EN()?'⏸ PAUSE':'إيقاف مؤقت');pBtn.classList.toggle('on',!!pd);pBtn.disabled=!!(o.canPause&&!o.canPause());}
+  function sync(){if(pBtn){var pd=o.isPaused&&o.isPaused();pBtn.textContent=pd?('▶ '+(EN()?'RESUME':'استئناف')):(EN()?'⏸ PAUSE':'إيقاف مؤقت');pBtn.classList.toggle('on',!!pd);pBtn.disabled=!!(o.canPause&&!o.canPause());}
     var sb=box.querySelector('.btp-snd'),s=$('soundBtn');if(sb)sb.textContent=s?s.textContent:'🔊';}
   /* "the player can speak" toggle at the bottom of the map (control page only) */
   if(o.speak&&!A.obs){var sp=document.createElement('label');sp.className='btp-speak';var ic=document.createElement('span');var cb=document.createElement('input');cb.type='checkbox';cb.setAttribute('role','switch');cb.checked=!!o.speak.get();
-    cb.addEventListener('change',function(){o.speak.set(cb.checked);});sp.appendChild(ic);sp.appendChild(cb);gs.appendChild(sp);o._sp=function(){ic.textContent='🗨️ '+(EN()?'Players can speak':'اللاعب بيقدر يحكي');cb.checked=!!o.speak.get();};o._sp();}
+    cb.addEventListener('change',function(){o.speak.set(cb.checked);});sp.appendChild(ic);sp.appendChild(cb);gs.appendChild(sp);
+    /* Nov 4 (Mohammad): the chip can be hidden — ✕ on it in «تعديل الشكل», and the setting «زر تحدث اللاعبين على الخريطة» brings it back */
+    var SPK='lamma-spchip-'+(A.game||'bt');var spx=document.createElement('button');spx.type='button';spx.className='btp-spx';spx.textContent='✕';spx.title=EN()?'Hide':'إخفاء';
+    spx.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();spHide(true);});sp.appendChild(spx);
+    function spHide(h){try{localStorage.setItem(SPK,h?'1':'0')}catch(_){}sp.hidden=!!h;var t=document.getElementById('btSpChip');if(t)t.checked=!h;}
+    try{sp.hidden=localStorage.getItem(SPK)==='1'}catch(_){}
+    setTimeout(function(){var host=document.querySelector('.w2-set .srow.sw')||null;if(!host||document.getElementById('btSpChip'))return;var lb=document.createElement('label');lb.className='srow sw';var s1=document.createElement('span');s1.className='srow-l';s1.textContent=EN()?'“Players can speak” switch on the map':'زر «اللاعب يستطيع التحدث» على الخريطة';var i1=document.createElement('input');i1.type='checkbox';i1.setAttribute('role','switch');i1.id='btSpChip';i1.checked=!sp.hidden;i1.addEventListener('change',function(){spHide(!i1.checked);});lb.appendChild(s1);lb.appendChild(i1);host.parentNode.insertBefore(lb,host);},0);o._sp=function(){ic.textContent='🗨️ '+(EN()?'Players can speak':'اللاعب يستطيع التحدث');cb.checked=!!o.speak.get();};o._sp();}
   /* the streamer's editor (control page): essentials first, texts and the command list under "خيارات زيادة" */
   function editor(){var set=document.querySelector('.w2-set');if(!set||A.obs)return;var xOpen=false;var d=document.createElement('details');d.className='w2-xtra btp-edit';
     var sm=document.createElement('summary');var sms=document.createElement('span');sm.appendChild(sms);d.appendChild(sm);var body=document.createElement('div');d.appendChild(body);set.appendChild(d);
@@ -494,33 +580,78 @@ function panel(o){var A=root.App,$=A.$;var gs=o.root;var EN=function(){return A.
       var g=document.createElement('div');g.className='sgrp';
       var col=document.createElement('input');col.type='color';col.value=PC.ac;col.addEventListener('input',function(){PC.ac=col.value;changed(true);});g.appendChild(row(EN()?'Panel colour':'لون اللوحة',col));
       var rg=document.createElement('input');rg.type='range';rg.min=0;rg.max=100;rg.step=2;rg.value=PC.op;rg.addEventListener('input',function(){PC.op=+rg.value;pcStyle();pcSave();});g.appendChild(row(EN()?'Background opacity':'شفافية الخلفية',rg));
-      g.appendChild(row(EN()?'Cam frame shape':'شكل إطار الكاميرا',sel([['r','مدوّر','Rounded'],['s','زوايا حادة','Square corners'],['c','دائرة','Circle']],'cs')));
-      g.appendChild(row(EN()?'Cam frame size':'حجم إطار الكاميرا',sel([['f','كل المساحة','Fill the space'],['169','16:9','16:9'],['43','4:3','4:3'],['11','مربع 1:1','Square 1:1']],'ca')));
       body.appendChild(g);
-      var x=document.createElement('details');x.className='w2-xtra';if(xOpen)x.open=true;x.addEventListener('toggle',function(){xOpen=x.open;});var xs=document.createElement('summary');xs.textContent=EN()?'More options':'خيارات زيادة';x.appendChild(xs);var g2=document.createElement('div');g2.className='sgrp btp-ed';
+      var x=document.createElement('details');x.className='w2-xtra';if(xOpen)x.open=true;x.addEventListener('toggle',function(){xOpen=x.open;});var xs=document.createElement('summary');xs.textContent=EN()?'More options':'خيارات إضافية';x.appendChild(xs);var g2=document.createElement('div');g2.className='sgrp btp-ed';
       g2.appendChild(row(EN()?'Commands title':'عنوان الأوامر',txt('t1',EN()?'CHAT COMMANDS':'أوامر الشات')));
       g2.appendChild(row(EN()?'How-to-play title':'عنوان طريقة اللعب',txt('t2',EN()?'HOW TO PLAY':'طريقة اللعب')));
       g2.appendChild(row(EN()?'Short explanation':'الشرح القصير',txt('sh',L(o.short),true)));
       g2.appendChild(row(EN()?'Full explanation (one paragraph per line)':'الشرح الكامل (كل سطر فقرة)',txt('hw',(EN()?o.how[1]:o.how[0]).join('\n'),true)));
-      var lt=document.createElement('div');lt.className='srow-l';lt.textContent=EN()?'Commands in the panel (command · hint)':'الأوامر باللوحة (الأمر · الشرح)';g2.appendChild(lt);
-      var list=PC.cm||o.cmds.map(function(c){return [EN()?(c[1]||c[0]):(c[0]||c[1]),EN()?c[3]:c[2]];});
+      var lt=document.createElement('div');lt.className='srow-l';lt.textContent=EN()?'Commands in the panel — the short hint shows on stream; the full explanation is for you':'الأوامر في اللوحة — الشرح المختصر يظهر في البث، والشرح الكامل لك هنا';g2.appendChild(lt);
+      var list=cmState();
       function setList(nl){PC.cm=nl;changed();xOpen=true;build();d.open=true;}
-      list.forEach(function(c,i){var r=document.createElement('div');r.className='btp-er';var a=document.createElement('input');a.type='text';a.className='c1';a.value=c[0];a.maxLength=40;var b=document.createElement('input');b.type='text';b.value=c[1];b.maxLength=60;
-        function up(){var nl=list.map(function(z){return z.slice()});nl[i]=[a.value.trim(),b.value.trim()];PC.cm=nl;list=nl;changed(true);}a.addEventListener('input',up);b.addEventListener('input',up);
+      list.forEach(function(s,i){var c=o.cmds[s[0]];var r=document.createElement('div');r.className='btp-er'+(s[2]?' off':'');var a=document.createElement('b');a.className='c1';a.dir='auto';a.textContent=EN()?(c[1]||c[0]):(c[0]||c[1]);
+        var b=document.createElement('input');b.type='text';b.value=s[1];b.placeholder=EN()?c[3]:c[2];b.maxLength=60;b.setAttribute('aria-label',EN()?'Short hint on stream':'الشرح المختصر في البث');
+        function up(){var nl=list.map(function(z){return z.slice()});nl[i][1]=b.value.trim();PC.cm=nl;list=nl;changed(true);}b.addEventListener('input',up);
         function mb(t,lab,f){var bb=document.createElement('button');bb.type='button';bb.className='btn btn-ghost btn-sm';bb.textContent=t;bb.setAttribute('aria-label',lab);bb.title=lab;bb.addEventListener('click',f);return bb;}
         r.appendChild(a);r.appendChild(b);
-        r.appendChild(mb('↑',EN()?'Up':'لفوق',function(){if(!i)return;var nl=list.map(function(z){return z.slice()});var t=nl[i-1];nl[i-1]=nl[i];nl[i]=t;setList(nl);}));
-        r.appendChild(mb('↓',EN()?'Down':'لتحت',function(){if(i>=list.length-1)return;var nl=list.map(function(z){return z.slice()});var t=nl[i+1];nl[i+1]=nl[i];nl[i]=t;setList(nl);}));
-        r.appendChild(mb('×',EN()?'Remove':'شيل',function(){var nl=list.map(function(z){return z.slice()});nl.splice(i,1);setList(nl);}));g2.appendChild(r);});
-      var br=document.createElement('div');br.className='btn-row';var add=document.createElement('button');add.type='button';add.className='btn btn-ghost btn-sm';add.textContent=EN()?'+ Add a command':'+ ضيف أمر';add.addEventListener('click',function(){var nl=list.map(function(z){return z.slice()});nl.push(['!','']);setList(nl);});
-      var rs=document.createElement('button');rs.type='button';rs.className='btn btn-ghost btn-sm';rs.textContent=EN()?'Reset the panel':'رجّع اللوحة للأصل';rs.addEventListener('click',function(){Object.keys(PD).forEach(function(k){PC[k]=PD[k];});changed();build();});
-      br.appendChild(add);br.appendChild(rs);g2.appendChild(br);x.appendChild(g2);body.appendChild(x);}
+        r.appendChild(mb('↑',EN()?'Up':'للأعلى',function(){if(!i)return;var nl=list.map(function(z){return z.slice()});var t=nl[i-1];nl[i-1]=nl[i];nl[i]=t;setList(nl);}));
+        r.appendChild(mb('↓',EN()?'Down':'للأسفل',function(){if(i>=list.length-1)return;var nl=list.map(function(z){return z.slice()});var t=nl[i+1];nl[i+1]=nl[i];nl[i]=t;setList(nl);}));
+        r.appendChild(mb(s[2]?'👁‍🗨':'👁',s[2]?(EN()?'Show on stream':'أظهره في البث'):(EN()?'Hide from stream':'أخفه من البث'),function(){var nl=list.map(function(z){return z.slice()});nl[i][2]=nl[i][2]?0:1;setList(nl);}));
+        if(c[4]){var lg=document.createElement('p');lg.className='btp-long';lg.textContent=EN()?(c[5]||c[4]):c[4];r.appendChild(lg);}
+        g2.appendChild(r);});
+      var br=document.createElement('div');br.className='btn-row';
+      var rs=document.createElement('button');rs.type='button';rs.className='btn btn-ghost btn-sm';rs.textContent=EN()?'Reset the panel':'أعد اللوحة إلى الأصل';rs.addEventListener('click',function(){Object.keys(PD).forEach(function(k){PC[k]=PD[k];});changed();build();});
+      br.appendChild(rs);g2.appendChild(br);x.appendChild(g2);body.appendChild(x);}
     build();A.onLang&&A.onLang(build);}
   A.onLang&&A.onLang(function(){render();o._sp&&o._sp();});
   pcStyle();render();editor();setInterval(sync,500);
   return {el:wrap,sync:sync,render:render,item:{id:'panel',z:6,code:'p',kind:'box',ar:'لوحة الأوامر',en:'Side panel',def:o.def||{x:.8,y:2,w:20.5,h:96,s:1},minW:10,minH:24,sections:[
     {id:'cmds',code:'c',ar:'أوامر الشات',en:'Chat commands',def:{f:o.fc||6.2}},{id:'how',code:'h',ar:'طريقة اللعب',en:'How to play',def:{f:2.3}},{id:'cam',code:'k',ar:'مكان الكاميرا',en:'Cam here',def:{f:2.6}},{id:'btns',code:'t',ar:'الأزرار',en:'Buttons',def:{f:.95}}]}};}
 api.panel=panel;
+
+/* ---------- Minecraft skins (Mohammad #2/#3): a viewer picks their own skin with !سكن <MinecraftName> once they reach the
+   streamer's minimum level (Kukoro-style); no skin / not written / level too low → Steve. The control page sends the chosen
+   names with every publish so the OBS overlay draws the same skins. ---------- */
+var STEVE={skin:'#b98a68',hair:'#3b2416',pants:'#3a37a0',shirt:'#12a3a3',style:0,steve:1};
+var SKN={map:null,remote:null,cache:{}};
+function chan(){return (typeof window!=='undefined'&&window.App&&window.App.channel)||'';}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function skMap(){if(!SKN.map)SKN.map=lsGet('lamma-skins-'+chan(),{})||{};return SKN.map;}
+function xpLevel(u){var s=lsGet('lamma-ba-'+chan(),{})||{};var xp=(s.xp||{})[u];return lvlOf(xp);}
+api.skinMinLv=function(v){var k='lamma-skinlv-'+chan();if(v!=null){lsSet(k,+v);return +v;}var x=lsGet(k,12);return x==null?12:+x;};
+api.skinLevel=xpLevel;
+api.setSkin=function(user,name){name=String(name||'').trim().replace(/^@/,'');var m=skMap();
+  if(!name){if(m[user]){delete m[user];lsSet('lamma-skins-'+chan(),m);}return 'cleared';}
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(name))return 'bad';if(xpLevel(user)<api.skinMinLv())return 'level';
+  m[user]=name;lsSet('lamma-skins-'+chan(),m);return 'ok';};
+api.skinMap=function(){var m=skMap(),out={},min=api.skinMinLv(),n=0;Object.keys(m).forEach(function(u){if(n<400&&xpLevel(u)>=min){out[u]=m[u];n++;}});return out;};
+function avg(d,x,y,w,h){var r=0,g=0,b=0,n=0;for(var j=y;j<y+h;j++)for(var i=x;i<x+w;i++){var k=(j*64+i)*4;if(d[k+3]<128)continue;r+=d[k];g+=d[k+1];b+=d[k+2];n++;}if(!n)return null;var t=function(v){var s=Math.round(v/n).toString(16);return s.length<2?'0'+s:s;};return '#'+t(r)+t(g)+t(b);}
+function loadSkin(name){var c=SKN.cache[name];if(c)return c;c=SKN.cache[name]={look:null,face:null};if(typeof Image==='undefined')return c;
+  var img=new Image();img.crossOrigin='anonymous';img.onload=function(){try{var cv=document.createElement('canvas');cv.width=64;cv.height=64;var g=cv.getContext('2d');g.drawImage(img,0,0);var d=g.getImageData(0,0,64,64).data;
+    var f=document.createElement('canvas');f.width=8;f.height=8;var fg=f.getContext('2d');fg.imageSmoothingEnabled=false;fg.drawImage(img,8,8,8,8,0,0,8,8);fg.drawImage(img,40,8,8,8,0,0,8,8);
+    var legY=img.height===32?20:20;c.look={skin:avg(d,9,13,6,2)||STEVE.skin,hair:avg(d,8,0,8,8)||STEVE.hair,shirt:avg(d,20,20,8,6)||STEVE.shirt,pants:avg(d,4,legY+4,4,8)||STEVE.pants,style:0};c.face=f;}catch(e){c.look=null;}};
+  img.onerror=function(){c.look=null;};img.src='https://mc-heads.net/skin/'+encodeURIComponent(name);return c;}
+function skinNameOf(u){var m=SKN.remote||api.skinMap();return m[u]||'';}
+api.lookOf=function(u,color){var n=skinNameOf(u);if(!n)return STEVE;var c=loadSkin(n);return c.look||STEVE;};
+api.skinFace=function(u){var n=skinNameOf(u);if(!n)return null;var c=loadSkin(n);return c.face||null;};
+api.STEVE=STEVE;
+(function wire(){if(typeof window==='undefined')return;function go(){var A=window.App;if(!A||A._skWired)return;A._skWired=1;
+    if(A.strings)A.strings({ar:{bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر، وإلا تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.'},en:{bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve. !skin alone goes back to Steve.'}});
+    var pub=A.publish;if(pub)A.publish=function(o){if(o&&typeof o==='object'&&!Array.isArray(o)&&!A.obs){try{o.sk=api.skinMap();}catch(e){}}return pub.apply(A,arguments);};
+    if(A.onMirror)A.onMirror(function(s){if(s&&s.sk&&typeof s.sk==='object')SKN.remote=s.sk;});
+    if(A.onChat)A.onChat(function(m){if(A.runsEngine&&!A.runsEngine())return;var c=cmd(m.text);if(c&&c.k==='skin'){api.setSkin(m.user,c.arg);}});}
+  if(window.App)go();else document.addEventListener('DOMContentLoaded',go);})();
+/* the setting row, added to every battle game's «خيارات إضافية» */
+api.skinRow=function(host){if(!host||host.querySelector('.bt-skinlv'))return;var lab=document.createElement('label');lab.className='srow bt-skinlv';var sp=document.createElement('span');sp.className='srow-l';
+  var en=window.App&&App.lang&&App.lang()==='en';sp.textContent=en?'Minimum level to use your own Minecraft skin (!skin name)':'أقل مستوى لاستخدام سكن ماينكرافت الخاص (!سكن الاسم)';
+  var sel=document.createElement('select');sel.className='ssel';[[10,en?'Everyone':'الجميع'],[11,'11'],[12,'12'],[13,'13'],[15,'15'],[18,'18'],[20,'20']].forEach(function(o){var op=document.createElement('option');op.value=o[0];op.textContent=o[1];sel.appendChild(op);});
+  sel.value=String(api.skinMinLv());sel.addEventListener('change',function(){api.skinMinLv(+sel.value);window.App&&App.updateObsUrl&&App.updateObsUrl();});lab.appendChild(sp);lab.appendChild(sel);
+  var p=document.createElement('p');p.className='small muted';p.textContent=en?'Below that level, or with no skin written, the player is Steve.':'تحت هذا المستوى، أو إن لم يكتب سكنًا، تكون شخصيته ستيف.';
+  var g=host.querySelector('.sgrp')||host;g.appendChild(lab);g.appendChild(p);};
+
+/* writing in Twitch chat needs a bot account's OAuth token (chat:edit). None is linked yet, so ready() is false and every game keeps its on-screen card. */
+api.bot={token:null,ready:function(){return !!this.token&&typeof this.send==='function';},say:function(t){if(!this.ready()||!t)return false;try{this.send(String(t).slice(0,480));return true;}catch(e){return false;}}};
 
 
 /* ---------- DOM helpers ---------- */
@@ -531,7 +662,7 @@ api.tmr=function(row,get,set,def){if(!row)return;var inp=row.querySelector('inpu
   sb.forEach(function(b){b.addEventListener('click',function(){var want=b.getAttribute('data-v')==='1';if(want===(get()>0))return;set(want?Math.max(1,+inp.value||def):0);show();if(want)inp.focus();});});
   inp.addEventListener('change',function(){if(get()>0){set(Math.max(1,Math.min(3600,Math.round(+inp.value||def))));show();}});
   show();return show;};
-api.xtra=function(d,key){if(!d)return;try{d.open=localStorage.getItem(key)==='1';}catch(e){}d.addEventListener('toggle',function(){try{localStorage.setItem(key,d.open?'1':'0');}catch(e){}});};
+api.xtra=function(d,key){if(!d)return;try{api.skinRow(d);}catch(e){}try{d.open=localStorage.getItem(key)==='1';}catch(e){}d.addEventListener('toggle',function(){try{localStorage.setItem(key,d.open?'1':'0');}catch(e){}});};
 api.logo=function(host){if(host&&!host.firstChild){var s=document.createElement('span');s.className='s-logo';var b=document.createElement('b');b.textContent='لَمّة';var i=document.createElement('i');i.textContent='LAMMA';s.appendChild(b);s.appendChild(i);host.appendChild(s);}};
 api.name=function(name,color,cls){var b=document.createElement('bdi');b.className=cls||'bt-nm';b.textContent=String(name||'');if(color&&window.MC)b.style.color=window.MC.readableColor(color);return b;};
 /* a chat command as the site shows it: isolated direction, the "!" in the accent colour */

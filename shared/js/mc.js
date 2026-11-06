@@ -55,7 +55,12 @@ var GEN={
   planks:function(s){var c=noise('#a8803f',.1,s);var x=c.getContext('2d');x.fillStyle='rgba(80,50,20,.6)';for(var j=3;j<16;j+=4)x.fillRect(0,j,16,1);x.fillRect(5,0,1,4);x.fillRect(11,4,1,4);x.fillRect(3,8,1,4);x.fillRect(9,12,1,4);return c},
   log:function(s){var c=noise('#6b4a26',.2,s);var x=c.getContext('2d');x.fillStyle='rgba(40,25,10,.5)';for(var i=1;i<16;i+=3)x.fillRect(i,0,1,16);return c},
   leaves:function(s){return noise('#3f8a2a',.5,s,function(i,j,r){return r()<.16?'#2a6a1c':r()<.05?'#62b043':null})},
-  tnt_side:function(){var c=mk(16,16),x=c.getContext('2d');x.fillStyle='#d83a2a';x.fillRect(0,0,16,16);x.fillStyle='#b52a1e';for(var i=0;i<16;i+=4)x.fillRect(i,0,2,16);x.fillStyle='#eee';x.fillRect(0,6,16,4);x.fillStyle='#222';x.fillRect(2,7,2,2);x.fillRect(6,7,1,2);x.fillRect(9,7,2,2);x.fillRect(12,7,2,2);return c},
+  tnt_side:function(){var c=mk(16,16),x=c.getContext('2d');var R=['#c9321c','#a3260f','#db4528','#b72d16'];
+ for(var i=0;i<16;i++){x.fillStyle=R[(i>>1)%4];x.fillRect(i,0,1,16);}
+ x.fillStyle='rgba(0,0,0,.18)';x.fillRect(0,0,16,1);x.fillRect(0,15,16,1);
+ x.fillStyle='#e9e6df';x.fillRect(0,5,16,6);x.fillStyle='#cfcac0';x.fillRect(0,5,16,1);x.fillRect(0,10,16,1);
+ x.fillStyle='#1d1d1d';/* T */x.fillRect(2,6,3,1);x.fillRect(3,7,1,3);/* N */x.fillRect(6,6,1,4);x.fillRect(9,6,1,4);x.fillRect(7,7,1,1);x.fillRect(8,8,1,1);/* T */x.fillRect(11,6,3,1);x.fillRect(12,7,1,3);return c},
+
   chest:function(){var c=mk(16,16),x=c.getContext('2d');x.fillStyle='#a5712c';x.fillRect(0,0,16,16);x.fillStyle='#7a4f1a';x.fillRect(0,0,16,1);x.fillRect(0,6,16,1);x.fillRect(0,15,16,1);x.fillRect(0,0,1,16);x.fillRect(15,0,1,16);x.fillStyle='#d8d8d8';x.fillRect(7,5,2,3);return c},
   crate:function(s){var c=noise('#9a7034',.1,s);var x=c.getContext('2d');x.fillStyle='#5c3e18';x.fillRect(0,0,16,2);x.fillRect(0,14,16,2);x.fillRect(0,0,2,16);x.fillRect(14,0,2,16);for(var k=0;k<14;k++)x.fillRect(1+k,1+k,2,1);return c},
   glow:function(s){return noise('#e8c060',.25,s,function(i,j,r){return r()<.2?'#fff2b0':null})}
@@ -162,7 +167,7 @@ var MAPS={
   cave:{ar:'الكهف',en:'Cave',floor:['stone','cobble','deepslate','stone'],wall:'deepslate',wall2:'ore',deco:['ore','crate','chest'],sky:['#14161c','#050608'],light:'#ffb35a',amb:.56,lava:true,mobs:['zombie','cavespider','skeleton','creeper'],boss:'king'}
 };
 var BOSSES={wither:{ar:'الذابل',en:'The Wither',map:'nether'},dragon:{ar:'تنين النهاية',en:'Ender Dragon',map:'end'},golem:{ar:'الحارس الحديدي',en:'Iron Guardian',map:'plains'},king:{ar:'ملك الزومبي',en:'Zombie King',map:'cave'}};
-var MOBS={zombie:{ar:'زومبي',en:'Zombie'},husk:{ar:'زومبي الصحرا',en:'Husk'},skeleton:{ar:'هيكل',en:'Skeleton'},creeper:{ar:'كريبر',en:'Creeper'},spider:{ar:'عنكبوت',en:'Spider'},cavespider:{ar:'عنكبوت الكهف',en:'Cave spider'},blaze:{ar:'بليز',en:'Blaze'},piglin:{ar:'خنزير النذر',en:'Piglin'},wskel:{ar:'هيكل الذابل',en:'Wither skeleton'},enderman:{ar:'إندرمان',en:'Enderman'},endermite:{ar:'إندرمايت',en:'Endermite'}};
+var MOBS={zombie:{ar:'زومبي',en:'Zombie'},husk:{ar:'زومبي الصحراء',en:'Husk'},skeleton:{ar:'هيكل',en:'Skeleton'},creeper:{ar:'كريبر',en:'Creeper'},spider:{ar:'عنكبوت',en:'Spider'},cavespider:{ar:'عنكبوت الكهف',en:'Cave spider'},blaze:{ar:'بليز',en:'Blaze'},piglin:{ar:'خنزير النذر',en:'Piglin'},wskel:{ar:'هيكل الذابل',en:'Wither skeleton'},enderman:{ar:'إندرمان',en:'Enderman'},endermite:{ar:'إندرمايت',en:'Endermite'}};
 
 if(root.BTR){Object.keys(root.BTR.MOBS).forEach(function(k){MOBS[k]={ar:root.BTR.MOBS[k].ar,en:root.BTR.MOBS[k].en};});Object.keys(root.BTR.BOSSES).forEach(function(k){BOSSES[k]=Object.assign({},BOSSES[k]||{},{ar:root.BTR.BOSSES[k].ar,en:root.BTR.BOSSES[k].en});});}
 /* how tall each one stands (blocks, before scale) — where names / HP bars go */
@@ -221,7 +226,7 @@ function humanoid(iso,e,o,t){
   if(o.hat)o.hat(L+B+bob+H,opt);
 }
 function playerT(e){
-  var lk=e.look||look(e.name||'x',e.color),fc=e.avatar&&e.avatar.complete&&e.avatar.naturalWidth?e.avatar:face('player',lk.skin,lk.hair,lk.style);
+  var lk=e.look||look(e.name||'x',e.color),fc=e.avatar&&(e.avatar.getContext||(e.avatar.complete&&e.avatar.naturalWidth))?e.avatar:face('player',lk.skin,lk.hair,lk.style);
   var shirt=S(lk.shirt),hair=S(lk.hair);
   return {head:{front:fc,back:hair,side:FACE_SIDE(lk),top:hair},
     body:{front:shirtFront(lk.shirt),back:shirt,side:S(shade(lk.shirt,.92)),top:S(shade(lk.shirt,1.1))},

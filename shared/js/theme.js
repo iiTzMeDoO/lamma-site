@@ -70,9 +70,9 @@ function paint(){
       var inp=document.createElement('input');inp.type='color';inp.value='#'+custom[r[0]];inp.setAttribute('data-tc',String(r[0]));inp.setAttribute('aria-label',r[1]);
       inp.addEventListener('input',function(){setCustom(r[0],inp.value)});inp.addEventListener('change',function(){setCustom(r[0],inp.value)});
       lab.appendChild(sp);lab.appendChild(inp);box.appendChild(lab)});
-    var rs=document.createElement('button');rs.type='button';rs.className='tc-reset';rs.textContent='↺ '+L('رجّع الألوان','Reset colours');
+    var rs=document.createElement('button');rs.type='button';rs.className='tc-reset';rs.textContent='↺ '+L('أعِد الألوان','Reset colours');
     rs.addEventListener('click',function(){custom=DEF_CUSTOM.slice();ls('lamma-theme-custom',custom.join(''));applyCustom();syncObs();paint()});box.appendChild(rs);
-    var note=document.createElement('p');note.className='tc-note';note.textContent=L('بتنطبق عالموقع وعالعجلة، وبتنحفظ برابط OBS.','Applies to the site and the wheel, and is saved in the OBS link.');box.appendChild(note);
+    var note=document.createElement('p');note.className='tc-note';note.textContent=L('تُطبَّق على الموقع وعلى العجلة، وتُحفظ برابط OBS.','Applies to the site and the wheel, and is saved in the OBS link.');box.appendChild(note);
     menu.appendChild(box);
   }
   btn.setAttribute('aria-label',lang()==='en'?'Theme':'الثيم');btn.title=btn.getAttribute('aria-label');

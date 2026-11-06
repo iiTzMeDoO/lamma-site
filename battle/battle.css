@@ -48,6 +48,7 @@ html[dir=rtl] .btg .lay-el{direction:rtl}
 .bt-win li{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:1.2em}
 .bt-head{display:inline-grid;place-items:center;width:1.6em;height:1.6em;border:.12em solid #000;font-weight:900;color:#fff;overflow:hidden;flex:0 0 auto;image-rendering:pixelated}
 .bt-head img{width:100%;height:100%;object-fit:cover}
+.bt-head canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
 .bt-nm{font-weight:800;unicode-bidi:isolate}
 @keyframes btPop{from{transform:translate(-50%,-50%) scale(.4);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 @keyframes btPulse{50%{transform:scale(1.08)}}
@@ -93,7 +94,7 @@ html.lay-editing .ba-boss.off,.lay-edit .ba-boss.off{opacity:.45}
 .ba-sql.tight{gap:.22em}.ba-sql.tight li{padding:.1em .3em}.ba-sql.tight .bt-head{width:1.55em;height:1.55em}.ba-sql.tight .ba-sqm{gap:.1em}
 .ba-feed{display:flex;flex-direction:column;justify-content:flex-end;gap:.18em;padding:.4em .6em;font-size:.85em;font-weight:700;transition:opacity .3s}
 .ba-feed.off{opacity:0}
-.ba-fr{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:btIn .3s}
+.ba-fr{white-space:normal;line-height:1.35;unicode-bidi:isolate;animation:btIn .3s}.ba-fr bdi{unicode-bidi:isolate}
 @keyframes btIn{from{opacity:0;transform:translateY(.4em)}}
 .ba-lobby{display:flex;flex-direction:column;gap:.25em;padding:.5em .7em;font-weight:700}
 .ba-lobby.slim{justify-content:center}
@@ -286,3 +287,84 @@ html.obs .bt-fs-set{display:none!important}
 .hr-recp{margin:.4em 0 0;font-weight:800;opacity:.9}
 html.obs .hr-info{pointer-events:none}
 .hr-nm{font-size:1.2em}.hr-k{font-size:1.7em}.hr-ct .bt-head{width:2em;height:2em}.hr-champ{gap:.1em;padding:.25em .7em}
+.cv-round .cv-hint{white-space:normal;font-size:.8em;line-height:1.3;color:#ffd27a}
+
+.btp-ed .btp-er{flex-wrap:wrap}.btp-ed .btp-er b.c1{flex:0 0 26%;font-family:inherit;font-weight:800;color:#ffd27a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.btp-ed .btp-er.off{opacity:.5}.btp-ed .btp-long{flex:1 0 100%;margin:.1em 0 .45em;font-size:.82em;line-height:1.45;color:#c9cbe0}
+.srow[hidden]{display:none!important}
+/* info card: tidy + consistent (Mohammad, Nov 4): full names, chip sub-line, close button */
+.ba-info .gi-nm{white-space:normal;overflow:visible;text-overflow:clip;font-size:1.5em;line-height:1.15;word-break:break-word}
+.ba-info .gi-sub{display:flex;flex-wrap:wrap;gap:.25em;font-size:.9em}
+.ba-info .gi-sub .gi-chip{background:rgba(255,255,255,.14)}
+.ba-info .gi-type{display:block;font-size:.85em;opacity:.9}
+.ba-info .gi-in{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.ba-info .gi-x{position:absolute;top:-.8em;inset-inline-start:-.6em;width:1.9em;height:1.9em;border-radius:50%;border:.12em solid #0a0810;background:#e04a4a;color:#fff;font-weight:900;font-size:.95em;line-height:1;cursor:pointer;pointer-events:auto;box-shadow:0 .2em .5em rgba(0,0,0,.5)}
+.ba-info .gi-x:hover{background:#ff6a5a}
+.ba-info .gi-st{min-height:2.6em}
+/* arena wave screen (Mohammad #16) */
+.ba-wave{position:absolute;inset:0;z-index:24;display:flex;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,.45),rgba(0,0,0,.15) 70%)}
+.ba-wave[hidden]{display:none}
+.ba-wave .bw-in{pointer-events:auto;min-width:min(30em,70%);max-width:min(46em,86%);text-align:center;color:#fff;background:linear-gradient(180deg,rgba(60,54,80,.97),rgba(22,19,32,.97));border:.2em solid #0a0810;box-shadow:inset 0 0 0 .14em rgba(255,255,255,.16),0 .8em 2em rgba(0,0,0,.6);border-radius:.5em;padding:1em 1.4em .9em;animation:btPop .35s cubic-bezier(.2,1.5,.4,1)}
+.ba-wave .bw-in.boss{background:linear-gradient(180deg,rgba(110,30,42,.97),rgba(34,12,18,.97))}
+.ba-wave .bw-t{font-family:'Lalezar',var(--disp);font-size:2.6em;line-height:1.1;color:#ffd23d;text-shadow:0 .08em 0 #000}
+.ba-wave .bw-ev{margin-top:.45em;font-weight:700;font-size:1.05em;line-height:1.45;opacity:.95}
+.ba-wave .bw-ev b{color:#ffd27a}
+.ba-wave .bw-mobs{display:flex;flex-wrap:wrap;justify-content:center;gap:.35em;margin-top:.7em}
+.ba-wave .bw-mob{background:rgba(0,0,0,.3);border-radius:.35em;padding:.15em .6em;font-weight:800}
+.ba-wave .bw-mob.boss{background:rgba(255,80,80,.3)}
+.ba-wave .bw-ft{display:flex;align-items:center;justify-content:center;gap:.7em;margin-top:.9em;font-size:.9em;opacity:.9}
+.btp-ed .btp-er button{min-width:1.8em;padding-inline:.3em}
+.ba-cmenu{position:absolute;z-index:40;display:flex;flex-direction:column;gap:.35em;min-width:11em;padding:.55em .6em;background:linear-gradient(180deg,rgba(60,54,80,.98),rgba(22,19,32,.98));border:.15em solid #0a0810;border-radius:.45em;box-shadow:0 .5em 1.4em rgba(0,0,0,.6);color:#fff;font-size:.95em;animation:btPop .2s ease-out}
+.ba-cmenu .cm-h{font-weight:900;text-align:center;margin-bottom:.1em}
+.ba-cmenu .btn{width:100%;justify-content:center}
+.ba-cmenu small{opacity:.75;text-align:center;font-size:.78em}
+.ba-endbtns{display:flex;flex-wrap:wrap;justify-content:center;gap:.4em;margin-top:.7em;pointer-events:auto}
+.bt-win .ba-endbtns .btn{pointer-events:auto}
+.bt-banner{max-width:88%;white-space:normal;text-align:center;line-height:1.15}
+.bt-banner.big{font-size:clamp(2.2em,4.2vw,5em)}
+.bt-banner.long{font-size:2.6em}
+
+/* Nov 4 (Mohammad): things that open must open smoothly — positioned popups grow in place (the old btPop moved them by -50%,-50% while opening) */
+@keyframes btIn{from{opacity:0;scale:.9}to{opacity:1;scale:1}}
+.ba-info,.ba-cmenu,.tn-info,.hr-info{animation:btIn .18s ease-out both}
+.ba-cmenu{transform-origin:top left}
+.ba-info.no-anim{animation:none}
+/* info card: move / resize tools (not in OBS) */
+.ba-info{pointer-events:none}
+.ba-info .gi-tools{position:absolute;top:calc(100% + .45em);inset-inline-start:50%;translate:50% 0;padding:.25em;border-radius:.6em;background:rgba(10,10,16,.75);display:flex;gap:.3em;pointer-events:auto;opacity:.8;transition:opacity .15s}
+.ba-info:hover .gi-tools,.ba-info.gi-drag .gi-tools{opacity:1}
+.ba-info .gi-tools button{width:2em;height:2em;border-radius:.45em;border:.12em solid #0a0810;background:rgba(40,36,56,.97);color:#fff;font-size:.85em;line-height:1;cursor:grab;display:grid;place-items:center;box-shadow:0 .2em .5em rgba(0,0,0,.5)}
+.ba-info .gi-tools .gi-rs{cursor:nwse-resize}.ba-info .gi-tools .gi-rt{cursor:pointer}
+.ba-info .gi-tools button:hover{background:#868CBC}
+.ba-info.gi-drag{transition:none;user-select:none}
+.ba-info .gi-in{pointer-events:auto}
+body.obs .ba-info .gi-tools{display:none}
+html[lang=en] .ba-info .gi-tools{translate:-50% 0}
+.ba-info .gi-in .gi-nm{white-space:nowrap;word-break:keep-all}
+.ba-info{z-index:45}
+.btp-speak[hidden]{display:none!important}
+.btp-speak .btp-spx{display:none;margin-inline-start:.3em;width:1.6em;height:1.6em;border-radius:50%;border:0;background:#c0392b;color:#fff;font-size:.8em;cursor:pointer;line-height:1}
+.lay-editing .btp-speak .btp-spx{display:inline-grid;place-items:center}
+
+/* Nov 4 (Mohammad): the wave card sits in the exact centre of the map and drops in from the top (the old pop animation shifted it sideways) */
+@keyframes bwDrop{0%{transform:translateY(-120%);opacity:0}70%{transform:translateY(4%);opacity:1}100%{transform:translateY(0);opacity:1}}
+.ba-wave{align-items:center;justify-content:center}
+.ba-wave .bw-in{animation:bwDrop .45s cubic-bezier(.2,.9,.3,1) both;margin:0 auto;direction:rtl}
+html[lang=en] .ba-wave .bw-in{direction:ltr}
+.ba-wave .bw-ft span{unicode-bidi:isolate}
+
+/* info card editing (only in «تعديل الشكل») */
+.ba-info-ed{pointer-events:auto!important;cursor:move;z-index:60;animation:none!important;outline:2px dashed #9AA0D0;outline-offset:4px;border-radius:.5em;touch-action:none}
+.ba-info-ed[hidden]{display:none}
+.ba-info-ed .gie-body{pointer-events:none}
+.ba-info-ed .gie-ph{min-height:12em;display:grid;place-items:center;font-weight:900;font-size:1.2em;opacity:.85}
+.ba-info-ed .gie-cap{position:absolute;left:0;right:0;bottom:calc(100% + .5em);text-align:center;font-size:.78em;font-weight:800;color:#e9eaf6;text-shadow:0 1px 2px #000;white-space:nowrap}
+.ba-info-ed .gie-rs{position:absolute;bottom:-9px;inset-inline-end:-9px;width:18px;height:18px;border-radius:4px;background:#868CBC;border:2px solid #0b0b0f;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+html[lang=ar] .ba-info-ed .gie-rs,html:not([lang=en]) .ba-info-ed .gie-rs{cursor:nesw-resize}
+.ba-info-ed .gie-rt{position:absolute;top:-12px;inset-inline-start:-12px;width:26px;height:26px;border-radius:50%;border:2px solid #0b0b0f;background:#16161c;color:#fff;font-size:14px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.ba-info-ed .gie-rt:hover{background:#71749A}
+.ba-info .gi-tools{display:none!important}
+.ba-info-ed,.ba-info-ed *{user-select:none;-webkit-user-select:none}
+
+/* Nov 4: colours top card — one clean line, no wrapping */
+#bcAlive{white-space:nowrap}
+.bc-round{white-space:nowrap}

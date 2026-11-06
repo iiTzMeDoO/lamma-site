@@ -549,7 +549,7 @@ html[dir=rtl] .w2-final{direction:rtl}
 .w2-final.w2-findock .fn-box{padding:.35em .45em .45em;border-radius:.7em}
 .w2-final.w2-findock[hidden]{display:none}
 /* champion card: one symmetric grid, both pictures the same size, crown centred over the winner, title + name centred */
-.w2-champ{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:26;width:min(58%,34em);pointer-events:none;text-align:center}
+.w2-champ{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:26;width:min(58%,34em);pointer-events:auto;cursor:pointer;text-align:center}
 .w2-champ[hidden]{display:none}
 .lay-editing .w2-champ{display:none}
 .w2-champ .fn-box{background:linear-gradient(180deg,rgb(22,16,40),rgb(11,9,22));border:.16em solid var(--wh-a,#d8b65e);border-radius:1.2em;padding:1em 1.2em 1.1em;
@@ -569,20 +569,23 @@ html[dir=rtl] .w2-final{direction:rtl}
 .w2-champ .fn-ct{font-weight:900;font-size:2.1em;letter-spacing:.06em;background:linear-gradient(180deg,#fff3c4,var(--wh-a,#d8b65e) 60%,#a0782a);-webkit-background-clip:text;background-clip:text;color:transparent}
 .w2-champ .fn-cn{font-weight:900;font-size:1.35em}
 @media (max-width:600px){.w2-champ{width:86%}}
-/* fullscreen: the wheel alone, centred; ⚙ opens only the settings card */
-.stage-wrap.lay-fson .lay-el[data-lay=side]{display:none!important}
-.stage-wrap.lay-fson .lay-el[data-lay=wheel]{left:24.5%!important;top:4.6%!important;width:51%!important}
-.stage-wrap.lay-fson .lay-el[data-lay=final]{left:1.6%!important;top:3%!important;width:19%!important;height:21%!important}
+/* fullscreen (Nov 4 #21): the players panel stays (👥 hides it → the wheel alone, centred); ⚙ opens the settings card on the RIGHT */
+.stage-wrap.lay-fson.w-fs-noside .lay-el[data-lay=side]{display:none!important}
+.stage-wrap.lay-fson.w-fs-noside .lay-el[data-lay=wheel]{left:24.5%!important;top:4.6%!important;width:51%!important}
+.stage-wrap.lay-fson.w-fs-noside .lay-el[data-lay=final]{left:1.6%!important;top:3%!important;width:19%!important;height:21%!important}
 .stage-wrap.lay-fson .stage{cursor:pointer}
 .lay-wheel{cursor:pointer}
 .lay-editing .lay-wheel{cursor:move}
-.w-fs-gear{display:none}
-.stage-wrap.lay-fson .w-fs-gear{display:grid;place-items:center;position:absolute;left:calc(1.6% + 42px);bottom:2.2%;z-index:90;width:34px;height:34px;border-radius:10px;border:1px solid var(--g2-line2,rgba(154,160,208,.45));
+.w-fs-gear,.w-fs-side{display:none}
+.stage-wrap.lay-fson .w-fs-gear,.stage-wrap.lay-fson .w-fs-side{display:grid;place-items:center;position:absolute;right:1.6%;bottom:2.2%;z-index:90;width:34px;height:34px;border-radius:10px;border:1px solid var(--g2-line2,rgba(154,160,208,.45));
   background:rgba(12,12,16,.72);color:#fff;font-size:19px;line-height:1;cursor:pointer;padding:0;opacity:.55;transition:opacity .15s,transform .15s}
-.stage-wrap.lay-fson .w-fs-gear:hover,.stage-wrap.lay-fson .w-fs-gear.on{opacity:1}
-.w-fs-set{position:absolute;left:1.6%;bottom:calc(2.2% + 44px);z-index:95;width:min(400px,40%);max-height:78%;overflow:auto;cursor:auto;
+.stage-wrap.lay-fson .w-fs-side{right:calc(1.6% + 42px);font-size:17px}
+.stage-wrap.lay-fson .w-fs-gear:hover,.stage-wrap.lay-fson .w-fs-gear.on,.stage-wrap.lay-fson .w-fs-side:hover{opacity:1}
+.stage-wrap.lay-fson .w-fs-side.on{opacity:.85}
+.w-fs-set{position:absolute;right:1.6%;left:auto;bottom:calc(2.2% + 44px);z-index:95;width:min(400px,36%);max-height:80%;overflow:auto;cursor:auto;
   background:var(--card,#141022);color:var(--txt,#eee);border:1px solid var(--g2-line2,rgba(154,160,208,.45));border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.6);text-align:start}
 .w-fs-set[hidden]{display:none}
+html.obs .w-fs-side{display:none!important}
 html.obs .w-fs-gear,html.obs .w-fs-set{display:none!important}
 .w-reset.armed{background:#d92b2b!important;color:#fff!important;border-color:#ff6b6b!important}
 
@@ -595,3 +598,19 @@ html.obs .w-fs-gear,html.obs .w-fs-set{display:none!important}
 .w2-final:not(.is-won) .fn-score{font-size:2em;gap:.15em}
 .w2-final .fn-row{gap:.3em}
 .w2-final.w2-findock .fn-nm{font-size:.95em}
+
+/* Nov 4 fix: panel sections never squeeze each other (lists scroll inside, panel scrolls if needed) */
+html:not(.obs) .w2-panel{overflow-y:auto;scrollbar-width:thin}
+/* Nov 4 fix: settings card open in fullscreen -> wheel moves left so nothing is covered */
+.stage-wrap.lay-fson .lay-el[data-lay=wheel]{transition:left .25s,top .25s,width .25s,height .25s}
+.stage-wrap.lay-fson.w-fs-seton .lay-el[data-lay=wheel]{left:26%!important;top:10%!important;width:42%!important;height:auto!important}
+.stage-wrap.lay-fson.w-fs-noside.w-fs-seton .lay-el[data-lay=wheel]{left:10%!important;top:6%!important;width:52%!important}
+.stage-wrap.lay-fson .w2-sec[data-sec=list2],.stage-wrap.lay-fson .w2-sec[data-sec=event]{flex:0 0 auto!important}
+.stage-wrap.lay-fson .w2-sec[data-sec=list2] .w2-sec-in,.stage-wrap.lay-fson .w2-sec[data-sec=list2] .w2-sec-in>*,.stage-wrap.lay-fson .w2-sec[data-sec=event] .w2-sec-in,.stage-wrap.lay-fson .w2-sec[data-sec=event] .w2-sec-in>*{flex:none;min-height:auto}
+.stage-wrap.lay-fson .w2-sec[data-sec=list2] .w2-chips{flex:none;max-height:9.5em}
+
+/* champion card close button (Mohammad Nov 4) */
+.w2-champ .fn-box{position:relative}
+.w2-champ .fn-x{position:absolute;top:.5em;left:.5em;width:2em;height:2em;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:1em;line-height:1;cursor:pointer;display:grid;place-items:center}
+.w2-champ .fn-x:hover{background:rgba(255,255,255,.2)}
+body.obs .w2-champ .fn-x{display:none}

@@ -76,7 +76,7 @@ html.obs .lay-guides{display:none!important}
 .lay-div{flex:0 0 auto;height:.9em;margin:0 .6em;position:relative;cursor:row-resize;touch-action:none}
 .lay-div::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--g2-line2,rgba(154,160,208,.45)) 18%,var(--g2-line2,rgba(154,160,208,.45)) 82%,transparent)}
 .lay-div i{position:absolute;left:50%;top:50%;width:34px;height:8px;margin:-4px 0 0 -17px;border-radius:6px;background:var(--g2-acc,#868cbc);opacity:0;transition:opacity .15s;box-shadow:0 1px 4px rgba(0,0,0,.6)}
-.lay-div:hover i,.lay-div.on i,.lay-editing .lay-div i{opacity:.95}
+.lay-editing .lay-div:hover i,.lay-div.on i,.lay-editing .lay-div i{opacity:.95}
 .lay-div.on::before{background:var(--g2-acc-l,#c9ccf0);height:2px}
 html.obs .lay-div{cursor:default}
 .lay-sx{display:none}
@@ -96,3 +96,7 @@ html.obs .lay-fs{display:none!important}
 .stage-wrap.lay-fson>.lay-bar{display:none}
 .stage-wrap.lay-fson>.stage{width:min(100vw,calc(100vh * 16 / 9));border-radius:0;border:0}
 @media (max-width:640px){.lay-fs{width:26px;height:26px;border-radius:8px}.lay-fs svg{width:15px;height:15px}}
+
+/* Nov 4: outside «تعديل الشكل» the section divider is only a line */
+.lay-div{cursor:default}
+.lay-editing .lay-div{cursor:row-resize}

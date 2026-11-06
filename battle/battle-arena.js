@@ -1,6 +1,6 @@
 /* battle-arena.js — معركة الساحة / Arena Battle: Kukoro's dungeon-raid system drawn like Minecraft Dungeons
    (a wide open angled field split by a chasm with a bridge in the middle, chunky voxel fighters / mobs / bosses, lamp and lava light).
-   Kukoro's flow: the party stands still on the left, the room's enemies on the right; the streamer sends ONE fighter at a time
+   Kukoro's flow: the party stands still on the left, the wave's enemies on the right; the streamer sends ONE fighter at a time
    (click on the map / the list, or "التالي") for a 1v1 duel in the middle with DODGE / CRIT / damage numbers.
    The engine (BT.Arena in btcore.js) runs on the control page (or on the overlay alone, from mods' chat commands) and is mirrored
    to the OBS overlay ~8 times a second; both sides draw the same scene from that state with smoothing in between. */
@@ -9,6 +9,16 @@
 var A=window.App,BT=window.BT,MC=window.MC,$=A.$;
 var PW_AR={bolt:'صاعقة',fire:'كرة نار',shield:'درع',heal:'شفاء',arrows:'سهام',tnt:'TNT',freeze:'تجميد'},PW_EN={bolt:'Lightning',fire:'Fireball',shield:'Shield',heal:'Heal',arrows:'Arrow rain',tnt:'TNT',freeze:'Freeze'};
 var PW_IC={bolt:'⚡',fire:'🔥',shield:'🛡',heal:'💚',arrows:'🏹',tnt:'💣',freeze:'❄'};
+
+/* Minecraft-style hardcore heart (9x8 pixels): K outline, R blood, H highlight, D the hardcore horns */
+var HH=['.KKK.KKK.','KHRRKRRRK','KHRRRRRRK','KRRRRRRRK','.KRRRRRK.','..KRRRK..','...KRK...','....K....'];
+/* Mohammad Nov 4: brown heart (like his reference) — fills with brown from the bottom while the power recharges, warm glow when ready */
+function drawHHeart(x,y,c,prog,act){var h=8*c,cut=y+h*(1-prog);ctx.save();
+  if(prog>=1){ctx.shadowColor='rgba(255,190,110,.9)';ctx.shadowBlur=(act?9:5)+Math.sin(performance.now()/1000*6)*2.5;}
+  for(var r=0;r<8;r++)for(var q=0;q<9;q++){var ch=HH[r][q];if(ch==='.')continue;var px=x+q*c,py=y+r*c,col;
+    if(ch==='K')col='#2a1708';else{var full=py+c>cut+.01;col=full?(ch==='H'?'#d9a066':(r<3?'#a8692f':'#8a5426')):'#3a3330';}
+    ctx.fillStyle=col;ctx.fillRect(Math.round(px),Math.round(py),Math.ceil(c),Math.ceil(c));}
+  ctx.restore();}
 var BTR=window.BTR,TYPE_COL={fire:'#ff9a3d',burn:'#ff9a3d',magic:'#d9a6ff',bolt:'#bfe8ff',poison:'#7dff5a',blast:'#ffcf5a',tnt:'#ffcf5a',arrow:'#e8e8e8',arrows:'#e8e8e8'};
 var WMAP={sword:'sword',bow:'bow',staff:'staff',axe:'axe',dagger:'dagger',flask:'flask',tnt:'tnt',wand:'wand'};
 var WCOL=['#a0743a','#9a9aa0','#d6f2fa','#ffd84a','#4fe0d8','#5a4a58'];
@@ -19,43 +29,43 @@ function wName(cls,tier){var en=A.lang()==='en',W=BTR.WEAPON[tier],k=(BTR.CLASSE
 function lootName(it,cls){if(!it)return '';var en=A.lang()==='en';if(it.t==='w')return wName(cls,it.v);
   if(it.t==='a'){var R=BTR.ARMOUR[it.v];return en?R.en+' armour':'درع '+R.ar;}if(it.t==='ae')return '✨ '+L2(BTR.ARM_ENCH[it.v]);if(it.t==='we')return '✨ '+L2(BTR.WPN_ENCH[it.v]);if(it.t==='i'){var I=BTR.ITEMS[it.v];return I.ic+' '+L2(I);}return '';}
 A.strings({
- ar:{g_title:'معركة الساحة',g_how:'الشات بيدخل بـ !دخول ويكتب !قفز ليتنقّى. إنت بتختار الفريق، وبكل غرفة إنت بتختار مين يطلع يقاتل واحد ضد واحد بالنص، وبالآخر الزعيم. اللي عم يقاتل بيطلق قوتو بـ !قوة.',
-  ba_start:'ابدأ المعركة',ba_again:'معركة جديدة',ba_pause:'وقف',ba_resume:'كمّل',ba_next:'التالي ⚔️',ba_boss:'روح للزعيم',ba_reset:'رجوع للوبي',ba_squad:'الفريق',ba_wait:'بالانتظار',
-  ba_add_j:'ضيف اللي قفزو ⬆',ba_add_r:'ضيف عشوائي',ba_empty:'فضّي الفريق',ba_demo:'ضيف 12 لاعب تجربة',ba_hint:'قبل الغارة: اضغط على اسم بالانتظار لتحطو بالفريق. وقت الغارة: اضغط على مقاتل (بالساحة أو هون ⚔) ليطلع يقاتل واحد ضد واحد. ⬆ = كتب !قفز.',
-  bt_settings:'الإعدادات',ba_waves:'عدد الغرف',ba_diff:'الصعوبة',ba_d_easy:'سهل',ba_d_normal:'عادي',ba_d_hard:'صعب',ba_d_hell:'جحيم',ba_break:'الغرفة الجاية لحالها بعد',bt_more:'خيارات زيادة',
+ ar:{g_title:'معركة الساحة',g_how:'الشات يدخل بـ !دخول ويكتب !قفز ليُنتقى. أنت تختار الفريق، وفي كل موجة تختار من يخرج ليقاتل واحدًا ضد واحد في المنتصف، وفي الآخر الزعيم. من يقاتل يطلق قوته بـ !قوة.',
+  ba_start:'ابدأ المعركة',ba_again:'معركة جديدة',ba_pause:'وقف',ba_resume:'تابع',ba_next:'التالي ⚔️',ba_boss:'اذهب إلى الزعيم',ba_reset:'رجوع إلى اللوبي',ba_squad:'الفريق',ba_wait:'في الانتظار',
+  ba_add_j:'أضف من قفزوا ⬆',ba_add_r:'أضف عشوائيًا',ba_empty:'أفرغ الفريق',ba_demo:'أضف 12 لاعبًا تجريبيًا',ba_hint:'قبل الغارة: اضغط على اسم في الانتظار لتضعه في الفريق. وقت الغارة: اضغط على مقاتل (في الساحة أو هنا ⚔) ليخرج للقتال واحدًا ضد واحد. ⬆ = كتب !قفز.',
+  bt_settings:'الإعدادات',ba_wcard:'شاشة الموجة تُغلق تلقائيًا بعد',ba_bot:'الرد في الشات (يحتاج حساب بوت)',ba_bot_n:'عند التفعيل يرسل البوت ردّ !معلومات في شات تويتش بدل الشاشة. يلزم ربط حساب بوت يكتب في الشات، وحتى يُربط تبقى البطاقة على الشاشة.',ba_waves:'عدد الموجات',ba_diff:'الصعوبة',ba_d_easy:'سهل',ba_d_normal:'عادي',ba_d_hard:'صعب',ba_d_hell:'جحيم',ba_break:'الموجة القادمة تلقائيًا بعد',bt_more:'خيارات إضافية',
   ba_bosssel:'الزعيم',ba_b_auto:'حسب الخريطة',boss_wither:'الذابل',boss_dragon:'تنين النهاية',boss_golem:'الحارس الحديدي',boss_king:'ملك الزومبي',boss_warden:'حارس الأعماق',boss_ravagerk:'ملك المدمّرين',boss_evokerm:'سيد الاستحضار',boss_blazek:'ملك البليز',boss_elder:'الحارس العتيق',ba_size:'حجم الفريق',bt_join_t:'وقت الدخول',
-  ba_autop:'القوة بتنطلق لحالها إذا ما كتب !قوة',bt_av:'صور تويتش على الراس',bt_map:'الخريطة',bt_nolimit:'بلا وقت',bt_manual:'إنت بتضغط',bt_sec:'ث',
+  ba_autop:'تنطلق القوة تلقائيًا إذا لم يكتب !قوة',bt_av:'صور تويتش على الرأس',bt_map:'الخريطة',bt_nolimit:'بلا وقت',bt_manual:'أنت تضغط',bt_sec:'ث',
   map_plains:'سهول',map_desert:'صحراء',map_nether:'النذر',map_end:'النهاية',map_cave:'الكهف',
-  ba_wave:'الغرفة {w}/{n}',ba_wave_inf:'الغرفة {w}',ba_lvl:'{m} · المستوى {l}',ba_lobby_t:'اللوبي',ba_boss_w:'غرفة الزعيم!',ba_wave_b:'الغرفة {w}',ba_cleared:'نضفت الغرفة!',ba_won:'انتصار! 🏆',ba_lost:'خسرنا… 💀',
-  ba_won_s:'المستوى صار {l}',ba_lost_s:'المستوى رجع لـ {l}',ba_mvp:'الأقوى',ba_kills:'قتلات',ba_join1:'اكتب {a} لتدخل الانتظار',ba_join2:'{a} اختارني · {b} لا تختارني · {c} اسم',ba_inq:'بالانتظار: {n}',ba_picked:'الفريق ({n}/{m})',
-  ba_fight_j:'{a} اختارني · {c} اسم · {b} وقت قتالك',ba_none:'لسا ما حدا دخل',ba_st_lobby:'اللوبي: {q} بالانتظار، {s} بالفريق. اختار الفريق واضغط "ابدأ المعركة".',ba_st_fight:'الغرفة {w}: اختار مين يطلع يقاتل (اضغط عليه بالساحة أو بالقائمة، أو "التالي"). {a} عايشين، {m} أعداء.',ba_st_duel:'{f} عم يقاتل {m}…',ba_st_break:'استراحة… الغرفة الجاية بعد شوي.',ba_st_break_m:'نضفت الغرفة. اضغط "التالي".',ba_autof:'قتال تلقائي (التالي بيطلع لحالو)',ba_pick_t:'مين بيطلع يقاتل؟',ba_dodge:'تفادى!',ba_crit:'كريت!',ba_block:'صد!',ba_frozen:'متجمد',ba_party:'الفريق',
-  ba_st_won:'انتصرنا! المستوى صار {l}.',ba_st_lost:'خسرنا. المستوى رجع لـ {l}.',ba_st_paused:'موقّفة',ba_need:'ما في حدا بالفريق ولا بالانتظار',ba_power_ready:'القوة جاهزة',
-  bt_c_join:'دخول الانتظار',bt_c_jump:'اختارني للمعركة',bt_c_hide:'لا تختارني',bt_c_vote:'صوّت لحدا',bt_c_power:'أطلق قوتك',bt_c_focus:'ركّز على زعيم أو موب',bt_c_start:'بلّش المعركة',bt_c_pause:'وقف / كمّل',bt_c_next:'طلّع المقاتل التالي',bt_c_boss:'روح لغرفة الزعيم',ba_eff_super:'فعّال جداً!',ba_eff_resist:'مقاوم',ba_eff_immune:'مناعة!',ba_st_burn:'🔥 احتراق',ba_st_poison:'🧪 تسمم',ba_st_wither:'💀 ذبول',ba_stun:'💫 دايخ',ba_split:'انقسم!',ba_totem:'🗿 قام من الموت!',ba_save:'❤ نجا!',ba_phase:'المرحلة التانية!',ba_loot:'🎁 غنيمة:',ba_boom:'💥 انفجر!',ba_mheal:'🧪 شربت جرعة!',ba_sp_sonic:'صرخة صوتية!',ba_sp_roar:'زئير!',ba_sp_charge:'هجمة!',bt_c_info:'معلوماتك أو معلومات حدا / وحش',bt_c_cancel:'الغي اختياري',bt_c_class:'غيّر صنفك',ba_speak:'المرشحين بيحكو (كلامهم فوق راسهم)',ba_events:'أحداث الغرف (ليل، مطر، كنز…)',ba_lootopt:'غنائم بعد كل غرفة',ba_resetgear:'امسح العدّة والأصناف',ba_resetq:'أكيد؟ رح ترجع عدّة الكل للبداية',gi_hp:'صحة',gi_atk:'هجوم',gi_def:'دفاع',gi_spd:'سرعة',gi_agi:'تفادي',gi_crit:'كريت',gi_xp:'خبرة',gi_perks:'القدرات',gi_res:'مقاوم',gi_weak:'ضعيف قدام',gi_imm:'مناعة',gi_gear:'العدّة',gi_items:'أغراض',gi_power:'القوة',gi_used:'انستعملت',gi_ready:'جاهزة',gi_kills:'قتلات',gi_fam:'الفصيلة',gi_trait:'ميزة',gi_p2:'بنص صحتو',gi_boss:'زعيم',gi_none:'ولا شي',gi_out:'مو بالفريق',gi_dmg:'ضرر',gi_armour:'درع',gi_type:'ضربو',gi_max:'أعلى مستوى',ba_card_t:'!معلومات',bt_c_infomob:'معلومات وحش (مثلاً !معلومات زومبي)'},
- en:{g_title:'Arena Battle',g_how:'Chat joins with !join and types !jump to get picked. You pick the party; in every room you choose who walks out for a 1v1 duel in the middle, then the boss. The one fighting fires their power with !power.',
+  ba_wave:'الموجة {w}/{n}',ba_wave_inf:'الموجة {w}',ba_lvl:'{m} · المستوى {l}',ba_lobby_t:'اللوبي',ba_boss_w:'موجة الزعيم!',ba_wave_b:'الموجة {w}',ba_cleared:'تم تطهير الموجة!',ba_won:'انتصار! 🏆',ba_lost:'خسرنا… 💀',
+  ba_won_s:'أصبح المستوى {l}',ba_lost_s:'عاد المستوى إلى {l}',ba_mvp:'الأقوى',ba_kills:'القتلى',ba_join1:'اكتب {a} لتدخل في الانتظار',ba_join2:'{a} اخترني · {b} لا تخترني · {c} اسم',ba_inq:'في الانتظار: {n}',ba_picked:'الفريق ({n}/{m})',
+  ba_fight_j:'{a} اخترني · {c} اسم · {b} أثناء قتالك',ba_none:'لم يدخل أحد بعد',ba_st_lobby:'اللوبي: {q} في الانتظار، {s} في الفريق. اختر الفريق واضغط "ابدأ المعركة".',ba_st_fight:'الموجة {w}: اختر من يخرج للقتال (اضغط عليه في الساحة أو في القائمة، أو "التالي"). {a} أحياء، {m} أعداء.',ba_st_duel:'{f} يقاتل {m}…',ba_st_break:'استراحة… الموجة القادمة بعد قليل.',ba_st_break_m:'تم تطهير الموجة. اضغط "التالي".',ba_autof:'قتال تلقائي (التالي يظهر تلقائيًا)',ba_pick_t:'من يخرج للقتال؟',ba_dodge:'تفادى!',ba_crit:'ضربة حرجة!',ba_block:'صد!',ba_frozen:'متجمد',ba_party:'الفريق',
+  ba_st_won:'انتصرنا! أصبح المستوى {l}.',ba_st_lost:'خسرنا. عاد المستوى إلى {l}.',ba_st_paused:'متوقفة',ba_need:'لا يوجد أحد في الفريق ولا في الانتظار',ba_power_ready:'القوة جاهزة',ba_gion:'كرت معلومات الشخصية على الشاشة',ba_gion_n:'أطفئه إذا كنت تعتمد على رد البوت في الشات. حين يظهر الكرت: ✥ لتحريكه، ⤡ لتكبيره أو تصغيره، ↺ لإرجاعه بجانب الشخصية. يُحفظ كل ذلك تلقائيًا.',ba_pwt:'وقت شحن القوة بعد استخدامها',ba_pwt_n:'{n} أدوار',
+  bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر، وإلا تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.',bt_c_join:'اكتب !دخول لتنضمّ إلى قائمة الانتظار وتظهر مرشّحًا حول الساحة. لا تقاتل حتى يضعك الستريمر في الفريق.',bt_c_jump:'تطوّع للقتال: يقفز شخصك فعلًا في الساحة ليراه الستريمر، ويظهر اسمك في قائمة المتطوعين. الستريمر يختار من بينهم.',bt_c_hide:'اطلب ألّا يختارك الستريمر الآن: يصبح شخصك شبه شفاف ويبقى في الانتظار.',bt_c_vote:'صوّت لمرشّح ليدخل الفريق، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه، ويرى الستريمر الأكثر تصويتًا.',bt_c_power:'أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.',bt_c_focus:'اختر العدو الذي تريد مواجهته حين يخرجك الستريمر، مثل: !ركز زعيم أو !ركز هيكل.',bt_c_start:'ابدأ المعركة',bt_c_pause:'إيقاف / استئناف',bt_c_next:'أخرج المقاتل التالي',bt_c_boss:'اذهب إلى موجة الزعيم',ba_eff_super:'فعّال جدًا!',ba_eff_resist:'مقاوم',ba_eff_immune:'مناعة!',ba_st_burn:'🔥 احتراق',ba_st_poison:'🧪 تسمم',ba_st_wither:'💀 ذبول',ba_stun:'💫 دائخ',ba_split:'انقسم!',ba_totem:'🗿 قام من الموت!',ba_save:'❤ نجا!',ba_phase:'المرحلة الثانية!',ba_loot:'🎁 غنيمة:',ba_boom:'💥 انفجر!',ba_mheal:'🧪 شربت جرعة!',ba_sp_sonic:'صرخة صوتية!',ba_sp_roar:'زئير!',ba_sp_charge:'هجمة!',bt_c_info:'يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. وتستطيع كتابة اسم وحش أو زعيم، مثل !معلومات زومبي، لترى بطاقته ونقاط ضعفه.',bt_c_cancel:'تراجع عن !قفز إذا غيّرت رأيك قبل أن يختارك الستريمر.',bt_c_class:'غيّر صنفك',ba_speak:'المرشحون يتحدثون (كلامهم فوق رؤوسهم)',ba_events:'أحداث الموجات (ليل، مطر، كنز…)',ba_lootopt:'غنائم بعد كل موجة',ba_resetgear:'امسح العدّة والأصناف',ba_resetq:'هل أنت متأكد؟ ستعود عدّة الجميع إلى البداية',gi_hp:'صحة',gi_atk:'هجوم',gi_def:'دفاع',gi_spd:'سرعة',gi_agi:'تفادي',gi_crit:'ضربة حرجة',gi_xp:'خبرة',gi_perks:'القدرات',gi_res:'مقاوم',gi_weak:'ضعيف أمام',gi_imm:'مناعة',gi_gear:'العدّة',gi_items:'أغراض',gi_power:'القوة',gi_used:'استُخدمت',gi_ready:'جاهزة',gi_kills:'القتلى',gi_fam:'الفصيلة',gi_trait:'ميزة',gi_p2:'بنصف صحته',gi_boss:'زعيم',gi_none:'لا شيء',gi_out:'ليس في الفريق',gi_dmg:'ضرر',gi_armour:'درع',gi_type:'ضربه',gi_max:'أعلى مستوى',ba_card_t:'!معلومات',bt_c_infomob:'معلومات وحش (مثلاً !معلومات زومبي)'},
+ en:{g_title:'Arena Battle',g_how:'Chat joins with !join and types !jump to get picked. You pick the party; in every wave you choose who walks out for a 1v1 duel in the middle, then the boss. The one fighting fires their power with !power.',
   ba_start:'Start battle',ba_again:'New battle',ba_pause:'Pause',ba_resume:'Resume',ba_next:'Next ⚔️',ba_boss:'Go to the boss',ba_reset:'Back to lobby',ba_squad:'Squad',ba_wait:'Waiting',
   ba_add_j:'Add jumpers ⬆',ba_add_r:'Add random',ba_empty:'Empty squad',ba_demo:'Add 12 demo players',ba_hint:'Before the raid: click a waiting name to add it to the party. During the raid: click a fighter (on the map or here ⚔) to send them out for a 1v1. ⬆ = typed !jump.',
-  bt_settings:'Settings',ba_waves:'Rooms',ba_diff:'Difficulty',ba_d_easy:'Easy',ba_d_normal:'Normal',ba_d_hard:'Hard',ba_d_hell:'Hell',ba_break:'Next room by itself after',bt_more:'More options',
+  bt_settings:'Settings',ba_wcard:'Wave screen closes by itself after',ba_bot:'Reply in chat (needs a bot account)',ba_bot_n:'When on, a bot posts the !getinfo answer in Twitch chat instead of the screen. It needs a bot account that can write in chat; until one is linked the card stays on screen.',ba_waves:'Waves',ba_diff:'Difficulty',ba_d_easy:'Easy',ba_d_normal:'Normal',ba_d_hard:'Hard',ba_d_hell:'Hell',ba_break:'Next wave by itself after',bt_more:'More options',
   ba_bosssel:'Boss',ba_b_auto:'From the map',boss_wither:'The Wither',boss_dragon:'Ender Dragon',boss_golem:'Iron Guardian',boss_king:'Zombie King',boss_warden:'Deep Warden',boss_ravagerk:'Ravager King',boss_evokerm:'Evoker Lord',boss_blazek:'Blaze King',boss_elder:'Elder Guardian',ba_size:'Squad size',bt_join_t:'Join time',
   ba_autop:'Power fires by itself if nobody types !power',bt_av:'Twitch pictures on heads',bt_map:'Map',bt_nolimit:'No limit',bt_manual:'You press',bt_sec:'s',
   map_plains:'Plains',map_desert:'Desert',map_nether:'Nether',map_end:'The End',map_cave:'Cave',
-  ba_wave:'Room {w}/{n}',ba_wave_inf:'Room {w}',ba_lvl:'{m} · Level {l}',ba_lobby_t:'Lobby',ba_boss_w:'Boss room!',ba_wave_b:'Room {w}',ba_cleared:'Room cleared!',ba_won:'Victory! 🏆',ba_lost:'Defeated… 💀',
+  ba_wave:'Wave {w}/{n}',ba_wave_inf:'Wave {w}',ba_lvl:'{m} · Level {l}',ba_lobby_t:'Lobby',ba_boss_w:'Boss wave!',ba_wave_b:'Wave {w}',ba_cleared:'Wave cleared!',ba_won:'Victory! 🏆',ba_lost:'Defeated… 💀',
   ba_won_s:'Level is now {l}',ba_lost_s:'Level back to {l}',ba_mvp:'MVP',ba_kills:'kills',ba_join1:'Type {a} to join the waiting list',ba_join2:'{a} pick me · {b} not me · {c} name',ba_inq:'Waiting: {n}',ba_picked:'Squad ({n}/{m})',
-  ba_fight_j:'{a} pick me · {c} name · {b} in your duel',ba_none:'Nobody joined yet',ba_st_lobby:'Lobby: {q} waiting, {s} in the squad. Pick the squad and press "Start battle".',ba_st_fight:'Room {w}: choose who walks out (click them on the map or in the list, or "Next"). {a} alive, {m} enemies.',ba_st_duel:'{f} is fighting {m}…',ba_st_break:'Break… next room soon.',ba_st_break_m:'Room cleared. Press "Next".',ba_autof:'Auto fight (next fighter goes by itself)',ba_pick_t:'Who walks out to fight?',ba_dodge:'DODGE',ba_crit:'CRIT',ba_block:'BLOCK',ba_frozen:'Frozen',ba_party:'Party',
-  ba_st_won:'Victory! Level is now {l}.',ba_st_lost:'Defeated. Level back to {l}.',ba_st_paused:'Paused',ba_need:'Nobody in the squad or the waiting list',ba_power_ready:'Power ready',
-  bt_c_join:'join the waiting list',bt_c_jump:'pick me',bt_c_hide:'don\u2019t pick me',bt_c_vote:'vote for someone',bt_c_power:'fire your power',bt_c_focus:'focus a boss or mob',bt_c_start:'start the battle',bt_c_pause:'pause / resume',bt_c_next:'send the next fighter',bt_c_boss:'go to the boss room',ba_eff_super:'Super effective!',ba_eff_resist:'Resisted',ba_eff_immune:'Immune!',ba_st_burn:'🔥 Burning',ba_st_poison:'🧪 Poisoned',ba_st_wither:'💀 Withering',ba_stun:'💫 Stunned',ba_split:'Split!',ba_totem:'🗿 Rose from death!',ba_save:'❤ Survived!',ba_phase:'Phase two!',ba_loot:'🎁 Loot:',ba_boom:'💥 Exploded!',ba_mheal:'🧪 Drank a potion!',ba_sp_sonic:'Sonic boom!',ba_sp_roar:'Roar!',ba_sp_charge:'Charge!',bt_c_info:'Your info, or someone’s / an enemy’s',bt_c_cancel:'Take back your !jump',bt_c_class:'Change your class',ba_speak:'Candidates can speak (their chat over their head)',ba_events:'Room events (night, rain, treasure…)',ba_lootopt:'Loot after every room',ba_resetgear:'Reset gear and classes',ba_resetq:'Sure? Everyone’s gear goes back to the start',gi_hp:'HP',gi_atk:'ATK',gi_def:'DEF',gi_spd:'SPD',gi_agi:'Dodge',gi_crit:'Crit',gi_xp:'XP',gi_perks:'Abilities',gi_res:'Resists',gi_weak:'Weak to',gi_imm:'Immune',gi_gear:'Gear',gi_items:'Items',gi_power:'Power',gi_used:'used',gi_ready:'ready',gi_kills:'kills',gi_fam:'Family',gi_trait:'Trait',gi_p2:'At half HP',gi_boss:'Boss',gi_none:'none',gi_out:'not in the squad',gi_dmg:'DMG',gi_armour:'Armour',gi_type:'Hits with',gi_max:'max level',ba_card_t:'!getinfo',bt_c_infomob:'Enemy info (e.g. !getinfo zombie)'}
+  ba_fight_j:'{a} pick me · {c} name · {b} in your duel',ba_none:'Nobody joined yet',ba_st_lobby:'Lobby: {q} waiting, {s} in the squad. Pick the squad and press "Start battle".',ba_st_fight:'Wave {w}: choose who walks out (click them on the map or in the list, or "Next"). {a} alive, {m} enemies.',ba_st_duel:'{f} is fighting {m}…',ba_st_break:'Break… next wave soon.',ba_st_break_m:'Wave cleared. Press "Next".',ba_autof:'Auto fight (next fighter goes by itself)',ba_pick_t:'Who walks out to fight?',ba_dodge:'DODGE',ba_crit:'CRIT',ba_block:'BLOCK',ba_frozen:'Frozen',ba_party:'Party',
+  ba_st_won:'Victory! Level is now {l}.',ba_st_lost:'Defeated. Level back to {l}.',ba_st_paused:'Paused',ba_need:'Nobody in the squad or the waiting list',ba_power_ready:'Power ready',ba_gion:'Character info card on screen',ba_gion_n:'Turn it off if you rely on the bot reply in chat. When the card shows: ✥ moves it, ⤡ makes it bigger or smaller, ↺ puts it back beside the character. All saved automatically.',ba_pwt:'Power recharge after use',ba_pwt_n:'{n} turns',
+  bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve. !skin alone goes back to Steve.',bt_c_join:'Type !join to enter the waiting list and appear as a candidate around the field. You only fight once the streamer puts you in the squad.',bt_c_jump:'Volunteer to fight: your character really jumps on the field so the streamer sees you, and your name shows in the volunteers list. The streamer picks from them.',bt_c_hide:'Ask the streamer not to pick you for now: your character turns see-through and stays waiting.',bt_c_vote:'Vote for a candidate to join the squad, e.g. !vote Mohammad. The vote count ★ shows over their head and the streamer sees who has the most.',bt_c_power:'Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.',bt_c_focus:'Choose which enemy you face when the streamer sends you out, e.g. !focus boss or !focus skeleton.',bt_c_start:'start the battle',bt_c_pause:'pause / resume',bt_c_next:'send the next fighter',bt_c_boss:'go to the boss wave',ba_eff_super:'Super effective!',ba_eff_resist:'Resisted',ba_eff_immune:'Immune!',ba_st_burn:'🔥 Burning',ba_st_poison:'🧪 Poisoned',ba_st_wither:'💀 Withering',ba_stun:'💫 Stunned',ba_split:'Split!',ba_totem:'🗿 Rose from death!',ba_save:'❤ Survived!',ba_phase:'Phase two!',ba_loot:'🎁 Loot:',ba_boom:'💥 Exploded!',ba_mheal:'🧪 Drank a potion!',ba_sp_sonic:'Sonic boom!',ba_sp_roar:'Roar!',ba_sp_charge:'Charge!',bt_c_info:'Shows your card: class, level, HP, attack, defence, abilities and gear. Add a mob or boss name, e.g. !getinfo zombie, to see its card and weaknesses.',bt_c_cancel:'Take back your !jump if you change your mind before the streamer picks you.',bt_c_class:'Change your class',ba_speak:'Candidates can speak (their chat over their head)',ba_events:'Wave events (night, rain, treasure…)',ba_lootopt:'Loot after every wave',ba_resetgear:'Reset gear and classes',ba_resetq:'Sure? Everyone’s gear goes back to the start',gi_hp:'HP',gi_atk:'ATK',gi_def:'DEF',gi_spd:'SPD',gi_agi:'Dodge',gi_crit:'Crit',gi_xp:'XP',gi_perks:'Abilities',gi_res:'Resists',gi_weak:'Weak to',gi_imm:'Immune',gi_gear:'Gear',gi_items:'Items',gi_power:'Power',gi_used:'used',gi_ready:'ready',gi_kills:'kills',gi_fam:'Family',gi_trait:'Trait',gi_p2:'At half HP',gi_boss:'Boss',gi_none:'none',gi_out:'not in the squad',gi_dmg:'DMG',gi_armour:'Armour',gi_type:'Hits with',gi_max:'max level',ba_card_t:'!getinfo',bt_c_infomob:'Enemy info (e.g. !getinfo zombie)'}
 });
 function T(k,o){var s=A.t(k);if(o)Object.keys(o).forEach(function(x){s=s.split('{'+x+'}').join(o[x])});return s;}
 var EN=function(){return A.lang()==='en'};
 var MAPS=['plains','desert','nether','end','cave'];
 var KEY='lamma-ba-'+A.channel,store=BT.store(KEY),sv=A.obs?null:store.get();
-var CFG={waves:5,diff:'normal',brk:4,map:'nether',boss:'auto',size:10,join:0,autoP:true,av:true,autoF:false,speak:true,events:true,loot:true};
+var CFG={card:0,bot:false,waves:5,diff:'normal',brk:4,map:'nether',boss:'auto',size:10,join:0,autoP:true,pwT:3,giOn:true,giX:null,giY:null,giW:0,giS:1,av:true,autoF:false,speak:true,events:true,loot:true};
 if(sv&&sv.cfg)Object.keys(CFG).forEach(function(k){if(sv.cfg[k]!=null)CFG[k]=sv.cfg[k]});
-var Q=A.Q;if(A.obs){if(Q.get('map')&&MAPS.indexOf(Q.get('map'))>=0)CFG.map=Q.get('map');if(Q.get('wv')!=null)CFG.waves=+Q.get('wv')||0;if(Q.get('df'))CFG.diff=Q.get('df');if(Q.get('av'))CFG.av=Q.get('av')==='1';if(Q.get('bs'))CFG.boss=Q.get('bs');if(Q.get('af'))CFG.autoF=Q.get('af')==='1';}
-var E=new BT.Arena({cfg:{waves:CFG.waves,diff:CFG.diff,squadMax:+CFG.size||10,map:CFG.map,boss:CFG.boss,autoPower:CFG.autoP,autoFight:!!CFG.autoF,breakSecs:CFG.brk,speak:CFG.speak,events:CFG.events,loot:CFG.loot}});
+var Q=A.Q;if(A.obs){if(Q.get('map')&&MAPS.indexOf(Q.get('map'))>=0)CFG.map=Q.get('map');if(Q.get('wv')!=null)CFG.waves=+Q.get('wv')||0;if(Q.get('df'))CFG.diff=Q.get('df');if(Q.get('av'))CFG.av=Q.get('av')==='1';if(Q.get('bs'))CFG.boss=Q.get('bs');if(Q.get('af'))CFG.autoF=Q.get('af')==='1';if(Q.get('wc')!=null)CFG.card=+Q.get('wc')||0;if(Q.get('gi')==='0')CFG.giOn=false;if(Q.get('gx')!=null&&Q.get('gy')!=null){CFG.giX=+Q.get('gx');CFG.giY=+Q.get('gy');}if(Q.get('gw'))CFG.giW=+Q.get('gw');if(Q.get('gs'))CFG.giS=+Q.get('gs');}
+var E=new BT.Arena({cfg:{cardSecs:+CFG.card||0,waves:CFG.waves,diff:CFG.diff,squadMax:+CFG.size||10,map:CFG.map,boss:CFG.boss,autoPower:CFG.autoP,pwTurns:+CFG.pwT||3,autoFight:!!CFG.autoF,breakSecs:CFG.brk,speak:CFG.speak,events:CFG.events,loot:CFG.loot}});
 if(sv){E.levels=sv.levels||{};E.xp=sv.xp||{};E.gear=sv.gear||{};E.cls=sv.cls||{};}
-function applyCfg(){E.cfg.autoFight=!!CFG.autoF;if(E.phase==='pick')E.toPick();E.cfg.waves=+CFG.waves;E.cfg.diff=CFG.diff;E.cfg.squadMax=+CFG.size||10;E.cfg.map=CFG.map;E.cfg.boss=CFG.boss;E.cfg.autoPower=!!CFG.autoP;E.cfg.breakSecs=+CFG.brk;E.cfg.speak=!!CFG.speak;E.cfg.events=!!CFG.events;E.cfg.loot=!!CFG.loot;}
+function applyCfg(){E.cfg.cardSecs=+CFG.card||0;E.cfg.autoFight=!!CFG.autoF;if(E.phase==='pick')E.toPick();E.cfg.waves=+CFG.waves;E.cfg.diff=CFG.diff;E.cfg.squadMax=+CFG.size||10;E.cfg.map=CFG.map;E.cfg.boss=CFG.boss;E.cfg.autoPower=!!CFG.autoP;E.cfg.pwTurns=+CFG.pwT||3;E.cfg.breakSecs=+CFG.brk;E.cfg.speak=!!CFG.speak;E.cfg.events=!!CFG.events;E.cfg.loot=!!CFG.loot;}
 function save(){if(A.obs)return;store.set({cfg:CFG,levels:E.levels,xp:E.xp,gear:E.gear,cls:E.cls});A.updateObsUrl();}
-A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&bs='+CFG.boss+'&av='+(CFG.av?1:0)+'&af='+(CFG.autoF?1:0);});
+A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&bs='+CFG.boss+'&av='+(CFG.av?1:0)+'&af='+(CFG.autoF?1:0)+'&wc='+(+CFG.card||0)+(CFG.giOn===false?'&gi=0':'')+(CFG.giX!=null&&CFG.giY!=null?'&gx='+(+CFG.giX).toFixed(3)+'&gy='+(+CFG.giY).toFixed(3):'')+(CFG.giW?'&gw='+(+CFG.giW).toFixed(3):'')+(CFG.giS&&CFG.giS!==1?'&gs='+(+CFG.giS).toFixed(2):'');});
 var P=E.pub(); /* the state both sides draw */
 
 /* ---------- engine loop (control, or overlay alone) ---------- */
@@ -67,6 +77,7 @@ setInterval(function(){var now=performance.now(),dt=(now-lastT)/1000;lastT=now;i
   if(E.phase==='lobby'&&joinEnd&&Date.now()>=joinEnd){joinEnd=0;startBattle();}
 },33);
 A.onMirror(function(s){if(s&&s.f)P=s;});
+if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(el&&!el.hidden&&$('stage').contains(ev.target))closeInfo();},true);
 A.allowSolo();
 function startBattle(){applyCfg();if(!E.start()){status(T('ba_need'));return;}A.sfx('start');P=E.pub();A.publish(P);hud(true);}
 function pauseT(){if(!E.inRaid())return;E.paused=!E.paused;P=E.pub();A.publish(P);hud(true);}
@@ -78,17 +89,22 @@ A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);
   if(c.k==='pause'||c.k==='cancel'){E.cancel(m.user);hudSoon();return;}
   if(BT.MODK[c.k])return;
   if(c.k==='join')E.join(m.user,m.name,m.color);else if(c.k==='leave')E.leave(m.user);else if(c.k==='jump')E.jump(m.user,m.name,m.color);else if(c.k==='hide')E.hide(m.user);
-  else if(c.k==='vote')E.vote(m.user,c.arg);else if(c.k==='power')E.power(m.user);else if(c.k==='focus')E.focus(m.user,c.arg);else if(c.k==='info')E.askInfo(m.user,c.arg,m.name,m.color);
-  else if(c.k==='cls'){if(E.setClass(m.user,c.arg))save();}
+  else if(c.k==='vote')E.vote(m.user,c.arg);else if(c.k==='power')E.power(m.user);else if(c.k==='focus')E.focus(m.user,c.arg);else if(c.k==='info'){if(!(CFG.bot&&BT.bot.ready()&&BT.bot.say(infoText(m.user,c.arg))))E.askInfo(m.user,c.arg,m.name,m.color);}
   hudSoon();});
 /* the streamer sends one fighter into the middle (click on the map, the list, or "التالي") */
+/* !معلومات as one chat line, for the bot path (only used once a bot account is linked) */
+function infoText(u,arg){var g=null;try{E.askInfo(u,arg,'','');g=E.infoQ.length?E.infoQ.pop():(E.info&&E.info.u===u?E.info:null);if(g===E.info)E.info=null;}catch(x){}
+  if(!g)return '';if(g.t==='m'){var S=g.boss?BTR.BOSSES[g.kind]:BTR.MOBS[g.kind];return (S?(EN()?S.en:S.ar):g.kind)+' · LV '+g.lv+' · ❤️ '+g.hp+'/'+g.max+' · 🗡️ '+g.dmg+' · 🛡️ '+g.def+'%';}
+  var C=BTR.CLASSES[g.cls]||{};return '@'+g.name+' · '+(C.ic||'')+' '+(EN()?C.en:C.ar)+' · LV '+g.lv+' · ❤️ '+g.hp+'/'+g.max+' · 🗡️ '+g.atk+' · 🛡️ '+g.def+'% · 🎯 '+g.crit+'%';}
 function sendF(u){if(E.phase!=='pick')return false;var ok=E.send(u);if(ok){P=E.pub();A.publish(P);hud(true);}return ok;}
 
 /* ---------- view state ---------- */
-var V={},lastEv=0,parts=[],nums=[],fx=[],shake=0,flashT=0;
+var V={},lastEv=0,parts=[],nums=[],fx=[],shake=0,flashT=0,MIN={};
+function bossP2(m){var k=String(m[1]||'').replace(/^boss:/,'');var B=BTR.BOSSES[k];return B?B.p2:'';}
+var P2COL={armour:'rgba(120,200,255,A)',crystal:'rgba(255,120,230,A)',rage:'rgba(255,60,40,A)',summon:'rgba(120,220,90,A)',charge:'rgba(255,170,40,A)',storm:'rgba(255,120,30,A)',fatigue:'rgba(120,200,160,A)',totem:'rgba(255,220,80,A)'};
 function addParts(x,y,z,n,col,spd,size,life){for(var i=0;i<n;i++)parts.push({x:x,y:y,z:z,vx:(Math.random()-.5)*spd,vy:(Math.random()-.5)*spd,vz:Math.random()*spd*1.2+.5,life:life||(.5+Math.random()*.5),t:0,col:col[Math.floor(Math.random()*col.length)],s:size||(.06+Math.random()*.06)});}
 function vOf(id){return V['f'+id]||V['m'+id]||null;}
-function floatTxt(id,txt,col,big,small){var v=vOf(id);if(!v)return;nums.push({x:v.x,y:v.y,z:(v.h||2.2)+.2,txt:txt,col:col,big:big,small:small,t:0,dx:(Math.random()-.5)*.25});}
+function floatTxt(id,txt,col,big,small){var v=vOf(id);if(!v)return;var near=nums.filter(function(n){return n.id===id&&n.t<.35&&!!n.small===!!small}).length;nums.push({id:id,x:v.x,y:v.y,z:(v.h||2.2)+.2+near*.55,txt:txt,col:col,big:big,small:small,t:0,dx:(Math.random()-.5)*.25});}
 function onEvent(e){
   if(e.k==='hit'){var to=vOf(e.to),fr=vOf(e.from);if(fr&&!e.dot&&!e.env&&e.how!=='thorns'){fr.lunge=1;}
     if(e.dodge){floatTxt(e.to,T('ba_dodge'),'#bfe8ff',false);A.sfx('tick');}
@@ -99,14 +115,20 @@ function onEvent(e){
       if(e.c){floatTxt(e.to,T('ba_crit'),'#ffd23d',false,true);floatTxt(e.to,'-'+e.n,'#ffd23d',true);shake=Math.max(shake,.35);}else floatTxt(e.to,'-'+e.n,e.a==='f'?(hc||'#ffb347'):'#ff5a5a',false);
       if(e.eff==='super')floatTxt(e.to,T('ba_eff_super'),'#7dff7a',false,true);else if(e.eff==='resist')floatTxt(e.to,T('ba_eff_resist'),'#c8c8c8',false,true);else if(e.eff==='immune')floatTxt(e.to,T('ba_eff_immune'),'#9fd8ff',false,true);
       if(e.how==='thorns')floatTxt(e.to,'🌵','#7dff7a',false,true);
-      A.sfx(e.c?'boom':'pop');}}
+      A.sfx(e.c?'crit':'pop');}}
   else if(e.k==='status'){floatTxt(e.to,T('ba_st_'+e.st),e.st==='burn'?'#ff9a3d':e.st==='poison'?'#7dff5a':'#c9a0ff',false,true);}
   else if(e.k==='immune'){floatTxt(e.to,T('ba_eff_immune'),'#9fd8ff',false,true);}
   else if(e.k==='stun'){floatTxt(e.to,T('ba_stun'),'#ffe680',false,true);}
   else if(e.k==='split'){var sv2=vOf(e.to);if(sv2)addParts(sv2.x,sv2.y,.5,18,['#7ad65c','#5cb848','#c84a1a'],2,.08,.7);floatTxt(e.to,T('ba_split'),'#b6ff3b',false,true);}
   else if(e.k==='totem'){var tv=vOf(e.to);if(tv)addParts(tv.x,tv.y,1,30,['#ffd23d','#7dff7a','#fff'],2.5,.08,1.1);floatTxt(e.to,T('ba_totem'),'#ffd23d',true);flashT=.2;A.sfx('win');}
   else if(e.k==='save'){floatTxt(e.to,T('ba_save'),'#ff7a9a',false,true);}
-  else if(e.k==='phase'){banner(T('ba_phase')+' '+(EN()?BTR.PHASE2[e.p].en:BTR.PHASE2[e.p].ar),true);shake=1;flashT=.3;A.sfx('boom');}
+  else if(e.k==='phase'){banner(T('ba_phase')+' '+(EN()?BTR.PHASE2[e.p].en:BTR.PHASE2[e.p].ar),true);shake=1.2;flashT=.35;A.sfx('boom');
+    /* Mohammad #18: every boss phase has its own visible animation */
+    var bv=vOf(e.to);if(bv){var col=P2COL[e.p]||'rgba(255,255,255,A)';fx.push({k:'ring',x:bv.x,y:bv.y,t:0,life:.9,col:col});fx.push({k:'ring',x:bv.x,y:bv.y,t:-.25,life:.9,col:col});bv.flash=.6;
+      var pc={armour:['#bfe8ff','#7fd0ff','#fff'],crystal:['#ff9ae8','#d070ff','#fff'],rage:['#ff4a2a','#ffb347','#fff'],summon:['#5cb848','#3a7a2a','#a07050'],charge:['#ffb347','#ffd23d'],storm:['#ff7a1a','#ffd23d','#c33'],fatigue:['#7ad6a0','#3a8a6a'],totem:['#ffd23d','#fff']}[e.p]||['#fff'];
+      addParts(bv.x,bv.y,1,60,pc,3.4,.11,1.3);
+      if(e.p==='summon'){MIN[e.to]=[{ox:-1.15,oy:.75,born:performance.now(),lunge:0},{ox:-1.15,oy:-.75,born:performance.now()+250,lunge:0}];MIN[e.to].forEach(function(mn){addParts(bv.x+mn.ox,bv.y+mn.oy,0,16,['#6b4a2a','#8a6a3a','#5cb848'],1.6,.09,.9);});}}}
+  else if(e.k==='extra'){if(e.src==='minion'&&MIN[e.from]){var L2_=MIN[e.from];var mn=L2_[(L2_.ti=(L2_.ti||0)+1)%L2_.length];mn.lunge=1;}else{var fb=vOf(e.from);if(fb)fb.lunge=1;}}
   else if(e.k==='special'){floatTxt(e.to,T('ba_sp_'+e.sp),'#ffcf5a',true);shake=Math.max(shake,.6);A.sfx('boom');}
   else if(e.k==='boom'){var bv=vOf(e.to);if(bv){addParts(bv.x,bv.y,.4,50,['#fff','#ffd23d','#ff7a1a','#4fbf3a','#444'],4.5,.11,1);fx.push({k:'boom',x:bv.x,y:bv.y,t:0,life:.6});bv.gone=1;}shake=1;A.sfx('boom');floatTxt(e.to,T('ba_boom'),'#ffb347',true);}
   else if(e.k==='mheal'){floatTxt(e.to,T('ba_mheal'),'#7dff7a',false,true);}
@@ -119,16 +141,16 @@ function onEvent(e){
   else if(e.k==='power'){A.sfx('go');var f1=vOf(e.fid),m1=vOf(e.mid);if(f1&&m1){fx.push({k:'p_'+e.p,x:f1.x,y:f1.y,tx:m1.x,ty:m1.y,t:0,life:e.p==='shield'?.8:e.p==='freeze'?1:.8});
     if(e.p==='bolt'){flashT=.25;shake=Math.max(shake,.5);addParts(m1.x,m1.y,.3,24,['#fff','#bfe8ff','#7fd0ff'],3.5,.08,.6);}
     if(e.p==='tnt'||e.p==='fire'){setTimeout(function(){addParts(m1.x,m1.y,.4,46,['#fff','#ffd23d','#ff7a1a','#c33','#444'],4.5,.11,1);shake=Math.max(shake,.8);A.sfx('boom');fx.push({k:'boom',x:m1.x,y:m1.y,t:0,life:.6});},e.p==='tnt'?650:380);}
-    if(e.p==='heal')addParts(f1.x,f1.y,.5,14,['#5cd65c','#b6ff3b','#fff'],1.2,.08,1);
+    A.sfx(e.p==='heal'?'heal':'power');if(e.p==='heal')addParts(f1.x,f1.y,.5,14,['#5cd65c','#b6ff3b','#fff'],1.2,.08,1);
     if(e.p==='freeze')addParts(m1.x,m1.y,.6,16,['#bff4ff','#7fe3ff','#fff'],1.4,.08,.9);}
     banner((PW_IC[e.p]||'')+' '+(EN()?PW_EN[e.p]:PW_AR[e.p]),false,e.name,e.c);}
-  else if(e.k==='wave'){var EV=e.e&&BTR.EVENTS[e.e];banner(e.boss?T('ba_boss_w'):T('ba_wave_b',{w:e.w})+(EV?' · '+EV.ic+' '+(EN()?EV.en+': '+EV.d.en:EV.ar+': '+EV.d.ar):''),!!e.boss);A.sfx(e.boss?'boom':'start');}
+  else if(e.k==='wave'){A.sfx(e.boss?'boom':'start');hud(true);}
   else if(e.k==='cleared'){banner(T('ba_cleared'));}
   else if(e.k==='won'){A.sfx('win');A.confetti($('stage'),110);}
   else if(e.k==='lost'){A.sfx('bad');}
 }
 var bnT=null;
-function banner(text,big,who,col){var el=$('baBanner');A.clear(el);if(who){el.appendChild(BT.name(who,col,'bt-nm'));el.appendChild(document.createTextNode(' '));}el.appendChild(document.createTextNode(text));el.className='bt-banner'+(big?' big':'')+(who?' who':'');el.hidden=false;clearTimeout(bnT);bnT=setTimeout(function(){el.hidden=true},big?2600:1600);}
+function banner(text,big,who,col){var el=$('baBanner');A.clear(el);if(who){el.appendChild(BT.name(who,col,'bt-nm'));el.appendChild(document.createTextNode(' '));}el.appendChild(document.createTextNode(text));el.className='bt-banner'+(big?' big':'')+(who?' who':'')+(String(text).length>26?' long':'');el.hidden=false;clearTimeout(bnT);bnT=setTimeout(function(){el.hidden=true},big?2600:1600);}
 function status(t){var s=$('baStatus');if(s)s.textContent=t;}
 
 /* ---------- canvas: the wide raid field ---------- */
@@ -140,7 +162,8 @@ function size(){var r=cv.parentNode.getBoundingClientRect();var w=Math.max(200,M
 function keepOut(){var k=[];for(var i=0;i<16;i++){var p=BT.partySlot(i,i<6?6:i<12?12:16);k.push([p[0],p[1],.05]);}for(var n=1;n<=6;n++)for(var j=0;j<n;j++){var q=BT.enemySlot(j,n,false);k.push([q[0],q[1],.05]);}k.push([.79,.58,.08]);
   for(var a=0;a<16;a++){[6,12,16].forEach(function(nn){if(a<nn){var p2=BT.partySlot(a,nn);k.push([p2[0],p2[1],.045]);}});}return k;}
 function getRoom(map){var k=map+W+'x'+H+DPR;if(roomKey!==k||!room){FLD.layout(iso,W,H);iso.dpr=DPR;room=MC.renderField(map,W,H,iso,MC.hash(map)+7,keepOut());roomKey=k;}return room;}
-function avatarImg(u){if(!CFG.av)return null;var url=BT.avatar(u);if(!url)return null;return BT.img(url);}
+function avatarImg(u){return BT.skinFace(u); /* Twitch pictures over the heads removed (Mohammad, Nov 4) */
+if(!CFG.av)return null;var url=BT.avatar(u);if(!url)return null;return BT.img(url);}
 function fs(px){return Math.max(W<600?7:10,Math.round(px*iso.tw/52));}
 function label(x,y,txt,col,size,weight){ctx.font=(weight||800)+' '+size+'px Cairo,system-ui,sans-serif';ctx.lineWidth=Math.max(2.5,size*.28);ctx.strokeStyle='rgba(0,0,0,.85)';ctx.lineJoin='round';ctx.strokeText(txt,x,y);ctx.fillStyle=col;ctx.fillText(txt,x,y);}
 function hpBar(x,y,w,frac,col){var h=Math.max(3,Math.round(iso.tw*.08));ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillRect(Math.round(x-w/2)-1,Math.round(y)-1,Math.round(w)+2,h+2);ctx.fillStyle='#3a1a1a';ctx.fillRect(Math.round(x-w/2),Math.round(y),Math.round(w),h);ctx.fillStyle=col;ctx.fillRect(Math.round(x-w/2),Math.round(y),Math.round(w*Math.max(0,Math.min(1,frac))),h);return h;}
@@ -156,6 +179,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
   var nobg=STG.classList.contains('lay-nobg')&&A.obs;if(nobg){ctx.clearRect(-20,-20,W+40,H+40);}else{ctx.drawImage(R.canvas,0,0,W,H);}
   /* liquid shimmer */
   if(!nobg)R.liquid.forEach(function(q){if(Math.random()<.2){var p=iso.p(q[0]+Math.random()-.5,q[1]+Math.random()-.5,-.55);ctx.fillStyle=R.fm.chasm==='water'?'rgba(200,230,255,.8)':'rgba(255,230,120,.9)';ctx.fillRect(p[0],p[1],2,2);}});
+  if(P.ev&&P.ev.length&&P.ev[P.ev.length-1].id<lastEv-2)lastEv=P.ev[0].id-1; /* ids restarted (new engine): resync instead of going deaf */
   (P.ev||[]).forEach(function(e){if(e.id>lastEv){lastEv=e.id;if(performance.now()-t0>800)onEvent(e);}});
   var duelF=P.d?P.d[0]:0,duelM=P.d?P.d[1]:0,ph=P.ph,list=[],seen={};
   (P.f||[]).forEach(function(f){var key='f'+f[0];seen[key]=1;var v=V[key];if(!v){v=V[key]={nx:f[4],ny:f[5],walk:0,dir:1,lunge:0,flash:0};}
@@ -164,13 +188,17 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
     var face=mv?(v.dir<0?0:1):(f[12]==='duel'||f[12]==='out'||f[0]===duelF?1:1);
     var lx=0,ly=0;if(v.lunge>0){var m2=duelM&&V['m'+duelM];if(m2){var ddx=m2.x-v.x,ddy=m2.y-v.y,dd=Math.sqrt(ddx*ddx+ddy*ddy)||1;var l=Math.sin(v.lunge*Math.PI)*.55;lx=ddx/dd*l;ly=ddy/dd*l;}v.lunge=Math.max(0,v.lunge-dt*3.2);}
     v.flash=Math.max(0,v.flash-dt);
-    list.push({kind:'player',scale:SC,x:v.x+lx,y:v.y+ly,face:face,name:f[2],color:f[3],look:MC.look(f[1],f[3]),avatar:avatarImg(f[1]),weapon:WMAP[(BTR.CLASSES[f[18]]||BTR.CLASSES.warrior).w],wcol:WCOL[f[21]||0],armour:BTR.ARMOUR[f[20]||0].col,anim:{walk:mv?v.walk:0,atk:v.lunge,flash:v.flash>0?.6:0},F:f,V:v,dead:dead,glow:f[0]===duelF&&!f[16]?'#7fd0ff':null});});
+    list.push({kind:'player',scale:SC,x:v.x+lx,y:v.y+ly,face:face,name:f[2],color:f[3],look:BT.lookOf(f[1],f[3]),avatar:avatarImg(f[1]),weapon:WMAP[(BTR.CLASSES[f[18]]||BTR.CLASSES.warrior).w],wcol:WCOL[f[21]||0],armour:BTR.ARMOUR[f[20]||0].col,anim:{walk:mv?v.walk:0,atk:v.lunge,flash:v.flash>0?.6:0},z:(f[13]&&!dead&&!mv)?Math.max(0,Math.sin(t*6.5+f[0]*1.7))*.7:0,F:f,V:v,dead:dead,glow:f[0]===duelF&&!f[16]?'#7fd0ff':null});});
   (P.m||[]).forEach(function(m){var key='m'+m[0];seen[key]=1;var v=V[key];if(!v){v=V[key]={nx:m[2],ny:m[3],walk:0,dir:-1,lunge:0,flash:0,born:now};}
     var mv=moveV(v,m[2],m[3],dt);var w=FLD.toWorld(v.nx,v.ny);v.x=w[0];v.y=w[1];v.h=(MC.MOBH[m[1]]||(m[7]?2.4:2.1))*SC*m[8];
     var lx=0,ly=0;if(v.lunge>0){var f2=duelF&&V['f'+duelF];if(f2){var ddx=f2.x-v.x,ddy=f2.y-v.y,dd=Math.sqrt(ddx*ddx+ddy*ddy)||1;var l=Math.sin(v.lunge*Math.PI)*.55;lx=ddx/dd*l;ly=ddy/dd*l;}v.lunge=Math.max(0,v.lunge-dt*3.2);}
     v.flash=Math.max(0,v.flash-dt);var age=(now-v.born)/1000;
     list.push({kind:m[1],x:v.x+lx,y:v.y+ly,face:mv?(v.dir>0?1:0):0,scale:SC*m[8]*(age<.4?age/.4:1),anim:{walk:mv?v.walk:0,atk:v.lunge,flash:v.flash>0?.7:0},M:m,V:v,frozen:m[11]>0,z:age<.4?(.4-age)*2:0});});
   Object.keys(V).forEach(function(k){if(!seen[k]){var v=V[k];v.gone=(v.gone||0)+dt;if(v.gone>1.5)delete V[k];}});
+  /* the Zombie King's summoned zombies stand beside him in phase 2 and strike after him */
+  (P.m||[]).forEach(function(m){if(!m[7]||!m[13]||bossP2(m)!=='summon')return;var bv=V['m'+m[0]];if(!bv)return;if(!MIN[m[0]])MIN[m[0]]=[{ox:-1.15,oy:.75,born:now-2000,lunge:0},{ox:-1.15,oy:-.75,born:now-2000,lunge:0}];
+    MIN[m[0]].forEach(function(mn){var age=(now-mn.born)/1000;if(age<0)return;var lx=0,ly=0;if(mn.lunge>0){var f2=duelF&&V['f'+duelF];if(f2){var tx=f2.x-(bv.x+mn.ox),ty=f2.y-(bv.y+mn.oy),dd=Math.sqrt(tx*tx+ty*ty)||1;var l=Math.sin(mn.lunge*Math.PI)*Math.min(dd-.6,2.2);lx=tx/dd*l;ly=ty/dd*l;}mn.lunge=Math.max(0,mn.lunge-dt*2.2);}
+      list.push({kind:'zombie',x:bv.x+mn.ox+lx,y:bv.y+mn.oy+ly,face:0,scale:SC*.88,anim:{walk:mn.lunge>0?t*2:0,atk:mn.lunge,flash:0},V:{ny:bv.ny+mn.oy*.01},z:age<.6?(age-.6)*1.6:0,minion:1});});});
   list.sort(function(a,b){return a.V.ny-b.V.ny});
   /* duel ring on the bridge */
   if(P.d){var a1=FLD.toWorld(.5,.6);var pr=iso.p(a1[0],a1[1],0);ctx.strokeStyle='rgba(255,210,90,'+(.35+Math.sin(t*4)*.15)+')';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(pr[0],pr[1],iso.tw*2.2,iso.tw*1.1,0,0,Math.PI*2);ctx.stroke();}
@@ -179,19 +207,28 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
     if(e.F&&e.dead){var g=iso.p(v.x,v.y,0);var gt=MC.tex('cobble',3);iso.box(v.x-.18,v.y-.08,0,.36,.16,.5,{top:gt,side:gt},{outline:'rgba(0,0,0,.5)'});if(v.dead>1.2)return;ctx.globalAlpha=Math.max(0,1-v.dead/1.2);}
     if(e.F&&canPick&&!e.dead){var pp=iso.p(v.x,v.y,0),hv=hoverU===e.F[1];ctx.strokeStyle=hv?'rgba(255,230,120,.95)':'rgba(255,230,120,'+(.35+Math.sin(t*5+e.F[0])*.2)+')';ctx.lineWidth=hv?3:2;ctx.beginPath();ctx.ellipse(pp[0],pp[1],iso.tw*.55,iso.tw*.28,0,0,Math.PI*2);ctx.stroke();}
     if(e.F&&e.F[15]&&!e.dead)ctx.globalAlpha=.55;
+    if(e.M&&e.M[7]&&e.M[13]){var p2=bossP2(e.M),bp=iso.p(e.x,e.y,.9*(e.scale||1)),R=iso.tw*1.5*(e.scale||1),pu=.5+Math.sin(t*5)*.25;
+      if(p2==='rage'){MC.glow(ctx,bp[0],bp[1],R*1.3,'rgba(255,40,30,A)',.35*pu+.15);}
+      else if(p2==='armour'){MC.glow(ctx,bp[0],bp[1],R*1.2,'rgba(120,200,255,A)',.3);}
+      else if(p2==='crystal'){for(var ci=0;ci<2;ci++){var cx_=e.x+(ci?1.6:-1.6),cy_=e.y-1.2,cp=iso.p(cx_,cy_,2.6+Math.sin(t*2+ci)*.3);ctx.strokeStyle='rgba(255,140,240,'+(.5+pu*.3)+')';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cp[0],cp[1]);ctx.lineTo(bp[0],bp[1]);ctx.stroke();ctx.fillStyle='#ff9ae8';ctx.fillRect(cp[0]-iso.tw*.18,cp[1]-iso.tw*.18,iso.tw*.36,iso.tw*.36);ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(cp[0]-iso.tw*.18,cp[1]-iso.tw*.18,iso.tw*.36,iso.tw*.36);MC.glow(ctx,cp[0],cp[1],iso.tw*.8,'rgba(255,120,230,A)',.5);}}
+      else if(p2==='storm'||p2==='charge'){MC.glow(ctx,bp[0],bp[1],R*1.1,p2==='storm'?'rgba(255,120,30,A)':'rgba(255,170,40,A)',.3*pu+.1);if(Math.random()<dt*14)addParts(e.x+(Math.random()-.5)*1.6,e.y+(Math.random()-.5)*1.2,.3,1,p2==='storm'?['#ff7a1a','#ffd23d']:['#ffb347'],1.2,.07,.7);}
+      else if(p2==='summon'){MC.glow(ctx,bp[0],bp[1],R,'rgba(120,220,90,A)',.18);}
+      else if(p2==='fatigue'){MC.glow(ctx,bp[0],bp[1],R,'rgba(120,200,160,A)',.22);}}
+    if(e.minion){var mp=iso.p(e.x,e.y,0);ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(mp[0],mp[1],iso.tw*.5,iso.tw*.25,0,0,Math.PI*2);ctx.fill();MC.glow(ctx,mp[0],mp[1]-iso.tw*.6,iso.tw*1.1,'rgba(120,230,90,A)',.32);}
     MC.drawEntity(iso,e,t);ctx.globalAlpha=1;
     if(e.frozen){var pf=iso.p(e.x,e.y,.9*(e.scale||1));ctx.fillStyle='rgba(150,230,255,.25)';ctx.fillRect(pf[0]-iso.tw*.3*(e.scale||1),pf[1]-iso.tw*.7*(e.scale||1),iso.tw*.6*(e.scale||1),iso.tw*1.2*(e.scale||1));}
     if(e.F&&e.F[17]>0&&!e.dead){var ps=iso.p(e.x,e.y,1);ctx.strokeStyle='rgba(120,200,255,'+(.5+Math.sin(t*6)*.2)+')';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(ps[0],ps[1]-iso.tw*.2,iso.tw*.5,iso.tw*.75,0,0,Math.PI*2);ctx.stroke();}});
   /* names, levels and HP bars over heads (Kukoro: always visible) */
   ctx.textAlign='center';ctx.textBaseline='bottom';
   list.forEach(function(e){var v=e.V;if(e.F&&e.dead){if(v.dead>1.2){var gp=iso.p(v.x,v.y,.6);ctx.globalAlpha=.6;label(gp[0],gp[1],e.F[2],'#bbb',fs(10),700);ctx.globalAlpha=1;}return;}
-    var p=iso.p(e.x,e.y,v.h+(e.kind==='blaze'?.6:0)),bw=Math.max(26,iso.tw*(e.M&&e.M[7]?1.6:.95)),y=p[1]-4;
-    if(e.F){var f=e.F;hpBar(p[0],y,bw,f[6]/f[7],f[6]/f[7]>.35?'#5cd65c':'#ffb347');var nmY=y-3;ctx.direction='ltr';label(p[0],nmY,f[2],MC.readableColor(f[3]||'#cfd3ff'),fs(12));
+    var p=iso.p(e.x,e.y,v.h+(e.z||0)+(e.kind==='blaze'?.6:0)),bw=Math.max(26,iso.tw*(e.M&&e.M[7]?1.6:.95)),y=p[1]-4;
+    if(e.F){var f=e.F;hpBar(p[0],y,bw,f[6]/f[7],f[6]/f[7]>.35?'#5cd65c':'#ffb347');var nmY=y-3;ctx.direction='auto';label(p[0],nmY,f[2],MC.readableColor(f[3]||'#cfd3ff'),fs(12));
       var lvx=p[0]-bw/2-2;ctx.textAlign='right';if(W>=600)label(lvx,y+Math.max(4,iso.tw*.1)+1,'LV'+f[8],'#ffd23d',fs(8),800);ctx.textAlign='center';
-      var tag='';if(f[13])tag+='⬆';if(f[14])tag+=(tag?' ':'')+'★'+f[14];
+      var tag='';if(f[14])tag+='★'+f[14]; /* !قفز now makes the character really jump (no arrow over the head) */
       if(tag){var bob=Math.abs(Math.sin(t*5+f[0]))*iso.tw*.08;label(p[0],nmY-fs(12)-bob,tag,'#ffd23d',fs(13),900);}
-      if(f[0]===duelF&&!f[16]&&ph==='duel'){ctx.font=fs(12)+'px system-ui';ctx.fillText(PW_IC[BT.POWERS[f[9]]]||'⚡',p[0]+bw/2+fs(9),y+6);}}
-    else if(e.M){var m=e.M;hpBar(p[0],y,bw,m[4]/m[5],'#e04a4a');ctx.direction='ltr';var nm=mobLabel(m[7]?m[1].slice(5):m[1])+(m[9]?' 👑':'')+' Lv.'+m[6];label(p[0],y-3,nm,m[7]?'#ffcf5a':'#ffdede',fs(m[7]?14:11));}});
+      if(!e.dead&&f[10]){/* #12 + Mohammad Nov 4: a small Minecraft HARDCORE heart beside every fighter; it fills with blood while the power recharges and glows when ready */
+        var left=f[26]||0,tot=f[27]||3,prog=f[16]?Math.max(0,Math.min(1,1-left/tot)):1;var hc=Math.max(1.4,fs(12)/9);drawHHeart(p[0]+bw/2+fs(4),y-4*hc,hc,prog,f[0]===duelF&&ph==='duel');}}
+    else if(e.M){var m=e.M;hpBar(p[0],y,bw,m[4]/m[5],'#e04a4a');ctx.direction='auto';var nm=mobLabel(m[7]?m[1].slice(5):m[1])+(m[9]?' 👑':'')+' Lv.'+m[6];label(p[0],y-3,nm,m[7]?'#ffcf5a':'#ffdede',fs(m[7]?14:11));}});
   ctx.direction='ltr';
   /* statuses over heads (burn / poison / wither / stunned) and the boss's second phase */
   list.forEach(function(e){var v=e.V;if(e.F&&e.dead)return;var st=e.F?e.F[22]:e.M?e.M[15]:'',stun=e.F?e.F[23]:0;var p=iso.p(e.x,e.y,v.h+(e.kind==='blaze'?.6:0));
@@ -199,13 +236,14 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
     if(e.M&&e.M[7]&&e.M[13]){var gp=iso.p(e.x,e.y,1.2*(e.scale||1));MC.glow(ctx,gp[0],gp[1],iso.tw*2.4*(e.scale||1),'rgba(255,40,40,A)',.18+Math.sin(t*6)*.08);}});
   /* "candidates can speak": their last chat line in a bubble over their head for 4 s */
   (P.say||[]).forEach(function(s){var e=null;list.forEach(function(x){if(x.F&&x.F[1]===s[0]&&!x.dead)e=x;});if(!e)return;var v=e.V,p=iso.p(e.x,e.y,v.h),size=fs(12);
-    ctx.font='700 '+size+'px Cairo,system-ui,sans-serif';ctx.direction='ltr';var tw=Math.min(W*.3,ctx.measureText(s[1]).width)+size*1.1,bh=size*1.7,bx=p[0]-tw/2,by=p[1]-size*3.4-bh;
+    ctx.font='700 '+size+'px Cairo,system-ui,sans-serif';ctx.direction='auto';var tw=Math.min(W*.3,ctx.measureText(s[1]).width)+size*1.1,bh=size*1.7,bx=p[0]-tw/2,by=p[1]-size*3.4-bh;
     ctx.fillStyle='rgba(255,255,255,.95)';ctx.strokeStyle='rgba(20,16,30,.9)';ctx.lineWidth=2;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx,by,tw,bh,size*.5);else ctx.rect(bx,by,tw,bh);ctx.fill();ctx.stroke();
     ctx.beginPath();ctx.moveTo(p[0]-size*.4,by+bh-1);ctx.lineTo(p[0],by+bh+size*.6);ctx.lineTo(p[0]+size*.4,by+bh-1);ctx.closePath();ctx.fill();
     ctx.fillStyle='#1a1424';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s[1],p[0],by+bh/2,W*.3);ctx.textBaseline='bottom';ctx.direction='ltr';});
   /* effects */
   fx=fx.filter(function(f){f.t+=dt;if(f.t>f.life)return false;var a=1-f.t/f.life,p,q;
-    if(f.k==='boom'){p=iso.p(f.x,f.y,.3);MC.glow(ctx,p[0],p[1],iso.tw*(1+f.t*4),'rgba(255,200,90,A)',a*.9);}
+    if(f.k==='ring'){if(f.t<0)return true;p=iso.p(f.x,f.y,.05);ctx.strokeStyle=f.col.replace('A',(a*.9).toFixed(2));ctx.lineWidth=Math.max(3,iso.tw*.14*a);ctx.beginPath();ctx.ellipse(p[0],p[1],iso.tw*(.6+f.t*5),iso.tw*(.3+f.t*2.5),0,0,Math.PI*2);ctx.stroke();}
+    else if(f.k==='boom'){p=iso.p(f.x,f.y,.3);MC.glow(ctx,p[0],p[1],iso.tw*(1+f.t*4),'rgba(255,200,90,A)',a*.9);}
     else if(f.k==='p_bolt'){p=iso.p(f.tx,f.ty,0);ctx.strokeStyle='rgba(220,240,255,'+a+')';ctx.lineWidth=4;ctx.shadowColor='#7fd0ff';ctx.shadowBlur=18;ctx.beginPath();var x=p[0],y=p[1]-H;ctx.moveTo(x,y);for(var i=1;i<=8;i++){x=p[0]+(Math.random()-.5)*iso.tw*.6*(1-i/8);y=p[1]-H+H*i/8;ctx.lineTo(x,y);}ctx.stroke();ctx.shadowBlur=0;MC.glow(ctx,p[0],p[1],iso.tw*1.6,'rgba(160,220,255,A)',a*.8);}
     else if(f.k==='p_fire'){var u2=Math.min(1,f.t/.38);p=iso.p(f.x+(f.tx-f.x)*u2,f.y+(f.ty-f.y)*u2,1.2+Math.sin(u2*Math.PI)*1.2);MC.glow(ctx,p[0],p[1],iso.tw*.6,'rgba(255,140,40,A)',1);ctx.fillStyle='#ffd23d';ctx.fillRect(p[0]-5,p[1]-5,10,10);}
     else if(f.k==='p_tnt'){if(f.t<.65){var u3=Math.min(1,f.t/.5);iso.box(f.x+(f.tx-f.x)*u3-.25,f.y+(f.ty-f.y)*u3-.25,Math.sin(u3*Math.PI)*1.8,.5,.5,.5,{top:MC.tex('planks'),side:MC.tex('tnt_side')},{flash:Math.sin(f.t*40)>0?.6:0});}}
@@ -239,9 +277,20 @@ function hitTest(ev){var r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev
 function hitMob(ev){var r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top,best=null,bd=1e9;
   (P.m||[]).forEach(function(m){var v=V['m'+m[0]];if(!v)return;var p=iso.p(v.x,v.y,0),top=iso.p(v.x,v.y,v.h||2.2);var cx=p[0],cy=(p[1]+top[1])/2,hw=Math.max(18,iso.tw*.6*(m[8]||1)),hh=Math.max(24,(p[1]-top[1])/2+12);
     if(Math.abs(mx-cx)<hw&&Math.abs(my-cy)<hh){var d=Math.abs(mx-cx)+Math.abs(my-cy);if(d<bd){bd=d;best=m[0];}}});return best;}
-if(!A.obs){cv.addEventListener('click',function(ev){if(document.body.classList.contains('lay-editing'))return;var u=hitTest(ev);if(u&&E.phase==='pick'){sendF(u);return;}
+/* Mohammad #4: a click on a character opens a small menu — «هجوم» (send them to duel) or «معلومات الشخصية»; the streamer chooses */
+function closeCMenu(){var m=$('baCMenu');if(m)m.remove();}
+function openCMenu(u,ev){closeCMenu();var f=E.fOf(u);if(!f)return;var st=$('stage'),r0=st.getBoundingClientRect();var m=document.createElement('div');m.id='baCMenu';m.className='ba-cmenu';
+  var hd=document.createElement('div');hd.className='cm-h';hd.appendChild(BT.name(f.name,f.color));m.appendChild(hd);
+  function btn(txt,ok,fn){var b=document.createElement('button');b.type='button';b.className='btn btn-sm '+(ok?'btn-main':'btn-ghost');b.textContent=txt;b.disabled=!ok;b.addEventListener('click',function(e){e.stopPropagation();closeCMenu();fn();});m.appendChild(b);}
+  var canAtk=E.phase==='pick'&&!E.paused&&f.alive;
+  btn('⚔ '+(EN()?'Attack':'هجوم'),canAtk,function(){sendF(u);});
+  btn('ℹ '+(EN()?'Character info':'معلومات الشخصية'),true,function(){E.closeInfo();E.askInfo(u,'',f.name,f.color);P=E.pub();A.publish(P);hud(true);});
+  if(!canAtk){var n=document.createElement('small');n.textContent=!f.alive?(EN()?'Out of the fight':'خرج من القتال'):E.phase==='duel'?(EN()?'A duel is running':'مبارزة جارية الآن'):(EN()?'Attack opens when it is your pick':'الهجوم متاح وقت الاختيار');m.appendChild(n);}
+  st.appendChild(m);var x=ev.clientX-r0.left+10,y=ev.clientY-r0.top-10;var mw=m.offsetWidth,mh=m.offsetHeight;x=Math.max(6,Math.min(r0.width-mw-6,x));y=Math.max(6,Math.min(r0.height-mh-6,y));m.style.left=x+'px';m.style.top=y+'px';}
+if(!A.obs){document.addEventListener('pointerdown',function(ev){var m=$('baCMenu');if(m&&!m.contains(ev.target))closeCMenu();},true);
+  cv.addEventListener('click',function(ev){if(document.body.classList.contains('lay-editing'))return;var u=hitTest(ev);if(u){openCMenu(u,ev);return;}
     /* click an enemy: its bestiary card (Kukoro) */var mid=hitMob(ev);if(mid&&E.enemyInfo(mid)){P=E.pub();A.publish(P);hud(true);}});
-  cv.addEventListener('mousemove',function(ev){var u=E.phase==='pick'?hitTest(ev):null;hoverU=u||'';cv.style.cursor=u||(E.inRaid()&&hitMob(ev))?'pointer':'';});}
+  cv.addEventListener('mousemove',function(ev){var u=E.inRaid()||E.phase==='lobby'?hitTest(ev):null;hoverU=u||'';cv.style.cursor=u||(E.inRaid()&&hitMob(ev))?'pointer':'';});}
 
 
 /* ---------- !معلومات / !getinfo card: big and clear on stream, next to the character (Kukoro shows the same sheet) ---------- */
@@ -253,12 +302,12 @@ function chips(host,label,list,cls){if(!list.length)return;var r=document.create
 function tname(t){var T0=BTR.TYPE[t];return T0?T0.ic+' '+L2(T0):t;}
 function buildCard(g){var en=EN(),box=document.createElement('div');box.className='gi-in '+(g.t==='m'?'gi-mob'+(g.boss?' gi-boss':''):'gi-player');
   var hd=document.createElement('div');hd.className='gi-hd';
-  if(g.t==='p'){var lk=MC.look(g.u,g.c);hd.appendChild(portrait({kind:'player',scale:1,face:0,name:g.name,color:g.c,look:lk,avatar:CFG.av&&BT.avatar(g.u)?BT.img(BT.avatar(g.u)):null,weapon:WMAP[BTR.CLASSES[g.cls].w],wcol:WCOL[g.gear.w],armour:BTR.ARMOUR[g.gear.a].col,anim:{},h:2.05},120,150));
-    var tx=document.createElement('div');tx.className='gi-tx';var nm=BT.name(g.name,g.c,'gi-nm');tx.appendChild(nm);var C=BTR.CLASSES[g.cls];var sub=document.createElement('div');sub.className='gi-sub';sub.textContent=C.ic+' '+L2(C)+' · LV '+g.lv+(g.inSquad?'':' · '+T('gi_out'));tx.appendChild(sub);
+  if(g.t==='p'){var lk=BT.lookOf(g.u,g.c);hd.appendChild(portrait({kind:'player',scale:1,face:0,name:g.name,color:g.c,look:lk,avatar:CFG.av&&BT.avatar(g.u)?BT.img(BT.avatar(g.u)):null,weapon:WMAP[BTR.CLASSES[g.cls].w],wcol:WCOL[g.gear.w],armour:BTR.ARMOUR[g.gear.a].col,anim:{},h:2.05},120,150));
+    var tx=document.createElement('div');tx.className='gi-tx';var nm=BT.name(g.name,g.c,'gi-nm');tx.appendChild(nm);var C=BTR.CLASSES[g.cls];var sub=document.createElement('div');sub.className='gi-sub';[C.ic+' '+L2(C),'LV '+g.lv,g.inSquad?'':T('gi_out')].filter(Boolean).forEach(function(x){var c=document.createElement('span');c.className='gi-chip';c.textContent=x;sub.appendChild(c);});tx.appendChild(sub);
     var xp=document.createElement('div');xp.className='gi-xp';var xb=document.createElement('span');xb.className='gi-bar xp';var xi=document.createElement('i');xi.style.width=(g.xpN?Math.round(g.xp/g.xpN*100):100)+'%';xb.appendChild(xi);xp.appendChild(document.createTextNode(T('gi_xp')+' '));xp.appendChild(xb);var xt=document.createElement('small');xt.textContent=g.xpN?g.xp+'/'+g.xpN:T('gi_max');xp.appendChild(xt);tx.appendChild(xp);hd.appendChild(tx);}
   else{var S=g.boss?BTR.BOSSES[g.kind]:BTR.MOBS[g.kind];hd.appendChild(portrait({kind:g.boss?'boss:'+g.kind:g.kind,scale:g.boss?.62:1,face:0,anim:{},h:(MC.MOBH[g.boss?'boss:'+g.kind:g.kind]||2.1)*(g.boss?.62:1)},120,150));
-    var tx2=document.createElement('div');tx2.className='gi-tx';var nm2=document.createElement('div');nm2.className='gi-nm';nm2.textContent=(g.boss?'👑 ':'')+L2(S);tx2.appendChild(nm2);var F=BTR.FAM[g.fam];var sub2=document.createElement('div');sub2.className='gi-sub';sub2.textContent=(g.boss?T('gi_boss')+' · ':'')+'Lv.'+g.lv+' · '+F.ic+' '+L2(F);tx2.appendChild(sub2);
-    var ty=document.createElement('div');ty.className='gi-sub';ty.textContent=T('gi_type')+': '+tname(g.atkT)+(g.atk2?' + '+tname(g.atk2):'');tx2.appendChild(ty);hd.appendChild(tx2);}
+    var tx2=document.createElement('div');tx2.className='gi-tx';var nm2=document.createElement('div');nm2.className='gi-nm';nm2.textContent=(g.boss?'👑 ':'')+L2(S);tx2.appendChild(nm2);var F=BTR.FAM[g.fam];var sub2=document.createElement('div');sub2.className='gi-sub';[(g.boss?'👑 '+T('gi_boss'):''),'LV '+g.lv,F.ic+' '+L2(F)].filter(Boolean).forEach(function(x){var c=document.createElement('span');c.className='gi-chip';c.textContent=x;sub2.appendChild(c);});tx2.appendChild(sub2);
+    var ty=document.createElement('div');ty.className='gi-sub';ty.className='gi-sub gi-type';ty.textContent=T('gi_type')+': '+tname(g.atkT)+(g.atk2?' + '+tname(g.atk2):'');tx2.appendChild(ty);hd.appendChild(tx2);}
   box.appendChild(hd);
   var st=document.createElement('div');st.className='gi-grid';
   if(g.t==='p'){st.appendChild(giRow('❤️',T('gi_hp'),g.hp+'/'+g.max,g.hp/g.max,g.hp/g.max>.35?'#5cd65c':'#ffb347'));st.appendChild(giRow('🗡️',T('gi_atk'),String(g.atk)+' '+BTR.TYPE[g.atkT].ic));st.appendChild(giRow('🛡️',T('gi_def'),g.def+'%'));
@@ -278,27 +327,78 @@ function buildCard(g){var en=EN(),box=document.createElement('div');box.classNam
     if(g.trait){var tr=document.createElement('div');tr.className='gi-sec';var h3=document.createElement('h5');h3.textContent=T('gi_trait');tr.appendChild(h3);var d3=document.createElement('div');d3.textContent=L2(BTR.TRAIT[g.trait]);tr.appendChild(d3);box.appendChild(tr);}
     if(g.p2){var p2=document.createElement('div');p2.className='gi-sec'+(g.phase2?' on':'');var h4=document.createElement('h5');h4.textContent=T('gi_p2');p2.appendChild(h4);var d4=document.createElement('div');d4.textContent=L2(BTR.PHASE2[g.p2]);p2.appendChild(d4);box.appendChild(p2);}}
   var lc=document.createElement('div');lc.className='gi-l2';while(main.firstChild)lc.appendChild(main.firstChild);main.appendChild(lc);main.appendChild(rc);
+  if(!A.obs){var xb=document.createElement('button');xb.type='button';xb.className='gi-x';xb.textContent='✕';xb.setAttribute('aria-label',EN()?'Close':'إغلاق');xb.addEventListener('click',function(ev){ev.stopPropagation();closeInfo();});main.appendChild(xb);}
   var cap=document.createElement('div');cap.className='gi-cap';cap.textContent=T('ba_card_t');main.appendChild(cap);
   return main;}
+
+/* ---------- the wave screen: name + what is coming; it stays until the streamer / a mod skips it (button, !التالي, N) or after the set seconds ---------- */
+function renderWave(){var el=$('baWave');if(!el)return;var wc=P.wc;if(!wc){if(!el.hidden){el.hidden=true;el._k='';}return;}
+  var key=JSON.stringify([wc,(P.m||[]).length,EN()]);if(el._k===key)return;var same=el._w===wc[0]&&!el.hidden;el._k=key;el._w=wc[0];A.clear(el);
+  var box=document.createElement('div');box.className='bw-in'+(wc[1]?' boss':'');if(same)box.style.animation='none';
+  var h=document.createElement('div');h.className='bw-t';h.textContent=wc[1]?'👑 '+T('ba_boss_w'):(P.ws>0?T('ba_wave',{w:wc[0],n:P.ws}):T('ba_wave_inf',{w:wc[0]}));box.appendChild(h);
+  var EV=wc[2]&&BTR.EVENTS[wc[2]];if(EV){var ev=document.createElement('div');ev.className='bw-ev';var b=document.createElement('b');b.textContent=EV.ic+' '+(EN()?EV.en:EV.ar);ev.appendChild(b);ev.appendChild(document.createTextNode(' — '+(EN()?EV.d.en:EV.d.ar)));box.appendChild(ev);}
+  var cnt={},order=[];(P.m||[]).forEach(function(m){var k=(m[7]?'b:':'')+m[1];if(!cnt[k]){cnt[k]=0;order.push(k);}cnt[k]++;});
+  var ul=document.createElement('div');ul.className='bw-mobs';order.forEach(function(k){var boss=k.indexOf('b:')===0,kind=boss?k.slice(2):k;var c=document.createElement('span');c.className='bw-mob'+(boss?' boss':'');
+    var S=boss?BTR.BOSSES[kind]:BTR.MOBS[kind];var nm=S?(EN()?S.en:S.ar):mobName(kind);c.textContent=(boss?'👑 ':'')+nm+(cnt[k]>1?' ×'+cnt[k]:'');ul.appendChild(c);});box.appendChild(ul);
+  if(wc[1]){var bk=order[0]&&order[0].slice(2),B=BTR.BOSSES[bk];if(B&&B.p2&&BTR.PHASE2[B.p2]){var p2=document.createElement('div');p2.className='bw-ev';p2.textContent=T('gi_p2')+': '+(EN()?BTR.PHASE2[B.p2].en:BTR.PHASE2[B.p2].ar);box.appendChild(p2);}}
+  var ft=document.createElement('div');ft.className='bw-ft';
+  if(!A.obs){var sk=document.createElement('button');sk.type='button';sk.className='btn btn-main btn-sm';sk.textContent=EN()?'Continue ▶':'متابعة ▶';sk.addEventListener('click',function(){if(engine()){E.skipCard();P=E.pub();A.publish(P);hud(true);}});ft.appendChild(sk);}
+  var tx=document.createElement('span');if(wc[3]>=0)tx.textContent=EN()?'Starts in '+wc[3]+' s':'تبدأ بعد '+wc[3]+' ث';else{tx.appendChild(document.createTextNode(EN()?'The streamer or a mod continues: ':'يتابع الستريمر أو المشرف: '));tx.appendChild(BT.cmdEl(EN()?'!next':'!التالي'));}ft.appendChild(tx);box.appendChild(ft);
+  el.appendChild(box);el.hidden=false;fitWave();}
+/* centre the wave card on the map itself (not on map + side panel) */
+function fitWave(){var el=$('baWave');if(!el||el.hidden)return;var r=cv.getBoundingClientRect(),r0=STG.getBoundingClientRect();if(!r.width)return;el.style.inset='auto';el.style.left=(r.left-r0.left)+'px';el.style.top=(r.top-r0.top)+'px';el.style.width=r.width+'px';el.style.height=r.height+'px';}
+window.addEventListener('resize',function(){setTimeout(fitWave,50);});document.addEventListener('fullscreenchange',function(){setTimeout(fitWave,80);});
 var giKey='';
+function closeInfo(){if(engine()){E.closeInfo();P=E.pub();A.publish(P);}var el=$('baInfo');if(el){el.hidden=true;}giKey='';}
 function renderInfo(){var el=$('baInfo');if(!el)return;var g=P.gi;if(!g){if(giKey){el.hidden=true;giKey='';}return;}
-  var k=JSON.stringify([g.key,g.hp,g.max,g.pwUsed,g.kills,g.phase2,EN(),CFG.av]);if(k!==giKey){giKey=k;A.clear(el);el.appendChild(buildCard(g));el.hidden=false;el.className='ba-info'+(g.t==='m'?' mob':'');}
+  if(CFG.giOn===false){if(!el.hidden){el.hidden=true;giKey='';}return;} /* «كرت المعلومات على الشاشة» off: rely on the bot's reply in chat */
+  var k=JSON.stringify([g.key,g.hp,g.max,g.pwUsed,g.kills,g.phase2,EN(),CFG.av]);if(!A.obs&&giEditing()){return;}if(k!==giKey){var was=!el.hidden&&giKey;giKey=k;A.clear(el);var cd=buildCard(g);el.appendChild(cd);lastCard=cd;el.hidden=false;el.className='ba-info'+(g.t==='m'?' mob':'')+(was?' no-anim':'');}
   placeInfo();}
-function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0,gap=0;el.style.transform='';var g=P.gi,v=g.id?V[(g.t==='p'?'f':'m')+g.id]:null,sw=STG.clientWidth,sh=STG.clientHeight,cw=el.offsetWidth,ch=el.offsetHeight,x,y;
+function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0,gap=0;el.style.transform='';el.style.width='';el.style.fontSize='';var g=P.gi,v=g.id?V[(g.t==='p'?'f':'m')+g.id]:null,sw=STG.clientWidth,sh=STG.clientHeight,cw=el.offsetWidth,ch=el.offsetHeight,x,y;
   if(v&&v.x!=null){var p=iso.p(v.x,v.y,(v.h||2)*.6);var r1=cv.getBoundingClientRect(),r0=STG.getBoundingClientRect();px=p[0]+(r1.left-r0.left);var py=p[1]+(r1.top-r0.top);gap=Math.max(24,iso.tw*.9);
     x=px<sw/2?px+gap:px-gap-cw;y=py-ch/2;}else{x=(sw-cw)/2;y=sh*.24;}
-  var k=Math.min(1,(sh*.84)/Math.max(1,ch),(sw*.96)/Math.max(1,cw));el.style.transform=k<1?'scale('+k.toFixed(3)+')':'';el.style.transformOrigin='0 0';cw*=k;ch*=k;
+  var k=Math.min((CFG.giS||1)*Math.min(1,(sh*.84)/Math.max(1,ch),(sw*.96)/Math.max(1,cw)),(sh*.88)/Math.max(1,ch),(sw*.96)/Math.max(1,cw));el.style.transform=Math.abs(k-1)>.001?'scale('+k.toFixed(3)+')':'';el.style.transformOrigin='0 0';cw*=k;ch*=k;
   if(v&&v.x!=null&&px>=sw/2)x=px-gap-cw;
-  x=Math.max(6,Math.min(sw-cw-6,x));y=Math.max(sh*.13,Math.min(sh-ch-6,y));el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
+  var tb=el.querySelector('.gi-tools'),th=tb?(tb.offsetHeight+10)*k:0; /* keep the ✥ ⤡ ↺ bar under the card on screen */
+  if(CFG.giX!=null&&CFG.giY!=null){x=CFG.giX*sw;y=CFG.giY*sh;x=Math.max(0,Math.min(sw-cw,x));y=Math.max(0,Math.min(sh-ch-th,y));}
+  else{x=Math.max(6,Math.min(sw-cw-6,x));y=Math.max(6,Math.min(sh-ch-th-6,y));}el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
+/* Mohammad Nov 4 (2nd pass): no buttons on the live card. In «تعديل الشكل» a fixed copy of the card appears (it does not close):
+   drag it to move it, drag its corner to make it bigger/smaller, ↺ puts it back beside the character. Saved with the settings. */
+var lastCard=null;
+function giEditing(){return STG.classList.contains('lay-editing')||document.body.classList.contains('lay-editing');}
+function giGhost(){var gh=$('baInfoEd');if(gh)return gh;gh=document.createElement('div');gh.id='baInfoEd';gh.className='ba-info ba-info-ed';gh.hidden=true;STG.appendChild(gh);
+  var body=document.createElement('div');body.className='gie-body';gh.appendChild(body);
+  var cap=document.createElement('div');cap.className='gie-cap';gh.appendChild(cap);
+  var rs=document.createElement('div');rs.className='gie-rs';rs.title=EN()?'Drag to resize':'اسحب للتكبير أو التصغير';gh.appendChild(rs);
+  var rt=document.createElement('button');rt.type='button';rt.className='gie-rt';rt.textContent='↺';rt.title=EN()?'Back beside the character':'رجّعه جنب الشخصية';gh.appendChild(rt);
+  function drag(h,fn,el0){h.addEventListener('pointerdown',function(e){if(e.button>0||e.target===rt)return;e.preventDefault();e.stopPropagation();var r=gh.getBoundingClientRect(),r0=STG.getBoundingClientRect(),s={x:e.clientX,y:e.clientY,l:r.left-r0.left,t:r.top-r0.top,w:r.width,gs:CFG.giS||1};gh.classList.add('gi-drag');try{h.setPointerCapture(e.pointerId)}catch(_){}
+    function mv(ev){fn(ev,s,r0);ghostPlace();}function up(){h.removeEventListener('pointermove',mv);h.removeEventListener('pointerup',up);h.removeEventListener('pointercancel',up);gh.classList.remove('gi-drag');save();}
+    h.addEventListener('pointermove',mv);h.addEventListener('pointerup',up);h.addEventListener('pointercancel',up);});}
+  drag(gh,function(ev,s,r0){CFG.giX=(s.l+ev.clientX-s.x)/r0.width;CFG.giY=(s.t+ev.clientY-s.y)/r0.height;});
+  drag(rs,function(ev,s,r0){var d=((ev.clientX-s.x)*(EN()?1:-1)+(ev.clientY-s.y))/2;CFG.giW=0;CFG.giS=Math.max(.6,Math.min(1.8,s.gs*(1+d/Math.max(120,s.w))));});
+  rt.addEventListener('click',function(e){e.stopPropagation();CFG.giX=null;CFG.giY=null;CFG.giW=0;CFG.giS=1;save();ghostPlace();});
+  return gh;}
+function ghostShow(on){var gh=giGhost();if(!on||A.obs||CFG.giOn===false){gh.hidden=true;return;}
+  var body=gh.querySelector('.gie-body');A.clear(body);
+  if(lastCard){var cl=lastCard.cloneNode(true);var src=lastCard.querySelectorAll('canvas'),dst=cl.querySelectorAll('canvas');for(var ci=0;ci<dst.length&&ci<src.length;ci++){try{dst[ci].getContext('2d').drawImage(src[ci],0,0);}catch(_){}}body.appendChild(cl);}
+  else{var ph=document.createElement('div');ph.className='gi-in gie-ph';ph.textContent=EN()?'Character info card':'كرت معلومات الشخصية';body.appendChild(ph);}
+  gh.hidden=false;ghostPlace();}
+function ghostPlace(){var gh=$('baInfoEd');if(!gh||gh.hidden)return;var sw=STG.clientWidth,sh=STG.clientHeight;gh.style.transform='';gh.style.transformOrigin='0 0';
+  var cw=gh.offsetWidth,ch=gh.offsetHeight,k=Math.min((CFG.giS||1)*Math.min(1,(sh*.84)/Math.max(1,ch),(sw*.96)/Math.max(1,cw)),(sh*.92)/Math.max(1,ch),(sw*.96)/Math.max(1,cw));
+  gh.style.transform=Math.abs(k-1)>.001?'scale('+k.toFixed(3)+')':'';cw*=k;ch*=k;var auto=CFG.giX==null||CFG.giY==null;
+  var x=auto?(sw-cw)/2:CFG.giX*sw,y=auto?(sh-ch)/2:CFG.giY*sh;x=Math.max(0,Math.min(sw-cw,x));y=Math.max(0,Math.min(sh-ch,y));gh.style.left=Math.round(x)+'px';gh.style.top=Math.round(y)+'px';
+  var cap=gh.querySelector('.gie-cap');cap.textContent=auto?(EN()?'Now: beside the character — drag to fix a place':'الآن: بجانب الشخصية — اسحبه لتثبيت مكان'):(EN()?'Drag to move · corner to resize · ↺ reset':'اسحب للتحريك · الزاوية للتكبير · ↺ للإرجاع');}
+if(!A.obs&&window.MutationObserver){var giWas=false;new MutationObserver(function(){var on=giEditing();if(on===giWas)return;giWas=on;var el=$('baInfo');if(on&&el){el.hidden=true;}else{giKey='';}ghostShow(on);}).observe(STG,{attributes:true,attributeFilter:['class']});
+  window.addEventListener('resize',function(){setTimeout(ghostPlace,60);});}
 
 /* ---------- HUD (DOM) ---------- */
 var hudKey='';
 function headEl(u,col,name){var s=document.createElement('span');s.className='bt-head';var url=CFG.av?BT.avatar(u):null;
   if(url){var im=document.createElement('img');im.src=url;im.alt='';im.referrerPolicy='no-referrer';s.appendChild(im);}
-  else{var lk=MC.look(u,col);var c=document.createElement('canvas');c.width=8;c.height=8;c.getContext('2d').drawImage(MC.face('player',lk.skin,lk.hair,lk.style),0,0);s.appendChild(c);}return s;}
+  else{var lk=BT.lookOf(u,col);var c=document.createElement('canvas');c.width=8;c.height=8;c.getContext('2d').drawImage(MC.face('player',lk.skin,lk.hair,lk.style),0,0);s.appendChild(c);}return s;}
 function bar(cls,v,col){var b=document.createElement('span');b.className='ba-bar '+cls;var i=document.createElement('i');i.style.width=Math.round(Math.max(0,Math.min(1,v))*100)+'%';if(col)i.style.background=col;b.appendChild(i);return b;}
 function hudSoon(){setTimeout(function(){hud(true)},30);}
-function hud(force){var ph=P.ph,EN_=EN();renderInfo();
+function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* waves bar */
   var wt=$('baWaveT');wt.textContent=ph==='lobby'?T('ba_lobby_t'):P.ws>0?T('ba_wave',{w:Math.max(1,P.w),n:P.ws}):T('ba_wave_inf',{w:Math.max(1,P.w)});
   $('baMapT').textContent=T('ba_lvl',{m:T('map_'+(P.map||CFG.map)),l:P.lv||1});
@@ -320,7 +420,7 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();
     sq.appendChild(ul);}
   /* kill feed */
   var fd=$('baFeed');var fk=JSON.stringify(P.feed);if(fd._k!==fk){fd._k=fk;A.clear(fd);(P.feed||[]).slice(-5).forEach(function(x){var r=document.createElement('div');r.className='ba-fr';
-    if(x.dead){r.appendChild(document.createTextNode('💀 '));r.appendChild(BT.name(x.dead,x.dc));}else{r.appendChild(BT.name(x.by||'?',x.bc));r.appendChild(document.createTextNode(' ⚔ '+(x.boss?'👑 ':'')+mobName(x.mk)));}fd.appendChild(r);});}
+    if(x.dead){r.appendChild(document.createTextNode('💀 '));r.appendChild(BT.name(x.dead,x.dc));}else{r.appendChild(BT.name(x.by||'?',x.bc));r.appendChild(document.createTextNode(' ⚔ '+(x.boss?'👑 ':'')));var mb=document.createElement('bdi');mb.textContent=mobName(x.mk);r.appendChild(mb);}fd.appendChild(r);});}
   fd.classList.toggle('off',!(P.feed||[]).length);
   /* lobby / join box */
   var lb=$('baLobby');var lk=JSON.stringify([ph==='lobby'?'l':'r',P.q,P.nq,EN_]);if(lb._k!==lk){lb._k=lk;A.clear(lb);
@@ -333,6 +433,10 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();
   /* end card */
   var end=$('baEnd');if(ph==='won'||ph==='lost'){var ek=ph+P.lv+fs.length;if(end._k!==ek){end._k=ek;A.clear(end);var h3=document.createElement('h3');h3.textContent=T(ph==='won'?'ba_won':'ba_lost');end.appendChild(h3);var sub=document.createElement('p');sub.textContent=T(ph==='won'?'ba_won_s':'ba_lost_s',{l:P.lv});end.appendChild(sub);
       var best=fs.slice().sort(function(a,b){return b[11]-a[11]})[0];if(best){var mv=document.createElement('div');mv.className='ba-mvp';mv.appendChild(document.createTextNode('👑 '+T('ba_mvp')+': '));mv.appendChild(headEl(best[1],best[3],best[2]));mv.appendChild(BT.name(best[2],best[3]));mv.appendChild(document.createTextNode(' · ☠'+best[11]));end.appendChild(mv);}
+      if(!A.obs){var row=document.createElement('div');row.className='ba-endbtns';
+        var rb=document.createElement('button');rb.type='button';rb.className='btn btn-ghost btn-sm';rb.textContent='🔁 '+(EN()?'Replay the level':'إعادة المرحلة');rb.addEventListener('click',function(){if(E.again(false)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(rb);
+        var nb=document.createElement('button');nb.type='button';nb.className='btn btn-main btn-sm';nb.textContent='⏭ '+(EN()?'Next level':'المستوى التالي');nb.disabled=ph!=='won';nb.addEventListener('click',function(){if(E.again(true)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(nb);
+        var lb2=document.createElement('button');lb2.type='button';lb2.className='btn btn-ghost btn-sm';lb2.textContent=EN()?'Lobby':'اللوبي';lb2.addEventListener('click',toLobby);row.appendChild(lb2);end.appendChild(row);}
       end.className='bt-win '+(ph==='won'?'won':'lost');end.hidden=false;}}else{end.hidden=true;end._k='';}
   /* control panel */
   if(!A.obs)ctrlHud(force);
@@ -364,12 +468,14 @@ if(!A.obs){
   var mp=$('baMaps');MAPS.forEach(function(m){var b=document.createElement('button');b.type='button';b.className='seg ba-map'+(CFG.map===m?' on':'');b.setAttribute('data-map',m);b.setAttribute('role','radio');var sw=document.createElement('canvas');sw.width=16;sw.height=16;sw.getContext('2d').drawImage(MC.tex(MC.MAPS[m].floor[0],2),0,0);b.appendChild(sw);var s=document.createElement('span');s.setAttribute('data-i18n','map_'+m);s.textContent=T('map_'+m);b.appendChild(s);
     b.addEventListener('click',function(){if(E.inRaid())return;CFG.map=m;applyCfg();[].forEach.call(mp.children,function(x){x.classList.toggle('on',x.getAttribute('data-map')===m);x.setAttribute('aria-checked',String(x.getAttribute('data-map')===m))});save();P=E.pub();A.publish(P);hud(true);});mp.appendChild(b);});
   var wv=$('baWavesSel');wv.value=String(CFG.waves);wv.addEventListener('change',function(){CFG.waves=+wv.value;applyCfg();save();P=E.pub();A.publish(P);hud(true);});
+  var pwt=$('baPwT');if(pwt){pwt.value=String(CFG.pwT||3);pwt.addEventListener('change',function(){CFG.pwT=+pwt.value;applyCfg();save();});}
   var df=$('baDiff');df.value=CFG.diff;df.addEventListener('change',function(){CFG.diff=df.value;applyCfg();save();});
   var bs=$('baBossSel');bs.value=CFG.boss;bs.addEventListener('change',function(){CFG.boss=bs.value;applyCfg();save();});
   var sz=$('baSize');sz.value=String(CFG.size);sz.addEventListener('change',function(){CFG.size=+sz.value;applyCfg();while(E.squad.length>E.cfg.squadMax&&E.phase==='lobby')E.squad.pop();save();hud(true);});
   BT.tmr($('baBreakRow'),function(){return CFG.brk},function(v){CFG.brk=v;applyCfg();save();},4);
+  BT.tmr($('baCardRow'),function(){return CFG.card},function(v){CFG.card=v;applyCfg();save();},6);
   BT.tmr($('baJoinRow'),function(){return CFG.join},function(v){CFG.join=v;joinEnd=v>0?Date.now()+v*1000:0;save();},60);
-  [['baAutoP','autoP'],['baAv','av'],['baAutoF','autoF'],['baSpeak','speak'],['baEvents','events'],['baLoot','loot']].forEach(function(a){var e=$(a[0]);e.checked=!!CFG[a[1]];e.addEventListener('change',function(){CFG[a[1]]=e.checked;applyCfg();save();hud(true);});});
+  [['baGiOn','giOn'],['baAutoP','autoP'],['baBot','bot'],['baAv','av'],['baAutoF','autoF'],['baSpeak','speak'],['baEvents','events'],['baLoot','loot']].forEach(function(a){var e=$(a[0]);e.checked=!!CFG[a[1]];e.addEventListener('change',function(){CFG[a[1]]=e.checked;applyCfg();save();hud(true);});});
   $('baResetGear').addEventListener('click',function(){if(!confirm(T('ba_resetq')))return;E.gear={};E.cls={};E.f.forEach(function(f){E.applySheet(f);});save();P=E.pub();A.publish(P);hud(true);});
   BT.xtra($('baXtra'),'lamma-baxtra');
   if(CFG.join>0)joinEnd=Date.now()+CFG.join*1000;
@@ -382,18 +488,18 @@ A.onDemo(function(){var nm=A.BOTS.slice(0,14);nm.forEach(function(b,i){A.later(2
 
 var PANEL=BT.panel({key:'arena',root:$('gs'),stage:$('stage'),onPause:pauseT,isPaused:function(){return !!E.paused},canPause:function(){return E.inRaid()},onNext:function(){var b=$('baNext');if(b&&!b.disabled)b.click();},
   speak:{get:function(){return !!CFG.speak},set:function(v){CFG.speak=v;var e=$('baSpeak');if(e)e.checked=v;applyCfg();save();hud(true);}},
-  cmds:[['!دخول','!join','انضم','join'],['!قفز','!jump','تطوّع','volunteer'],['!اختبي','!hide','لا تختارني','don\u2019t pick me'],['!الغي','!stop','الغي قفزتك','take back !jump'],['!صوت اسم','!vote name','صوّت لحدا','vote someone'],['!معلومات','!getinfo','شوف القدرات','see abilities'],['!قوة','!power','بمبارزتك','in your duel'],['!ركز','!focus','اختار العدو','pick the enemy'],['!صنف','!class','غيّر صنفك','change class']],
-  more:['!معلومات زومبي = بطاقة الوحش. الكلام العادي من المرشحين بيطلع فوق راسهم.','!getinfo zombie = the enemy card. Candidates\u2019 normal chat shows over their heads.'],
-  short:['الستريمر بيختار مين يقاتل. كل مبارزة 1 ضد 1، والغرفة الأخيرة فيها الزعيم.','The streamer picks who fights. Every duel is 1v1; the last room holds the boss.'],
-  how:[['الشات بيدخل بـ !دخول ويوقف مرشح بالساحة. اللي بدو يقاتل بيكتب !قفز.','كبسة على مرشح بتطلعو للفريق، وكبسة على حدا من الفريق بتبعتو يبارز بنص الجسر: 1 ضد 1، ضربة بضربة.','كل لاعب إلو صنف وقدرات وعدّة (درع وسلاح وسحر) بتكبر مع المستوى وبالغنايم بعد كل غرفة. كل وحش ضعيف قدام نوع ضرب ومقاوم لنوع تاني.','الغرفة الأخيرة فيها زعيم بمرحلة تانية بنص صحتو. إذا ربحتو بيطلع مستوى الخريطة.'],
-       ['Chat joins with !join and stands on the field as a candidate. Whoever wants to fight types !jump.','Click a candidate to add them to the squad; click a squad member to send them to duel in the middle of the bridge: 1v1, blow for blow.','Every player has a class, abilities and gear (armour, weapon, enchants) that grow with the level and with loot after each room. Every mob is weak to one damage type and resists another.','The last room holds a boss with a second phase at half HP. Win and the map level goes up.']],
-  ctrl:[['!ابدأ','!start','بلّش المعركة (مود)','start the battle (mod)'],['!وقف','!pause','وقف / كمّل (مود)','pause / resume (mod)'],['!التالي','!next','المقاتل التالي (مود)','next fighter (mod)'],['!زعيم','!boss','روح للزعيم (مود)','go to the boss (mod)'],['كبسة','click','على مرشح: للفريق · على الفريق: يبارز','candidate: to the squad · squad: duels'],['Space','Space','وقف / كمّل','pause / resume'],['N','N','المقاتل التالي','next fighter'],['F','F','شاشة كاملة','fullscreen']],
+  cmds:[['!دخول','!join','انضم','join','اكتب !دخول لتنضمّ إلى قائمة الانتظار وتظهر مرشّحًا حول الساحة. لا تقاتل حتى يضعك الستريمر في الفريق.','Type !join to enter the waiting list and appear as a candidate around the field. You only fight once the streamer puts you in the squad.'],['!قفز','!jump','تطوّع للقتال','volunteer','تطوّع للقتال: يقفز شخصك فعلًا في الساحة ليراه الستريمر، ويظهر اسمك في قائمة المتطوعين. الستريمر يختار من بينهم.','Volunteer to fight: your character really jumps on the field so the streamer sees you, and your name shows in the volunteers list. The streamer picks from them.'],['!اختبي','!hide','لا تخترني','don’t pick me','اطلب ألّا يختارك الستريمر الآن: يصبح شخصك شبه شفاف ويبقى في الانتظار.','Ask the streamer not to pick you for now: your character turns see-through and stays waiting.'],['!الغي','!stop','تراجع عن القفز','take back !jump','تراجع عن !قفز إذا غيّرت رأيك قبل أن يختارك الستريمر.','Take back your !jump if you change your mind before the streamer picks you.'],['!صوت اسم','!vote name','صوّت لأحد','vote someone','صوّت لمرشّح ليدخل الفريق، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه، ويرى الستريمر الأكثر تصويتًا.','Vote for a candidate to join the squad, e.g. !vote Mohammad. The vote count ★ shows over their head and the streamer sees who has the most.'],['!معلومات','!getinfo','بطاقتك','your card','يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. وتستطيع كتابة اسم وحش أو زعيم، مثل !معلومات زومبي، لترى بطاقته ونقاط ضعفه.','Shows your card: class, level, HP, attack, defence, abilities and gear. Add a mob or boss name, e.g. !getinfo zombie, to see its card and weaknesses.'],['!قوة','!power','أطلق قوتك','fire your power','أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.','Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.'],['!سكن اسم','!skin name','سكن ماينكرافت','your MC skin','اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر في الإعدادات، وإلا تبقى شخصيتك ستيف.','Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve.']],
+  more:['!معلومات زومبي = بطاقة الوحش. الكلام العادي من المرشحين يظهر فوق رأسهم.','!getinfo zombie = the enemy card. Candidates\u2019 normal chat shows over their heads.'],
+  short:['الستريمر يختار من يقاتل. كل مبارزة 1 ضد 1، والموجة الأخيرة فيها الزعيم.','The streamer picks who fights. Every duel is 1v1; the last wave holds the boss.'],
+  how:[['الشات يدخل بـ !دخول ويقف مرشحًا في الساحة. من يريد القتال يكتب !قفز.','اضغط على مرشح لتضعه في الفريق، واضغط على أحد أفراد الفريق لترسله إلى المبارزة في منتصف الجسر: 1 ضد 1، ضربة بضربة.','لكل لاعب صنف وقدرات وعدّة (درع وسلاح وسحر) تكبر مع المستوى ومع الغنائم بعد كل موجة. كل وحش ضعيف أمام نوع من الضرب ومقاوم لنوع آخر.','الموجة الأخيرة فيها زعيم بمرحلة ثانية عند نصف صحته. إذا ربحتموه يرتفع مستوى الخريطة.'],
+       ['Chat joins with !join and stands on the field as a candidate. Whoever wants to fight types !jump.','Click a candidate to add them to the squad; click a squad member to send them to duel in the middle of the bridge: 1v1, blow for blow.','Every player has a class, abilities and gear (armour, weapon, enchants) that grow with the level and with loot after each wave. Every mob is weak to one damage type and resists another.','The last wave holds a boss with a second phase at half HP. Win and the map level goes up.']],
+  ctrl:[['!ابدأ','!start','ابدأ المعركة (مشرف)','start the battle (mod)'],['!وقف','!pause','إيقاف / استئناف (مود)','pause / resume (mod)'],['!التالي','!next','المقاتل التالي (مشرف)','next fighter (mod)'],['!زعيم','!boss','اذهب إلى الزعيم (مود)','go to the boss (mod)'],['كبسة','click','على مرشح: للفريق · على الفريق: يبارز','candidate: to the squad · squad: duels'],['Space','Space','إيقاف / استئناف','pause / resume'],['N','N','المقاتل التالي','next fighter'],['F','F','شاشة كاملة','fullscreen']],
   def:{x:.8,y:2,w:20.5,h:96,s:1}});
 /* ---------- layout editor ---------- */
 BT.logo($('btLogo'));
 window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:'battle-arena',items:[
   {id:'arena',z:1,code:'a',kind:'box',ar:'الساحة',en:'Arena',def:{x:22,y:0,w:78,h:100,s:1},minW:30,minH:30},
-  {id:'waves',z:4,code:'w',kind:'box',ar:'الغرف',en:'Rooms',def:{x:35,y:1.8,w:52,h:10,s:1},minW:14,minH:5},
+  {id:'waves',z:4,code:'w',kind:'box',ar:'الموجات',en:'Waves',def:{x:35,y:1.8,w:52,h:10,s:1},minW:14,minH:5},
   {id:'boss',z:4,code:'b',kind:'box',ar:'صحة الزعيم',en:'Boss HP',def:{x:41,y:12.8,w:40,h:7.5,s:1},minW:14,minH:5},
   {id:'squad',z:3,code:'s',kind:'box',ar:'الفريق',en:'Squad',def:{x:23,y:2.5,w:19,h:60,s:1,v:false},minW:10,minH:18},
   {id:'feed',z:3,code:'f',kind:'box',ar:'القتلات',en:'Kill feed',def:{x:80,y:80,w:18.5,h:17,s:1},minW:10,minH:8},

@@ -58,15 +58,15 @@ function watchCmds(){
 /* ---------- language ---------- */
 var T={ar:{},en:{}};
 var BASE={
- ar:{brand_sub:'كل ألعاب الشات بمكان واحد',skip:'تخطَّ إلى المحتوى',demo:'تجربة',sound:'صوت',lang_btn:'EN',all_games:'كل الألعاب',all_wheels:'كل العجلات',all_battle:'كل المعركة',
-  conn_connecting:'عم يتصل…',conn_connected:'متصل',conn_error:'انقطع، عم يعيد…',conn_demo:'شات تجريبي',conn_bad:'اسم قناة غلط',
-  chat_feed:'الشات',feed_empty:'رسائل الشات بتطلع هون',lb:'الترتيب',lb_empty:'لسا ما حدا ربح',reset:'تصفير',reset_q:'أكيد بدك تصفّر الترتيب لهالقناة؟',pts:'نقطة',
-  obs_title:'رابط OBS',obs_help:'حط هالرابط كـ Browser Source بـ OBS (1920×1080). الرابط ما بيعرض أي سر: لا الكلمة ولا المفتاح.',copy:'نسخ',copied:'انتسخ ✓',
-  obs_dock:'خلي هالصفحة نفسها Custom Browser Dock جوا OBS (Docks ← Custom Browser Docks) لحتى الأوفرلي يمشي معك خطوة بخطوة.',
-  cmds:'أوامر الشات',cmds_mod:'للستريمر والمودز',cmds_all:'للكل',
-  waiting_ctrl:'بانتظار لوحة التحكم',footer:'للتسلية بس — بلا مراهنات وبلا فلوس حقيقية. الشات بينقرأ قراءة بس، بدون أي تسجيل دخول.',
-  winner:'الفائز',start:'ابدأ',stop:'وقّف',next:'التالي',skip_btn:'تخطّي',seconds:'ث',players:'لاعب',round:'جولة',timeup:'خلص الوقت!',
-  live:'لايف',offline:'أوفلاين'},
+ ar:{brand_sub:'كل ألعاب الشات في مكان واحد',skip:'تخطَّ إلى المحتوى',demo:'تجربة',sound:'صوت',lang_btn:'EN',all_games:'كل الألعاب',all_wheels:'كل العجلات',all_battle:'كل المعركة',
+  conn_connecting:'يتصل…',conn_connected:'متصل',conn_error:'انقطع، يعيد المحاولة…',conn_demo:'شات تجريبي',conn_bad:'اسم قناة خاطئ',
+  chat_feed:'الشات',feed_empty:'رسائل الشات تظهر هنا',lb:'الترتيب',lb_empty:'لم يفز أحد بعد',reset:'تصفير',reset_q:'هل تريد حقًا تصفير الترتيب لهذه القناة؟',pts:'نقطة',
+  obs_title:'رابط OBS',obs_help:'ضع هذا الرابط كـ Browser Source في OBS (1920×1080). الرابط لا يعرض أي سر: لا الكلمة ولا المفتاح.',copy:'نسخ',copied:'تم النسخ ✓',
+  obs_dock:'اجعل هذه الصفحة نفسها Custom Browser Dock داخل OBS (Docks ← Custom Browser Docks) حتى يعمل الأوفرلي معك خطوة بخطوة.',
+  cmds:'أوامر الشات',cmds_mod:'للستريمر والمشرفين',cmds_all:'للجميع',
+  waiting_ctrl:'بانتظار لوحة التحكم',footer:'للتسلية فقط — بلا مراهنات وبلا أموال حقيقية. يُقرأ الشات قراءةً فقط، دون أي تسجيل دخول.',
+  winner:'الفائز',start:'ابدأ',stop:'أوقف',next:'التالي',skip_btn:'تخطّي',seconds:'ث',players:'لاعب',round:'جولة',timeup:'انتهى الوقت!',
+  live:'مباشر',offline:'أوفلاين'},
  en:{brand_sub:'All your chat games in one place',skip:'Skip to content',demo:'Demo',sound:'Sound',lang_btn:'ع',all_games:'All games',all_wheels:'All wheels',all_battle:'All battle modes',
   conn_connecting:'Connecting…',conn_connected:'Connected',conn_error:'Disconnected, retrying…',conn_demo:'Demo chat',conn_bad:'Invalid channel',
   chat_feed:'Chat',feed_empty:'Chat messages show up here',lb:'Leaderboard',lb_empty:'No winners yet',reset:'Reset',reset_q:'Reset the leaderboard for this channel?',pts:'pts',
@@ -220,22 +220,34 @@ function allowSolo(){soloOk=true;}
 function runsEngine(){return mode==='control'||mode==='solo'}
 
 /* ---------- sounds (WebAudio, no files) ---------- */
-var AC=null,gest=OBS,soundOn=OBS?Q.get('sound')==='1':LS.get('lamma-sound','1')==='1';
-if(!OBS)['pointerdown','keydown','touchstart'].forEach(function(ev){window.addEventListener(ev,function(){gest=true;if(AC&&AC.state==='suspended'){try{AC.resume()}catch(e){}}},{passive:true})});
-function tone(f,d,type,vol,when){
-  if(!soundOn||!gest)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();var o=AC.createOscillator(),g=AC.createGain();o.type=type||'square';o.frequency.value=f;
-  var t0=AC.currentTime+(when||0);g.gain.setValueAtTime(vol||.05,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.02);}catch(e){}
-}
+var AC=null,soundOn=OBS?Q.get('sound')==='1':LS.get('lamma-sound','1')==='1';
+/* Nov 4 (Mohammad #14): fuller sounds — a master bus with a compressor (no clipping when hits stack), noise for hits and
+   explosions, a resume of the audio engine after the browser suspends it (that was "sounds sometimes disappear"), and a short
+   per-sound spacing so a burst of events doesn't turn into one loud click. */
+var BUS=null,NOISE=null,lastSfx={};
+function ac(){if(!soundOn)return null;try{if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();var comp=AC.createDynamicsCompressor();comp.threshold.value=-18;comp.knee.value=12;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;
+    BUS=AC.createGain();BUS.gain.value=.9;BUS.connect(comp);comp.connect(AC.destination);
+    var len=AC.sampleRate*1,buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);for(var i=0;i<len;i++)d[i]=Math.random()*2-1;NOISE=buf;}
+  if(AC.state==='suspended'&&AC.resume)AC.resume();return AC;}catch(e){return null;}}
+['pointerdown','keydown'].forEach(function(ev){document.addEventListener(ev,function(){if(AC&&AC.state==='suspended')AC.resume();},true);});
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&AC&&AC.state==='suspended')AC.resume();});
+function tone(f,d,type,vol,when,f2){var a=ac();if(!a)return;try{var o=a.createOscillator(),g=a.createGain();o.type=type||'square';var t0=a.currentTime+(when||0);o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(Math.max(20,f2),t0+d);
+  g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol||.05,t0+.008);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(BUS);o.start(t0);o.stop(t0+d+.03);}catch(e){}}
+function noise(d,vol,when,lp,hp){var a=ac();if(!a||!NOISE)return;try{var s=a.createBufferSource();s.buffer=NOISE;var f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=lp||1800;var g=a.createGain();var t0=a.currentTime+(when||0);
+  g.gain.setValueAtTime(vol||.1,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);var last=f;if(hp){var h=a.createBiquadFilter();h.type='highpass';h.frequency.value=hp;f.connect(h);last=h;}s.connect(f);last.connect(g);g.connect(BUS);s.start(t0,Math.random()*.5);s.stop(t0+d+.05);}catch(e){}}
 var SFX={
- tick:function(){tone(1200,.04,'square',.03)},
- pop:function(){tone(660,.08,'triangle',.06)},
- start:function(){tone(523,.12,'square',.05);tone(784,.16,'square',.05,.12)},
- win:function(){[523,659,784,1046].forEach(function(f,i){tone(f,.18,'square',.05,i*.11)})},
- boom:function(){tone(90,.45,'sawtooth',.09);tone(60,.6,'square',.06,.05)},
- bad:function(){tone(220,.2,'sawtooth',.05)},
- go:function(){tone(880,.1,'square',.05)}
+ tick:function(){tone(1500,.035,'square',.025)},
+ pop:function(){noise(.07,.16,0,2600,400);tone(220,.09,'triangle',.09,0,110)},
+ start:function(){tone(523,.12,'square',.05);tone(659,.12,'square',.05,.1);tone(784,.2,'square',.055,.2)},
+ win:function(){[523,659,784,1046].forEach(function(f,i){tone(f,.22,'square',.05,i*.12);tone(f/2,.22,'triangle',.05,i*.12)});tone(1318,.5,'triangle',.05,.5)},
+ boom:function(){noise(.7,.32,0,900);tone(110,.55,'sine',.22,0,38);noise(.25,.12,.02,4000,1200)},
+ bad:function(){tone(330,.16,'sawtooth',.05,0,220);tone(196,.32,'sawtooth',.05,.15,110)},
+ go:function(){noise(.18,.08,0,3000,700);tone(660,.1,'square',.04,.02,990)},
+ crit:function(){noise(.09,.2,0,5000,900);tone(1200,.12,'square',.05,0,600);tone(160,.16,'triangle',.12,0,70)},
+ heal:function(){[784,988,1175].forEach(function(f,i){tone(f,.14,'sine',.05,i*.07)})},
+ power:function(){tone(300,.35,'sawtooth',.05,0,1200);noise(.3,.08,.05,6000,2000)}
 };
-function sfx(n){if(SFX[n])SFX[n]()}
+function sfx(n){var now=Date.now();if(lastSfx[n]&&now-lastSfx[n]<45)return;lastSfx[n]=now;if(SFX[n])SFX[n]()}
 function setSound(on){soundOn=!!on;if(!OBS)LS.set('lamma-sound',on?'1':'0');var b=$('soundBtn');if(b){b.setAttribute('aria-pressed',String(soundOn));b.textContent=soundOn?'🔊':'🔇';}}
 
 /* ---------- confetti ---------- */

@@ -120,10 +120,10 @@ api.init=function(cfg){
   function divider(it,a,b){
     var d=document.createElement('div');d.className='lay-div';d.setAttribute('role','separator');d.setAttribute('aria-orientation','horizontal');
     if(OBS)return d;
-    d.title=t('اسحب لفوق أو لتحت: قسم بيكبر والتاني بيصغر','Drag up or down: one section grows, the other shrinks');
+    d.title=t('اسحب للأعلى أو للأسفل: قسم يكبر والآخر يصغر','Drag up or down: one section grows, the other shrinks');
     d.appendChild(document.createElement('i'));
     d.addEventListener('pointerdown',function(e){
-      if(e.button>0)return;e.preventDefault();e.stopPropagation();
+      if(e.button>0||!editing)return; /* Nov 4: sections resize only in «تعديل الشكل» */e.preventDefault();e.stopPropagation();
       var p=lay[it.id],qa=p.sec[a.id],qb=p.sec[b.id],ha=a.node.getBoundingClientRect().height,hb=b.node.getBoundingClientRect().height,tot=qa.f+qb.f,sy=e.clientY,pid=e.pointerId;
       var mn=Math.min(26,(ha+hb)/3);try{d.setPointerCapture(pid)}catch(_){}d.classList.add('on');
       function mv(ev){if(ev.pointerId!==pid)return;var na=clamp(ha+(ev.clientY-sy),mn,ha+hb-mn),fa=Math.round(tot*na/Math.max(1,ha+hb)*10)/10;
@@ -250,9 +250,9 @@ api.init=function(cfg){
 
   function renderBar(){
     items.forEach(function(it){var tg=it.node&&it.node.querySelector(':scope>.lay-h .lay-tag');if(tg)tg.textContent=label(it);var x=it.node&&it.node.querySelector(':scope>.lay-h .lay-x');if(x)x.title=t('شيل','Hide');
-      if(it.node)it.node.querySelectorAll(':scope>.lay-h .lay-edge').forEach(function(g){g.title=t('اسحب لتطوّل أو تعرّض (الكلام بيضل نفس الحجم)','Drag to make it taller / wider (text keeps its size)')});
+      if(it.node)it.node.querySelectorAll(':scope>.lay-h .lay-edge').forEach(function(g){g.title=t('اسحب لتطيل أو توسّع (الكلام يبقى بنفس الحجم)','Drag to make it taller / wider (text keeps its size)')});
       (it.sections||[]).forEach(function(sc){var sx=sc.node&&sc.node.querySelector(':scope>.lay-sx');if(sx){sx.title=t('شيل','Hide')+' '+secLabel(sc);sx.setAttribute('aria-label',sx.title)}if(sc.node)sc.node.setAttribute('data-sec-name',secLabel(sc));});
-      if(it.node)it.node.querySelectorAll('.lay-div').forEach(function(d){if(d.firstChild)d.title=t('اسحب لفوق أو لتحت: قسم بيكبر والتاني بيصغر','Drag up or down: one section grows, the other shrinks')});});
+      if(it.node)it.node.querySelectorAll('.lay-div').forEach(function(d){if(d.firstChild)d.title=t('اسحب للأعلى أو للأسفل: قسم يكبر والآخر يصغر','Drag up or down: one section grows, the other shrinks')});});
     if(!bar)return;while(bar.firstChild)bar.removeChild(bar.firstChild);
     var row=document.createElement('div');row.className='lay-row';
     var seg=document.createElement('div');seg.className='lay-seg';seg.setAttribute('role','radiogroup');seg.setAttribute('aria-label',t('الخلفية','Background'));
@@ -264,9 +264,9 @@ api.init=function(cfg){
       var r2=document.createElement('div');r2.className='lay-row lay-items';
       items.forEach(function(it){var on=lay[it.id].v!==0;var b=mkBtn('lay-chip'+(on?' on':''),(on?'✓ ':'+ ')+label(it),function(){setVis(it.id,!on)},on?t('شيل','Hide')+' '+label(it):t('رجّع','Add back')+' '+label(it));b.setAttribute('aria-pressed',String(on));r2.appendChild(b);
         (it.sections||[]).forEach(function(sc){if(!sc.node)return;var so=lay[it.id].sec[sc.id].v!==0;var sb=mkBtn('lay-chip lay-chip-sec'+(so?' on':''),(so?'✓ ':'+ ')+secLabel(sc),function(){setSecVis(it,sc.id,!so)},so?t('شيل','Hide')+' '+secLabel(sc):t('رجّع','Add back')+' '+secLabel(sc));sb.setAttribute('aria-pressed',String(so));r2.appendChild(sb)});});
-      r2.appendChild(mkBtn('lay-chip lay-reset','↺ '+t('رجّع الأصلي','Reset'),reset));
+      r2.appendChild(mkBtn('lay-chip lay-reset','↺ '+t('أعِد الأصلي','Reset'),reset));
       bar.appendChild(r2);
-      var hp=document.createElement('p');hp.className='lay-help';hp.textContent=t('اسحب أي شي لتحرّكو: بيلزق بنص العجلة وبالخطوط. أطراف البوكس (فوق، تحت، يمين، يسار) بتطوّلو أو بتعرّضو والكلام بيضل نفس الحجم، والزوايا بتكبّر كلو. الخطوط بين أقسام القائمة بتنسحب لفوق ولتحت، و× عالقسم بتشيلو والباقي بيكبر لحالو. Alt = بلا لزق. بعد ما تخلص انسخ رابط OBS من جديد.','Drag anything to move it: it snaps to the wheel centre and the guide lines. A box\'s edges (top, bottom, left, right) make it taller or wider and the text keeps its size; the corners resize all of it. Drag the lines between the list sections up or down; × on a section hides it and the rest grow to fill. Hold Alt to place freely. When you are done, copy the OBS link again.');bar.appendChild(hp);
+      var hp=document.createElement('p');hp.className='lay-help';hp.textContent=t('اسحب أي شيء لتحريكه: سيلتصق بمنتصف العجلة وبالخطوط. أطراف المربع (أعلى، أسفل، يمين، يسار) تطيله أو توسّعه والكلام يبقى بنفس الحجم، والزوايا تكبّر كل شيء. الخطوط بين أقسام القائمة تُسحب للأعلى وللأسفل، و× على القسم يزيله والباقي يكبر تلقائيًا. Alt = بلا لصق. بعد أن تنتهي انسخ رابط OBS من جديد.','Drag anything to move it: it snaps to the wheel centre and the guide lines. A box\'s edges (top, bottom, left, right) make it taller or wider and the text keeps its size; the corners resize all of it. Drag the lines between the list sections up or down; × on a section hides it and the rest grow to fill. Hold Alt to place freely. When you are done, copy the OBS link again.');bar.appendChild(hp);
     }
   }
   if(!OBS){
@@ -282,7 +282,7 @@ api.init=function(cfg){
       [['fs-in','M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'],['fs-out','M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5']].forEach(function(s){var NS='http://www.w3.org/2000/svg',sv=document.createElementNS(NS,'svg'),pa=document.createElementNS(NS,'path');
         sv.setAttribute('class',s[0]);sv.setAttribute('viewBox','0 0 24 24');sv.setAttribute('aria-hidden','true');pa.setAttribute('d',s[1]);sv.appendChild(pa);fb.appendChild(sv);});
       if(!can)fb.hidden=true;
-      var fsSync=function(){var on=fsEl()===wrap;wrap.classList.toggle('lay-fson',on);fb.classList.toggle('on',on);var tt=on?t('اطلع من الشاشة الكاملة','Exit fullscreen'):t('شاشة كاملة','Fullscreen');fb.title=tt;fb.setAttribute('aria-label',tt);fb.setAttribute('aria-pressed',String(on));};
+      var fsSync=function(){var on=fsEl()===wrap;wrap.classList.toggle('lay-fson',on);fb.classList.toggle('on',on);var tt=on?t('اخرج من الشاشة الكاملة','Exit fullscreen'):t('شاشة كاملة','Fullscreen');fb.title=tt;fb.setAttribute('aria-label',tt);fb.setAttribute('aria-pressed',String(on));};
       document.addEventListener('fullscreenchange',fsSync);document.addEventListener('webkitfullscreenchange',fsSync);
       fb.classList.add('ctrl-only');stage.appendChild(fb);fsSync();if(A&&A.onLang)A.onLang(fsSync);
       h0.fullscreen=fsSync;
