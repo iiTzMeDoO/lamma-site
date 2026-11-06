@@ -186,12 +186,12 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
   ctx.textAlign='center';ctx.textBaseline='bottom';
   list.forEach(function(e){var v=e.V;if(e.F&&e.dead){if(v.dead>1.2){var gp=iso.p(v.x,v.y,.6);ctx.globalAlpha=.6;label(gp[0],gp[1],e.F[2],'#bbb',fs(10),700);ctx.globalAlpha=1;}return;}
     var p=iso.p(e.x,e.y,v.h+(e.kind==='blaze'?.6:0)),bw=Math.max(26,iso.tw*(e.M&&e.M[7]?1.6:.95)),y=p[1]-4;
-    if(e.F){var f=e.F;hpBar(p[0],y,bw,f[6]/f[7],f[6]/f[7]>.35?'#5cd65c':'#ffb347');var nmY=y-3;ctx.direction='auto';label(p[0],nmY,f[2],MC.readableColor(f[3]||'#cfd3ff'),fs(12));
+    if(e.F){var f=e.F;hpBar(p[0],y,bw,f[6]/f[7],f[6]/f[7]>.35?'#5cd65c':'#ffb347');var nmY=y-3;ctx.direction='ltr';label(p[0],nmY,f[2],MC.readableColor(f[3]||'#cfd3ff'),fs(12));
       var lvx=p[0]-bw/2-2;ctx.textAlign='right';if(W>=600)label(lvx,y+Math.max(4,iso.tw*.1)+1,'LV'+f[8],'#ffd23d',fs(8),800);ctx.textAlign='center';
       var tag='';if(f[13])tag+='⬆';if(f[14])tag+=(tag?' ':'')+'★'+f[14];
       if(tag){var bob=Math.abs(Math.sin(t*5+f[0]))*iso.tw*.08;label(p[0],nmY-fs(12)-bob,tag,'#ffd23d',fs(13),900);}
       if(f[0]===duelF&&!f[16]&&ph==='duel'){ctx.font=fs(12)+'px system-ui';ctx.fillText(PW_IC[BT.POWERS[f[9]]]||'⚡',p[0]+bw/2+fs(9),y+6);}}
-    else if(e.M){var m=e.M;hpBar(p[0],y,bw,m[4]/m[5],'#e04a4a');ctx.direction='auto';var nm=mobLabel(m[7]?m[1].slice(5):m[1])+(m[9]?' 👑':'')+' Lv.'+m[6];label(p[0],y-3,nm,m[7]?'#ffcf5a':'#ffdede',fs(m[7]?14:11));}});
+    else if(e.M){var m=e.M;hpBar(p[0],y,bw,m[4]/m[5],'#e04a4a');ctx.direction='ltr';var nm=mobLabel(m[7]?m[1].slice(5):m[1])+(m[9]?' 👑':'')+' Lv.'+m[6];label(p[0],y-3,nm,m[7]?'#ffcf5a':'#ffdede',fs(m[7]?14:11));}});
   ctx.direction='ltr';
   /* statuses over heads (burn / poison / wither / stunned) and the boss's second phase */
   list.forEach(function(e){var v=e.V;if(e.F&&e.dead)return;var st=e.F?e.F[22]:e.M?e.M[15]:'',stun=e.F?e.F[23]:0;var p=iso.p(e.x,e.y,v.h+(e.kind==='blaze'?.6:0));
@@ -199,7 +199,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
     if(e.M&&e.M[7]&&e.M[13]){var gp=iso.p(e.x,e.y,1.2*(e.scale||1));MC.glow(ctx,gp[0],gp[1],iso.tw*2.4*(e.scale||1),'rgba(255,40,40,A)',.18+Math.sin(t*6)*.08);}});
   /* "candidates can speak": their last chat line in a bubble over their head for 4 s */
   (P.say||[]).forEach(function(s){var e=null;list.forEach(function(x){if(x.F&&x.F[1]===s[0]&&!x.dead)e=x;});if(!e)return;var v=e.V,p=iso.p(e.x,e.y,v.h),size=fs(12);
-    ctx.font='700 '+size+'px Cairo,system-ui,sans-serif';ctx.direction='auto';var tw=Math.min(W*.3,ctx.measureText(s[1]).width)+size*1.1,bh=size*1.7,bx=p[0]-tw/2,by=p[1]-size*3.4-bh;
+    ctx.font='700 '+size+'px Cairo,system-ui,sans-serif';ctx.direction='ltr';var tw=Math.min(W*.3,ctx.measureText(s[1]).width)+size*1.1,bh=size*1.7,bx=p[0]-tw/2,by=p[1]-size*3.4-bh;
     ctx.fillStyle='rgba(255,255,255,.95)';ctx.strokeStyle='rgba(20,16,30,.9)';ctx.lineWidth=2;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx,by,tw,bh,size*.5);else ctx.rect(bx,by,tw,bh);ctx.fill();ctx.stroke();
     ctx.beginPath();ctx.moveTo(p[0]-size*.4,by+bh-1);ctx.lineTo(p[0],by+bh+size*.6);ctx.lineTo(p[0]+size*.4,by+bh-1);ctx.closePath();ctx.fill();
     ctx.fillStyle='#1a1424';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s[1],p[0],by+bh/2,W*.3);ctx.textBaseline='bottom';ctx.direction='ltr';});

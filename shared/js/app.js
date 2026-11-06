@@ -220,9 +220,10 @@ function allowSolo(){soloOk=true;}
 function runsEngine(){return mode==='control'||mode==='solo'}
 
 /* ---------- sounds (WebAudio, no files) ---------- */
-var AC=null,soundOn=OBS?Q.get('sound')==='1':LS.get('lamma-sound','1')==='1';
+var AC=null,gest=OBS,soundOn=OBS?Q.get('sound')==='1':LS.get('lamma-sound','1')==='1';
+if(!OBS)['pointerdown','keydown','touchstart'].forEach(function(ev){window.addEventListener(ev,function(){gest=true;if(AC&&AC.state==='suspended'){try{AC.resume()}catch(e){}}},{passive:true})});
 function tone(f,d,type,vol,when){
-  if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain();o.type=type||'square';o.frequency.value=f;
+  if(!soundOn||!gest)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();var o=AC.createOscillator(),g=AC.createGain();o.type=type||'square';o.frequency.value=f;
   var t0=AC.currentTime+(when||0);g.gain.setValueAtTime(vol||.05,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.02);}catch(e){}
 }
 var SFX={

@@ -158,7 +158,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
       anim:{walk:v.mv?v.walk:0,atk:v.atkT&&now-v.atkT<320?(now-v.atkT)/320:0,flash:v.hitT&&now-v.hitT<180?.7:0},shadow:.3},t);ctx.globalAlpha=1;});
   for(var tq=0;tq<2;tq++){torch(-.5,-.3+tq*0,0);torch(AC+.5,-.3,0);}
   /* labels: fighters get name + HP bar (+ crown and kills for the warrior); the queue gets small names, the next one "الجاي" */
-  ctx.textAlign='center';ctx.textBaseline='bottom';ctx.direction='auto';var nf=fs(8);var boxes=[];
+  ctx.textAlign='center';ctx.textBaseline='bottom';ctx.direction='ltr';var nf=fs(8);var boxes=[];
   list.slice().reverse().forEach(function(o){var p=o.p,v=o.v;if(!p||o.gone)return;var fighter=p[0]===P.ch||p[0]===P.fo;
     if(fighter){var hp=iso.p(v.x,v.y,v.z+2.25);var bw=iso.tw*1.9,bh=Math.max(5,iso.tw*.16),x0=hp[0]-bw/2,y0=hp[1]-bh;var fr=Math.max(0,Math.min(1,p[3]/Math.max(1,p[4])));
       ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(x0-2,y0-2,bw+4,bh+4);ctx.fillStyle=fr>.5?'#4fdc5a':fr>.25?'#ffd23d':'#ff4a3a';ctx.fillRect(x0,y0,bw*fr,bh);

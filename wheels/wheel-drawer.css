@@ -90,3 +90,5 @@ html:not(.obs) body.g-wheel-pick .w2-set .ssel{min-width:10.5rem;max-width:12.5r
 html:not(.obs) body.g-wheel-pick .w2-set .sinp{width:10.5rem;height:32px}
 html:not(.obs) body.g-wheel-pick .w2-set .tmr-row input{height:32px;min-height:32px}
 html:not(.obs) body.g-wheel-pick .w2-set .tsb{height:30px}
+
+.fs-dock [hidden]{display:none!important}

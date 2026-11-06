@@ -54,7 +54,7 @@
   /* الواجهة بتختفي بعد 3 ثواني بلا حركة وبترجع بأي حركة أو لمسة */
   var idleT=null;
   function arm(){clearTimeout(idleT);idleT=setTimeout(function(){
-    if(b.classList.contains('drawer-open')||document.querySelector('header.top:hover,.fs-dock:hover,#side:hover,header.top:focus-within,.fs-dock:focus-within')){arm();return;}
+    if(b.classList.contains('drawer-open')){arm();return;}
     b.classList.add('ui-idle');},3000);}
   function wake(){b.classList.remove('ui-idle');arm();}
   ['mousemove','mousedown','touchstart','keydown','wheel'].forEach(function(ev){document.addEventListener(ev,wake,{passive:true});});

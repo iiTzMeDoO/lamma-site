@@ -152,7 +152,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
   list.forEach(function(o){var p=o.p,v=o.v,z=v.fall?v.fall.z:0;if(v.fall)ctx.globalAlpha=Math.max(0,1-v.fall.t/2.2);
     MC.drawEntity(iso,{kind:'player',x:v.x,y:v.y,z:z,scale:sc,face:v.mv?v.dir:0,name:p[1],color:p[2],look:MC.look(p[0],p[2]),avatar:avatarImg(p[0]),anim:{walk:v.mv?v.walk:0,flash:v.fall?.4:0},shadow:.28},t);ctx.globalAlpha=1;});
   /* names: small, never on top of each other — a name that would overlap one already drawn is skipped and counted as "+N" for its side */
-  ctx.textAlign='center';ctx.textBaseline='bottom';ctx.direction='auto';var boxes=[],hidden={},nf=fs(8.5);ctx.font='800 '+nf+'px Cairo,system-ui,sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='bottom';ctx.direction='ltr';var boxes=[],hidden={},nf=fs(8.5);ctx.font='800 '+nf+'px Cairo,system-ui,sans-serif';
   list.slice().reverse().forEach(function(o){var p=o.p,v=o.v;if(v.fall)return;var hp=iso.p(v.x,v.y,2.05*sc+.05);var just=t-v.zt<1.6&&v.zt>0;
     if(just)label(hp[0],hp[1]-(CFG.names?nf+2:0),'!','#ffd23d',fs(13),900);if(!CFG.names)return;
     var w=Math.min(ctx.measureText(p[1]).width,nf*9)+4,h=nf+2,r=[hp[0]-w/2,hp[1]-h,w,h];var hit=boxes.some(function(b){return r[0]<b[0]+b[2]&&b[0]<r[0]+r[2]&&r[1]<b[1]+b[3]&&b[1]<r[1]+r[3];});
