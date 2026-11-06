@@ -1,105 +1,133 @@
 {
- "cleanUrls": false,
- "redirects": [
-  {
-   "source": "/wheels.html",
-   "destination": "/wheels/",
-   "permanent": true
-  },
-  {
-   "source": "/wheel-pick.html",
-   "destination": "/wheels/wheel-pick.html",
-   "permanent": true
-  },
-  {
-   "source": "/wheel-classic.html",
-   "destination": "/wheels/wheel-classic.html",
-   "permanent": true
-  },
-  {
-   "source": "/wheel.html",
-   "destination": "/wheels/wheel-pick.html",
-   "permanent": true
-  },
-  {
-   "source": "/wheel-shield.html",
-   "destination": "/wheels/wheel-pick.html",
-   "permanent": true
-  },
-  {
-   "source": "/battle.html",
-   "destination": "/battle/",
-   "permanent": true
-  },
-  {
-   "source": "/battle-arena.html",
-   "destination": "/battle/battle-arena.html",
-   "permanent": true
-  },
-  {
-   "source": "/battle-colors.html",
-   "destination": "/battle/battle-colors.html",
-   "permanent": true
-  },
-  {
-   "source": "/tnt.html",
-   "destination": "/battle/tnt.html",
-   "permanent": true
-  },
-  {
-   "source": "/hero.html",
-   "destination": "/battle/hero.html",
-   "permanent": true
-  },
-  {
-   "source": "/auth.html",
-   "destination": "/account/auth.html",
-   "permanent": true
-  },
-  {
-   "source": "/spymaster.html",
-   "destination": "/games/codenames/spymaster.html",
-   "permanent": true
-  },
-  {
-   "source": "/charades.html",
-   "destination": "/games/charades/",
-   "permanent": true
-  },
-  {
-   "source": "/codenames.html",
-   "destination": "/games/codenames/",
-   "permanent": true
-  },
-  {
-   "source": "/fast.html",
-   "destination": "/games/fast/",
-   "permanent": true
-  },
-  {
-   "source": "/guess.html",
-   "destination": "/games/guess/",
-   "permanent": true
-  },
-  {
-   "source": "/likely.html",
-   "destination": "/games/likely/",
-   "permanent": true
-  },
-  {
-   "source": "/trivia.html",
-   "destination": "/games/trivia/",
-   "permanent": true
-  },
-  {
-   "source": "/chain.html",
-   "destination": "/games/chain/",
-   "permanent": true
-  },
-  {
-   "source": "/party.html",
-   "destination": "/battle/",
-   "permanent": true
-  }
- ]
+  "cleanUrls": false,
+  "redirects": [
+    {
+      "source": "/wheels.html",
+      "destination": "/wheels/",
+      "permanent": true
+    },
+    {
+      "source": "/wheel-pick.html",
+      "destination": "/wheels/wheel-pick.html",
+      "permanent": true
+    },
+    {
+      "source": "/wheel-classic.html",
+      "destination": "/wheels/wheel-classic.html",
+      "permanent": true
+    },
+    {
+      "source": "/wheel.html",
+      "destination": "/wheels/wheel-pick.html",
+      "permanent": true
+    },
+    {
+      "source": "/wheel-shield.html",
+      "destination": "/wheels/wheel-pick.html",
+      "permanent": true
+    },
+    {
+      "source": "/battle.html",
+      "destination": "/battle/",
+      "permanent": true
+    },
+    {
+      "source": "/battle-arena.html",
+      "destination": "/battle/battle-arena.html",
+      "permanent": true
+    },
+    {
+      "source": "/battle-colors.html",
+      "destination": "/battle/battle-colors.html",
+      "permanent": true
+    },
+    {
+      "source": "/tnt.html",
+      "destination": "/battle/tnt.html",
+      "permanent": true
+    },
+    {
+      "source": "/hero.html",
+      "destination": "/battle/hero.html",
+      "permanent": true
+    },
+    {
+      "source": "/auth.html",
+      "destination": "/account/auth.html",
+      "permanent": true
+    },
+    {
+      "source": "/spymaster.html",
+      "destination": "/games/codenames/spymaster.html",
+      "permanent": true
+    },
+    {
+      "source": "/charades.html",
+      "destination": "/games/charades/",
+      "permanent": true
+    },
+    {
+      "source": "/codenames.html",
+      "destination": "/games/codenames/",
+      "permanent": true
+    },
+    {
+      "source": "/fast.html",
+      "destination": "/games/fast/",
+      "permanent": true
+    },
+    {
+      "source": "/guess.html",
+      "destination": "/games/guess/",
+      "permanent": true
+    },
+    {
+      "source": "/likely.html",
+      "destination": "/games/likely/",
+      "permanent": true
+    },
+    {
+      "source": "/trivia.html",
+      "destination": "/games/trivia/",
+      "permanent": true
+    },
+    {
+      "source": "/chain.html",
+      "destination": "/games/chain/",
+      "permanent": true
+    },
+    {
+      "source": "/party.html",
+      "destination": "/battle/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/shared/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
