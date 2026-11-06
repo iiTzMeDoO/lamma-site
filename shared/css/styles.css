@@ -42,6 +42,14 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1d1735;border
 [data-state=connected] .dot{background:var(--lime);box-shadow:0 0 10px var(--lime)}
 [data-state=connecting] .dot{background:var(--gold);animation:blink 1s infinite}
 [data-state=error] .dot{background:var(--red)}
+/* no channel (not signed in with Twitch): a calm «غير متصل — سجّل دخولك بتويتش» chip that opens the sign-in */
+.chan-chip[data-state=off]{border-style:dashed;border-color:rgba(154,160,208,.45);cursor:pointer}
+.chan-chip[data-state=off] .dot{background:transparent;border:1.5px solid var(--dim)}
+.chan-chip[data-state=off] bdi{color:var(--mut);font-weight:600}
+.chan-chip[data-state=off] .conn-tx{color:#9AA0D0;font-weight:700}
+.chan-chip[data-state=off] bdi+.conn-tx::before{content:'— ';color:var(--dim)}
+.chan-chip[data-state=off]:hover,.chan-chip[data-state=off]:focus-visible{border-color:#9AA0D0;background:rgba(134,140,188,.10)}
+.chan-chip:empty,.chan-chip bdi:empty{display:none}
 @keyframes blink{50%{opacity:.3}}
 .top-end{display:flex;align-items:center;gap:8px}
 .icon-btn,.lang-btn{height:38px;min-width:38px;border-radius:12px;border:1px solid var(--line2);background:var(--card);color:var(--tx);font:inherit;font-weight:800;cursor:pointer}
@@ -196,6 +204,9 @@ html.obs .obs-panel{background:rgba(10,7,20,.82);border:.08em solid rgba(201,182
 @media (max-width:1100px){.gp-grid{grid-template-columns:1fr}.stage-wrap{position:relative;top:0}.side{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start}}
 @media (max-width:640px){
  .brand small,.conn-tx{display:none}
+ .chan-chip[data-state=off] .conn-tx{display:inline}
+ .chan-chip[data-state=off] bdi{display:none}
+ .chan-chip[data-state=off] bdi+.conn-tx::before{content:none}
  .logo-en{display:none}
  .top{gap:8px;padding:10px 12px}
  .gc-party{grid-column:auto}

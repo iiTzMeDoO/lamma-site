@@ -614,3 +614,14 @@ html:not(.obs) .w2-panel{overflow-y:auto;scrollbar-width:thin}
 .w2-champ .fn-x{position:absolute;top:.5em;left:.5em;width:2em;height:2em;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:1em;line-height:1;cursor:pointer;display:grid;place-items:center}
 .w2-champ .fn-x:hover{background:rgba(255,255,255,.2)}
 body.obs .w2-champ .fn-x{display:none}
+
+/* ===== wheel: «لاعبَين على الأقل» toast, an off-looking spin button with one name, the short winner burst (Nov 6) ===== */
+.wh-toast{position:absolute;left:50%;top:6%;z-index:30;transform:translate(-50%,-.6em);opacity:0;pointer-events:none;max-width:86%;
+  padding:.7em 1.2em;border-radius:999px;background:rgba(16,16,22,.94);border:1px solid rgba(154,160,208,.55);color:#eceefa;
+  font:700 clamp(13px,1.15em,18px)/1.4 Cairo,system-ui,sans-serif;text-align:center;box-shadow:0 .6em 1.6em rgba(0,0,0,.5);transition:opacity .2s,transform .2s}
+.wh-toast.on{opacity:1;transform:translate(-50%,0)}
+.btn.is-off,#whSpin.is-off{opacity:.5;filter:saturate(.4);cursor:not-allowed}
+.wh-burst{position:absolute;left:50%;top:50%;width:0;height:0;z-index:2;pointer-events:none}
+.wh-burst i{position:absolute;left:-.35em;top:-.2em;width:.7em;height:.4em;border-radius:.1em;opacity:0;animation:whBurst 1.5s cubic-bezier(.15,.7,.3,1) forwards}
+@keyframes whBurst{0%{opacity:1;transform:translate(0,0) rotate(0) scale(.6)}70%{opacity:1}100%{opacity:0;transform:translate(var(--dx),calc(var(--dy) + 4em)) rotate(var(--r)) scale(1)}}
+@media (prefers-reduced-motion:reduce){.wh-burst{display:none}}

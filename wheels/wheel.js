@@ -22,7 +22,7 @@ A.strings({
  ar:{g_title:'العجلة',g_how:'الشات بيدخل بـ !دخول أو !join. العجلة بتوقف على حدا، بتطلع قائمة كبيرة عالشاشة فيها كل اللي بالعجلة، وهو بيختار مين يطلع بـ !طرد رقم أو اسم (أو !kick). بيقدر يطلع لحالو بـ !خروج. لما يضلو 2، آخر لفة بتعطي الفائز.',
   w_m_elim:'إقصاء',w_m_classic:'كلاسيك (اللي بتوقف عليه بيربح)',
   w_entries:'الأسماء (كل اسم بسطر)',w_open:'الشات بيقدر يدخل بـ !دخول أو !join',w_remove:'شيل الفائز بعد الدورة',w_dur:'مدة الدورة',w_dur_none:'بدون وقت (لحد ما توقفها)',w_nolimit:'بدون وقت',w_custom:'وقت مخصص',w_join_t:'وقت الدخول',w_join_left:'الدخول بيسكّر بعد {s} ث',w_stop_spin:'وقّف العجلة ⏹',w_skip:'تخطّي الدور',w_picker_on:'قائمة الطرد الكبيرة عالشاشة',w_sh_on:'إضافة شيلدات 🛡️',w_pk_title:'{x} اختار مين يطلع',w_pk_click:'اضغط على اسم لتطردو',w_pk_out:'برّا!',w_pk_safe:'محمي 🛡️',w_pk_pass:'ما حدا طلع',w_pk_nolimit:'بدون وقت',w_ev_pass:'⏭️ {x} تخطّى الدور، ما حدا طلع',w_cmd_skip:'تخطّي الدور (ما حدا بيطلع)',w_st_choose_nl:'{x} عم يختار (بدون وقت)',w_st_endless:'عم تلف… اضغط وقّف العجلة',w_title_l:'العنوان بنص العجلة',w_chatcols:'الشرايح بلون اسم كل واحد بالشات',w_avatar:'صورة القناة بنص العجلة',w_click_kick:'اضغط على أي اسم بالقائمة لتطرده',
-  w_spin:'لفّ العجلة',w_spin_final:'اللفة الأخيرة 🏆',w_shuffle:'خلط',w_clear:'مسح الكل',w_clear_q:'تمسح كل الأسماء؟',w_new:'جولة جديدة (الكل يرجع)',
+  w_spin:'لفّ العجلة',w_need2:'يجب وجود لاعبَين اثنين على الأقل',w_spin_final:'اللفة الأخيرة 🏆',w_shuffle:'خلط',w_clear:'مسح الكل',w_clear_q:'تمسح كل الأسماء؟',w_new:'جولة جديدة (الكل يرجع)',
   w_pause:'إيقاف مؤقت',w_resume:'كمّل',w_rand:'اختيار عشوائي عنو',w_undo:'تراجع',w_add_names:'إضافة أسماء بإيدك',w_close:'إغلاق',w_fin_show:'مدة إظهار لوحة النتيجة',w_always:'دايماً',w_g_turn:'الدور',w_g_join:'الدخول',w_g_final:'النهائي',w_g_look:'الشكل',w_more_opts:'خيارات زيادة',w_add:'ضيف',w_settings:'الإعدادات',
   w_shields:'شيلد لكل واحد بالبداية',w_pick:'وقت الاختيار',w_timeout:'إذا خلص الوقت',w_to_random:'طرد عشوائي',w_to_streamer:'الستريمر بيختار',w_to_skip:'ما حدا بيطلع',w_fin_auto:'لفّ تلقائي بالنهائي',w_fin_dock:'النتيجة باللوحة اليسار',w_fs_set:'الإعدادات',w_vip:'الـVIP بيتحكموا بالعجلة',w_reset:'↺ ريسيت',w_reset_q:'متأكد؟ اكبس كمان مرة',
   w_auto:'لفّ تلقائي بعد كل طرد',w_auto_off:'يدوي',w_in:'بالعجلة',w_out:'برا العجلة',
@@ -39,7 +39,7 @@ A.strings({
  en:{w_lay_event_ph:'Event line (kick, revive)',g_title:'Spin Wheel',g_how:'Chat joins with !join (or !دخول). The wheel lands on someone, a big on-screen list of everyone on the wheel opens, and they pick who leaves with !kick number or name. Anyone can leave with !leave. When 2 are left, the last spin crowns the winner.',
   w_m_elim:'Elimination',w_m_classic:'Classic (landed name wins)',
   w_entries:'Names (one per line)',w_open:'Chat can join with !join',w_remove:'Remove the winner after a spin',w_dur:'Spin time',w_dur_none:'No limit (until you stop it)',w_nolimit:'No limit',w_custom:'Custom',w_join_t:'Join window',w_join_left:'Joining closes in {s}s',w_stop_spin:'Stop the wheel ⏹',w_skip:'Skip the turn',w_picker_on:'Big kick list on screen',w_sh_on:'Add shields 🛡️',w_pk_title:'{x}, pick who leaves',w_pk_click:'Click a name to kick it',w_pk_out:'OUT!',w_pk_safe:'Protected 🛡️',w_pk_pass:'Nobody left',w_pk_nolimit:'No time limit',w_ev_pass:'⏭️ {x} skipped, nobody left',w_cmd_skip:'skip the turn (nobody leaves)',w_st_choose_nl:'{x} is choosing (no time limit)',w_st_endless:'Spinning… press Stop the wheel',w_title_l:'Title in the wheel centre',w_chatcols:'Slices in each viewer\'s chat colour',w_avatar:'Channel picture in the wheel centre',w_click_kick:'Click a name in the list to kick it',
-  w_spin:'Spin the wheel',w_spin_final:'Final spin 🏆',w_shuffle:'Shuffle',w_clear:'Clear all',w_clear_q:'Clear every name?',w_new:'New round (everyone back)',
+  w_spin:'Spin the wheel',w_need2:'At least two players are needed',w_spin_final:'Final spin 🏆',w_shuffle:'Shuffle',w_clear:'Clear all',w_clear_q:'Clear every name?',w_new:'New round (everyone back)',
   w_pause:'Pause',w_resume:'Resume',w_rand:'Random pick for them',w_undo:'Undo',w_add_names:'Add names by hand',w_close:'Close',w_fin_show:'Scoreboard visible for',w_always:'Always',w_g_turn:'Turn',w_g_join:'Joining',w_g_final:'Final',w_g_look:'Look & feel',w_more_opts:'More options',w_add:'Add',w_settings:'Settings',
   w_shields:'Shields each at start',w_pick:'Pick time',w_timeout:'When time runs out',w_to_random:'Random kick',w_to_streamer:'Streamer picks',w_to_skip:'Nobody leaves',w_fin_auto:'Auto-spin in the final',w_fin_dock:'Score in the left panel',w_fs_set:'Settings',w_vip:'VIPs control the wheel',w_reset:'↺ Reset',w_reset_q:'Sure? Tap again',
   w_auto:'Auto-spin after each kick',w_auto_off:'Manual',w_in:'On the wheel',w_out:'Out of the wheel',
@@ -132,18 +132,27 @@ function add(name,color,user,sh){
   if(S.entries.some(dup)||S.out.some(dup))return false;
   S.entries.push({n:name,c:color||'',u:user||'',sh:sh==null?startShields():sh});return true;
 }
-function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,fs:S.finShow,v:18}));if(A.updateObsUrl)A.updateObsUrl();}}
+function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,fs:S.finShow,v:19}));if(A.updateObsUrl)A.updateObsUrl();}}
 /* join window: joining closes by itself N s after it opens (0 = stays open) */
 function openJoin(on){S.open=!!on;S.joinUntil=S.open&&S.joinSecs>0?Date.now()+S.joinSecs*1000:0;}
 function event(type,x,y){S.ev={t:type,x:x||'',y:y||''};S.evT=Date.now();}
 
 /* ---------- spin ---------- */
+/* a short message over the stage (control page only) */
+var toastT=0;
+function toast(msg){if(A.obs)return;var st=$('gs')||$('stage')||document.body,tb=document.getElementById('whToast');
+  if(!tb){tb=el('div','wh-toast');tb.id='whToast';tb.setAttribute('role','status');tb.setAttribute('aria-live','polite');st.appendChild(tb);}
+  tb.textContent=msg;tb.classList.remove('on');void tb.offsetWidth;tb.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){tb.classList.remove('on')},2600);}
+/* spam guard for chat / button: a new spin waits ~4 s after a result, so a flood of !spin gives one spin and one celebration */
+function userSpin(){if(S.winAt&&Date.now()-S.winAt<4000)return;spin();}
 function spin(){
   if(S.spin)return;
   if(S.phase==='choose')return;
   if(S.rmT)flushRemove();
-  if(S.entries.length<1)return;
-  if(S.mode==='elim'&&S.entries.length===1){finishWin(S.entries[0]);return;}
+  if(S.entries.length<2){
+    /* an elimination game already under way with one left (the rest were kicked) is won; otherwise a wheel needs two names */
+    if(S.mode==='elim'&&S.spun&&S.entries.length===1){finishWin(S.entries[0]);return;}
+    toast(A.t('w_need2'));return;}
   if(S.mode==='elim')S.spun=true;
   syncFin();
   if(!(S.dur>0)){ /* spin time "no limit": the wheel keeps turning until the streamer (or a mod with !وقف / !stop) stops it */
@@ -182,13 +191,21 @@ function landed(){
   S.phase='choose';S.chooser={n:who.n,c:who.c||'',u:who.u||''};S.streamerPicks=false;S.paused=false;S.deadline=S.pickSecs>0?Date.now()+S.pickSecs*1000:0;
   A.sfx('go');changed();
 }
+/* the winner moment: one short burst of site-colour pieces from the wheel's centre (~1.6 s), behind the winner card */
+function burst(){var st=cv&&cv.parentNode;if(!st||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  var old=st.querySelector('.wh-burst');if(old)old.remove();
+  var box=el('div','wh-burst'),cols=['#868CBC','#9AA0D0','#c9ccf0','#d8b65e','#efd89a','#ffffff'],n=34;
+  for(var i=0;i<n;i++){var p=el('i'),a=(i/n)*Math.PI*2+Math.random()*.3,d=6+Math.random()*11;
+    p.style.setProperty('--dx',(Math.cos(a)*d).toFixed(1)+'em');p.style.setProperty('--dy',(Math.sin(a)*d*.8-3).toFixed(1)+'em');
+    p.style.setProperty('--r',(Math.random()*540-270|0)+'deg');p.style.background=cols[i%cols.length];p.style.animationDelay=(Math.random()*.12).toFixed(2)+'s';box.appendChild(p);}
+  st.appendChild(box);setTimeout(function(){if(box.parentNode)box.parentNode.removeChild(box)},1900);}
 function finishWin(who){
   S.phase='win';S.winner={n:who.n,c:who.c||''};S.chooser=null;
   if(S.mode==='elim')S.entries.concat(S.out).forEach(function(e){if(e.u)A.xpPlay(e.u,e.n)}); /* levels: the whole elimination game is one round */
   if(who.u&&S.mode==='elim')A.award(who.u,who.n,3);
   if(S.mode==='classic'){S.wins.unshift({n:who.n,c:who.c||'',u:who.u||''});if(S.wins.length>30)S.wins.length=30;S.last={n:who.n,u:who.u||'',removed:false};if(who.u)A.award(who.u,who.n,1);save();}
-  A.sfx('win');changed();A.confetti($('stage'),140);
-  setTimeout(function(){A.confetti($('stage'),90)},900);
+  A.sfx('win');changed();S.winAt=Date.now();
+  if(!S.confT){A.confetti($('stage'),140);S.confT=setTimeout(function(){A.confetti($('stage'),90);setTimeout(function(){S.confT=0},1500)},900);}
 }
 /* classic "remove the winner after the spin": the winner leaves the wheel 3.5 s after landing (or at once when the next spin starts) */
 function flushRemove(){
@@ -274,7 +291,7 @@ function pickIdx(list,cmd){var i=find(list,cmd.rest);if(i<0&&cmd.num>0&&cmd.num<
 A.onChat(function(m){
   if(!A.runsEngine())return;var cmd=WC?WC.resolve(m.text):null;if(!cmd)return;var c=cmd.cmd;
   if((A.isCtrl(m)||(S.vipCtrl&&m.vip))&&!cmd.bare){ /* "الـVIP بيتحكموا بالعجلة" (off by default) gives VIPs the mod commands */
-    if(c==='spin'){spin();return;}
+    if(c==='spin'){userSpin();return;}
     if(c==='clear'){resetAll();return;}
     if(c==='respin'){respin();return;}
     if(c==='open'){openJoin(true);save();changed();return;}if(c==='close'){openJoin(false);save();changed();return;}
@@ -352,6 +369,12 @@ if(window.MutationObserver)new MutationObserver(function(){readTheme()}).observe
 /* Twitch gives a viewer who never picked a colour one of its 15 defaults; we do the same from the login so every slice is a real chat colour */
 var TW_DEF=['#FF0000','#0000FF','#00FF00','#B22222','#FF7F50','#9ACD32','#FF4500','#2E8B57','#DAA520','#D2691E','#5F9EA0','#1E90FF','#FF69B4','#8A2BE2','#00FF7F'];
 function twDef(k){k=String(k||'').toLowerCase();var h=0;for(var i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))|0;return TW_DEF[Math.abs(h)%TW_DEF.length]}
+/* the site never shows purple: a violet/purple chat colour becomes one of the site's periwinkle / grey shades */
+var SITE_ALT=['#868CBC','#5d6070','#9AA0D0','#71749A'];
+function noPurple(hex,i){if(!hex)return hex;var r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+  var mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn,h=0;if(!d)return hex;
+  if(mx===r)h=((g-b)/d)%6;else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h=(h*60+360)%360;var s=d/(1-Math.abs(mx+mn-1)||1);
+  return (h>=245&&h<=330&&s>.25)?SITE_ALT[i%SITE_ALT.length]:hex}
 function sliceCol(i,n,ent){
   if(cur&&(cur.chatCols||cur.fin)&&ent){var cc=hex6(ent[1]||twDef(ent[3]||ent[0]),'');if(cc)return [cc,isLight(cc)?'#121218':'#ffffff']} /* the viewer's own Twitch colour (purple too, when it is theirs) */ /* toggle: the viewer's own chat colour */
   if(TH.multi){var col=COLS[i%COLS.length];if(n%COLS.length===1&&i===n-1)col=COLS[Math.floor(COLS.length/2)];return [col,isLight(col)?'#121218':'#ffffff']}
@@ -610,6 +633,9 @@ function renderCtrl(){
   if(A.obs)return;
   var busy=!!S.spin;
   var sp=$('whSpin'),endless=!!(S.spin&&S.spin.endless);sp.disabled=(busy&&!endless)||!S.entries.length||S.phase==='choose';
+  var few=!busy&&S.entries.length<2&&!(S.mode==='elim'&&S.spun&&S.entries.length===1); /* one name: looks off, a click explains why */
+  if(S.entries.length===1&&few)sp.disabled=false;
+  sp.classList.toggle('is-off',few);sp.setAttribute('aria-disabled',few?'true':'false');if(few)sp.title=A.t('w_need2');else sp.removeAttribute('title');
   sp.textContent=endless?A.t('w_stop_spin'):(S.fin&&S.phase!=='win')?fmt(A.t('w_spin_fin'),{r:WO.finalRound(S.fin)}):(S.mode==='elim'&&S.entries.length===2&&S.phase!=='win')?A.t('w_spin_final'):A.t('w_spin');sp.classList.toggle('is-stop',endless);
   $('wSkip').disabled=S.phase!=='choose';$('whOpen').checked=S.open;
   var rs=$('wRespin');rs.hidden=!(S.mode==='classic'&&S.phase==='win'&&S.last&&!busy);
@@ -694,7 +720,7 @@ if(!A.obs){
   $('wShields').addEventListener('change',function(){S.shStart=+this.value;save();});
   $('wTimeout').addEventListener('change',function(){S.timeoutAct=this.value;save();});
   $('whTitle').addEventListener('input',function(){S.title=this.value.slice(0,40);save();changed();});
-  $('whSpin').addEventListener('click',function(){if(S.spin&&S.spin.endless)stopSpin();else spin();});
+  $('whSpin').addEventListener('click',function(){if(S.spin&&S.spin.endless)stopSpin();else userSpin();});
   $('wRespin').addEventListener('click',respin);
   $('wPause').addEventListener('click',togglePause);
   $('wRand').addEventListener('click',function(){if(S.phase==='choose')randomKick();});
@@ -743,7 +769,7 @@ if(!A.obs){(function(){
   stage.appendChild(gear);stage.appendChild(box);
   var sync=function(){if(!fsOn())closeSet();document.body.classList.toggle('w-fs',fsOn());fnKey='';fdKey='';if(cur)drawFinal(cur);};
   document.addEventListener('fullscreenchange',function(){setTimeout(sync,0)});document.addEventListener('webkitfullscreenchange',function(){setTimeout(sync,0)});
-  function spinOrStop(){if(S.spin&&S.spin.endless){stopSpin();return true;}if(S.spin||S.phase==='choose'||!S.entries.length)return false;spin();return true;}
+  function spinOrStop(){if(S.spin&&S.spin.endless){stopSpin();return true;}if(S.spin||S.phase==='choose'||!S.entries.length)return false;userSpin();return true;}
   stage.addEventListener('click',function(e){
     if(editing())return;var t=e.target;
     if(t.closest('button,a,input,select,textarea,label,summary,details,.w2-picker,.w2-panel,.lay-fs,.w-fs-gear,.w-fs-set,.w2-champ'))return;

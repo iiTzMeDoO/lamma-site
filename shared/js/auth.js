@@ -156,14 +156,14 @@ function canControl(ch){
 
 /* ---------- page UI (header box, sign-in chooser, lock screen over the control panel) ---------- */
 var A=window.App;
-var STR={ar:{in:'سجّل الدخول بتويتش',out:'خروج',as:'داخل كـ',my_profile:'حسابي',gate_t:'لوحة التحكم لصاحب القناة',gate_in:'سجّل الدخول بحساب تويتش الخاص بالقناة لفتح لوحة التحكم.',gate_other:'أنت مسجّل الدخول بحساب',gate_other2:'ولوحة تحكم قناة',gate_other3:'تفتح لصاحبها فقط.',mine:'افتح لقناتي',off:'تسجيل الدخول غير مفعّل بعدُ',safe:'لا نطلب أي صلاحيات، نتأكد فقط من هويتك. يبقى التوكن في متصفحك.',
+var STR={ar:{nc_t:'سجّل دخولك لتبدأ',nc_in:'ألعاب لَمّة تعمل على شات قناتك في تويتش. سجّل الدخول بتويتش وتتصل اللعبة بقناتك تلقائيًا.',nc_other:'أنت داخل بحساب',nc_other2:'وهذا الحساب ليس له قناة تويتش. لتشغيل اللعبة على شات قناتك سجّل الدخول بتويتش.',in:'سجّل الدخول بتويتش',out:'خروج',as:'داخل كـ',my_profile:'حسابي',gate_t:'لوحة التحكم لصاحب القناة',gate_in:'سجّل الدخول بحساب تويتش الخاص بالقناة لفتح لوحة التحكم.',gate_other:'أنت مسجّل الدخول بحساب',gate_other2:'ولوحة تحكم قناة',gate_other3:'تفتح لصاحبها فقط.',mine:'افتح لقناتي',off:'تسجيل الدخول غير مفعّل بعدُ',safe:'لا نطلب أي صلاحيات، نتأكد فقط من هويتك. يبقى التوكن في متصفحك.',
   signin:'تسجيل الدخول',choose_t:'سجّل الدخول',choose_sub:'اختر الطريقة التي تناسبك. نأخذ اسمك وصورتك فقط.',
   p_twitch:'تويتش',p_discord:'ديسكورد',p_google:'جوجل',p_guest:'ضيف',
   d_twitch:'للستريمرز: لوحة تحكم قناتك',d_discord:'العب مع أصحابك بلا بث',d_google:'بحساب جوجل',d_guest:'اكتب اسمك فقط، بلا حساب',
   not_set:'غير مفعّل بعدُ (يحتاج Client ID)',guest_ph:'اسمك الظاهر',guest_go:'ادخل',guest_bad:'اكتب اسمًا من حرفين على الأقل',close:'إغلاق',
   friends:'العب مع أصحابك بلا بث',friends_t:'العب مع أصحابك',friends_in:'سجّل الدخول بأي طريقة لفتح لوحة التحكم لغرفتك.',
   friends_on:'بلا بث',stream_back:'العودة إلى وضع البث',or:'أو'},
- en:{in:'Login with Twitch',out:'Log out',as:'Signed in as',my_profile:'My profile',gate_t:'Control panel is for the channel owner',gate_in:'Sign in with the channel\'s Twitch account to open the control panel.',gate_other:'You are signed in as',gate_other2:'and the control panel for',gate_other3:'opens only for its owner.',mine:'Open my channel',off:'Login is not switched on yet',safe:'No permissions requested, we only check who you are. The token stays in your browser.',
+ en:{nc_t:'Sign in to start',nc_in:'Lamma games run on your own Twitch chat. Sign in with Twitch and the game connects to your channel automatically.',nc_other:'You are signed in with',nc_other2:'which has no Twitch channel. To run the game on your chat, sign in with Twitch.',in:'Login with Twitch',out:'Log out',as:'Signed in as',my_profile:'My profile',gate_t:'Control panel is for the channel owner',gate_in:'Sign in with the channel\'s Twitch account to open the control panel.',gate_other:'You are signed in as',gate_other2:'and the control panel for',gate_other3:'opens only for its owner.',mine:'Open my channel',off:'Login is not switched on yet',safe:'No permissions requested, we only check who you are. The token stays in your browser.',
   signin:'Sign in',choose_t:'Sign in',choose_sub:'Pick whichever suits you. We only take your name and picture.',
   p_twitch:'Twitch',p_discord:'Discord',p_google:'Google',p_guest:'Guest',
   d_twitch:'For streamers: your channel\'s control panel',d_discord:'Play with friends, no stream',d_google:'With your Google account',d_guest:'Just type a name, no account',
@@ -266,8 +266,12 @@ function gate(u){
     var back=btn('auth-link',[L('stream_back')],function(){setMode('stream')});
     card.appendChild(mk('div','auth-acts auth-alt',[back]));
   }else{
-    card=mk('div','auth-card',[mk('span','auth-lock',[lockIcon()]),mk('h2','',[L('gate_t')])]);
-    if(u){
+    card=mk('div','auth-card',[mk('span','auth-lock',[lockIcon()]),mk('h2','',[L(ch?'gate_t':'nc_t')])]);
+    if(!ch){
+      /* no channel yet (signed out, or a Discord / Google / guest account): nothing is connected and no channel is named */
+      if(u){card.appendChild(mk('p','',[L('nc_other')+' ',mk('b','',[bdi(u.display||u.login)]),' ('+L('p_'+u.provider)+') '+L('nc_other2')]));card.appendChild(mk('div','auth-acts',[twBtn(L('in'),true),outBtn()]));}
+      else{card.appendChild(mk('p','',[L('nc_in')]));card.appendChild(mk('div','auth-acts',[twBtn(L('in'),true)]));}
+    }else if(u){
       card.appendChild(mk('p','',[L('gate_other')+' ',mk('b','',[bdi(u.display||u.login)]),' '+L('gate_other2')+' ',mk('b','',[bdi('#'+ch)]),' '+L('gate_other3')]));
       var acts=mk('div','auth-acts');
       if(u.provider==='twitch'){var mine=mk('a','tw-btn',[twIcon(),mk('span','',[L('mine')+' ',bdi('#'+u.login)])]);mine.href=chanUrl(u.login);acts.appendChild(mine)}

@@ -7,14 +7,20 @@ var Q=new URLSearchParams(location.search);
 var LS={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 /* one-time migration: keys were "allin1-*" before the rename to Lamma; copy them so settings/leaderboards carry over */
 (function(){try{var ks=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('allin1-')===0)ks.push(k)}ks.forEach(function(k){var nk='lamma-'+k.slice(7);if(localStorage.getItem(nk)==null)localStorage.setItem(nk,localStorage.getItem(k))})}catch(e){}})();
-var qCh=C.safeChannel(Q.get('channel'));
-/* signed in with Twitch → your own channel is the default (set from the session, never typed). ?channel= still opens a
-   channel read-only for overlays / viewer links; the control panel stays locked to that channel's owner (auth.js + gate.js). */
-var sessCh=(function(){try{var s=JSON.parse(localStorage.getItem('lamma-session')||'null');if(s&&s.provider==='twitch'&&(!s.exp||Date.now()<s.exp))return C.safeChannel(s.login)}catch(e){}return ''})();
-if(sessCh&&document.body&&document.body.classList.contains('hub'))qCh=''; /* the home page always shows your own channel */
-if(qCh)LS.set('lamma-channel',qCh);
-var CHANNEL=qCh||sessCh||C.safeChannel(LS.get('lamma-channel',''))||'iitzmedoo';
 var OBS=Q.get('obs')==='1';
+var qCh=C.safeChannel(Q.get('channel'));
+/* Which chat this page reads (read-only, anonymous):
+   • signed in with Twitch → your own channel, taken from the session (never typed, never a default).
+   • ?channel=… is used by the OBS overlay (?obs=1&channel=…, it runs inside OBS with no login) and, for someone signed in
+     with Twitch, to open another channel (a mod listed in TWITCH_MODS; the control panel stays locked to the owner — auth.js + gate.js).
+   • not signed in, or signed in with Discord / Google / guest (no Twitch channel) → NO channel: nothing connects and no
+     channel name is shown; the chip asks the visitor to sign in with Twitch. There is no site-wide default channel any more. */
+function twitchLogin(){try{var s=JSON.parse(localStorage.getItem('lamma-session')||'null');if(s&&s.provider==='twitch'&&s.id&&(!s.exp||Date.now()<s.exp))return C.safeChannel(s.login)}catch(e){}return ''}
+var sessCh=twitchLogin();
+if(sessCh&&document.body&&document.body.classList.contains('hub'))qCh=''; /* the home page always shows your own channel */
+try{localStorage.removeItem('lamma-channel')}catch(e){} /* the old "last channel" memory auto-connected visitors to a stale channel: gone */
+var CHANNEL=OBS?qCh:(sessCh?(qCh||sessCh):'');
+var FROMQ=!!(qCh&&CHANNEL===qCh&&qCh!==sessCh); /* the page runs a channel from the link → keep it on the in-page links */
 var GAME=document.body.getAttribute('data-game')||'';
 if(OBS){document.documentElement.classList.add('obs');}
 
@@ -63,7 +69,7 @@ function watchCmds(){
 var T={ar:{},en:{}};
 var BASE={
  ar:{brand_sub:'كل ألعاب الشات في مكان واحد',skip:'تخطَّ إلى المحتوى',sound:'صوت',lang_btn:'EN',all_games:'كل الألعاب',all_wheels:'كل العجلات',all_battle:'كل المعركة',
-  conn_connecting:'يتصل…',conn_connected:'متصل',conn_error:'انقطع، يعيد المحاولة…',conn_bad:'اسم قناة خاطئ',
+  conn_connecting:'يتصل…',conn_off:'غير متصل',conn_signin:'سجّل دخولك بتويتش',feed_nochan:'الشات غير متصل. سجّل الدخول بتويتش وتتصل قناتك تلقائيًا.',conn_connected:'متصل',conn_error:'انقطع، يعيد المحاولة…',conn_bad:'اسم قناة خاطئ',
   chat_feed:'الشات',feed_empty:'رسائل الشات تظهر هنا',lb:'الترتيب',lb_empty:'لم يفز أحد بعد',reset:'تصفير',reset_q:'هل تريد حقًا تصفير الترتيب لهذه القناة؟',pts:'نقطة',
   obs_title:'رابط OBS',obs_help:'ضع هذا الرابط كـ Browser Source في OBS (1920×1080). الرابط لا يعرض أي سر: لا الكلمة ولا المفتاح.',copy:'نسخ',copied:'تم النسخ ✓',
   obs_dock:'اجعل هذه الصفحة نفسها Custom Browser Dock داخل OBS (Docks ← Custom Browser Docks) حتى يعمل الأوفرلي معك خطوة بخطوة.',
@@ -72,7 +78,7 @@ var BASE={
   winner:'الفائز',start:'ابدأ',stop:'أوقف',next:'التالي',skip_btn:'تخطّي',seconds:'ث',players:'لاعب',round:'جولة',timeup:'انتهى الوقت!',
   live:'مباشر',offline:'أوفلاين'},
  en:{brand_sub:'All your chat games in one place',skip:'Skip to content',sound:'Sound',lang_btn:'ع',all_games:'All games',all_wheels:'All wheels',all_battle:'All battle modes',
-  conn_connecting:'Connecting…',conn_connected:'Connected',conn_error:'Disconnected, retrying…',conn_bad:'Invalid channel',
+  conn_connecting:'Connecting…',conn_off:'Not connected',conn_signin:'Sign in with Twitch',feed_nochan:'Chat is not connected. Sign in with Twitch and your channel connects automatically.',conn_connected:'Connected',conn_error:'Disconnected, retrying…',conn_bad:'Invalid channel',
   chat_feed:'Chat',feed_empty:'Chat messages show up here',lb:'Leaderboard',lb_empty:'No winners yet',reset:'Reset',reset_q:'Reset the leaderboard for this channel?',pts:'pts',
   obs_title:'OBS link',obs_help:'Add this link as a Browser Source in OBS (1920×1080). It never shows a secret: not the word, not the key.',copy:'Copy',copied:'Copied ✓',
   obs_dock:'Run this control page as a Custom Browser Dock inside OBS (Docks → Custom Browser Docks) so the overlay follows you step by step.',
@@ -99,11 +105,15 @@ function applyLang(){
 function setLang(l){lang=l;LS.set('lamma-lang',l);applyLang();}
 
 /* ---------- connection status ---------- */
-var connState='connecting';
+var connState=CHANNEL?'connecting':'off';
 function setConn(s){
   connState=s;var c=$('conn');if(!c)return;c.setAttribute('data-state',s);
-  var tx=$('connTxt');if(tx)tx.textContent=t('conn_'+s);
+  var tx=$('connTxt');if(tx)tx.textContent=t(s==='off'?'conn_signin':'conn_'+s);
+  c.querySelectorAll('[data-chan]').forEach(function(n){n.textContent=CHANNEL?'#'+CHANNEL:t('conn_off')});
+  if(s==='off'){c.title=t('conn_off')+' — '+t('conn_signin');c.setAttribute('aria-label',c.title)}else{c.title='Twitch · #'+CHANNEL;c.removeAttribute('aria-label')}
 }
+/* no channel: the chip opens the sign-in chooser (auth.js) instead of going home */
+function chipClick(e){if(CHANNEL||connState!=='off')return;var Au=window.LammaAuth;if(Au&&Au.open){e.preventDefault();if(Au.session&&Au.session()&&Au.login)Au.login();else Au.open();}}
 
 /* ---------- chat bus ---------- */
 var chatFns=[],stats={received:0,parsed:0,last:''};
@@ -119,7 +129,9 @@ function isCtrl(m){return !!(m&&(m.mod||m.broadcaster||m.host))}
 /* ---------- anonymous read-only Twitch IRC ---------- */
 var ws=null,retry=0,retryT=null;
 function connect(){
-  clearTimeout(retryT);setConn('connecting');
+  clearTimeout(retryT);
+  if(!CHANNEL){setConn('off');return;} /* not signed in with Twitch (and no overlay link): no chat connection at all */
+  setConn('connecting');
   try{ws=new WebSocket('wss://irc-ws.chat.twitch.tv:443');}catch(e){setConn('error');scheduleRetry();return;}
   var sock=ws;
   sock.onopen=function(){
@@ -142,7 +154,8 @@ function connect(){
   sock.onclose=function(){if(sock!==ws)return;ws=null;setConn('error');scheduleRetry();};
   sock.onerror=function(){};
 }
-function scheduleRetry(){clearTimeout(retryT);retry=Math.min(retry+1,6);retryT=setTimeout(connect,Math.min(30000,1000*Math.pow(2,retry)));}
+function disconnect(){clearTimeout(retryT);var w=ws;ws=null;if(w)try{w.close()}catch(e){}}
+function scheduleRetry(){if(!CHANNEL)return;clearTimeout(retryT);retry=Math.min(retry+1,6);retryT=setTimeout(connect,Math.min(30000,1000*Math.pow(2,retry)));}
 
 /* ---------- live feed ---------- */
 function pushFeed(m){
@@ -244,7 +257,7 @@ function confetti(host,n){
 }
 
 /* ---------- OBS link card ---------- */
-function obsUrl(extra){var u=location.origin+location.pathname+'?obs=1&channel='+encodeURIComponent(CHANNEL)+(lang==='en'?'&lang=en':'')+(extra||'');return u}
+function obsUrl(extra){var u=location.origin+location.pathname+'?obs=1'+(CHANNEL?'&channel='+encodeURIComponent(CHANNEL):'')+(lang==='en'?'&lang=en':'')+(extra||'');return u}
 /* modules add their own OBS params (layout, background…) with A.obsExtra(fn); fn returns e.g. '&bg=0' */
 var obsExtras=[];
 function obsExtrasStr(){return obsExtras.map(function(f){try{return f()||''}catch(e){return ''}}).join('')}
@@ -280,8 +293,11 @@ function boot(){
   var sb=$('soundBtn');if(sb)sb.addEventListener('click',function(){setSound(!soundOn)});setSound(soundOn);
   var rs=$('lbReset');if(rs)rs.addEventListener('click',function(){if(confirm(t('reset_q'))){LS.set(LBKEY,'{}');renderBoard();}});
   var cb=$('obsCopy');if(cb)cb.addEventListener('click',function(){copyText($('obsUrl').value,cb)});
-  document.querySelectorAll('[data-chan]').forEach(function(n){n.textContent='#'+CHANNEL});
-  document.querySelectorAll('a[data-keep]').forEach(function(a){if(qCh){a.href=a.getAttribute('href')+(a.getAttribute('href').indexOf('?')<0?'?':'&')+'channel='+CHANNEL;}});
+  document.querySelectorAll('[data-chan]').forEach(function(n){n.textContent=CHANNEL?'#'+CHANNEL:t('conn_off')});
+  document.querySelectorAll('a[data-keep]').forEach(function(a){if(FROMQ){a.href=a.getAttribute('href')+(a.getAttribute('href').indexOf('?')<0?'?':'&')+'channel='+CHANNEL;}});
+  var cc=$('conn');if(cc)cc.addEventListener('click',chipClick);
+  var fe=$('feedEmpty');if(fe&&!CHANNEL&&!OBS)fe.setAttribute('data-i18n','feed_nochan');
+  setConn(connState);
   var y=$('year');if(y)y.textContent=new Date().getFullYear();
   document.documentElement.setAttribute('data-mode',mode);
   fitStage();
@@ -289,11 +305,20 @@ function boot(){
   watchCmds();
 }
 
+/* signing out (or switching to a non-Twitch account) closes the chat at once; signing in with another Twitch account reloads with it */
+function authChanged(){if(OBS)return;var now=twitchLogin(),want=now?(qCh||now):'';if(want===CHANNEL)return;
+  if(!want){CHANNEL='';disconnect();setConn('off');updateObsUrl();if(window.App)window.App.channel='';return;}
+  location.reload();}
+window.addEventListener('lamma-auth',authChanged); /* registered before auth.js's own listener, so its lock screen already sees the new channel */
+window.addEventListener('storage',function(e){if(e.key==='lamma-session')authChanged()});
+
 window.App={C:C,Q:Q,$:$,el:el,rich:rich,setRich:setRich,clear:clear,nameEl:nameEl,readable:readable,strings:strings,t:t,lang:function(){return lang},onLang:function(f){langFns.push(f)},setLang:setLang,
   channel:CHANNEL,obs:OBS,game:GAME,onChat:onChat,dispatch:dispatch,isCtrl:isCtrl,stats:stats,
   award:award,top:top,xpWin:xpWin,xpPlay:xpPlay,roundStart:roundStart,roundEnd:roundEnd,renderBoard:renderBoard,publish:publish,onMirror:onMirror,onMode:onMode,mode:function(){return mode},allowSolo:allowSolo,runsEngine:runsEngine,
   sfx:sfx,confetti:confetti,obsUrl:obsUrl,obsExtra:obsExtra,updateObsUrl:updateObsUrl,fixCmds:fixCmds,copyText:copyText,channelInfo:channelInfo,LS:LS,boot:boot,
   start:function(){ // called by each page after it registered its handlers
+    /* an old Twitch sign-in that auth.js just carried over from this tab: reload once so its own channel connects */
+    if(!OBS&&!CHANNEL&&window.LammaAuth&&LammaAuth.session){var u=null;try{u=LammaAuth.session()}catch(e){}if(u&&u.provider==='twitch'&&twitchLogin()){location.reload();return;}}
     boot();
     connect();
   }};
