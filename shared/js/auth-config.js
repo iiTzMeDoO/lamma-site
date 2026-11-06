@@ -12,7 +12,7 @@
 window.LAMMA_AUTH_CONFIG = {
 
   /* Twitch — https://dev.twitch.tv/console/apps → your app → Client ID (keeps the current value) */
-  TWITCH_CLIENT_ID: 'PASTE_TWITCH_CLIENT_ID',
+  TWITCH_CLIENT_ID: 'fc2d5cxz6n3ogheyqx6sqpbzney4vv',
 
   /* Discord — https://discord.com/developers/applications → your app → OAuth2 → Client ID (a long number) */
   DISCORD_CLIENT_ID: '',
