@@ -1,4 +1,4 @@
-/* gate.js — one switch for "only the streamer opens the control panel".
+/* gate.js — one switch for who opens the control panel (stream mode: the channel's Twitch owner; with friends: anyone signed in).
    Uses window.requireStreamer(channel) → Promise<boolean> if a page defines one, else the shared Twitch login
    (auth.js: LammaAuth.canControl(channel), which also draws its own lock screen), else lets everyone in. Until then this fallback lets everyone in. Overlays (?obs=1) are never gated: they carry no
    controls and no secrets. When the promise resolves false the page gets html.ctrl-locked (games2.css hides every .ctrl-only
@@ -13,9 +13,10 @@ var req=typeof window.requireStreamer==='function'?window.requireStreamer:
   function(){return Promise.resolve(true)};
 var res;try{res=req(A.channel)}catch(e){res=Promise.resolve(false)}
 Promise.resolve(res).then(function(ok){
-  if(ok)return;
-  document.documentElement.classList.add('ctrl-locked');
+  document.documentElement.classList.toggle('ctrl-locked',!ok);
 },function(){document.documentElement.classList.add('ctrl-locked');});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else setTimeout(run,0);
+/* sign-in, sign-out or a mode switch (auth.js fires 'lamma-auth') re-checks without a reload */
+window.addEventListener('lamma-auth',function(){setTimeout(run,0)});
 })();

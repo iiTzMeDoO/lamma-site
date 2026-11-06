@@ -501,3 +501,45 @@ html.auth-locked main{filter:blur(6px) brightness(.5);pointer-events:none;user-s
 .auth-lock{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:50%;color:#9AA0D0;background:radial-gradient(circle at 38% 30%,#262631,#101015 72%);box-shadow:0 0 0 2px rgba(134,140,188,.35),0 0 24px rgba(134,140,188,.35)}
 .auth-lock svg{width:26px;height:26px}
 @media(max-width:600px){.auth-box .auth-who bdi{max-width:7em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.auth-box .tw-btn span{display:none}}
+
+/* ---------- multi sign-in (auth.js): chooser, provider buttons, header avatar ---------- */
+.auth-modal{z-index:120;background:rgba(8,8,11,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.auth-card{position:relative}
+.auth-x{position:absolute;top:10px;inset-inline-end:10px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(154,160,208,.22);background:rgba(255,255,255,.03);color:#9AA0D0;font:inherit;font-size:1.3rem;line-height:1;cursor:pointer}
+.auth-x:hover{background:rgba(134,140,188,.12)}
+.auth-provs{display:grid;gap:8px;margin:16px 0 4px;text-align:start}
+.auth-prov{display:flex;align-items:center;gap:12px;width:100%;font:inherit;color:#eeeef4;padding:11px 14px;border-radius:14px;cursor:pointer;border:1px solid rgba(154,160,208,.2);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.01)),#16161c;transition:border-color .15s,background .15s,transform .15s}
+.auth-prov:hover:not([disabled]){border-color:rgba(154,160,208,.55);background:linear-gradient(180deg,rgba(134,140,188,.14),rgba(134,140,188,.04)),#16161c}
+.auth-prov:active:not([disabled]){transform:translateY(1px)}
+.auth-prov[disabled]{cursor:not-allowed;opacity:.5;filter:grayscale(1)}
+.auth-prov-ic{display:inline-grid;place-items:center;flex:0 0 40px;height:40px;border-radius:12px;color:#0d0d14;background:linear-gradient(180deg,#b1b6e0,#868CBC 60%,#7a80b0);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.auth-prov[disabled] .auth-prov-ic{background:#2a2b33;color:#5d6070;box-shadow:none}
+.auth-prov.p-guest .auth-prov-ic{background:#22232b;color:#9AA0D0;box-shadow:0 0 0 1px rgba(154,160,208,.3)}
+.auth-prov-ic svg{width:22px;height:22px}
+.auth-prov-tx{display:flex;flex-direction:column;align-items:flex-start;text-align:start;flex:1;line-height:1.35;min-width:0}
+.auth-prov-tx b{font-size:1rem;font-weight:800}
+.auth-card .auth-prov-tx small{margin:0;color:#8b8ea3;font-size:.8rem}
+.auth-prov[disabled] .auth-prov-tx small{color:#71749A}
+.auth-guest{display:grid;gap:6px;padding:4px 0 2px}
+.auth-guest[hidden]{display:none}
+.auth-guest-row{display:flex;gap:8px}
+.auth-guest input{flex:1;min-width:0;font:inherit;font-weight:700;color:#eeeef4;background:#0b0b0f;border:1px solid rgba(154,160,208,.35);border-radius:12px;padding:.6em .9em}
+.auth-guest input::placeholder{color:#5d6070}
+.auth-guest input:focus{outline:2px solid #9AA0D0;outline-offset:1px}
+.auth-card .auth-guest-err{margin:0;color:#e2a5a5}
+.auth-or{display:flex;align-items:center;gap:10px;margin:14px 0 10px;color:#5d6070;font-size:.82rem}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:rgba(154,160,208,.16)}
+.auth-friends,.auth-link{display:inline-flex;align-items:center;gap:.5em;font:inherit;font-weight:700;font-size:.9rem;color:#c9cce6;padding:.6em 1em;border-radius:12px;border:1px solid rgba(154,160,208,.3);background:rgba(134,140,188,.08);cursor:pointer}
+.auth-friends:hover,.auth-link:hover{background:rgba(134,140,188,.16)}
+.auth-friends svg{width:1.15em;height:1.15em}
+.auth-link{border-color:transparent;background:none;color:#9AA0D0;text-decoration:underline;text-underline-offset:3px}
+.auth-alt{margin-top:10px}
+.auth-av{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;overflow:hidden;flex-shrink:0;font-size:.78rem;font-weight:800;color:#0d0d14;background:linear-gradient(180deg,#b1b6e0,#868CBC)}
+.auth-av img{width:100%;height:100%;object-fit:cover;display:block}
+.auth-who{padding:.25em .6em .25em .3em}
+html[dir=rtl] .auth-who{padding:.25em .3em .25em .6em}
+.auth-who .auth-pv{display:inline-flex;color:#9AA0D0;opacity:.85}
+.auth-who .auth-pv svg{width:.95em;height:.95em}
+.auth-mode{display:inline-flex;align-items:center;gap:.35em;font:inherit;font-size:.78rem;font-weight:700;color:#9AA0D0;background:rgba(134,140,188,.08);border:1px dashed rgba(154,160,208,.35);border-radius:99px;padding:.35em .7em;cursor:pointer}
+.auth-mode svg{width:1.05em;height:1.05em}
+@media(max-width:600px){.auth-mode span{display:none}.auth-prov{padding:10px 12px}}
