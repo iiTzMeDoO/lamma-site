@@ -309,33 +309,6 @@ if(!A.obs){
 A.onLang(function(){key='';ctrlKey='';changed();});
 A.onMirror(function(P){draw(P)});
 
-/* ---------- demo: 16 chatters join, teams/roles get set like a streamer would, bots discuss and captains pick ---------- */
-var dT=null;
-A.onDemo(function(){
-  var need=16-S.order.length;
-  if(need>0)A.BOTS.slice(0,16).forEach(function(b,i){A.later(250+i*180,function(){A.say(['!join','!انضم','!join'][i%3],A.bot(i));});});
-  A.later(250+16*180+600,function(){
-    if(S.phase==='lobby'&&!members('red').length){$('kSplit')&&$('kSplit').click();$('kRoles')&&$('kRoles').click();startGame();}
-  });
-  clearInterval(dT);var tick=0,lastClueTurn='',lastPickAt=0;
-  dT=setInterval(function(){
-    if(!A.demo()){clearInterval(dT);return;}tick++;
-    var t=S.turn;
-    function bot(u){var i=A.BOTS.findIndex(function(b){return 'demo_'+b[0].toLowerCase()===u});return i>=0?A.bot(i):null}
-    if(S.phase==='clue'&&S.spy[t]&&S.spy[t]!=='@me'){var tag=t+S.bid+S.rev.filter(Boolean).length;if(tag!==lastClueTurn){lastClueTurn=tag;
-      var sp=S.spy[t];A.later(2200,function(){if(S.phase!=='clue'||S.turn!==t)return;var pool=(W.GRID[A.lang()]||W.GRID.ar).filter(function(w){return S.words.indexOf(w)<0});var b=bot(sp);if(b)A.say('!clue '+pool[Math.random()*pool.length|0]+' '+(1+(Math.random()*2|0)),b);});}}
-    if(S.phase==='guess'){
-      var ms=members(t).filter(function(u){return u!==S.spy[t]&&u!==S.cap[t]});
-      var mine=[],open=[];for(var i=0;i<25;i++){if(S.rev[i])continue;if(S.key[i]===t[0])mine.push(i);if(S.key[i]!=='x')open.push(i);}
-      if(tick%2===0&&ms.length){var u=ms[Math.random()*ms.length|0];var pickI=Math.random()<.6?mine[Math.random()*mine.length|0]:open[Math.random()*open.length|0];var b=bot(u);
-        if(b&&pickI!=null)A.say(Math.random()<.5?'!pick '+(pickI+1):(Math.random()<.5?String(pickI+1):S.words[pickI]),b);}
-      if(Date.now()-lastPickAt>7000&&Date.now()-S.evT>6000){lastPickAt=Date.now();var cap=bot(S.cap[t]);
-        var best=-1,bv=0;Object.keys(S.tally).forEach(function(k){if(S.tally[k]>bv){bv=S.tally[k];best=+k}});
-        if(best<0||S.rev[best])best=Math.random()<.7?mine[0]:open[Math.random()*open.length|0];
-        if(cap&&best!=null)A.say('!pick '+(best+1),cap);}
-    }
-  },1100);
-});
 changed();
 A.start();
 })();

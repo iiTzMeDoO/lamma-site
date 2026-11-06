@@ -13,9 +13,9 @@ var S={phase:'idle',chain:[],used:{},endsAt:0,dur:15,lang:'ar',t:null,lastUser:'
 function script(w){return /[\u0600-\u06FF]/.test(w)?'ar':'en'}
 function start(){clearTimeout(S.t);S.lang=A.obs?'ar':$('chnLang').value;S.dur=A.obs?15:+$('chnTime').value;var l=W.FAST[S.lang];var w=l[Math.random()*l.length|0];
   S.chain=[{w:w,n:'',u:''}];S.used={};S.used[C.normalize(w)]=1;S.lastUser='';S.phase='live';A.roundStart();A.sfx('start');arm();}
-function arm(){clearTimeout(S.t);S.endsAt=Date.now()+S.dur*1000;changed();A.poke();S.t=setTimeout(function(){if(S.phase==='live'){S.phase='end';A.roundEnd({players:S.chain.filter(function(x){return x.u}).map(function(x){return [x.u,x.n]})});A.sfx('bad');changed();}},S.dur*1000);}
+function arm(){clearTimeout(S.t);S.endsAt=Date.now()+S.dur*1000;changed();S.t=setTimeout(function(){if(S.phase==='live'){S.phase='end';A.roundEnd({players:S.chain.filter(function(x){return x.u}).map(function(x){return [x.u,x.n]})});A.sfx('bad');changed();}},S.dur*1000);}
 function undo(){if(S.chain.length<2)return;var x=S.chain.pop();delete S.used[C.normalize(x.w)];if(x.u)A.award(x.u,x.n,-1);S.lastUser='';if(S.phase==='end')S.phase='live';arm();}
-function stop(){clearTimeout(S.t);if(S.phase==='live')A.roundEnd({players:S.chain.filter(function(x){return x.u}).map(function(x){return [x.u,x.n]})});S.phase='idle';changed();A.clearLater();}
+function stop(){clearTimeout(S.t);if(S.phase==='live')A.roundEnd({players:S.chain.filter(function(x){return x.u}).map(function(x){return [x.u,x.n]})});S.phase='idle';changed();}
 A.onChat(function(m){if(!A.runsEngine())return;var cmd=C.parseCmd(m.text);
   if(cmd&&A.isCtrl(m)){if(cmd.cmd==='chain'){start();return;}if(cmd.cmd==='stop'){stop();return;}if(cmd.cmd==='undo'){undo();return;}}
   if(S.phase!=='live'||cmd)return;
@@ -40,11 +40,5 @@ setInterval(tick,100);
 function changed(){var P=pub();draw(P);A.publish(P);if(!A.obs){$('chnStop').disabled=S.phase==='idle';$('chnUndo').disabled=S.chain.length<2||S.phase==='idle';$('chnStart').textContent=A.t('ch_start');}}
 if(!A.obs){$('chnStart').addEventListener('click',start);$('chnUndo').addEventListener('click',undo);$('chnStop').addEventListener('click',stop);}
 A.onLang(function(){key='';if(cur)draw(cur);});A.onMirror(draw);
-/* demo bots know a few words per starting letter */
-A.onDemo(function(){if(S.phase!=='live')return;A.clearLater();var len=S.chain.length;
-  A.later(2500+Math.random()*4000,function(){if(S.phase!=='live'||S.chain.length!==len)return;var need=C.lastLetter(S.chain[S.chain.length-1].w);
-    var pool=[];Object.keys(W.CHARADES).forEach(function(k){W.CHARADES[k].forEach(function(it){var s=(S.lang==='ar'?it[0]:it[1]);if(s)s.split('|').forEach(function(x){if(x.indexOf(' ')<0)pool.push(x)});});});
-    pool=pool.concat(W.GRID[S.lang]);var ok=pool.filter(function(w){return C.chainOk(S.chain[S.chain.length-1].w,w)&&!S.used[C.normalize(w)]});
-    if(ok.length)A.say(ok[Math.random()*ok.length|0]);});});
 changed();A.start();
 })();

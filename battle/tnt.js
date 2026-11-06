@@ -9,7 +9,7 @@
 var A=window.App,BT=window.BT,MC=window.MC,$=A.$;
 A.strings({
  ar:{g_title:'اهرب من الـTNT',g_how:'الشات بيدخل بـ !دخول ويوقف عالمنصة. كل جولة الجهة اللي فيها ناس أكتر بيولّع فيها الـTNT وبتنفجر لما يخلص الوقت. انتقلو بـ !يمين و !يسار. آخر واحد بيضل هو البطل.',
-  tn_start:'ابدأ اللعبة',tn_boom:'فجّر هلأ 💥',tn_next:'الجولة الجاية',tn_again:'العب مرة تانية',tn_pause:'وقف مؤقت',tn_resume:'كمّل',tn_new:'لعبة جديدة (نفس اللاعبين)',tn_demo:'ضيف 40 لاعب تجربة',tn_clear:'مسح الكل',
+  tn_start:'ابدأ اللعبة',tn_boom:'فجّر هلأ 💥',tn_next:'الجولة الجاية',tn_again:'العب مرة تانية',tn_pause:'وقف مؤقت',tn_resume:'كمّل',tn_new:'لعبة جديدة (نفس اللاعبين)',tn_clear:'مسح الكل',
   tn_hint:'الشات بيدخل بـ !دخول. بالجولة: !يمين أو !يسار (!r / !l). الجهة اللي فيها ناس أكتر هي اللي بتنفجر، فخبّو حالكن بالجهة الفاضية.',
   bt_settings:'الإعدادات',tn_secs:'وقت الجولة',tn_zones:'عدد الجهات',tn_z2:'جهتين (يمين / يسار)',tn_z3:'تلات جهات (+ النص)',tn_speed:'الجولات بتسرع',tn_sp0:'لا',tn_sp1:'شوي',tn_sp2:'عادي',tn_sp3:'كتير',bt_more:'خيارات زيادة',
   tn_jit:'وقت عشوائي ±5 ث (متل كوكيرو)',tn_auto:'الجولة الجاية لحالها',bt_join_t:'وقت الدخول',bt_av:'صور تويتش على الراس',bt_map:'الخريطة',tn_names:'أسامي فوق الراس',
@@ -21,7 +21,7 @@ A.strings({
   tn_info:'عايش · بجهة {z}',tn_info_out:'طلع بالجولة {r}',tn_info_w:'ربح {w} مرة',
   bt_c_join:'دخول',bt_c_lr:'روح يسار / يمين',bt_c_m:'روح عالنص (3 جهات)',bt_c_info:'معلوماتك',bt_c_cstart:'بلّش',bt_c_cnext:'فجّر هلأ / الجولة الجاية',bt_c_pause:'وقف مؤقت'},
  en:{g_title:'TNT Run',g_how:'Chat joins with !join and stands on the platform. Every round the side with MORE people gets its TNT lit and blows up when the timer runs out. Move with !r and !l. The last one standing wins.',
-  tn_start:'Start game',tn_boom:'Blow it now 💥',tn_next:'Next round',tn_again:'Play again',tn_pause:'Pause',tn_resume:'Resume',tn_new:'New game (same players)',tn_demo:'Add 40 demo players',tn_clear:'Clear all',
+  tn_start:'Start game',tn_boom:'Blow it now 💥',tn_next:'Next round',tn_again:'Play again',tn_pause:'Pause',tn_resume:'Resume',tn_new:'New game (same players)',tn_clear:'Clear all',
   tn_hint:'Chat joins with !join. During a round: !r or !l (!يمين / !يسار). The side with more people is the one that blows, so hide on the emptier side.',
   bt_settings:'Settings',tn_secs:'Round time',tn_zones:'Sides',tn_z2:'Two (left / right)',tn_z3:'Three (+ middle)',tn_speed:'Rounds speed up',tn_sp0:'No',tn_sp1:'A bit',tn_sp2:'Normal',tn_sp3:'A lot',bt_more:'More options',
   tn_jit:'Random ±5 s (like Kukoro)',tn_auto:'Next round by itself',bt_join_t:'Join time',bt_av:'Twitch pictures on heads',bt_map:'Map',tn_names:'Names over heads',
@@ -199,7 +199,6 @@ function ctrlHud(){var ph=G.phase;$('tnGo').textContent=T(ph==='lobby'?'tn_start
 /* ---------- control panel ---------- */
 if(!A.obs){
   $('tnGo').addEventListener('click',go);$('tnPause').addEventListener('click',pauseT);$('tnNew').addEventListener('click',newGame);$('tnClear').addEventListener('click',clearAll);
-  $('tnDemoAdd').addEventListener('click',function(){var B=A.BOTS||[];for(var i=0;i<40;i++){var b=B[i%Math.max(1,B.length)]||['Bot','#ffd23d'];var nm=(b[0]||'Bot')+(i>=B.length?'_'+(Math.floor(i/Math.max(1,B.length))+1):'');G.join('demo_t'+i,nm,b[1]);}P=G.pub();A.publish(P);hud(true);});
   BT.tmr($('tnSecsRow'),function(){return CFG.secs},function(v){CFG.secs=v;apply();save();},25);
   BT.tmr($('tnAutoRow'),function(){return CFG.auto},function(v){CFG.auto=v;apply();save();},3);
   BT.tmr($('tnJoinRow'),function(){return CFG.join},function(v){CFG.join=v;joinEnd=v>0?Date.now()+v*1000:0;save();},60);
@@ -209,10 +208,6 @@ if(!A.obs){
   [['tnJit','jit'],['tnAv','av'],['tnNames','names']].forEach(function(a){var e=$(a[0]);e.checked=!!CFG[a[1]];e.addEventListener('change',function(){CFG[a[1]]=e.checked;apply();save();hud(true);});});
   BT.xtra($('tnXtra'),'lamma-tnxtra');if(CFG.join>0)joinEnd=Date.now()+CFG.join*1000;A.onLang(function(){hud(true);});}
 if(window.LammaAvatars&&LammaAvatars.onChange)LammaAvatars.onChange(function(){hud(true);});
-/* demo chat: bots join, then keep switching sides (some follow the crowd, some run from it) */
-A.onDemo(function(){var bots=A.BOTS.slice(0,24);bots.forEach(function(b,i){A.later(150+i*120,function(){A.say(i%2?'!join':'!دخول',A.bot(i));});});
-  setInterval(function(){if(!A.demo()||G.phase!=='fuse')return;for(var k=0;k<3;k++){var al=G.alive();var u=al[Math.floor(Math.random()*al.length)];if(!u)continue;var p=G.players[u];var c=G.counts();var z=Math.random()<.6?c.indexOf(Math.min.apply(null,c)):Math.floor(Math.random()*G.cfg.zones);
-    var w=z===0?(Math.random()<.5?'!يسار':'!l'):z===1?(Math.random()<.5?'!يمين':'!r'):'!نص';A.say(w,{user:u,name:p.name,color:p.color});}},700);});
 
 var PANEL=BT.panel({key:'tnt',root:$('gs'),stage:$('stage'),onPause:pauseT,isPaused:function(){return !!G.paused},canPause:function(){return G.phase==='fuse'||G.phase==='boom'},onNext:go,
   cmds:[['!دخول','!join','انضم','join'],['!يسار','!l','روح شمال','go left'],['!يمين','!r','روح يمين','go right'],['!نص','!m','الوسط (3 جهات)','middle (3 sides)'],['!معلومات','!getinfo','شوف حالك','your card'],['!خروج','!leave','اطلع','leave']],

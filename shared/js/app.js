@@ -1,4 +1,4 @@
-/* app.js — shared runtime for لَمّة | Lamma: language, channel, anonymous Twitch chat, demo chatters,
+/* app.js — shared runtime for لَمّة | Lamma: language, channel, anonymous Twitch chat,
    leaderboard, control→overlay sync, sounds. Every game page loads core.js, words.js, app.js, then its own file. */
 (function(){
 'use strict';
@@ -62,8 +62,8 @@ function watchCmds(){
 /* ---------- language ---------- */
 var T={ar:{},en:{}};
 var BASE={
- ar:{brand_sub:'كل ألعاب الشات في مكان واحد',skip:'تخطَّ إلى المحتوى',demo:'تجربة',sound:'صوت',lang_btn:'EN',all_games:'كل الألعاب',all_wheels:'كل العجلات',all_battle:'كل المعركة',
-  conn_connecting:'يتصل…',conn_connected:'متصل',conn_error:'انقطع، يعيد المحاولة…',conn_demo:'شات تجريبي',conn_bad:'اسم قناة خاطئ',
+ ar:{brand_sub:'كل ألعاب الشات في مكان واحد',skip:'تخطَّ إلى المحتوى',sound:'صوت',lang_btn:'EN',all_games:'كل الألعاب',all_wheels:'كل العجلات',all_battle:'كل المعركة',
+  conn_connecting:'يتصل…',conn_connected:'متصل',conn_error:'انقطع، يعيد المحاولة…',conn_bad:'اسم قناة خاطئ',
   chat_feed:'الشات',feed_empty:'رسائل الشات تظهر هنا',lb:'الترتيب',lb_empty:'لم يفز أحد بعد',reset:'تصفير',reset_q:'هل تريد حقًا تصفير الترتيب لهذه القناة؟',pts:'نقطة',
   obs_title:'رابط OBS',obs_help:'ضع هذا الرابط كـ Browser Source في OBS (1920×1080). الرابط لا يعرض أي سر: لا الكلمة ولا المفتاح.',copy:'نسخ',copied:'تم النسخ ✓',
   obs_dock:'اجعل هذه الصفحة نفسها Custom Browser Dock داخل OBS (Docks ← Custom Browser Docks) حتى يعمل الأوفرلي معك خطوة بخطوة.',
@@ -71,8 +71,8 @@ var BASE={
   waiting_ctrl:'بانتظار لوحة التحكم',footer:'للتسلية فقط — بلا مراهنات وبلا أموال حقيقية. يُقرأ الشات قراءةً فقط، دون أي تسجيل دخول.',
   winner:'الفائز',start:'ابدأ',stop:'أوقف',next:'التالي',skip_btn:'تخطّي',seconds:'ث',players:'لاعب',round:'جولة',timeup:'انتهى الوقت!',
   live:'مباشر',offline:'أوفلاين'},
- en:{brand_sub:'All your chat games in one place',skip:'Skip to content',demo:'Demo',sound:'Sound',lang_btn:'ع',all_games:'All games',all_wheels:'All wheels',all_battle:'All battle modes',
-  conn_connecting:'Connecting…',conn_connected:'Connected',conn_error:'Disconnected, retrying…',conn_demo:'Demo chat',conn_bad:'Invalid channel',
+ en:{brand_sub:'All your chat games in one place',skip:'Skip to content',sound:'Sound',lang_btn:'ع',all_games:'All games',all_wheels:'All wheels',all_battle:'All battle modes',
+  conn_connecting:'Connecting…',conn_connected:'Connected',conn_error:'Disconnected, retrying…',conn_bad:'Invalid channel',
   chat_feed:'Chat',feed_empty:'Chat messages show up here',lb:'Leaderboard',lb_empty:'No winners yet',reset:'Reset',reset_q:'Reset the leaderboard for this channel?',pts:'pts',
   obs_title:'OBS link',obs_help:'Add this link as a Browser Source in OBS (1920×1080). It never shows a secret: not the word, not the key.',copy:'Copy',copied:'Copied ✓',
   obs_dock:'Run this control page as a Custom Browser Dock inside OBS (Docks → Custom Browser Docks) so the overlay follows you step by step.',
@@ -117,9 +117,8 @@ function dispatch(m){
 function isCtrl(m){return !!(m&&(m.mod||m.broadcaster||m.host))}
 
 /* ---------- anonymous read-only Twitch IRC ---------- */
-var ws=null,retry=0,retryT=null,demo=false;
+var ws=null,retry=0,retryT=null;
 function connect(){
-  if(demo)return;
   clearTimeout(retryT);setConn('connecting');
   try{ws=new WebSocket('wss://irc-ws.chat.twitch.tv:443');}catch(e){setConn('error');scheduleRetry();return;}
   var sock=ws;
@@ -140,34 +139,10 @@ function connect(){
       if(p.command==='PRIVMSG'){stats.received++;var m=C.toChat(p);if(m)dispatch(m);}
     });
   };
-  sock.onclose=function(){if(sock!==ws)return;ws=null;if(!demo){setConn('error');scheduleRetry();}};
+  sock.onclose=function(){if(sock!==ws)return;ws=null;setConn('error');scheduleRetry();};
   sock.onerror=function(){};
 }
 function scheduleRetry(){clearTimeout(retryT);retry=Math.min(retry+1,6);retryT=setTimeout(connect,Math.min(30000,1000*Math.pow(2,retry)));}
-function disconnect(){clearTimeout(retryT);if(ws){var s=ws;ws=null;try{s.close()}catch(e){}}}
-
-/* ---------- demo chatters (clearly fake names) ---------- */
-var BOTS=[
- ['أبو_علي','#ff7a59','Notch'],['Sniper_99','#5ad1ff','jeb_'],['نور_الهدى','#ff8fd0','Dinnerbone'],['MC_Fox','#ffb84d','Technoblade'],['ليلى_x','#c39bff','Dream'],
- ['Zaid_SY','#7cf5b0','GeorgeNotFound'],['غيمة','#9fc4ff','Grian'],['PixelKing','#ffd76a','CaptainSparklez'],['سامر2005','#ff6b8b','TommyInnit'],['xX_Hamoudi_Xx','#8ef0e6','iiTzMeDoO'],
- ['ريم_ع','#ffa3e0',''],['BlockMaster','#a6ff7a',''],['حلبي_بيلعب','#ffcf6b',''],['Luna_Gamer','#b49bff',''],['فراس77','#6bd3ff',''],['CreeperHunter','#7dff9b',''],
- ['شام_ستريم','#ff9d7a',''],['Yousef_GG','#f7f06b',''],['بنت_الشام','#ff7ab8',''],['NoobSlayer','#7ab8ff',''],['حمودي','#ffd36b',''],['Kareem_X','#9effe1',''],['ملك_البلوك','#e3a1ff',''],['Ali.exe','#ffb07a','']
-];
-var FILL={ar:['السلام عليكم 👋','يلا يلا','GG','😂😂😂','حلوة اللعبة','🔥🔥','سلام محمد','ههههه','أنا جاهز','شو هاد 😂','يا عيني','وين الناس'],
-          en:['hello chat','GG','lol','first time here 👀','lets go','🔥🔥','ez','hype','wait what','im ready']};
-function bot(i){var b=BOTS[i==null?Math.random()*BOTS.length|0:i%BOTS.length];return {user:'demo_'+b[0].toLowerCase(),name:b[0],color:b[1],mc:b[2],mod:false,fake:true}}
-function say(text,who){if(!demo)return;var b=who||bot();dispatch({user:b.user,name:b.name,color:b.color,text:String(text),mod:!!b.mod,host:!!b.host,fake:true});}
-var demoT=null,demoTimers=[],demoFns=[];
-function later(ms,fn){var id=setTimeout(function(){demoTimers.splice(demoTimers.indexOf(id),1);if(demo)fn();},ms);demoTimers.push(id);return id}
-function clearLater(){demoTimers.forEach(clearTimeout);demoTimers=[];}
-function onDemo(f){demoFns.push(f)}
-function poke(){if(!demo)return;demoFns.forEach(function(f){try{f()}catch(e){console.error(e)}});}
-function setDemo(on){
-  demo=!!on;var dt=$('demoToggle');if(dt)dt.checked=demo;
-  document.documentElement.classList.toggle('is-demo',demo);
-  if(demo){disconnect();setConn('demo');clearInterval(demoT);demoT=setInterval(function(){if(Math.random()<.45){var f=FILL[Math.random()<.65?'ar':'en'];say(f[Math.random()*f.length|0]);}},2400);poke();}
-  else{clearInterval(demoT);clearLater();connect();}
-}
 
 /* ---------- live feed ---------- */
 function pushFeed(m){
@@ -192,7 +167,7 @@ function roundEnd(o){var l=lv();if(l)try{l.roundEnd(o)}catch(e){console.error(e)
 function top(n){return C.topN(loadBoard(),n||10)}
 function renderBoard(){
   var ol=$('lb');if(!ol)return;clear(ol);var rows=top(10);
-  rows.forEach(function(r,i){var li=el('li');li.appendChild(el('span','rk',String(i+1)));li.appendChild(nameEl(r.name));var l=lv(),lvl=l?l.localLevel((/^demo_/.test(r.user)?'demo:'+r.user.slice(5):'twitch:'+r.user)):0;if(lvl)li.appendChild(l.badge(lvl));li.appendChild(el('span','pt',r.pts+' '+t('pts')));ol.appendChild(li);});
+  rows.forEach(function(r,i){var li=el('li');li.appendChild(el('span','rk',String(i+1)));li.appendChild(nameEl(r.name));var l=lv(),lvl=l?l.localLevel('twitch:'+r.user):0;if(lvl)li.appendChild(l.badge(lvl));li.appendChild(el('span','pt',r.pts+' '+t('pts')));ol.appendChild(li);});
   var e=$('lbEmpty');if(e)e.hidden=rows.length>0;
 }
 window.addEventListener('storage',function(e){if(e.key===LBKEY)renderBoard();});
@@ -302,7 +277,6 @@ function boot(){
     document.querySelectorAll('.ctrl-only,.secret,#side,header.top,.gp-head,footer,.skip').forEach(function(n){if(n.parentNode)n.parentNode.removeChild(n)});
   }
   var lb=$('langBtn');if(lb)lb.addEventListener('click',function(){setLang(lang==='ar'?'en':'ar')});
-  var dt=$('demoToggle');if(dt)dt.addEventListener('change',function(){setDemo(this.checked)});
   var sb=$('soundBtn');if(sb)sb.addEventListener('click',function(){setSound(!soundOn)});setSound(soundOn);
   var rs=$('lbReset');if(rs)rs.addEventListener('click',function(){if(confirm(t('reset_q'))){LS.set(LBKEY,'{}');renderBoard();}});
   var cb=$('obsCopy');if(cb)cb.addEventListener('click',function(){copyText($('obsUrl').value,cb)});
@@ -317,11 +291,10 @@ function boot(){
 
 window.App={C:C,Q:Q,$:$,el:el,rich:rich,setRich:setRich,clear:clear,nameEl:nameEl,readable:readable,strings:strings,t:t,lang:function(){return lang},onLang:function(f){langFns.push(f)},setLang:setLang,
   channel:CHANNEL,obs:OBS,game:GAME,onChat:onChat,dispatch:dispatch,isCtrl:isCtrl,stats:stats,
-  demo:function(){return demo},setDemo:setDemo,say:say,bot:bot,BOTS:BOTS,later:later,clearLater:clearLater,onDemo:onDemo,poke:poke,
   award:award,top:top,xpWin:xpWin,xpPlay:xpPlay,roundStart:roundStart,roundEnd:roundEnd,renderBoard:renderBoard,publish:publish,onMirror:onMirror,onMode:onMode,mode:function(){return mode},allowSolo:allowSolo,runsEngine:runsEngine,
   sfx:sfx,confetti:confetti,obsUrl:obsUrl,obsExtra:obsExtra,updateObsUrl:updateObsUrl,fixCmds:fixCmds,copyText:copyText,channelInfo:channelInfo,LS:LS,boot:boot,
   start:function(){ // called by each page after it registered its handlers
     boot();
-    if(Q.get('demo')==='1'&&!OBS)setDemo(true);else connect();
+    connect();
   }};
 })();

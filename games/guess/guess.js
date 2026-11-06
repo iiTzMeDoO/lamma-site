@@ -127,21 +127,6 @@ if(!A.obs){
 }
 A.onLang(function(){key='';changed();});
 A.onMirror(function(P){draw(P)});
-/* demo: chatters narrow the range (some spam the same number to show it gets ignored) */
-var dT=null;
-A.onDemo(function(){
-  if(!S.on&&!S.winner)start();
-  clearInterval(dT);var i=0;
-  dT=setInterval(function(){
-    if(!A.demo()){clearInterval(dT);return;}
-    if(!S.on)return;
-    var b=A.bot(i++%A.BOTS.length);
-    var span=S.hi-S.lo;var v=span<=0?S.lo:S.lo+Math.round(span*(.08+Math.random()*.84));
-    if(Math.random()<.18)v=S.last.length?S.last[0].v:v;          // spam
-    if(Math.random()<.08&&span>3)v=S.lo+Math.floor(Math.random()*(span+1));
-    A.say(String(v),b);
-  },1300);
-});
 changed();
 A.start();
 })();

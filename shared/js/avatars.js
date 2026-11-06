@@ -3,13 +3,13 @@
    Queued logins are looked up together (one Twitch GQL request for up to 35 logins, public Client-ID, no login / token);
    if that fails, one decapi.me lookup per login. Results are cached in localStorage for 7 days (misses for 1 day).
    LammaAvatars.onChange(fn) runs fn after new pictures arrived, so lists / the wheel can repaint.
-   Demo chatters (demo_*) and anything that is not a Twitch login get no lookup: the letter circle stays. */
+   Anything that is not a Twitch login gets no lookup: the letter circle stays. */
 (function(root){
 'use strict';
 var CID='kimne78kx3ncx6brgo4mv6wki5h1ko',DAY=864e5,OK=7*DAY,MISS=DAY,PFX='lamma-av-';
 var mem={},queue=[],queued={},fns=[],timer=null,busy=false;
 var CDN=/^https:\/\/static-cdn\.jtvnw\.net\/[^\s"'<>()]+$/;
-function valid(l){return /^[a-z0-9_]{2,25}$/.test(l)&&l.indexOf('demo_')!==0}
+function valid(l){return /^[a-z0-9_]{2,25}$/.test(l)}
 function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function now(){return Date.now()}

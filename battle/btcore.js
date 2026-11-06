@@ -266,7 +266,7 @@ Arena.prototype.fTurn=function(f,m){/* Mohammad #12: after use the power recharg
   f.strength=m.boss&&f.gear.items.indexOf('strength')>=0&&this.useItem(f,'strength')?1.3:(f.strength||1);
   var r=this.strike(f,m,1);
   if(r&&!r.dodge&&r.n>0&&m.hp>0){if(f.atkT==='poison')applyDot(this,m,'poison',2+f.atk*.25);if(f.gear.we==='fireasp')applyDot(this,m,'burn',2+f.atk*.2);if(f.gear.we==='knock'&&this.r()<.15){m.stun=1;}}
-  if(this.cfg.autoPower&&!f.pwUsed&&!f.pwAuto&&!this.duel.end&&(f.hp<f.max*.4||this.duel.hits>=5)&&f.u.indexOf('demo_')!==0){f.pwAuto=1;this.firePower(f);}};
+  if(this.cfg.autoPower&&!f.pwUsed&&!f.pwAuto&&!this.duel.end&&(f.hp<f.max*.4||this.duel.hits>=5)){f.pwAuto=1;this.firePower(f);}};
 /* the enemy's turn: traits and boss phases */
 Arena.prototype.mTurn=function(m,f){if(m.dot){tickDot(this,m);this.checkEnd();if(this.duel.end)return;}
   if(m.frozen>0){m.frozen--;this.emit({k:'frozen',to:m.id});return;}if(m.stun>0){m.stun--;this.emit({k:'stun',to:m.id});return;}

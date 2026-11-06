@@ -180,25 +180,6 @@ if(!A.obs){
 }
 A.onLang(function(){key='';renderCats();changed();});
 A.onMirror(function(P){draw(P)});
-/* demo: a few chatters try (some with small typos / missing hamza / no spaces, still counted) */
-var dT=null;
-A.onDemo(function(){
-  if(S.phase==='idle')start();
-  clearInterval(dT);var n=0;
-  dT=setInterval(function(){
-    if(!A.demo()){clearInterval(dT);return;}
-    if(S.phase!=='live'||!S.item)return;n++;
-    var b=A.bot(Math.random()*A.BOTS.length|0),txt;
-    var el2=(Date.now()-(S.deadline-S.time*1000))/1000;
-    if(el2>4+Math.random()*6&&Math.random()<.35){
-      txt=S.item.kind==='quiz'?S.item.ans[0]:S.item.show;
-      if(S.item.kind==='adhkar'&&Math.random()<.6)txt=txt.replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');   // typed without hamzas → still correct
-    }else{
-      var wrong=S.item.kind==='quiz'?['ما بعرف','؟؟','دمشق','5','argentina','ههههه'][n%6]:S.item.show.split(' ').slice(0,2).join(' ');txt=wrong;
-    }
-    A.say(txt,b);
-  },900);
-});
 changed();
 A.start();
 })();

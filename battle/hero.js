@@ -10,7 +10,7 @@
 var A=window.App,BT=window.BT,MC=window.MC,$=A.$;
 A.strings({
  ar:{g_title:'المحارب',g_how:'الشات بيدخل بـ !دخول وبيستنى دورو. المحارب واقف بالساحة وكل متحدّي بيفوت لعندو بمبارزة بالدور. اللي بيربح بيضل، واللي بيخسر بيرجع عآخر الدور. لاقي تركيبتك المثالية بـ !احصائيات ABCD.',
-  hr_start:'ابدأ',hr_next:'المبارزة الجاية ⚔',hr_skip:'خلّص المبارزة هلأ',hr_stop:'خلّص اللعبة',hr_again:'العب مرة تانية',hr_pause:'وقف مؤقت',hr_resume:'كمّل',hr_new:'لعبة جديدة (نفس اللاعبين)',hr_demo:'ضيف 20 لاعب تجربة',hr_clear:'مسح الكل',
+  hr_start:'ابدأ',hr_next:'المبارزة الجاية ⚔',hr_skip:'خلّص المبارزة هلأ',hr_stop:'خلّص اللعبة',hr_again:'العب مرة تانية',hr_pause:'وقف مؤقت',hr_resume:'كمّل',hr_new:'لعبة جديدة (نفس اللاعبين)',hr_clear:'مسح الكل',
   hr_hint:'الشات بيدخل بـ !دخول. كل واحد بيختار 4 حروف (A–Z) لـ هجوم / دفاع / سرعة / صحة بـ !احصائيات ABCD، وقيمة كل حرف بتختلف حسب اسمو. !علاج بين المبارزات للمحارب.',
   bt_settings:'الإعدادات',hr_speed:'سرعة القتال',hr_sp_s:'بطيء',hr_sp_n:'عادي',hr_sp_f:'سريع',hr_brk:'استراحة بين المبارزات',hr_streamer:'الستريمر هو المحارب الأول',bt_more:'خيارات زيادة',
   hr_respawn:'الخسران بيرجع عالدور',hr_bots:'موبز بتتحدّى لما ما في حدا',hr_boss:'صحة الستريمر',bt_join_t:'وقت الدخول',bt_av:'صور تويتش على الراس',bt_map:'الخريطة',hr_names:'أسامي فوق الراس',hr_heal:'!علاج بيرجّع',
@@ -23,7 +23,7 @@ A.strings({
   mob_zombie:'زومبي',mob_skeleton:'هيكل عظمي',mob_husk:'زومبي الصحرا',mob_spider:'عنكبوت',mob_creeper:'كريبر',mob_piglin:'بيغلن',mob_wskel:'هيكل الذابل',mob_enderman:'إندرمان',
   bt_c_join:'دخول',bt_c_stats:'غيّر حروفك (هجوم دفاع سرعة صحة)',bt_c_heal:'تعالج بين المبارزات',bt_c_info:'معلوماتك',bt_c_cstart:'بلّش',bt_c_cnext:'المبارزة الجاية / خلّصها',bt_c_pause:'وقف مؤقت',bt_c_end:'خلّص اللعبة'},
  en:{g_title:'The Perfect Warrior',g_how:'Chat joins with !join and waits in line. The warrior stands in the arena and each challenger steps in for a turn-based duel. The winner stays, the loser goes to the back of the line. Find your perfect combination with !stats ABCD.',
-  hr_start:'Start',hr_next:'Next duel ⚔',hr_skip:'Finish this duel now',hr_stop:'End the game',hr_again:'Play again',hr_pause:'Pause',hr_resume:'Resume',hr_new:'New game (same players)',hr_demo:'Add 20 demo players',hr_clear:'Clear all',
+  hr_start:'Start',hr_next:'Next duel ⚔',hr_skip:'Finish this duel now',hr_stop:'End the game',hr_again:'Play again',hr_pause:'Pause',hr_resume:'Resume',hr_new:'New game (same players)',hr_clear:'Clear all',
   hr_hint:'Chat joins with !join. Everyone picks 4 letters (A–Z) for attack / defence / speed / life with !stats ABCD; what a letter is worth depends on your name. !heal between duels for the warrior.',
   bt_settings:'Settings',hr_speed:'Fight speed',hr_sp_s:'Slow',hr_sp_n:'Normal',hr_sp_f:'Fast',hr_brk:'Break between duels',hr_streamer:'The streamer is the first warrior',bt_more:'More options',
   hr_respawn:'The loser goes back in line',hr_bots:'Mobs challenge when nobody waits',hr_boss:'Streamer HP',bt_join_t:'Join time',bt_av:'Twitch pictures on heads',bt_map:'Map',hr_names:'Names over heads',hr_heal:'!heal restores',
@@ -219,7 +219,6 @@ function ctrlHud(){var ph=G.phase;$('hrGo').textContent=T(ph==='lobby'?'hr_start
 /* ---------- control panel ---------- */
 if(!A.obs){
   $('hrGo').addEventListener('click',go);$('hrPause').addEventListener('click',pauseT);$('hrStop').addEventListener('click',endGame);$('hrNew').addEventListener('click',newGame);$('hrClear').addEventListener('click',clearAll);
-  $('hrDemoAdd').addEventListener('click',function(){var B=A.BOTS||[];for(var i=0;i<20;i++){var b=B[i%Math.max(1,B.length)]||['Bot','#ffd23d'];var nm2=(b[0]||'Bot')+(i>=B.length?'_'+(Math.floor(i/Math.max(1,B.length))+1):'');G.join('demo_h'+i,nm2,b[1]);}P=G.pub();A.publish(P);hud(true);});
   BT.tmr($('hrBrkRow'),function(){return CFG.brk},function(v){CFG.brk=v;apply();save();},4);
   BT.tmr($('hrJoinRow'),function(){return CFG.join},function(v){CFG.join=v;joinEnd=v>0?Date.now()+v*1000:0;save();},60);
   var spd=$('hrSpeed');spd.value=CFG.speed;spd.addEventListener('change',function(){CFG.speed=spd.value;apply();save();});
@@ -229,10 +228,6 @@ if(!A.obs){
   [['hrStreamer','streamer'],['hrRespawn','respawn'],['hrBots','bots'],['hrAv','av'],['hrNames','names']].forEach(function(a){var e=$(a[0]);e.checked=!!CFG[a[1]];e.addEventListener('change',function(){CFG[a[1]]=e.checked;apply();save();hud(true);});});
   BT.xtra($('hrXtra'),'lamma-hrxtra');if(CFG.join>0)joinEnd=Date.now()+CFG.join*1000;A.onLang(function(){hud(true);});}
 if(window.LammaAvatars&&LammaAvatars.onChange)LammaAvatars.onChange(function(){hud(true);});
-/* demo chat: bots join, try letter combinations, the warrior heals */
-A.onDemo(function(){var bots=A.BOTS.slice(0,14);bots.forEach(function(b,i){A.later(150+i*160,function(){A.say(i%2?'!join':'!دخول',A.bot(i));});});
-  setInterval(function(){if(!A.demo())return;if(G.phase==='after'&&G.champ&&!G.players[G.champ].bot&&Math.random()<.5){var c=G.players[G.champ];A.say(Math.random()<.5?'!heal':'!علاج',{user:c.user,name:c.name,color:c.color});}
-    if(Math.random()<.35){var q=G.queue[Math.floor(Math.random()*G.queue.length)];var p=q&&G.players[q];if(p&&!p.bot){var L='';for(var i=0;i<4;i++)L+=String.fromCharCode(65+Math.floor(Math.random()*26));A.say((Math.random()<.5?'!stats ':'!احصائيات ')+L,{user:p.user,name:p.name,color:p.color});}}},1500);});
 
 var PANEL=BT.panel({key:'hero',root:$('gs'),stage:$('stage'),onPause:pauseT,isPaused:function(){return !!G.paused},canPause:function(){return G.phase!=='lobby'&&G.phase!=='end'},onNext:go,
   cmds:[['!دخول','!join','تحدّى المحارب','challenge'],['!احصائيات ABCD','!stats ABCD','حروفك: هجوم دفاع سرعة صحة','your letters: atk def spd hp'],['!علاج','!heal','تعالج بين المبارزات','heal between duels'],['!معلومات','!getinfo','شوف حالك','your card'],['!خروج','!leave','اطلع','leave']],

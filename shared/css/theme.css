@@ -22,9 +22,6 @@ html[data-theme]:not([data-theme=neon]) .hero-ar{color:var(--thi);text-shadow:0 
 html[data-theme]:not([data-theme=neon]) .top{background:color-mix(in srgb,var(--bg) 75%,transparent);border-bottom:1px solid rgba(var(--glow),.22);box-shadow:0 1px 0 rgba(255,255,255,.03),0 8px 30px -12px rgba(var(--glow),.35)}
 html[data-theme]:not([data-theme=neon]) .chan-chip,html[data-theme]:not([data-theme=neon]) .icon-btn,html[data-theme]:not([data-theme=neon]) .lang-btn,html[data-theme]:not([data-theme=neon]) .theme-btn{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)),var(--card);border-color:rgba(var(--glow),.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
 html[data-theme]:not([data-theme=neon]) .icon-btn:hover,html[data-theme]:not([data-theme=neon]) .lang-btn:hover,html[data-theme]:not([data-theme=neon]) .theme-btn:hover{border-color:var(--ta2);box-shadow:0 0 14px rgba(var(--glow),.35)}
-html[data-theme]:not([data-theme=neon]) [data-state=demo] .dot{background:var(--ta2);box-shadow:0 0 10px var(--ta2)}
-html[data-theme]:not([data-theme=neon]) .switch .track{background:color-mix(in srgb,var(--card2) 80%,var(--ta3))}
-html[data-theme]:not([data-theme=neon]) .switch input:checked+.track{background:linear-gradient(90deg,var(--ta3),var(--ta2))}
 html[data-theme]:not([data-theme=neon]) :is(a,button,input,select,textarea,summary):focus-visible{outline-color:var(--ta2)}
 html[data-theme]:not([data-theme=neon]) .btn-main{color:var(--tink);background:linear-gradient(180deg,var(--tp1),var(--ta) 60%,var(--ta3));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 22px rgba(var(--glow),.4)}
 html[data-theme]:not([data-theme=neon]) .btn-main:hover:not(:disabled){box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 30px rgba(var(--glow),.55)}

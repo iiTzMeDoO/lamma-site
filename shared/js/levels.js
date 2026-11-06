@@ -8,7 +8,6 @@
    • Streamer (the signed-in Twitch owner of the channel, id "twitch:<login>"): +round for every round that ends with ≥1 player,
      plus +perPlayer for each viewer who played in it (capped).
    • With friends (no stream): the host is the signed-in person (any provider); hosting XP goes to their own player level.
-   • Demo chatters (demo mode) count only on this device, never online.
    LEVEL CURVE: level 1 at 0 XP; level n needs 100·(n−1)^1.5 cumulative XP  (Lv2 100, Lv3 283, Lv5 800, Lv10 2 700, Lv20 8 282).
 
    STORAGE (pluggable): always LOCAL (localStorage "lamma-levels", works today, this device only); and SUPABASE as well once
@@ -39,18 +38,20 @@ function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function clean(s,n){return String(s==null?'':s).replace(/[\u0000-\u001f\u007f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,n||40)}
 function safeImg(u){return typeof u==='string'&&/^https:\/\/[^\s"'<>]{1,300}$/.test(u)?u:''}
-var ID_RE=/^(twitch|discord|google|guest|demo):[^\s:<>"']{1,64}$/;
+var ID_RE=/^(twitch|discord|google|guest):[^\s:<>"']{1,64}$/;
 
 var Local={
   name:'local',
-  load:function(){var d=null;try{d=JSON.parse(lsGet(LKEY)||'null')}catch(e){}if(!d||typeof d!=='object')d={};d.players=d.players||{};d.streamers=d.streamers||{};return d},
+  load:function(){var d=null;try{d=JSON.parse(lsGet(LKEY)||'null')}catch(e){}if(!d||typeof d!=='object')d={};d.players=d.players||{};d.streamers=d.streamers||{};
+    /* the old demo mode (removed Nov 2026) left test entries on this device: drop them */
+    var drop=0;['players','streamers'].forEach(function(t){Object.keys(d[t]).forEach(function(k){if(/^demo:/.test(k)||d[t][k].demo){delete d[t][k];drop++}})});if(drop)lsSet(LKEY,JSON.stringify(d));return d},
   save:function(d){lsSet(LKEY,JSON.stringify(d))},
   add:function(items){
     var d=Local.load(),now=new Date().toISOString();
     items.forEach(function(it){
       var tb=it.kind==='streamer'?d.streamers:d.players,r=tb[it.id]||{id:it.id,display:it.display||it.id,avatar:'',provider:it.id.split(':')[0],xp:0,level:1,rounds:0};
       r.display=it.display||r.display;if(it.avatar)r.avatar=it.avatar;r.xp+=Math.max(0,Math.min(XP.maxPerCall,it.amount|0));r.level=levelFor(r.xp);
-      r.rounds=(r.rounds||0)+(it.rounds|0);r.updated_at=now;if(it.demo)r.demo=true;tb[it.id]=r;
+      r.rounds=(r.rounds||0)+(it.rounds|0);r.updated_at=now;tb[it.id]=r;
     });
     Local.save(d);return Promise.resolve(true);
   },
@@ -117,18 +118,17 @@ function host(){
   var verified=!!(s&&s.provider==='twitch'&&String(s.login).toLowerCase()===ch);
   return {kind:'streamer',id:'twitch:'+ch,display:verified?(s.display||ch):ch,avatar:verified?(s.avatar||''):'',online:verified};
 }
-function viewerId(u,demo){u=String(u||'').toLowerCase();return demo?'demo:'+u.replace(/^demo_/,''):'twitch:'+u}
-function isDemoUser(u){return /^demo_/.test(String(u||''))}
+function viewerId(u){return 'twitch:'+String(u||'').toLowerCase()}
 
 /* ---------- rounds ---------- */
 var R=null,lastAutoHost=0;
-function openRound(explicit){R={explicit:!!explicit,at:Date.now(),p:{},demo:A&&A.demo&&A.demo()};armIdle()}
+function openRound(explicit){R={explicit:!!explicit,at:Date.now(),p:{}};armIdle()}
 var idleT=0,autoT=0;
 function armIdle(){clearTimeout(idleT);idleT=setTimeout(function(){if(R)closeRound()},XP.idleCloseMin*60000)}
-function touch(u,n,demo){
-  if(!u)return null;var id=viewerId(u,demo);if(!ID_RE.test(id))return null;
+function touch(u,n){
+  if(!u)return null;var id=viewerId(u);if(!ID_RE.test(id))return null;
   var h=host();if(h&&id===h.id)return null;                    // the streamer playing in their own round earns as host, not as viewer
-  var p=R.p[id];if(!p){p=R.p[id]={id:id,display:clean(n||u,40),win:0,demo:!!demo};}else if(n)p.display=clean(n,40);
+  var p=R.p[id];if(!p){p=R.p[id]={id:id,display:clean(n||u,40),win:0};}else if(n)p.display=clean(n,40);
   return p;
 }
 function roundStart(){if(!canRecord())return;if(R)closeRound();openRound(true)}
@@ -138,18 +138,18 @@ function roundEnd(opts){
   if(!canRecord()){R=null;return}
   if(!R)return;                                                 // nothing open (already closed, or a stop with no round running)
   opts=opts||{};
-  if(opts.players&&opts.players.length){var keep={};opts.players.forEach(function(x){var p=touch(x[0],x[1],isDemoUser(x[0])||R.demo);if(p)keep[p.id]=1});
+  if(opts.players&&opts.players.length){var keep={};opts.players.forEach(function(x){var p=touch(x[0],x[1]);if(p)keep[p.id]=1});
     if(R.explicit)Object.keys(R.p).forEach(function(k){if(!keep[k]&&!R.p[k].win)delete R.p[k]});}
   (opts.winners||[]).forEach(function(x){winIn(x[0],x[1],1)});
   closeRound();
 }
-function winIn(u,n,pts){var p=touch(u,n,isDemoUser(u)||(R&&R.demo));if(!p)return;var add=XP.viewer.win+XP.viewer.perPoint*Math.max(0,(pts|0)-1);p.win=Math.min(XP.viewer.maxWinPerRound,p.win+add)}
+function winIn(u,n,pts){var p=touch(u,n);if(!p)return;var add=XP.viewer.win+XP.viewer.perPoint*Math.max(0,(pts|0)-1);p.win=Math.min(XP.viewer.maxWinPerRound,p.win+add)}
 function chat(m){
   if(!R||!R.explicit||!m||m.broadcaster||m.host)return;
   if(!canRecord())return;
-  touch(m.user,m.name,!!m.fake);armIdle();
+  touch(m.user,m.name);armIdle();
 }
-function played(u,n){if(!canRecord()||!u)return;if(!R)openRound(false);touch(u,n,isDemoUser(u)||(A.demo&&A.demo()));autoClose()}
+function played(u,n){if(!canRecord()||!u)return;if(!R)openRound(false);touch(u,n);autoClose()}
 function win(u,n,pts){
   if(!canRecord()||!u||!(pts>0))return;
   if(!R)openRound(false);
@@ -159,15 +159,15 @@ function autoClose(){if(R&&!R.explicit){clearTimeout(autoT);autoT=setTimeout(fun
 function closeRound(){
   clearTimeout(idleT);clearTimeout(autoT);var r=R;R=null;if(!r)return;
   var ids=Object.keys(r.p);if(!ids.length)return;
-  var local=[],online=[],h=host(),realPlayers=0;
-  ids.forEach(function(id){var p=r.p[id],amt=XP.viewer.play+p.win;
-    var it={kind:'player',id:id,display:p.display,avatar:'',amount:amt,demo:p.demo};local.push(it);
-    if(!p.demo){realPlayers++;if(h&&h.online)online.push(it)}});
+  var local=[],online=[],h=host();
+  ids.forEach(function(id){var p=r.p[id];
+    var it={kind:'player',id:id,display:p.display,avatar:'',amount:XP.viewer.play+p.win};local.push(it);
+    if(h&&h.online)online.push(it)});
   if(h){
     var hostOk=r.explicit||Date.now()-lastAutoHost>XP.autoRoundSec*1000;
     if(hostOk){lastAutoHost=Date.now();
-      var n=Math.min(XP.streamer.maxPlayers,ids.length),hit={kind:h.kind,id:h.id,display:h.display,avatar:h.avatar,amount:XP.streamer.round+XP.streamer.perPlayer*n,rounds:1,demo:!realPlayers};
-      local.push(hit);if(h.online&&realPlayers){var oh={};for(var k in hit)oh[k]=hit[k];oh.amount=XP.streamer.round+XP.streamer.perPlayer*Math.min(XP.streamer.maxPlayers,realPlayers);online.push(oh)}}
+      var n=Math.min(XP.streamer.maxPlayers,ids.length),hit={kind:h.kind,id:h.id,display:h.display,avatar:h.avatar,amount:XP.streamer.round+XP.streamer.perPlayer*n,rounds:1};
+      local.push(hit);if(h.online)online.push(hit)}
   }
   Local.add(local);enqueue(online);emit();
 }

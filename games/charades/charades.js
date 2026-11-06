@@ -53,7 +53,7 @@ function newWord(){
   clearTimeout(S.timer);
   A.roundStart();var x=pick();S.item=x.it;S.catOf=x.c;S.phase='live';S.round++;S.guesses=[];S.winner=null;S.reveal='';
   S.startedAt=Date.now();S.endsAt=S.startedAt+S.dur*1000;
-  A.sfx('start');changed();A.poke();
+  A.sfx('start');changed();
 }
 function skip(){if(S.phase!=='live')return;S.round--;newWord();}
 function endRound(winner){
@@ -63,7 +63,7 @@ function endRound(winner){
   changed();if(winner)A.confetti($('stage'),80);
   if(winner&&S.auto){clearTimeout(S.timer);S.timer=setTimeout(function(){if(S.phase==='end')newWord();},5000);}
 }
-function stop(){clearTimeout(S.timer);S.phase='idle';S.item=null;S.winner=null;S.guesses=[];S.reveal='';changed();A.clearLater();}
+function stop(){clearTimeout(S.timer);S.phase='idle';S.item=null;S.winner=null;S.guesses=[];S.reveal='';changed();}
 
 A.onChat(function(m){
   if(!A.runsEngine())return;
@@ -168,15 +168,6 @@ if(!A.obs){
   A.onLang(function(){lastKey='';if(cur)draw(cur);});
 }
 A.onMirror(function(P){draw(P)});
-
-/* ---------- demo chatters guess ---------- */
-A.onDemo(function(){
-  if(S.phase!=='live')return;A.clearLater();
-  var r=S.round,catItems=W.CHARADES[S.catOf]||[],ans=answers();
-  var wrong=C.shuffle(catItems.filter(function(it){return it!==S.item&&it[0]})).slice(0,6).map(function(it){var s=Math.random()<.75?it[0]:(it[1]||it[0]);return s.split('|')[0]});
-  wrong.forEach(function(w,i){A.later(1500+i*1700+Math.random()*900,function(){if(S.phase==='live'&&S.round===r)A.say(Math.random()<.2?w+'؟':w);});});
-  A.later(11000+Math.random()*5000,function(){if(S.phase==='live'&&S.round===r){var a=ans[Math.random()*Math.min(ans.length,3)|0];A.say(Math.random()<.4?'ال'+a:a);}});
-});
 
 draw(pub());renderCtrl();
 A.start();

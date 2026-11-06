@@ -12,12 +12,12 @@ A.strings({ar:{g_title:'أسئلة سريعة',g_how:'سؤال و4 أجوبة. �
 function f(k,o){var s=A.t(k);for(var x in o)s=s.split('{'+x+'}').join(o[x]);return s}
 var S={phase:'idle',order:[],i:0,n:10,dur:20,endsAt:0,ans:{},first:null,score:{},t:null};
 function start(){S.n=A.obs?10:+$('tCount').value;S.dur=A.obs?20:+$('tTime').value;S.order=C.shuffle(W.TRIVIA.map(function(_,i){return i})).slice(0,S.n);S.n=S.order.length;S.i=0;S.score={};A.roundStart();ask();}
-function ask(){clearTimeout(S.t);S.phase='q';S.ans={};S.first=null;S.endsAt=Date.now()+S.dur*1000;A.sfx('start');changed();A.poke();S.t=setTimeout(reveal,S.dur*1000);}
+function ask(){clearTimeout(S.t);S.phase='q';S.ans={};S.first=null;S.endsAt=Date.now()+S.dur*1000;A.sfx('start');changed();S.t=setTimeout(reveal,S.dur*1000);}
 function reveal(){if(S.phase!=='q')return;clearTimeout(S.t);S.phase='a';var q=W.TRIVIA[S.order[S.i]];
   Object.keys(S.ans).forEach(function(u){var a=S.ans[u];if(a.v===q.c){var pts=(S.first&&S.first.u===u)?3:1;A.award(u,a.n,pts);var s=S.score[u]||{n:a.n,p:0};s.p+=pts;S.score[u]=s;}});
   A.sfx('win');changed();S.t=setTimeout(next,6000);}
 function next(){clearTimeout(S.t);if(S.phase==='idle')return;S.i++;if(S.i>=S.n){S.phase='done';A.roundEnd();changed();A.confetti($('stage'),70);return;}ask();}
-function stop(){clearTimeout(S.t);if(S.phase!=='idle'&&S.phase!=='done')A.roundEnd();S.phase='idle';changed();A.clearLater();}
+function stop(){clearTimeout(S.t);if(S.phase!=='idle'&&S.phase!=='done')A.roundEnd();S.phase='idle';changed();}
 A.onChat(function(m){if(!A.runsEngine())return;var cmd=C.parseCmd(m.text);
   if(cmd&&A.isCtrl(m)){if(cmd.cmd==='trivia'){start();return;}if(cmd.cmd==='stop'){stop();return;}if(cmd.cmd==='next'){next();return;}}
   if(S.phase!=='q')return;var v=C.parseVote(m.text,4);if(v<0||S.ans[m.user])return;
@@ -47,6 +47,5 @@ setInterval(tick,250);
 function changed(){var P=pub();draw(P);A.publish(P);if(!A.obs){$('tStop').disabled=S.phase==='idle';$('tNext').disabled=!(S.phase==='q'||S.phase==='a');$('tStart').disabled=S.phase==='q'||S.phase==='a';}}
 if(!A.obs){$('tStart').addEventListener('click',start);$('tNext').addEventListener('click',function(){if(S.phase==='q')reveal();else next();});$('tStop').addEventListener('click',stop);}
 A.onLang(function(){key='';if(cur)draw(cur);});A.onMirror(draw);
-A.onDemo(function(){if(S.phase!=='q')return;A.clearLater();var q=W.TRIVIA[S.order[S.i]],i0=S.i;A.BOTS.slice(0,14).forEach(function(b,i){A.later(1200+Math.random()*(S.dur*1000-4000),function(){if(S.phase!=='q'||S.i!==i0)return;A.say('!'+(1+(Math.random()<.6?q.c:(Math.random()*4|0))),A.bot(i));});});});
 changed();A.start();
 })();

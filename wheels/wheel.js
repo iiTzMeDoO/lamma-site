@@ -753,26 +753,6 @@ if(!A.obs){(function(){
   document.addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();spinOrStop();}if(e.key==='Escape'&&chEl&&!chEl.hidden&&!chEl.classList.contains('fn-off'))closeChamp();});
 })();}
 
-/* ---------- demo: bots join, and a landed bot kicks/revives by chat ---------- */
-var demoWatch=null;
-A.onDemo(function(){
-  if(S.entries.length<10){A.BOTS.slice(0,14).forEach(function(b,i){A.later(300+i*260,function(){A.say(['!join','!دخول','دخول','!wheel'][i%4],A.bot(i));});});}
-  clearInterval(demoWatch);var lastCh='';
-  demoWatch=setInterval(function(){
-    if(!A.demo()){clearInterval(demoWatch);return;}
-    if(S.phase==='choose'&&S.chooser&&!S.paused&&!S.streamerPicks){
-      var tag=S.chooser.n+S.deadline;if(tag===lastCh)return;lastCh=tag;
-      var me=chooserEntry();var bi=A.BOTS.findIndex(function(b){return b[0]===S.chooser.n});if(bi<0)return;
-      A.later(1800+Math.random()*3000,function(){
-        if(S.phase!=='choose'||!S.chooser||S.chooser.n!==A.BOTS[bi][0])return;
-        if(me&&(me.sh|0)>0&&S.out.length&&Math.random()<.3){A.say('!revive '+S.out[Math.random()*S.out.length|0].n,A.bot(bi));return;}
-        var others=S.entries.filter(function(e){return e.n!==S.chooser.n});if(!others.length)return;
-        var tg=others[Math.random()*others.length|0];
-        var r=Math.random();if(r<.3){var ti=S.entries.indexOf(tg);A.say('!طرد '+(ti+1),A.bot(bi));}else A.say((r<.65?'!kick ':'!طرد ')+tg.n,A.bot(bi));
-      });
-    }
-  },500);
-});
 /* ---------- layout editor (layout.js): every public piece of the stage can be moved, resized or hidden.
    Default (Nov 2026, after Mohammad's reference): one slim sidebar on the LEFT (players with the count on top, then the out / winners
    list, the event line and the join box), the wheel big in the centre of the rest, the title in its centre badge, the لَمّة logo fixed

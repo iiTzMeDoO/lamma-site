@@ -9,7 +9,7 @@
 var A=window.App,BT=window.BT,MC=window.MC,$=A.$;
 A.strings({
  ar:{g_title:'لعبة الألوان',g_how:'الشات بيدخل بـ !دخول، وبكل جولة بيبين لون فوق: كل واحد بيكتب رقم العمود اللي لونو نفسو. اللي غلط بيوقع.',
-  bc_start:'ابدأ اللعبة',bc_reveal:'اكشف هلأ',bc_next:'الجولة الجاية',bc_again:'العب مرة تانية',bc_pause:'وقف مؤقت',bc_resume:'كمّل',bc_new:'لعبة جديدة (نفس اللاعبين)',bc_add_demo:'ضيف 40 لاعب تجربة',bc_clear:'مسح الكل',
+  bc_start:'ابدأ اللعبة',bc_reveal:'اكشف هلأ',bc_next:'الجولة الجاية',bc_again:'العب مرة تانية',bc_pause:'وقف مؤقت',bc_resume:'كمّل',bc_new:'لعبة جديدة (نفس اللاعبين)',bc_clear:'مسح الكل',
   bc_hint:'الشات بيدخل بـ !دخول، وبالجولة بيكتب رقم العمود (!7 أو 7). اللي مش على اللون الصح بيوقع.',bt_settings:'الإعدادات',bc_pick_t:'وقت الجولة',bc_rounds:'عدد الجولات',bt_more:'خيارات زيادة',
   bc_auto:'الجولة الجاية لحالها بعد',bt_join_t:'وقت الدخول',bc_late:'رقم بالجولة الأولى بيدخّل اللاعب',bc_nb:'الجولة الأولى: العمود الجنب كمان بينجّي',bt_av:'صور تويتش على الراس',bt_map:'الخلفية',
   bt_nolimit:'بلا وقت',bt_manual:'إنت بتضغط',bt_sec:'ث',map_plains:'سهول',map_desert:'صحراء',map_nether:'النذر',map_end:'النهاية',map_cave:'الكهف',
@@ -19,7 +19,7 @@ A.strings({
   bc_fell:'وقع {n}!',bc_safe:'ما حدا وقع!',bc_win_t:'الفايزين',bc_win_one:'البطل',bc_win_none:'ما ضل حدا',bc_need:'لازم لاعب واحد عالأقل',
   bt_c_join:'دخول',bt_c_col:'رقم العمود',bt_c_cstart:'بلّش',bt_c_cnext:'اكشف / الجولة الجاية',bt_c_pause:'وقف مؤقت'},
  en:{g_title:'Colour Floor',g_how:'Chat joins with !join. Each round a colour shows on top: type the number of the column with the same colour. Wrong column falls.',
-  bc_start:'Start game',bc_reveal:'Reveal now',bc_next:'Next round',bc_again:'Play again',bc_pause:'Pause',bc_resume:'Resume',bc_new:'New game (same players)',bc_add_demo:'Add 40 demo players',bc_clear:'Clear all',
+  bc_start:'Start game',bc_reveal:'Reveal now',bc_next:'Next round',bc_again:'Play again',bc_pause:'Pause',bc_resume:'Resume',bc_new:'New game (same players)',bc_clear:'Clear all',
   bc_hint:'Chat joins with !join, then types a column number each round (!7 or 7). Anyone not on the right colour falls.',bt_settings:'Settings',bc_pick_t:'Round time',bc_rounds:'Rounds',bt_more:'More options',
   bc_auto:'Next round by itself after',bt_join_t:'Join time',bc_late:'A number in round 1 joins the player',bc_nb:'Round 1: the next column is safe too',bt_av:'Twitch pictures on heads',bt_map:'Backdrop',
   bt_nolimit:'No limit',bt_manual:'You press',bt_sec:'s',map_plains:'Plains',map_desert:'Desert',map_nether:'Nether',map_end:'The End',map_cave:'Cave',
@@ -46,7 +46,7 @@ function engine(){return A.runsEngine();}
 function startGame(){if(!G.order.length){flash(T('bc_need'));return;}apply();G.start();A.roundStart();S.deadline=CFG.pick>0?Date.now()+CFG.pick*1000:0;S.paused=false;A.sfx('start');changed();}
 function reveal(){var r=G.reveal();if(!r)return;S.deadline=0;A.sfx(r.fall.length?'boom':'win');
   banner(r.fall.length?T('bc_fell',{n:r.fall.length}):T('bc_safe'));
-  if(r.end){A.roundEnd({players:G.order.map(function(u){return [u,(G.players[u]||{}).name]}),winners:G.winners.map(function(u){return [u,(G.players[u]||{}).name]})});S.nextAt=0;A.later?0:0;setTimeout(function(){A.sfx('win');A.confetti($('stage'),90);},900);}
+  if(r.end){A.roundEnd({players:G.order.map(function(u){return [u,(G.players[u]||{}).name]}),winners:G.winners.map(function(u){return [u,(G.players[u]||{}).name]})});S.nextAt=0;setTimeout(function(){A.sfx('win');A.confetti($('stage'),90);},900);}
   else S.nextAt=CFG.auto>0?Date.now()+CFG.auto*1000+1600:0;
   changed();}
 function nextRound(){if(G.phase!=='reveal')return;G.nextRound();S.nextAt=0;S.deadline=CFG.pick>0?Date.now()+CFG.pick*1000:0;if(G.isLast())banner(T('bc_lastr'),true);A.sfx('go');changed();}
@@ -184,8 +184,6 @@ requestAnimationFrame(frame);
 /* ---------- control panel wiring ---------- */
 if(!A.obs){
   $('bcGo').addEventListener('click',go);$('bcPause').addEventListener('click',pause);$('bcNew').addEventListener('click',newGame);$('bcClear').addEventListener('click',clearAll);
-  $('bcDemoAdd').addEventListener('click',function(){var names=['Ahmad','Sara','Yousef','Lina','Karim','Maya','Tariq','Dana','Fadi','Rana','Hadi','Jana','Bassel','Nour','Ziad','Reem','Majd','Tala','Adam','Hala'];var cols=['#ff5a5a','#5aa8ff','#ffd23d','#5cd65c','#ff7ad9','#22e6ff','#ff9a3d','#b6ff3b','#c58aff','#ffffff'];
-    for(var i=0;i<40;i++){var nm=names[i%20]+(i>=20?'_'+(i-19):'');G.join('demo_'+nm.toLowerCase(),nm,cols[i%cols.length]);}changed();});
   BT.tmr($('bcPickRow'),function(){return CFG.pick},function(v){CFG.pick=v;if(G.phase==='pick'&&!S.paused)S.deadline=v>0?Date.now()+v*1000:0;changed();},15);
   BT.tmr($('bcAutoRow'),function(){return CFG.auto},function(v){CFG.auto=v;changed();},4);
   BT.tmr($('bcJoinRow'),function(){return CFG.join},function(v){CFG.join=v;S.joinEnd=v>0?Date.now()+v*1000:0;changed();},60);
@@ -199,9 +197,6 @@ if(!A.obs){
   setInterval(function(){if(G.phase==='lobby'&&S.joinEnd&&Date.now()>=S.joinEnd){S.joinEnd=0;if(G.order.length)startGame();}},500);
   if(CFG.join>0)S.joinEnd=Date.now()+CFG.join*1000;
 }
-A.onDemo(function(){if(G.order.length<12){for(var i=0;i<14;i++)(function(i){A.later(200+i*180,function(){A.say(i%2?'!join':'!دخول',A.bot(i));});})(i);}
-  /* demo chatters pick columns during a round (most get it right, some miss) */
-  setInterval(function(){if(!A.demo()||G.phase!=='pick')return;G.alive().forEach(function(u){if(u.indexOf('demo_')!==0||Math.random()<.6)return;var p=G.players[u];var r=Math.random(),c=r<.6?G.target:r<.8?G.target+(Math.random()<.5?1:-1):Math.floor(Math.random()*G.n);c=Math.max(0,Math.min(G.n-1,c));if(p.col!==c){G.choose(u,c);}});changedSoft();},1200);});
 /* ---------- layout editor ---------- */
 BT.logo($('btLogo'));
 window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:'battle-colors',items:[

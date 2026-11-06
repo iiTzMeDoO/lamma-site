@@ -6,21 +6,19 @@ A.strings({
  ar:{lv_title:'لوحة الصدارة',lv_sub:'المستويات من كل الألعاب: المشاهدون يكسبون نقاط خبرة باللعب والفوز، والستريمرز بتشغيل الجولات.',
   lv_streamers:'أفضل الستريمرز',lv_viewers:'أفضل المشاهدين',lv_empty:'لا أحد هنا بعد. شغّل جولة في أي لعبة وستظهر الأسماء.',
   lv_local:'على هذا الجهاز فقط',lv_local_why:'لوحة أونلاين تجمع كل الأجهزة تعمل بعد ربط Supabase (ملف الإعداد).',lv_online:'أونلاين · من كل الأجهزة',
-  lv_online_empty:'اللوحة الأونلاين فارغة بعدُ، فهذه بيانات هذا الجهاز.',lv_loading:'جارٍ التحميل…',lv_xp:'نقطة خبرة',lv_rounds:'جولة',lv_demo:'تجريبي',
+  lv_online_empty:'اللوحة الأونلاين فارغة بعدُ، فهذه بيانات هذا الجهاز.',lv_loading:'جارٍ التحميل…',lv_xp:'نقطة خبرة',lv_rounds:'جولة',
   lv_me:'مستواك',lv_next:'للمستوى التالي',lv_rules_t:'كيف تُحسب النقاط؟',
   r_play:'المشاهد: +{a} لكل جولة يشارك فيها',r_win:'الفوز: +{a}، و+{b} لكل نقطة إضافية تعطيها اللعبة (حتى {c} في الجولة)',
   r_host:'الستريمر: +{a} لكل جولة تنتهي بلاعب واحد على الأقل، و+{b} لكل مشاهد شارك (حتى {c} مشاهدًا)',
-  r_friends:'مع الأصحاب بلا بث: نقاط التشغيل تذهب إلى مستوى المضيف نفسه',r_curve:'المستوى n يحتاج 100 × (n−1)^1.5 نقطة: المستوى 2 = 100، 3 = 283، 5 = 800، 10 = 2700',
-  r_demo:'الشات التجريبي يُحسب على هذا الجهاز فقط ولا يُرسل أونلاين'},
+  r_friends:'مع الأصحاب بلا بث: نقاط التشغيل تذهب إلى مستوى المضيف نفسه',r_curve:'المستوى n يحتاج 100 × (n−1)^1.5 نقطة: المستوى 2 = 100، 3 = 283، 5 = 800، 10 = 2700'},
  en:{lv_title:'Leaderboard',lv_sub:'Levels from every game: viewers earn XP by playing and winning, streamers by running rounds.',
   lv_streamers:'Top Streamers',lv_viewers:'Top Viewers',lv_empty:'Nobody here yet. Run a round in any game and names will show up.',
   lv_local:'On this device only',lv_local_why:'An online board across all devices works once Supabase is connected (setup file).',lv_online:'Online · all devices',
-  lv_online_empty:'The online board is still empty, so this is this device\'s data.',lv_loading:'Loading…',lv_xp:'XP',lv_rounds:'rounds',lv_demo:'demo',
+  lv_online_empty:'The online board is still empty, so this is this device\'s data.',lv_loading:'Loading…',lv_xp:'XP',lv_rounds:'rounds',
   lv_me:'Your level',lv_next:'to next level',lv_rules_t:'How is XP counted?',
   r_play:'Viewer: +{a} for every round they take part in',r_win:'Winning: +{a}, plus +{b} for every extra point the game gives (up to {c} per round)',
   r_host:'Streamer: +{a} for every round that ends with at least one player, plus +{b} per viewer who played (up to {c} viewers)',
-  r_friends:'With friends, no stream: hosting XP goes to the host\'s own level',r_curve:'Level n needs 100 × (n−1)^1.5 XP: level 2 = 100, 3 = 283, 5 = 800, 10 = 2700',
-  r_demo:'Demo chat counts on this device only and is never sent online'}
+  r_friends:'With friends, no stream: hosting XP goes to the host\'s own level',r_curve:'Level n needs 100 × (n−1)^1.5 XP: level 2 = 100, 3 = 283, 5 = 800, 10 = 2700'}
 });
 var kind='streamer',last=null,avCache={};
 try{avCache=JSON.parse(sessionStorage.getItem('lamma-av')||'{}')||{}}catch(e){}
@@ -38,7 +36,6 @@ function bar(xp){var p=LV.progress(xp),b=mk('span','lvp-bar');var i=mk('i');i.st
 function row(r,i){
   var lv=r.level||LV.levelFor(r.xp);
   var nm=mk('span','lvp-nm',[mk('bdi','',[r.display||r.id])]);
-  if(r.demo||/^demo:/.test(r.id))nm.appendChild(mk('small','lvp-tag',[A.t('lv_demo')]));
   var meta=mk('span','lvp-meta',[num(r.xp)+' '+A.t('lv_xp')]);
   if(kind==='streamer'&&r.rounds)meta.appendChild(document.createTextNode(' · '+num(r.rounds)+' '+A.t('lv_rounds')));
   return mk('li','lvp-row',[mk('span','lvp-rk',[String(i+1)]),avatar(r),mk('span','lvp-who',[mk('span','lvp-line',[nm,LV.badge(lv)]),bar(r.xp),meta])]);
@@ -76,7 +73,7 @@ function me(){
 function rules(){
   var X=LV.XP,ul=$('lvRules');A.clear(ul);
   [fmt(A.t('r_play'),{a:X.viewer.play}),fmt(A.t('r_win'),{a:X.viewer.win,b:X.viewer.perPoint,c:X.viewer.maxWinPerRound}),
-   fmt(A.t('r_host'),{a:X.streamer.round,b:X.streamer.perPlayer,c:X.streamer.maxPlayers}),A.t('r_friends'),A.t('r_curve'),A.t('r_demo')].forEach(function(t){ul.appendChild(mk('li','',[t]))});
+   fmt(A.t('r_host'),{a:X.streamer.round,b:X.streamer.perPlayer,c:X.streamer.maxPlayers}),A.t('r_friends'),A.t('r_curve')].forEach(function(t){ul.appendChild(mk('li','',[t]))});
 }
 $('tabS').addEventListener('click',function(){setKind('streamer')});
 $('tabV').addEventListener('click',function(){setKind('player')});
