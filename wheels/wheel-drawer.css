@@ -16,11 +16,11 @@ html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{box-sizing:border-box;m
   width:min(100cqw,calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));
   height:min(calc(100cqh - var(--hdr,64px) - var(--dock-h)),calc(100cqw * 9 / 16))}
 /* على الشاشات العريضة: المحتوى بيضل بحجمو الطبيعي (نفس شكل OBS)، بس اللي على اليسار بيلزق بحافة الشاشة اليسار،
-   واللي على اليمين (اللوغو) بحافة اليمين، والعجلة بالنص. بوضع "تعديل الشكل" بيرجعوا لمكانهم بالصندوق 16:9 مشان السحب يضبط. */
+   واللي على اليمين (اللوغو) بحافة اليمين، والعجلة بالنص. وبوضع "تعديل الشكل" بيضلوا بنفس المكان (نفس شكل الصفحة بالضبط). */
 html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{
   --m:calc((100cqw - min(100cqw, calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9))) / 2)}
-html:not(.obs) body.g-wheel-pick .stage:not(.lay-editing) .wh2 [data-anchor=l]{translate:calc(var(--m) * -1) 0}
-html:not(.obs) body.g-wheel-pick .stage:not(.lay-editing) .wh2 [data-anchor=r]{translate:var(--m) 0}
+html:not(.obs) body.g-wheel-pick .stage .wh2 [data-anchor=l]{translate:calc(var(--m) * -1) 0}
+html:not(.obs) body.g-wheel-pick .stage .wh2 [data-anchor=r]{translate:var(--m) 0}
 html:not(.obs) body.g-wheel-pick .stage-wrap>.lay-bar{display:none}
 /* أزرار الشاشة الكاملة القديمة (جوا الستيج) مش لازمة: بالشريط التحتي زر شاشة كاملة للصفحة كلها */
 html:not(.obs) body.g-wheel-pick .stage .lay-fs,html:not(.obs) body.g-wheel-pick .stage .w-fs-gear{display:none!important}
@@ -92,3 +92,8 @@ html:not(.obs) body.g-wheel-pick .w2-set .tmr-row input{height:32px;min-height:3
 html:not(.obs) body.g-wheel-pick .w2-set .tsb{height:30px}
 
 .fs-dock [hidden]{display:none!important}
+
+/* ---------- لوحة النتيجة (النهائي): نص شفافة، بتتلاشى بدل ما تختفي فجأة (وبتنطبق على OBS كمان) ---------- */
+.w2-final{transition:opacity .45s ease}
+.w2-final.fn-off{opacity:0!important}
+.w2-final .fn-box{background:linear-gradient(180deg,rgba(18,14,34,.76),rgba(10,8,20,.76));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}

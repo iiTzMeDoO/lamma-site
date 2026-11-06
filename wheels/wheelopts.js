@@ -8,9 +8,9 @@
    - pickerModel(P): what the on-screen kick list shows for a published wheel state (open or closed, the chooser, numbered cards). */
 (function(root){
 'use strict';
-var DEF={sh:false,shStart:1,picker:true,pick:20,dur:6,auto:0,join:0,fin:true,finTo:3,fa:false,vip:false,fd:true};
-var LIM={pick:[3,600],dur:[2,120],auto:[1,600],join:[5,3600]};
-var LET={pick:'p',dur:'d',auto:'a',join:'j'};
+var DEF={sh:false,shStart:1,picker:true,pick:20,dur:6,auto:0,join:0,fs:6,fin:true,finTo:3,fa:false,vip:false,fd:true};
+var LIM={pick:[3,600],dur:[2,120],auto:[1,600],join:[5,3600],fs:[2,60]};
+var LET={pick:'p',dur:'d',auto:'a',join:'j',fs:'f'};
 function clampT(k,v){v=Math.round(+v);if(!isFinite(v)||v<=0)return 0;var l=LIM[k];return Math.max(l[0],Math.min(l[1],v));}
 function norm(o){o=o||{};var r={};for(var k in DEF)r[k]=DEF[k];
   if(o.sh!=null)r.sh=!!o.sh;if(o.shStart!=null){var s=Math.round(+o.shStart);r.shStart=isFinite(s)?Math.max(1,Math.min(3,s)):1;}
@@ -23,7 +23,7 @@ function encodeObs(o){o=norm(o);var tm='';for(var t in LET)tm+=LET[t]+o[t];
   return '&tm='+tm+(o.sh?'&sh='+o.shStart:'')+(o.picker?'':'&pk=0')+(o.fin?(o.finTo!==3?'&fn='+o.finTo:''):'&fn=0')+(o.fa?'&fa=1':'')+(o.vip?'&vp=1':'')+(o.fd?'':'&fd=0');}
 /* get(name) reads a URL param (URLSearchParams.get bound, or a plain object lookup) */
 function decodeObs(get){var o={};if(typeof get!=='function'){var src=get||{};get=function(k){return src[k]==null?null:String(src[k])};}
-  var tm=get('tm');if(tm&&/^([pdaj]\d{1,4})+$/.test(tm)){var m,re=/([pdaj])(\d{1,4})/g;while((m=re.exec(tm))){for(var t in LET)if(LET[t]===m[1])o[t]=+m[2];}}
+  var tm=get('tm');if(tm&&/^([pdajf]\d{1,4})+$/.test(tm)){var m,re=/([pdajf])(\d{1,4})/g;while((m=re.exec(tm))){for(var t in LET)if(LET[t]===m[1])o[t]=+m[2];}}
   var sh=get('sh');if(sh&&/^[1-3]$/.test(sh)){o.sh=true;o.shStart=+sh;}
   if(get('pk')==='0')o.picker=false;
   var fn=get('fn');if(fn==='0')o.fin=false;else if(fn&&/^[2-9]$/.test(fn)){o.fin=true;o.finTo=+fn;}

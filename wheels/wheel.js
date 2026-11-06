@@ -23,7 +23,7 @@ A.strings({
   w_m_elim:'إقصاء',w_m_classic:'كلاسيك (اللي بتوقف عليه بيربح)',
   w_entries:'الأسماء (كل اسم بسطر)',w_open:'الشات بيقدر يدخل بـ !دخول أو !join',w_remove:'شيل الفائز بعد الدورة',w_dur:'مدة الدورة',w_dur_none:'بدون وقت (لحد ما توقفها)',w_nolimit:'بدون وقت',w_custom:'وقت مخصص',w_join_t:'وقت الدخول',w_join_left:'الدخول بيسكّر بعد {s} ث',w_stop_spin:'وقّف العجلة ⏹',w_skip:'تخطّي الدور',w_picker_on:'قائمة الطرد الكبيرة عالشاشة',w_sh_on:'إضافة شيلدات 🛡️',w_pk_title:'{x} اختار مين يطلع',w_pk_click:'اضغط على اسم لتطردو',w_pk_out:'برّا!',w_pk_safe:'محمي 🛡️',w_pk_pass:'ما حدا طلع',w_pk_nolimit:'بدون وقت',w_ev_pass:'⏭️ {x} تخطّى الدور، ما حدا طلع',w_cmd_skip:'تخطّي الدور (ما حدا بيطلع)',w_st_choose_nl:'{x} عم يختار (بدون وقت)',w_st_endless:'عم تلف… اضغط وقّف العجلة',w_title_l:'العنوان بنص العجلة',w_chatcols:'الشرايح بلون اسم كل واحد بالشات',w_avatar:'صورة القناة بنص العجلة',w_click_kick:'اضغط على أي اسم بالقائمة لتطرده',
   w_spin:'لفّ العجلة',w_spin_final:'اللفة الأخيرة 🏆',w_shuffle:'خلط',w_clear:'مسح الكل',w_clear_q:'تمسح كل الأسماء؟',w_new:'جولة جديدة (الكل يرجع)',
-  w_pause:'إيقاف مؤقت',w_resume:'كمّل',w_rand:'اختيار عشوائي عنو',w_undo:'تراجع',w_add_names:'إضافة أسماء بإيدك',w_g_turn:'الدور',w_g_join:'الدخول',w_g_final:'النهائي',w_g_look:'الشكل',w_more_opts:'خيارات زيادة',w_add:'ضيف',w_settings:'الإعدادات',
+  w_pause:'إيقاف مؤقت',w_resume:'كمّل',w_rand:'اختيار عشوائي عنو',w_undo:'تراجع',w_add_names:'إضافة أسماء بإيدك',w_fin_show:'مدة إظهار لوحة النتيجة',w_always:'دايماً',w_g_turn:'الدور',w_g_join:'الدخول',w_g_final:'النهائي',w_g_look:'الشكل',w_more_opts:'خيارات زيادة',w_add:'ضيف',w_settings:'الإعدادات',
   w_shields:'شيلد لكل واحد بالبداية',w_pick:'وقت الاختيار',w_timeout:'إذا خلص الوقت',w_to_random:'طرد عشوائي',w_to_streamer:'الستريمر بيختار',w_to_skip:'ما حدا بيطلع',w_fin_auto:'لفّ تلقائي بالنهائي',w_fin_dock:'النتيجة باللوحة اليسار',w_fs_set:'الإعدادات',w_vip:'الـVIP بيتحكموا بالعجلة',w_reset:'↺ ريسيت',w_reset_q:'متأكد؟ اكبس كمان مرة',
   w_auto:'لفّ تلقائي بعد كل طرد',w_auto_off:'يدوي',w_in:'بالعجلة',w_out:'برا العجلة',
   w_choose_hint:'وقت الاختيار: اضغط ✖ جنب أي اسم (أو على اسمو بالقائمة عالشاشة) لتختار عنو. برّا وقت الاختيار: ✖ بيطرد مباشرة و↩ بيرجّع مباشرة.',
@@ -40,7 +40,7 @@ A.strings({
   w_m_elim:'Elimination',w_m_classic:'Classic (landed name wins)',
   w_entries:'Names (one per line)',w_open:'Chat can join with !join',w_remove:'Remove the winner after a spin',w_dur:'Spin time',w_dur_none:'No limit (until you stop it)',w_nolimit:'No limit',w_custom:'Custom',w_join_t:'Join window',w_join_left:'Joining closes in {s}s',w_stop_spin:'Stop the wheel ⏹',w_skip:'Skip the turn',w_picker_on:'Big kick list on screen',w_sh_on:'Add shields 🛡️',w_pk_title:'{x}, pick who leaves',w_pk_click:'Click a name to kick it',w_pk_out:'OUT!',w_pk_safe:'Protected 🛡️',w_pk_pass:'Nobody left',w_pk_nolimit:'No time limit',w_ev_pass:'⏭️ {x} skipped, nobody left',w_cmd_skip:'skip the turn (nobody leaves)',w_st_choose_nl:'{x} is choosing (no time limit)',w_st_endless:'Spinning… press Stop the wheel',w_title_l:'Title in the wheel centre',w_chatcols:'Slices in each viewer\'s chat colour',w_avatar:'Channel picture in the wheel centre',w_click_kick:'Click a name in the list to kick it',
   w_spin:'Spin the wheel',w_spin_final:'Final spin 🏆',w_shuffle:'Shuffle',w_clear:'Clear all',w_clear_q:'Clear every name?',w_new:'New round (everyone back)',
-  w_pause:'Pause',w_resume:'Resume',w_rand:'Random pick for them',w_undo:'Undo',w_add_names:'Add names by hand',w_g_turn:'Turn',w_g_join:'Joining',w_g_final:'Final',w_g_look:'Look & feel',w_more_opts:'More options',w_add:'Add',w_settings:'Settings',
+  w_pause:'Pause',w_resume:'Resume',w_rand:'Random pick for them',w_undo:'Undo',w_add_names:'Add names by hand',w_fin_show:'Scoreboard visible for',w_always:'Always',w_g_turn:'Turn',w_g_join:'Joining',w_g_final:'Final',w_g_look:'Look & feel',w_more_opts:'More options',w_add:'Add',w_settings:'Settings',
   w_shields:'Shields each at start',w_pick:'Pick time',w_timeout:'When time runs out',w_to_random:'Random kick',w_to_streamer:'Streamer picks',w_to_skip:'Nobody leaves',w_fin_auto:'Auto-spin in the final',w_fin_dock:'Score in the left panel',w_fs_set:'Settings',w_vip:'VIPs control the wheel',w_reset:'↺ Reset',w_reset_q:'Sure? Tap again',
   w_auto:'Auto-spin after each kick',w_auto_off:'Manual',w_in:'On the wheel',w_out:'Out of the wheel',
   w_choose_hint:'During a pick: press ✖ next to a name (or click it in the on-screen list) to choose for them. Outside a pick: ✖ removes directly and ↩ brings back directly.',
@@ -101,8 +101,8 @@ function undo(){
 function pub(){return {entries:S.entries.slice(0,300).map(function(e){return [e.n,e.c||'',e.sh|0,e.u||'']}),out:S.out.slice(0,120).map(function(e){return [e.n,e.c||'',e.sh|0,e.u||'']}),
   mode:S.mode,wins:S.mode==='classic'?S.wins.slice(0,12):[],open:S.open,rot:S.rot,spin:S.spin,winner:S.winner,title:S.title,chatCols:!!S.chatCols,avatar:!!S.avatar,phase:S.phase,chooser:S.chooser,
   left:S.phase==='choose'&&!S.paused&&S.deadline?Math.max(0,S.deadline-Date.now()):(S.paused?S.pausedLeft:0),pick:S.pickSecs,paused:S.paused,streamerPicks:!!S.streamerPicks,ev:S.ev,evT:S.evT,lang:A.lang(),
-  sh:S.mode==='elim'&&!!S.shOn,picker:!!S.picker,fin:S.mode==='elim'?S.fin:null,finDock:!!S.finDock,joinLeft:S.open&&S.joinUntil?Math.max(0,S.joinUntil-Date.now()):0}}
-function opts(){return {sh:S.shOn,shStart:S.shStart,picker:S.picker,pick:S.pickSecs,dur:S.dur,auto:S.autoNext,join:S.joinSecs,fin:S.finOn,finTo:S.finTo,fa:S.finAuto,vip:S.vipCtrl,fd:S.finDock}}
+  sh:S.mode==='elim'&&!!S.shOn,picker:!!S.picker,fin:S.mode==='elim'?S.fin:null,finDock:!!S.finDock,finShow:S.finShow|0,joinLeft:S.open&&S.joinUntil?Math.max(0,S.joinUntil-Date.now()):0}}
+function opts(){return {sh:S.shOn,shStart:S.shStart,picker:S.picker,pick:S.pickSecs,dur:S.dur,auto:S.autoNext,join:S.joinSecs,fin:S.finOn,finTo:S.finTo,fa:S.finAuto,vip:S.vipCtrl,fd:S.finDock,fs:S.finShow}}
 /* the FINAL starts by itself when exactly 2 are left (setting on); leaves when the pair changes (a leave, a revive, undo, new round) */
 /* Nov 4 (Mohammad): the final never opens just because 2 joined, nor while people are still joining — only once the streamer started
    the wheel and eliminations brought the wheel down to 2 (S.elim: someone was kicked out during this round) */
@@ -132,7 +132,7 @@ function add(name,color,user,sh){
   if(S.entries.some(dup)||S.out.some(dup))return false;
   S.entries.push({n:name,c:color||'',u:user||'',sh:sh==null?startShields():sh});return true;
 }
-function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,v:18}));if(A.updateObsUrl)A.updateObsUrl();}}
+function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,fs:S.finShow,v:18}));if(A.updateObsUrl)A.updateObsUrl();}}
 /* join window: joining closes by itself N s after it opens (0 = stays open) */
 function openJoin(on){S.open=!!on;S.joinUntil=S.open&&S.joinSecs>0?Date.now()+S.joinSecs*1000:0;}
 function event(type,x,y){S.ev={t:type,x:x||'',y:y||''};S.evT=Date.now();}
@@ -536,6 +536,11 @@ if(pkEl&&!A.obs){
 }
 /* ---------- the FINAL scoreboard (#whFinal, on the stage and the OBS overlay): two players, big "2 - 1", round, a pulse on each point,
    "نقطة الحسم!" at match point, and a champion card (crown, "البطل") when someone reaches N ---------- */
+var fnSeenKey='',fnSeenAt=0,fnHideT=0;
+/* visible for P.finShow seconds after the score (or players) last changed, never while the wheel is moving; 0 = always */
+function finVisible(P,M){var keep=P.finShow|0;if(!(keep>0))return true;if(P.spin)return false;
+  var sk=JSON.stringify([M.p,M.s,M.won]);if(sk!==fnSeenKey){fnSeenKey=sk;fnSeenAt=Date.now();}
+  var left=keep*1000-(Date.now()-fnSeenAt);clearTimeout(fnHideT);if(left>0){fnHideT=setTimeout(function(){if(cur)drawFinal(cur);},left+40);return true;}return false;}
 var fnEl=$('whFinal'),fnKey='',fnAt=0,chEl=$('whChamp'),chKey='',fdEl=$('whFinDock'),fdKey='';
 if(window.ResizeObserver&&fnEl&&fnEl.parentNode)new ResizeObserver(function(){fitFinal()}).observe(fnEl.parentNode);
 /* Nov 4: the scoreboard is its own layout piece (move / resize / hide in the editor) or docked on top of the left panel
@@ -551,15 +556,16 @@ function fitFinal(){if(!fnEl)return;var c=fnEl.parentNode;if(!c||!c.getBoundingC
 function drawFinal(P){
   if(!fnEl)return;var M=WO&&P.fin?WO.finalModel(P.fin):{open:false};var dock=P.finDock!==false&&sideShown(); /* docked by default; falls back to the floating piece when the left panel is hidden or in fullscreen */
   document.body.classList.toggle('w-fin-dock',dock);
+  var vis=M.open?finVisible(P,M):(fnSeenKey='',true);
   /* champion card (centre) */
   if(chEl){if(M.open&&M.won>=0){var ck=JSON.stringify([M.p,M.s,M.won,A.lang()]);if(ck!==chKey){chKey=ck;buildChamp(M);requestAnimationFrame(function(){fitText(chEl.querySelectorAll('.fn-nm,.fn-cn'),.45);});}chEl.hidden=false;}else if(!chEl.hidden){chEl.hidden=true;A.clear(chEl);chKey='';}}
   /* docked copy on the left panel */
-  if(fdEl){if(M.open&&dock){var dk=JSON.stringify([M.p,M.s,M.to,M.won,A.lang()]);if(dk!==fdKey){fdKey=dk;buildScore(fdEl,M,'w2-final w2-findock');requestAnimationFrame(function(){fitText(fdEl.querySelectorAll('.fn-nm'),.5);});}fdEl.hidden=false;}else if(!fdEl.hidden){fdEl.hidden=true;A.clear(fdEl);fdKey='';}}
+  if(fdEl){if(M.open&&dock){var dk=JSON.stringify([M.p,M.s,M.to,M.won,A.lang()]);if(dk!==fdKey){fdKey=dk;buildScore(fdEl,M,'w2-final w2-findock');requestAnimationFrame(function(){fitText(fdEl.querySelectorAll('.fn-nm'),.5);});}fdEl.hidden=false;fdEl.classList.toggle('fn-off',!vis);}else if(!fdEl.hidden){fdEl.hidden=true;A.clear(fdEl);fdKey='';}}
   if(!M.open&&!dock&&editing()&&!A.obs){M=finSample();}   /* the editor shows a sample so the piece can be placed */
   if(!M.open||dock){if(!fnEl.hidden){fnEl.hidden=true;fnEl.className='w2-final';A.clear(fnEl);fnKey='';}return;}
   var k=JSON.stringify([M.p,M.s,M.to,M.won,A.lang(),P.phase]);
   if(k!==fnKey){fnKey=k;buildScore(fnEl,M,'w2-final');}
-  fnEl.hidden=false;fitFinal();requestAnimationFrame(function(){fitText(fnEl.querySelectorAll('.fn-nm'),.5);});
+  fnEl.hidden=false;fnEl.classList.toggle('fn-off',!vis);fitFinal();requestAnimationFrame(function(){fitText(fnEl.querySelectorAll('.fn-nm'),.5);});
   if(M.at&&M.at!==fnAt){fnAt=M.at;if(Date.now()-M.at<4000&&M.last>=0){var side=fnEl.querySelector('.fn-p'+M.last),sc=fnEl.querySelector('.fn-s'+M.last);
     [side,sc].forEach(function(x){if(!x)return;x.classList.remove('pulse');void x.offsetWidth;x.classList.add('pulse');});}}
 }
@@ -643,8 +649,8 @@ if(!A.obs){
   S.mode=FIX||(sv.mode==='classic'?'classic':'elim');
   if(FIX){var seg=$('wModeSeg');if(seg&&seg.parentNode)seg.parentNode.removeChild(seg);}
   (sv.w||[]).forEach(function(e){if(e&&e.n)S.wins.push({n:String(e.n).slice(0,32),c:e.c||'',u:e.u||''})});/* saved before v13: shields were always on (sh = shields each, 0 = none) and timers had no "no limit"; shields now start OFF */
-  var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:(sv.v>=18&&sv.auto!=null)?sv.auto:OD.auto,join:sv.join==null?OD.join:sv.join,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
-  S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;
+  var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:(sv.v>=18&&sv.auto!=null)?sv.auto:OD.auto,join:sv.join==null?OD.join:sv.join,fs:sv.fs==null?OD.fs:sv.fs,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
+  S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finShow=so.fs;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;
   (sv.e||[]).forEach(function(e){add(e.n,e.c,e.u,S.shOn?(e.sh==null?S.shStart:e.sh):0)});
   (sv.o||[]).forEach(function(e){S.out.push({n:e.n,c:e.c,u:e.u,sh:S.shOn?e.sh|0:0})});
   S.fin=sv.f&&sv.f.p&&sv.f.s?sv.f:null; /* a refresh mid-final keeps the score */
@@ -657,8 +663,8 @@ if(!A.obs){
   var tmr=function(id,key,def,after){var m=$(id+'Mode'),inp=$(id),u=inp.parentNode.querySelector('.tmr-u'),lim=WO?WO.LIM[key]:[1,3600];
     inp.min=String(lim[0]);inp.max=String(lim[1]);
     var sb=[].slice.call(inp.parentNode.querySelectorAll('.tsb'));sb.forEach(function(b){if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.addEventListener('click',function(){if(m.value===b.getAttribute('data-v'))return;m.value=b.getAttribute('data-v');m.dispatchEvent(new Event('change'));});});
-    var show=function(){var v=S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs'}[key]];m.value=v>0?'1':'0';if(v>0)inp.value=String(v);else if(!inp.value)inp.value=String(def);inp.hidden=!(v>0);if(u)u.hidden=!(v>0);sb.forEach(function(b){var on=b.getAttribute('data-v')===m.value;if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});};
-    var set=function(v){S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs'}[key]]=WO?WO.clampT(key,v):v;show();save();if(after)after();changed();};
+    var show=function(){var v=S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow'}[key]];m.value=v>0?'1':'0';if(v>0)inp.value=String(v);else if(!inp.value)inp.value=String(def);inp.hidden=!(v>0);if(u)u.hidden=!(v>0);sb.forEach(function(b){var on=b.getAttribute('data-v')===m.value;if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});};
+    var set=function(v){S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow'}[key]]=WO?WO.clampT(key,v):v;show();save();if(after)after();changed();};
     m.addEventListener('change',function(){set(m.value==='1'?(+inp.value||def):0);if(m.value==='1')inp.focus();});
     inp.addEventListener('change',function(){if(m.value==='1')set(+inp.value||def);});
     show();};
@@ -666,7 +672,7 @@ if(!A.obs){
   (function(){var x=$('wXtra');if(!x)return;var XK='lamma-wxtra';try{x.open=localStorage.getItem(XK)==='1';}catch(e){}
     x.addEventListener('toggle',function(){try{localStorage.setItem(XK,x.open?'1':'0');}catch(e){}});})();
   tmr('wPick','pick',20,function(){if(S.phase==='choose'&&!S.paused&&!S.streamerPicks)S.deadline=S.pickSecs>0?Date.now()+S.pickSecs*1000:0;});
-  tmr('whDur','dur',6);tmr('wAuto','auto',10);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
+  tmr('whDur','dur',6);tmr('wAuto','auto',10);if($('wFinShow'))tmr('wFinShow','fs',6);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
   $('wShOn').addEventListener('change',function(){snap();S.shOn=this.checked;S.entries.forEach(function(e){e.sh=startShields()});S.out.forEach(function(e){e.sh=0});save();changed();});
   $('wPickerOn').addEventListener('change',function(){S.picker=this.checked;save();changed();});
   (function(){var fo=$('wFinOn'),ft=$('wFinTo');if(!fo||!ft)return;fo.checked=S.finOn;ft.value=String(S.finTo);
@@ -701,7 +707,7 @@ if(!A.obs){
   $('wVip').checked=S.vipCtrl;$('wVip').addEventListener('change',function(){S.vipCtrl=this.checked;save();changed();});
 }
 /* the overlay running on its own (mod chat commands, no dock) takes the options from its link: &tm= &sh= &pk= */
-if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;openJoin(true);}
+if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;openJoin(true);}
 if(!A.obs&&WO&&A.obsExtra)A.obsExtra(function(){return WO.encodeObs(opts())});
 A.onLang(function(){sideKey='';ctrlKey='';pkKey='';fnKey='';chKey='';fdKey='';shApplied=null;applySh(S.shOn&&S.mode==='elim');changed();});
 /* on the control page's stage: during a pick on the shield wheel, clicking a name in the players list kicks it (shields count, same as ✖) */
