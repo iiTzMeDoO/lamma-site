@@ -97,3 +97,13 @@ html:not(.obs) body.g-wheel-pick .w2-set .tsb{height:30px}
 .w2-final{transition:opacity .45s ease}
 .w2-final.fn-off{opacity:0!important}
 .w2-final .fn-box{background:linear-gradient(180deg,rgba(18,14,34,.76),rgba(10,8,20,.76));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+
+/* ---------- بطاقة البطل: زر إغلاق (للستريمر بس) + تلاشي ---------- */
+.w2-champ{transition:opacity .45s ease}
+.w2-champ.fn-off{opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.w2-champ .fn-box{position:relative}
+.w2-champ .fn-x{position:absolute;top:.5em;left:.5em;z-index:3;width:2em;height:2em;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.25);
+  background:rgba(0,0,0,.35);color:#fff;font:inherit;font-size:.9em;line-height:1;cursor:pointer;pointer-events:auto;display:grid;place-items:center}
+.w2-champ .fn-x:hover{background:rgba(255,255,255,.18)}
+.w2-champ .fn-x:focus-visible{outline:2px solid var(--wh-a,#d8b65e);outline-offset:2px}
+html.obs .w2-champ .fn-x{display:none}
