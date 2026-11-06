@@ -84,3 +84,49 @@ html[data-theme]:not([data-theme=neon]):not([data-theme=channel]) body.g-wheel{-
 .tc-row input[type=color]::-webkit-color-swatch-wrapper{padding:3px}.tc-row input[type=color]::-webkit-color-swatch{border:0;border-radius:5px}
 .tc-reset{border:1px dashed var(--line2,var(--line));background:transparent;color:var(--mut);font:inherit;font-weight:800;font-size:.8rem;padding:6px 10px;border-radius:9px;cursor:pointer}
 .tc-note{margin:0;font-size:.75rem;color:var(--mut)}
+
+/* ---------- ☰ header menu (theme.js → window.LammaMenu) ----------
+   The button sits at the physical LEFT of the header and the drawer slides in from the LEFT, in Arabic and English. */
+.lmn-btn{display:inline-grid;place-items:center;flex-shrink:0;width:38px;height:38px;padding:0;border-radius:12px;border:1px solid rgba(154,160,208,.28);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)),#16161c;color:#e6e7f2;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s}
+.lmn-btn svg{width:20px;height:20px}
+.lmn-btn:hover,.lmn-btn[aria-expanded=true]{border-color:#9AA0D0;box-shadow:0 0 14px rgba(134,140,188,.3)}
+.lmn-btn:focus-visible,.lmn-row:focus-visible,.lmn-x:focus-visible{outline:2px solid #9AA0D0;outline-offset:2px}
+html[dir=rtl] header.top .lmn-btn{order:99}
+html[dir=ltr] header.top .lmn-btn{order:-1}
+.lmn-back{position:fixed;inset:0;z-index:90;background:rgba(5,5,8,.55);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);opacity:0;transition:opacity .28s ease}
+.lmn-back[hidden]{display:none}
+html.lmn-open .lmn-back{opacity:1}
+.lmn-drawer{position:fixed;top:0;bottom:0;left:0;right:auto;z-index:95;width:min(320px,86vw);display:flex;flex-direction:column;gap:6px;padding:14px 12px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,#16161c,#0b0b0f);border-right:1px solid rgba(154,160,208,.22);box-shadow:18px 0 50px rgba(0,0,0,.55);color:#e6e7f2;font-family:inherit;
+  transform:translateX(-104%);visibility:hidden;transition:transform .3s cubic-bezier(.22,.8,.24,1),visibility 0s linear .3s;overflow-y:auto;overscroll-behavior:contain}
+html.lmn-open .lmn-drawer{transform:none;visibility:visible;transition:transform .3s cubic-bezier(.22,.8,.24,1),visibility 0s}
+html.lmn-open,html.lmn-open body{overflow:hidden}
+.lmn-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 6px 10px;border-bottom:1px solid rgba(154,160,208,.14);margin-bottom:4px}
+.lmn-title{font-weight:800;font-size:1rem;color:#c9cce6;letter-spacing:.01em}
+.lmn-x{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;border:1px solid rgba(154,160,208,.2);background:rgba(255,255,255,.03);color:#9AA0D0;cursor:pointer;padding:0}
+.lmn-x svg{width:18px;height:18px}
+.lmn-x:hover{border-color:#9AA0D0;color:#fff}
+.lmn-list{display:grid;gap:4px}
+.lmn-row{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 10px;border-radius:14px;border:1px solid transparent;background:transparent;color:#e6e7f2;font:inherit;font-weight:700;font-size:.95rem;text-align:start;text-decoration:none;cursor:pointer;transition:background .18s,border-color .18s}
+.lmn-row:hover,.lmn-row[aria-expanded=true],.lmn-row[aria-current=page]{background:rgba(134,140,188,.1);border-color:rgba(154,160,208,.2)}
+.lmn-ico{display:inline-grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:11px;background:rgba(134,140,188,.12);border:1px solid rgba(154,160,208,.22);color:#9AA0D0}
+.lmn-ico svg{width:19px;height:19px}
+.lmn-txt{display:flex;flex-direction:column;min-width:0;line-height:1.25;flex:1}
+.lmn-sub{font-size:.75rem;font-weight:600;color:#8b8ea3}
+.lmn-sub:empty{display:none}
+.lmn-pill{flex-shrink:0;min-width:34px;padding:4px 9px;border-radius:9px;border:1px solid rgba(154,160,208,.3);background:#0b0b0f;color:#c9cce6;font-weight:800;font-size:.85rem;text-align:center}
+.lmn-chev{display:inline-grid;color:#5d6070;transition:transform .2s}
+.lmn-chev svg{width:18px;height:18px}
+.lmn-row[aria-expanded=true] .lmn-chev{transform:rotate(180deg);color:#9AA0D0}
+/* the colours picker opens inline inside the drawer (no floating popup) */
+.lmn-theme{position:static}
+html[data-theme] .lmn-theme .theme-btn.lmn-row,html .lmn-theme .theme-btn.lmn-row{width:100%;height:auto;display:flex;border-radius:14px;border:1px solid transparent;background:transparent;box-shadow:none;padding:8px 10px}
+html[data-theme] .lmn-theme .theme-btn.lmn-row:hover,html[data-theme] .lmn-theme .theme-btn.lmn-row[aria-expanded=true]{background:rgba(134,140,188,.1);border-color:rgba(154,160,208,.2);box-shadow:none}
+.lmn-theme .theme-btn svg{width:19px;height:19px}
+.lmn-theme .theme-menu{position:static;min-width:0;margin:4px 6px 6px;padding:6px;border-radius:12px;background:#0b0b0f;border:1px solid rgba(154,160,208,.18);box-shadow:none}
+.lmn-theme .theme-menu:has(.theme-custom){min-width:0}
+.lv-nav.lmn-row{display:flex;align-items:center;justify-items:normal}
+.lmn-hold{display:none}
+@media(max-width:600px){.lmn-btn{width:34px;height:34px}.lmn-btn svg{width:18px;height:18px}}
+@media(prefers-reduced-motion:reduce){.lmn-drawer,.lmn-back{transition:none}}
+html.obs .lmn-btn,html.obs .lmn-drawer,html.obs .lmn-back{display:none!important}
