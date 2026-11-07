@@ -57,6 +57,7 @@
           <div class="lay-el" data-lay="feed"><div class="lay-c"><div class="bt-box ba-feed" id="baFeed"></div></div></div>
           <div class="lay-el" data-lay="lobby"><div class="lay-c"><div class="bt-box ba-lobby" id="baLobby"></div></div></div>
           <div class="ba-lobbycard" id="baLobbyCard" hidden></div>
+          <div class="ba-stagechip" id="baStageChip" aria-live="polite"></div>
           <div class="ba-wave" id="baWave" hidden aria-live="polite"></div>
           <div class="ba-info" id="baInfo" hidden aria-live="polite"></div>
           <div class="bt-banner" id="baBanner" hidden aria-live="polite"></div>
@@ -72,38 +73,22 @@
         <div class="w2-status bt-status" id="baStatus" aria-live="polite"></div>
         <div class="btn-row"><button class="btn btn-main" id="baGo" type="button" data-i18n="ba_start">ابدأ المعركة</button><button class="btn btn-ghost" id="baPause" type="button" data-i18n="ba_pause">إيقاف</button></div>
         <div class="btn-row"><button class="btn btn-ghost btn-sm" id="baNext" type="button" data-i18n="ba_next">التالي ⚔️</button><button class="btn btn-ghost btn-sm" id="baBossBtn" type="button" data-i18n="ba_boss">اذهب إلى الزعيم</button><button class="btn btn-ghost btn-sm" id="baReset" type="button" data-i18n="ba_reset">رجوع إلى اللوبي</button></div>
-        <div class="ba-maps" id="baMaps" role="radiogroup" data-i18n-aria="bt_map" aria-label=""></div>
         <div class="w2-lists ba-lists ba-lists1">
           <div><h4><span data-i18n="ba_squad">الفريق</span> <span class="cnt" id="baSqN">0</span></h4><ul class="w2-rows ba-rows" id="baSqList"></ul></div>
         </div>
-        <div class="btn-row"><button class="btn btn-ghost btn-sm" id="baEmpty" type="button" data-i18n="ba_empty">أفرغ الفريق</button></div>
-        <p class="hint-box" data-i18n="ba_hint">من يكتب !دخول يدخل الفريق مباشرة. قبل الغارة: اضغط على اسم لتطرده. وقت الغارة: اضغط على مقاتل (في الساحة أو هنا ⚔) ليخرج للقتال واحدًا ضد واحد. ⬆ = كتب !قفز.</p>
         <details class="w2-more w2-set" open>
           <summary data-i18n="bt_settings">الإعدادات</summary>
           <div class="sgrp">
-            <label class="srow sw"><span class="srow-l" data-i18n="ba_autof">قتال تلقائي (التالي يظهر تلقائيًا)</span><input type="checkbox" role="switch" id="baAutoF"></label>
-            <label class="srow"><span class="srow-l" data-i18n="ba_waves">عدد الموجات</span><select id="baWavesSel" class="ssel"><option value="3">3</option><option value="5" selected>5</option><option value="7">7</option><option value="0">∞</option></select></label>
-            <label class="srow"><span class="srow-l" data-i18n="ba_diff">الصعوبة</span><select id="baDiff" class="ssel"><option value="easy" data-i18n="ba_d_easy">سهل</option><option value="normal" selected data-i18n="ba_d_normal">عادي</option><option value="hard" data-i18n="ba_d_hard">صعب</option><option value="hell" data-i18n="ba_d_hell">جحيم</option></select></label>
-            <div class="srow tmr" id="baCardRow"><span class="srow-l" data-i18n="ba_wcard"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_manual" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="ba_wcard" aria-label=""></div></div>
-            <div class="srow tmr" id="baBreakRow"><span class="srow-l" data-i18n="ba_break">الموجة القادمة تلقائيًا بعد</span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_manual" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input id="baBreak" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="ba_break" aria-label=""></div></div>
-          </div>
-          <details class="w2-xtra" id="baXtra">
-            <summary><span data-i18n="bt_more">خيارات إضافية</span></summary>
-            <div class="sgrp">
-              <label class="srow"><span class="srow-l" data-i18n="ba_bosssel">الزعيم</span><select id="baBossSel" class="ssel"><option value="auto" data-i18n="ba_b_auto">حسب الخريطة</option><option value="wither" data-i18n="boss_wither">الذابل</option><option value="dragon" data-i18n="boss_dragon">تنين النهاية</option><option value="golem" data-i18n="boss_golem">الحارس الحديدي</option><option value="king" data-i18n="boss_king">ملك الزومبي</option><option value="warden" data-i18n="boss_warden">حارس الأعماق</option><option value="ravagerk" data-i18n="boss_ravagerk">ملك المدمّرين</option><option value="evokerm" data-i18n="boss_evokerm">سيد الاستحضار</option><option value="blazek" data-i18n="boss_blazek">ملك البليز</option><option value="elder" data-i18n="boss_elder">الحارس العتيق</option><option value="abom" data-i18n="boss_abom">وحش الأدغال</option><option value="wraith" data-i18n="boss_wraith">الطيف الملعون</option></select></label>
-              <label class="srow"><span class="srow-l" data-i18n="ba_size">حجم الفريق</span><select id="baSize" class="ssel"><option>4</option><option>6</option><option>8</option><option selected>10</option><option>12</option><option>16</option></select></label>
-              <div class="srow tmr" id="baJoinRow"><span class="srow-l" data-i18n="bt_join_t">وقت الدخول</span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_nolimit" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input id="baJoinT" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="bt_join_t" aria-label=""></div></div>
-              
-              <label class="srow sw"><span class="srow-l" data-i18n="ba_gion">كرت معلومات الشخصية على الشاشة</span><input type="checkbox" role="switch" id="baGiOn" checked></label>
-              <p class="small muted" data-i18n="ba_gion_n"></p>
-              <label class="srow sw"><span class="srow-l" data-i18n="ba_bot">الرد في الشات (يحتاج حساب بوت)</span><input type="checkbox" role="switch" id="baBot"></label>
-              <p class="small muted" data-i18n="ba_bot_n"></p>
-              <label class="srow sw" hidden><span class="srow-l" data-i18n="bt_av">صور تويتش على الرأس</span><input type="checkbox" role="switch" id="baAv" checked></label>
-              <label class="srow sw"><span class="srow-l" data-i18n="ba_speak">المرشحون يتحدثون (كلامهم فوق رؤوسهم)</span><input type="checkbox" role="switch" id="baSpeak" checked></label>
-              <label class="srow sw"><span class="srow-l" data-i18n="ba_events">أحداث الموجات (ليل، مطر، كنز…)</span><input type="checkbox" role="switch" id="baEvents" checked></label>
-              <label class="srow sw"><span class="srow-l" data-i18n="ba_lootopt">غنائم بعد كل موجة</span><input type="checkbox" role="switch" id="baLoot" checked></label>
+            <label class="srow ba-stage-row"><span class="srow-l" data-i18n="ba_stsel">المرحلة</span><select id="baStageSel" class="ssel"></select></label>
+            <p class="small muted ba-stage-n" id="baStageN"></p>
+            <label class="srow sw"><span class="srow-l" data-i18n="ba_open">الدخول مفتوح</span><input type="checkbox" role="switch" id="baOpen" checked></label>
+            <p class="small muted" data-i18n="ba_open_n">يُقفل وحده حين تضغط «ابدأ المعركة»، ويبقى مقفلًا حتى تفتحه.</p>
+            <label class="srow sw"><span class="srow-l" data-i18n="ba_autop">لعب تلقائي</span><input type="checkbox" role="switch" id="baAutoP"></label>
+            <div class="ba-autosub" id="baAutoSub" hidden>
+              <div class="srow tmr" id="baCardRow"><span class="srow-l" data-i18n="ba_wcard"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_manual" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="ba_wcard" aria-label=""></div></div>
+              <div class="srow tmr" id="baBreakRow"><span class="srow-l" data-i18n="ba_break">الموجة القادمة تلقائيًا بعد</span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="bt_manual" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="bt_sec">ث</button></div><input id="baBreak" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="ba_break" aria-label=""></div></div>
             </div>
-          </details>
+          </div>
         </details>
 
       </div>
@@ -126,11 +111,11 @@
   <button class="dock-btn dock-fs" id="dockFs" type="button">⛶</button>
   <div class="dock-status" id="dockStatus" aria-live="off"></div>
   <div class="dock-quick" id="dockQuick">
-    <button class="dock-btn" id="dqEmpty" type="button"><span class="di" aria-hidden="true">🗑</span><span class="dl" data-i18n="ba_empty">أفرغ الفريق</span></button>
     <button class="dock-btn" id="dqLobby" type="button"><span class="di" aria-hidden="true">↩</span><span class="dl" data-i18n="ba_lobby_b">اللوبي</span></button>
     <button class="dock-btn" id="dqBoss" type="button"><span class="di" aria-hidden="true">👑</span><span class="dl" data-i18n="ba_boss">اذهب إلى الزعيم</span></button>
     <button class="dock-btn" id="dqPause" type="button"><span class="di" aria-hidden="true">⏸</span><span class="dl"></span></button>
     <button class="dock-btn" id="dqNext" type="button"><span class="di" aria-hidden="true">⚔️</span><span class="dl" data-i18n="ba_next2">التالي</span></button>
+    <button class="dock-btn" id="dqEmpty" type="button"><span class="di" aria-hidden="true">🗑</span><span class="dl" data-i18n="ba_empty">أفرغ الفريق</span></button>
     <button class="dock-btn dock-main" id="dqGo" type="button"><span class="di" aria-hidden="true">▶</span><span class="dl"></span></button>
   </div>
 </div>

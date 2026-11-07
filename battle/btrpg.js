@@ -233,39 +233,88 @@ function sheet(user,lv,o){o=o||{};var R0=o.roll||null;var ck=classOf(user,o.cls|
   var res={};TYPES.forEach(function(t){var v=1;if(A.res[t]!=null)v*=A.res[t];if(AE.res[t]!=null)v*=AE.res[t];res[t]=Math.round(v*100)/100;});
   if(g.items.indexOf('fireres')>=0)res.fire=0;
   var L=lv-10,apple=g.items.indexOf('apple')>=0?1.2:1;
-  if(R0){ /* Nov 7 balance: the level is a modest edge (LV20 ≈ +30% HP, +40% class damage), not ×2.5 like before */
-    return {cls:ck,atkT:C.atk,hp:Math.round(C.hp*1.57*(1+L*.03)*apple*R0.hk),atk:Math.round((C.a*1.6*(1+L*.04)+W.a*1.2)*1.57*R0.ak*10)/10,def:Math.min(.6,Math.round((C.def+A.def)*100)/100),spd:C.spd,
-      agi:Math.max(.01,Math.min(.45,Math.round((C.agi+L*.003+R0.ag)*1000)/1000)),crit:Math.max(.02,Math.min(.5,Math.round((C.crit+L*.004+R0.cr)*1000)/1000)),
+  if(R0){ /* round 8: the arena level starts at LV0 and is a MODEST edge — LV20 = +40% HP, +50% attack (capped at LV30); never enough to ignore a counter */
+    var AL=Math.max(0,Math.min(30,lv));
+    return {cls:ck,atkT:C.atk,hp:Math.round(C.hp*1.57*(1+AL*.02)*apple*R0.hk),atk:Math.round((C.a*1.6*(1+AL*.025)+W.a*1.2)*1.57*R0.ak*10)/10,def:Math.min(.6,Math.round((C.def+A.def)*100)/100),spd:C.spd,
+      agi:Math.max(.01,Math.min(.45,Math.round((C.agi+AL*.002+R0.ag)*1000)/1000)),crit:Math.max(.02,Math.min(.5,Math.round((C.crit+AL*.003+R0.cr)*1000)/1000)),
       res:res,perks:perksOf(user+'#'+R0.s,lv),gear:g,thorns:g.ae==='thorns'?.15:0,roll:R0};}
   var hp=Math.round(C.hp*1.57*(1+L*.05)*apple);
   return {cls:ck,atkT:C.atk,hp:hp,atk:Math.round((C.a*1.6+1.5*L+W.a*1.2)*15.7)/10,def:Math.min(.6,Math.round((C.def+A.def)*100)/100),spd:C.spd,agi:Math.min(.45,Math.round((C.agi+L*.004)*1000)/1000),crit:Math.min(.5,Math.round((C.crit+L*.005)*1000)/1000),
     res:res,perks:perksOf(user,lv),gear:g,thorns:g.ae==='thorns'?.15:0};}
 function mobSheet(kind,boss){var S=boss?BOSSES[kind]:MOBS[kind];return S||null;}
 function resOf(x,t){var r=x&&x.res;return r&&r[t]!=null?r[t]:1;}
+/* ---------- Nov 7 (Mohammad, round 8: "make it a strategy game"): monster ROLES and class COUNTERS ----------
+   Every mob / boss has ONE role the streamer can read at a glance; every class is strong (▲) against some roles and weak (▼)
+   against others. In the arena the counter multiplies BOTH the damage the fighter deals and the damage they take, and it is
+   meant to matter more than the level: a LV20 sent against a role he is weak to loses the duel. */
+var ROLE={
+ brute:{ar:'مقاتل ثقيل',en:'Brute',ic:'🧟'},
+ fast:{ar:'سريع',en:'Fast',ic:'💨'},
+ ranged:{ar:'رامٍ',en:'Ranged',ic:'🎯'},
+ flyer:{ar:'طائر',en:'Flyer',ic:'🦇'},
+ mage:{ar:'ساحر',en:'Caster',ic:'🔮'},
+ armored:{ar:'مدرّع',en:'Armoured',ic:'🛡️'},
+ explosive:{ar:'متفجّر',en:'Explosive',ic:'💣'}
+};
+var ROLEK=Object.keys(ROLE);
+var MOBROLE={zombie:'brute',husk:'brute',wskel:'brute',zpiglin:'brute',piglin:'brute',brute:'brute',hoglin:'brute',vindicator:'brute',polar:'brute',slime:'brute',leapleaf:'brute',
+ spider:'fast',cavespider:'fast',silverfish:'fast',endermite:'fast',enderman:'fast',
+ skeleton:'ranged',stray:'ranged',drowned:'ranged',pillager:'ranged',bogged:'ranged',guardian:'ranged',
+ phantom:'flyer',blaze:'flyer',ghast:'flyer',vex:'flyer',breeze:'flyer',
+ witch:'mage',evoker:'mage',iceologer:'mage',necro:'mage',whisperer:'mage',
+ shulker:'armored',ravager:'armored',magma:'armored',puffer:'armored',
+ creeper:'explosive'};
+var BOSSROLE={wither:'flyer',dragon:'flyer',blazek:'flyer',golem:'armored',warden:'armored',king:'brute',ravagerk:'brute',abom:'brute',evokerm:'mage',elder:'mage',wraith:'mage'};
+var COUNTER={
+ warrior:{s:['fast','ranged'],w:['armored','flyer']},
+ archer:{s:['flyer','brute','explosive'],w:['fast','armored']},
+ mage:{s:['armored','flyer'],w:['fast','ranged']},
+ tank:{s:['brute','ranged'],w:['mage','explosive']},
+ rogue:{s:['mage','explosive'],w:['brute','armored']},
+ alchemist:{s:['armored','mage'],w:['flyer','explosive']},
+ bomber:{s:['armored','brute'],w:['fast','flyer']},
+ pyro:{s:['fast','brute'],w:['ranged','mage']}
+};
+/* the multipliers: out = damage the fighter deals, inc = damage the fighter takes */
+var CM={s:{out:1.6,inc:.65},n:{out:1,inc:1},w:{out:.45,inc:1.75}};
+function roleOf(kind,boss){return (boss?BOSSROLE[kind]:MOBROLE[kind])||'brute';}
+/* +1 strong ▲ · 0 neutral · -1 weak ▼ */
+function counter(cls,role){var c=COUNTER[cls];if(!c||!role)return 0;if(c.s.indexOf(role)>=0)return 1;if(c.w.indexOf(role)>=0)return -1;return 0;}
+function counterMult(v){return v>0?CM.s:v<0?CM.w:CM.n;}
+function strongVs(role){return CLASSK.filter(function(k){return counter(k,role)>0});}
+function weakVs(role){return CLASSK.filter(function(k){return counter(k,role)<0});}
+/* player levels in the arena (round 8): everyone starts at LV0 and climbs slowly — XP to go from LV n to n+1 = 60 + 45·(n+1) */
+function xpNeed(lv){return 60+45*(lv+1);}
+function alvOf(xp){xp=Math.max(0,xp||0);var lv=0;while(lv<99){var n=xpNeed(lv);if(xp<n)break;xp-=n;lv++;}return lv;}
+function alvProg(xp){xp=Math.max(0,xp||0);var lv=0;while(lv<99){var n=xpNeed(lv);if(xp<n)return {lv:lv,xp:xp,need:n};xp-=n;lv++;}return {lv:lv,xp:0,need:0};}
+function alvXp(lv){var t=0;for(var i=0;i<lv;i++)t+=xpNeed(i);return t;}
 /* how effective a type is on a target: the word the field floats */
 function effWord(mult){return mult===0?'immune':mult>=1.4?'super':mult<=.7?'resist':'';}
 /* one blow. att / def: {atk|dmg, atkT, crit, agi, def, res, fam, perks, gear, buff…}; ctx: {r: rng, type, mult, noDodge, ignoreDef, event, avenged, isBoss}
    returns {n, crit, dodge, eff, mult} — n is already the HP taken */
 function hit(att,def,ctx){ctx=ctx||{};var r=ctx.r||Math.random,type=ctx.type||att.atkT||'melee',m=ctx.mult||1,ev=ctx.event||'';
-  var tm=resOf(def,type);if(def.phase2==='armour'&&type==='arrow')tm=0;if((def.trait==='teleport'||def.trait==='gust')&&type==='arrow')tm=0;
+  var tm=resOf(def,type);if(!ctx.soft){if(def.phase2==='armour'&&type==='arrow')tm=0;if((def.trait==='teleport'||def.trait==='gust')&&type==='arrow')tm=0;}
+  else tm=Math.max(.85,Math.min(1.15,1+(tm-1)*.3)); /* round 8 (arena): the old type weak/resist table is only a light flavour — the class COUNTER decides */
   if(ev==='rain'&&type==='fire')m*=.5;if(ev==='night'&&att.fam==='undead')m*=1.25;if(ev==='blood'&&att.fam&&!att.u)m*=1.2;
   var pm=1,crit=false,first=false;
-  (att.perks||[]).forEach(function(p){if(p.f!==def.fam)return;var v=perkVal(p);if(p.t==='slayer')pm*=v;if(p.t==='avenger'&&ctx.avenged)pm*=v;if(p.t==='oddcrit'&&att.hpNow%2===1)crit=true;});
-  (def.perks||[]).forEach(function(p){if(p.f!==att.fam)return;if(p.t==='ward')pm*=perkVal(p);});
-  var we=att.gear&&WPN_ENCH[att.gear.we];if(we&&we.fam&&we.fam===def.fam)pm*=we.m;if(we&&att.gear.we==='sharp')pm*=we.m;
+  var sf=ctx.soft?function(v){return 1+(v-1)*.3;}:function(v){return v;};
+  (att.perks||[]).forEach(function(p){if(p.f!==def.fam)return;var v=perkVal(p);if(p.t==='slayer')pm*=sf(v);if(p.t==='avenger'&&ctx.avenged)pm*=sf(v);if(p.t==='oddcrit'&&att.hpNow%2===1)crit=true;});
+  (def.perks||[]).forEach(function(p){if(p.f!==att.fam)return;if(p.t==='ward')pm*=sf(perkVal(p));});
+  var we=att.gear&&WPN_ENCH[att.gear.we];if(we&&we.fam&&we.fam===def.fam)pm*=sf(we.m);if(we&&att.gear.we==='sharp')pm*=we.m;
   if(att.buffNext){pm*=att.buffNext;}
   var dodgeP=(def.agi||0)+(ev==='fog'?.1:0);(def.perks||[]).forEach(function(p){if(p.f===att.fam&&p.t==='hunter')dodgeP+=perkVal(p);});if(def.slowed)dodgeP*=.5;if(def.noDodge)dodgeP=0;
   if(type==='fire'||ctx.noDodge)dodgeP=Math.min(dodgeP,ctx.noDodge?0:dodgeP);
   if(r()<dodgeP)return {n:0,dodge:true,eff:'',mult:tm*pm};
   if(!crit)crit=r()<(att.crit||0);var base=att.atk!=null?att.atk:att.dmg;var defv=ctx.ignoreDef||crit?0:(def.def||0)+(def.hard||0);
   var imm=tm===0;if(imm)tm=.2; /* immune: only a scratch gets through (the fight still ends) */
-  var mult=tm*pm*m;
+  var cmv=ctx.cm||1;var mult=tm*pm*m*cmv;
   var n=Math.max(1,Math.round(base*mult*(.75+r()*.25)*(crit?1.5:1)*(1-Math.min(.75,defv))));
-  return {n:n,crit:crit,dodge:false,eff:imm?'immune':effWord(tm*pm),mult:tm*pm};}
+  return {n:n,crit:crit,dodge:false,eff:imm?'immune':effWord(tm*pm*cmv),mult:tm*pm*cmv};}
 /* enemy info for the bestiary card */
 function weakList(S){var w=[],rs=[],im=[];TYPES.forEach(function(t){var v=resOf(S,t);if(v===0)im.push(t);else if(v>=1.2)w.push(t);else if(v<=.8)rs.push(t);});return {weak:w,res:rs,immune:im};}
 var api={TYPES:TYPES,TYPE:TYPE,FAMS:FAMS,FAM:FAM,MOBS:MOBS,BOSSES:BOSSES,TRAIT:TRAIT,PHASE2:PHASE2,CLASSES:CLASSES,CLASSK:CLASSK,PERKS:PERKS,PERKK:PERKK,ARMOUR:ARMOUR,ARM_ENCH:ARM_ENCH,
   WEAPON:WEAPON,WPN_NAME:WPN_NAME,WPN_ENCH:WPN_ENCH,ITEMS:ITEMS,EVENTS:EVENTS,EVENTK:EVENTK,MAPMOBS:MAPMOBS,MAPBOSS:MAPBOSS,
-  strHash:strHash,rollLoadout:rollLoadout,rngS:rngS,classOf:classOf,classFromWord:classFromWord,perksOf:perksOf,perkVal:perkVal,perkText:perkText,baseGear:baseGear,mergeGear:mergeGear,sheet:sheet,mobSheet:mobSheet,resOf:resOf,effWord:effWord,hit:hit,weakList:weakList,pct:pct,fmt:fmt};
+  strHash:strHash,rollLoadout:rollLoadout,rngS:rngS,classOf:classOf,classFromWord:classFromWord,perksOf:perksOf,perkVal:perkVal,perkText:perkText,baseGear:baseGear,mergeGear:mergeGear,sheet:sheet,mobSheet:mobSheet,resOf:resOf,effWord:effWord,hit:hit,weakList:weakList,pct:pct,fmt:fmt,
+  ROLE:ROLE,ROLEK:ROLEK,MOBROLE:MOBROLE,BOSSROLE:BOSSROLE,COUNTER:COUNTER,CM:CM,roleOf:roleOf,counter:counter,counterMult:counterMult,strongVs:strongVs,weakVs:weakVs,xpNeed:xpNeed,alvOf:alvOf,alvProg:alvProg,alvXp:alvXp};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.BTR=api;
 })(typeof window!=='undefined'?window:globalThis);

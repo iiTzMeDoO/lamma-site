@@ -81,6 +81,12 @@ var DUELF=[.425,.6],DUELM=[.575,.6];
 function strHash(s){s=String(s||'');var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 function powerOf(user){return POWERS[strHash(user)%POWERS.length];}
 function lvlOf(xp){return Math.min(20,10+Math.floor((xp||0)/120));}
+/* round 8: the arena's own player level (starts at LV0, slow curve — btrpg.js xpNeed) and the Minecraft-run ORDER of maps */
+function alvOf(axp){return BTR.alvOf(axp);}
+var ORDER=['plains','jungle','desert','snow','cave','ocean','nether','end'];
+/* round 8 (Mohammad): no «عدد الموجات» / «الصعوبة» settings — the number of waves follows the squad size */
+function wavesFor(n){return n<=3?4:n<=7?5:6;}
+function stageOf(L){L=Math.max(1,Math.floor(+L||1));var i=(L-1)%ORDER.length;return {L:L,map:ORDER[i],idx:i,loop:Math.floor((L-1)/ORDER.length)+1,n:ORDER.length};}
 /* party places: a loose staggered field on the left (16 max), front rows first; enemies: spread on the right; the boss stands alone */
 function partySlot(i,n){var cols=n<=6?2:n<=12?3:4,rows=Math.ceil(n/cols);var c=i%cols,r=Math.floor(i/cols);
   var x=.33-c*(.26/Math.max(1,cols-1))-(r%2)*.03,y=rows<=1?.6:.3+r*(.6/(rows-1));if(cols===1)x=.25;
@@ -89,9 +95,12 @@ function enemySlot(i,n,boss){if(boss)return [.79,.58];var cols=n<=3?1:n<=8?2:3,r
   var x=.7+c*(cols>2?.1:.15)+(r%2)*.03,y=rows<=1?.6:.3+r*(.6/Math.max(1,rows-1));return [Math.round(x*1000)/1000,Math.round(y*1000)/1000];}
 function Arena(opt){opt=opt||{};this.seed=opt.seed||((Date.now()%1e9)|0);this.r=rng(this.seed);
   this.cfg={waves:5,diff:'normal',squadMax:10,map:'nether',boss:'auto',autoPower:false,pwRate:'normal',pwTurns:3,autoFight:false,breakSecs:4,pickSecs:1.6,events:true,loot:true,infoSecs:7,speak:true};if(opt.cfg)for(var k in opt.cfg)this.cfg[k]=opt.cfg[k];
-  this.levels={};this.xp={};this.gear={};this.cls={};this.load={};this.gameNo=0;this.sqK=1;this.waiting={};this.order=[];this.squad=[];this.infoQ=[];this.info=null;this.says={};this.reset();}
+  this.levels={};this.xp={};this.axp={};this.stage=Math.max(1,+this.cfg.stage||1);this.best=this.stage;this.cfg.map=stageOf(this.stage).map;this.gear={};this.cls={};this.load={};this.gameNo=0;this.sqK=1;this.waiting={};this.order=[];this.squad=[];this.infoQ=[];this.info=null;this.says={};this.reset();}
 Arena.prototype.reset=function(){this.card=null;this.phase='lobby';this.wave=0;this.f=[];this.m=[];this.ev=[];this.evId=this.evId||0; /* event ids never restart: a view that saw id 120 last game ignored every new event below 120 → no damage numbers, no sounds (Mohammad #14) */this.feed=[];this.t=0;this.nextAt=0;this.pickAt=0;this.duel=null;this.result='';this.idN=0;this.paused=false;this.voted={};this.event='';this.rooms=[];this.bossN=0;this.roomKills={};this.roomGold=0;};
-Arena.prototype.level=function(){return this.levels[this.cfg.map]||1;};
+Arena.prototype.level=function(){return this.stage||1;};
+/* round 8: one global level L = the stage of the run; its map comes from ORDER (plains → … → end, then loop 2 …) */
+Arena.prototype.setStage=function(L,force){L=Math.max(1,Math.floor(+L||1));if(!force&&L>this.best)return false;if(this.inRaid())return false;this.stage=L;this.cfg.map=stageOf(L).map;return true;};
+Arena.prototype.stageInfo=function(){return stageOf(this.stage);};
 Arena.prototype.emit=function(e){e.id=++this.evId;e.t=Math.round(this.t*100)/100;this.ev.push(e);if(this.ev.length>80)this.ev.splice(0,this.ev.length-80);return e;};
 Arena.prototype.join=function(user,name,color){if(!user)return false;var w=this.waiting[user];if(w){w.name=name||w.name;if(color)w.color=color;return false;}this.waiting[user]={user:user,name:name||user,color:color||'',jump:false,hide:false,votes:0,at:this.order.length};this.order.push(user);this.rollFor(user);return true;};
 /* Nov 7 (Mohammad): every NEW game rolls a new random loadout per viewer (class → weapon, gear tiers, enchant / potion, ±10% HP / attack, perks, power).
@@ -109,7 +118,7 @@ Arena.prototype.queue=function(){var s=this;return this.order.filter(function(u)
 Arena.prototype.inRaid=function(){return this.phase==='pick'||this.phase==='duel'||this.phase==='break';};
 Arena.prototype.pick=function(user){if(!this.waiting[user]||this.squad.indexOf(user)>=0||this.squad.length>=this.cfg.squadMax)return false;
   if(this.inRaid()){/* a reinforcement joins the party mid-raid at the next free place */this.squad.push(user);this.addF(user,this.squad.length-1);this.relayout();return true;}
-  this.squad.push(user);return true;};
+  this.squad.push(user);if(this.diversify)this.diversify();return true;};
 Arena.prototype.unpick=function(user){var i=this.squad.indexOf(user);if(i<0||this.inRaid())return false;this.squad.splice(i,1);return true;};
 Arena.prototype.addJumpers=function(){var s=this,n=0;this.queue().forEach(function(u){if(s.waiting[u].jump&&s.pick(u))n++;});return n;};
 Arena.prototype.addRandom=function(k){var s=this,pool=this.queue().filter(function(u){return !s.waiting[u].hide}),n=0;k=k||1;
@@ -118,24 +127,35 @@ Arena.prototype.addRandom=function(k){var s=this,pool=this.queue().filter(functi
 Arena.prototype.autoFill=function(){if(!this.squad.length){this.addJumpers();if(this.squad.length<this.cfg.squadMax)this.addRandom(this.cfg.squadMax-this.squad.length);}return this.squad.length;};
 /* a viewer's class: their own pick (!صنف) or one from their name */
 Arena.prototype.setClass=function(user,word){var k=BTR.classFromWord(word);if(!k)return false;var f=this.fOf(user);if(f&&this.inRaid())return false;this.cls[user]=k;return true;};
-Arena.prototype.sheetOf=function(u){var lv=lvlOf(this.xp[u]);return BTR.sheet(u,lv,{gear:this.gear[u],roll:this.rollFor(u)});};
-Arena.prototype.applySheet=function(f){var S=this.sheetOf(f.u),ratio=f.max?f.hp/f.max:1;f.lv=lvlOf(this.xp[f.u]);f.cls=S.cls;f.atkT=S.atkT;f.atk=S.atk;f.def=S.def;f.agi=S.agi;f.crit=S.crit;f.spd=S.spd;f.res=S.res;f.perks=S.perks;f.gear=S.gear;f.thorns=S.thorns;
-  var mx=Math.round(S.hp*(1+(f.lv-10)*.01));f.max=mx;f.hp=f.alive===0?0:Math.max(1,Math.round(mx*ratio));};
+Arena.prototype.sheetOf=function(u){var lv=alvOf(this.axp[u]);return BTR.sheet(u,lv,{gear:this.gear[u],roll:this.rollFor(u)});};
+Arena.prototype.applySheet=function(f){var S=this.sheetOf(f.u),ratio=f.max?f.hp/f.max:1;f.lv=alvOf(this.axp[f.u]);f.cls=S.cls;f.atkT=S.atkT;f.atk=S.atk;f.def=S.def;f.agi=S.agi;f.crit=S.crit;f.spd=S.spd;f.res=S.res;f.perks=S.perks;f.gear=S.gear;f.thorns=S.thorns;
+  var mx=Math.round(S.hp);f.max=mx;f.hp=f.alive===0?0:Math.max(1,Math.round(mx*ratio));};
 Arena.prototype.addF=function(u,i){var w=this.waiting[u]||{name:u};
-  var f={id:++this.idN,u:u,name:w.name,color:w.color||'',slot:i,nx:0,ny:0,hp:1,max:0,lv:10,pw:POWERS.indexOf(this.rollFor(u).pw),pc:0,armed:0,kills:0,alive:1,st:'idle',jump:w.jump?1:0,hide:w.hide?1:0,votes:w.votes||0,focus:'',pwUsed:0,shield:0,
+  var f={id:++this.idN,u:u,name:w.name,color:w.color||'',slot:i,nx:0,ny:0,hp:1,max:0,lv:0,pw:POWERS.indexOf(this.rollFor(u).pw),pc:0,armed:0,kills:0,alive:1,st:'idle',jump:w.jump?1:0,hide:w.hide?1:0,votes:w.votes||0,focus:'',pwUsed:0,shield:0,
     fam:'',dot:null,stun:0,slowed:0,noDodge:0,weak:1,hard:0,saves:0,buffNext:0,wins:0};
   this.applySheet(f);f.hp=f.max;this.f.push(f);return f;};
 Arena.prototype.relayout=function(){var n=this.f.length;this.f.forEach(function(f){var p=partySlot(f.slot,n);f.hx=p[0];f.hy=p[1];if(f.st==='idle'||f.st==='dead'){f.nx=p[0];f.ny=p[1];}});
   var ms=this.m;ms.forEach(function(m){var p=enemySlot(m.slot,ms.length,m.boss);m.hx=p[0];m.hy=p[1];if(m.st==='idle'){m.nx=p[0];m.ny=p[1];}});};
-Arena.prototype.start=function(){if(this.inRaid())return false;if(!this.autoFill())return false;var s=this,keep=this.squad.slice();this.reset();this.squad=keep;this.startLv=this.level();
+/* round 8: a squad of mixed classes — nobody repeats a class while another class is still free (so the streamer always has
+   counters to choose from). Earlier members keep their roll; only a duplicate later in the list is moved to the least-used class. */
+Arena.prototype.diversify=function(){var s=this,used={},n=this.squad.length,cap=Math.max(1,Math.ceil(n/BTR.CLASSK.length));
+  /* the roles this stage's map can throw at the squad (its mobs + its boss), with how often each comes */
+  var map=stageOf(this.stage).map,need={};(MAPMOBS[map]||[]).forEach(function(k){var r=BTR.roleOf(k,false);need[r]=(need[r]||0)+1;});(MAPBOSS[map]||[]).forEach(function(k){var r=BTR.roleOf(k,true);need[r]=(need[r]||0)+1.5;});
+  var cov={};function gain(c){var g=0;(BTR.COUNTER[c]||{s:[]}).s.forEach(function(r){if(need[r]&&!cov[r])g+=need[r];});return g;}
+  this.squad.forEach(function(u,i){var L=s.rollFor(u);if(L.cls0==null)L.cls0=L.cls;var c=L.cls0,h=strHash(u+'~'+s.gameNo);
+    var free=BTR.CLASSK.filter(function(k){return (used[k]||0)<cap});
+    /* a free class, and — while the squad still has a role nobody counters — one that adds a counter */
+    if((used[c]||0)>=cap||(i>0&&gain(c)===0)){var best=-1,pool=[];free.forEach(function(k){var g=gain(k);if(g>best){best=g;pool=[k];}else if(g===best)pool.push(k);});if(pool.length&&(best>0||(used[c]||0)>=cap))c=pool[h%pool.length];}
+    L.cls=c;used[c]=(used[c]||0)+1;(BTR.COUNTER[c]||{s:[]}).s.forEach(function(r){cov[r]=1;});});};
+Arena.prototype.start=function(){if(this.inRaid())return false;if(!this.autoFill())return false;var s=this,keep=this.squad.slice();this.reset();this.squad=keep;this.cfg.map=stageOf(this.stage).map;if(this.cfg.autoWaves)this.cfg.waves=wavesFor(this.squad.length);this.startLv=this.level();this.diversify();
   this.gear={}; /* loot only lasts for this game (Nov 7: random loadout every game) */
-  this.squad.forEach(function(u,i){s.addF(u,i);});var sl=0;this.f.forEach(function(f){sl+=f.lv-10;});this.sqK=1+(this.f.length?sl/this.f.length:0)*BAL.lvK;this.relayout();this.phase='break';this.nextAt=this.t+1.2;this.emit({k:'start'});return true;};
+  this.squad.forEach(function(u,i){s.addF(u,i);});this.sqK=1; /* round 8: no more "the squad's level makes the mobs stronger" — the level is the players' reward; the counters are the challenge */this.relayout();this.phase='break';this.nextAt=this.t+1.2;this.emit({k:'start'});return true;};
 Arena.prototype.bossKind=function(){if(this.cfg.boss&&this.cfg.boss!=='auto'&&BOSSTAT[this.cfg.boss])return this.cfg.boss;var L=MAPBOSS[this.cfg.map]||MAPBOSS.plains;return L[(this.level()-1+this.bossN)%L.length];};
 Arena.prototype.isBossWave=function(w){return this.cfg.waves>0?w===this.cfg.waves:(w%5===0);};
 /* Mohammad #20: the same difficulty should feel the same with 3 players or 16. Measured in Node (120 raids per point, 5 waves, auto fight):
    before this, «عادي» won 3% of raids with 3 players, 27% with 4, 80% with 6 and 100% with 16. These multipliers (enemy HP ×k, damage ×√k)
    were fitted so «عادي» wins ≈65% at every party size; the other levels keep their gap. */
-var PARTYK=[[1,.6],[2,.7],[3,.8],[4,.9],[5,.97],[6,1.0],[8,1.05],[10,1.08],[12,1.12],[16,1.17],[24,1.3]]; /* Nov 7: refitted with the new enemy table so «عادي» feels the same with 3, 6 or 10 players */
+var PARTYK=[[1,.55],[2,.65],[3,.77],[4,.88],[5,.95],[6,1.0],[8,1.05],[10,1.08],[12,1.12],[16,1.17],[24,1.3]]; /* Nov 7: refitted with the new enemy table so «عادي» feels the same with 3, 6 or 10 players */
 function partyK(n){n=Math.max(1,n||1);for(var i=1;i<PARTYK.length;i++){var a=PARTYK[i-1],b=PARTYK[i];if(n<=b[0])return a[1]+(b[1]-a[1])*(n-a[0])/(b[0]-a[0]);}return PARTYK[PARTYK.length-1][1];}
 var DIFFK={hard:[[1,.95],[3,.95],[6,1],[10,1],[16,.97],[24,.93]],hell:[[1,.95],[3,.95],[6,.88],[10,.86],[16,.8],[24,.75]]};
 function lerpT(T,n){n=Math.max(1,n||1);for(var i=1;i<T.length;i++){var a=T[i-1],b=T[i];if(n<=b[0])return a[1]+(b[1]-a[1])*(n-a[0])/(b[0]-a[0]);}return T[T.length-1][1];}
@@ -144,15 +164,19 @@ api.partyK=partyKD;api.PARTYK=PARTYK;api.DIFFK=DIFFK;api.DIFF=DIFF;
 /* Nov 7 (Mohammad: "no fairness at all with the monsters") — one table for every enemy number, tuned in Node (see REPORT.txt):
    enemy HP / damage = base × map level (capped) × wave ramp × difficulty × squad size (PARTYK) × the squad's average level (sqK).
    sqK keeps a LV20 squad from flattening a level-1 map (before: player power grew ×2.5 from LV10 to LV20 while enemies grew 4.5% a map level). */
-var BAL={lvK:.018,mapHp:.06,mapDmg:.04,mapCap:20,wHp:.12,wDmg:.08,mobHp:2.2,mobDmg0:8,mobDmgK:.8,bossHp:.16,bossN:.3,bossDmg0:9,bossDmgK:.75,fury:.25};
+var BAL={lvK:.018,mapHp:.06,mapDmg:.04,mapCap:20,wHp:.12,wDmg:.08,mobHp:2.2,mobDmg0:8,mobDmgK:.8,bossHp:.16,bossN:.3,bossDmg0:9,bossDmgK:.75,fury:.25,
+  /* round 8 (the Minecraft run): each map in the order is harder (stHp / stDmg per step) and each loop multiplies everything (loopHp / loopDmg) */
+  stHp:.05,stDmg:.035,loopHp:1.3,loopDmg:1.18,mobK:1.1,mobDK:1.05,bossK:.88,bossDK:1};
+/* round 8: every map's mobs are brought to the same average HP (the Nether's mobs were 45% beefier), so the ORDER alone sets the difficulty */
+var MAPHPN={};(function(){var ref=0,c=0;Object.keys(MAPMOBS).forEach(function(mp){var h=0;MAPMOBS[mp].forEach(function(k){h+=MOBSTAT[k].hp;});MAPHPN[mp]=h/MAPMOBS[mp].length;ref+=MAPHPN[mp];c++;});ref/=c;Object.keys(MAPHPN).forEach(function(mp){MAPHPN[mp]=Math.min(1.1,ref/MAPHPN[mp]);});})();
 api.BAL=BAL;
-Arena.prototype.mobStats=function(kind,boss,w,n){var st=boss?BOSSTAT[kind]:MOBSTAT[kind];if(!st)return null;var d=DIFF[this.cfg.diff]||1,L=Math.min(this.level(),BAL.mapCap),q=this.sqK||1,pk=this.cfg.partyScale===false?1:partyKD(n,this.cfg.diff);
-  var lvh=1+(L-1)*BAL.mapHp,lvd=1+(L-1)*BAL.mapDmg,wv=Math.max(0,(w||1)-1);
-  var hp=boss?st.hp*BAL.bossHp*(1+n*BAL.bossN)*lvh*d*q:st.hp*BAL.mobHp*(lvh+wv*BAL.wHp)*d*q;
-  var dmg=boss?(BAL.bossDmg0+st.dmg*BAL.bossDmgK)*lvd*d*q:(BAL.mobDmg0+st.dmg*BAL.mobDmgK)*(lvd+wv*BAL.wDmg)*d*q;
+Arena.prototype.mobStats=function(kind,boss,w,n){var st=boss?BOSSTAT[kind]:MOBSTAT[kind];if(!st)return null;var d=DIFF[this.cfg.diff]||1,S=stageOf(this.level()),pk=this.cfg.partyScale===false?1:partyKD(n,this.cfg.diff);
+  var lvh=(1+S.idx*BAL.stHp)*Math.pow(BAL.loopHp,S.loop-1),lvd=(1+S.idx*BAL.stDmg)*Math.pow(BAL.loopDmg,S.loop-1),wv=Math.max(0,(w||1)-1);
+  var hp=boss?st.hp*BAL.bossHp*BAL.bossK*(1+n*BAL.bossN)*lvh*d:st.hp*BAL.mobHp*BAL.mobK*(MAPHPN[S.map]||1)*lvh*(1+wv*BAL.wHp)*d;
+  var dmg=boss?(BAL.bossDmg0+st.dmg*BAL.bossDmgK)*BAL.bossDK*lvd*d:(BAL.mobDmg0+st.dmg*BAL.mobDmgK)*BAL.mobDK*lvd*(1+wv*BAL.wDmg)*d;
   return {hp:Math.round(hp*pk),dmg:Math.round(dmg*Math.sqrt(pk)*10)/10,st:st};};
 Arena.prototype.spawnMob=function(kind,boss,slot){var L=this.level(),w=this.wave,ms=this.mobStats(kind,boss,w,this.f.length);if(!ms)return null;var st=ms.st,hp=ms.hp,dmg=ms.dmg;
-  var m={id:++this.idN,k:boss?'boss:'+kind:kind,kind:kind,boss:boss?1:0,slot:slot||0,nx:0,ny:0,hp:hp,max:hp,dmg:dmg,agi:st.agi,lv:9+L+w+(boss?5:0),scale:st.scale||1,st:'idle',frozen:0,
+  var m={id:++this.idN,k:boss?'boss:'+kind:kind,kind:kind,boss:boss?1:0,slot:slot||0,nx:0,ny:0,hp:hp,max:hp,dmg:dmg,agi:st.agi,lv:L+w-1+(boss?2:0),role:BTR.roleOf(kind,boss),scale:st.scale||1,st:'idle',frozen:0,
     fam:st.fam,atkT:st.atk,atk2:st.atk2||'',def:st.def||0,crit:st.crit||0,res:st.res,trait:st.trait||'',p2:st.p2||'',phase2:0,turns:0,dot:null,stun:0,anger:0,splitUsed:0,healed:0,totemUsed:0,killedMate:0};
   this.m.push(m);if(boss)this.emit({k:'boss',kind:kind});return m;};
 Arena.prototype.startWave=function(){this.wave++;var kinds=MAPMOBS[this.cfg.map]||MAPMOBS.plains,n=this.alive().length||1,s=this;this.m=[];this.roomKills={};this.roomGold=0;
@@ -182,7 +206,7 @@ Arena.prototype.frontEnemy=function(f){var ms=this.m.filter(function(m){return m
 function hasPerk(f,t,fam){return (f.perks||[]).some(function(p){return p.t===t&&p.f===fam});}
 function perkV(f,t,fam){var v=0;(f.perks||[]).forEach(function(p){if(p.t===t&&p.f===fam)v=BTR.perkVal(p);});return v;}
 /* the streamer sends ONE fighter into the middle: a 1v1 duel with the front enemy */
-Arena.prototype.send=function(user){if(this.phase!=='pick'||this.paused)return false;this.card=null;user=user||this.nextFighter();var f=this.fOf(user);if(!f||!f.alive)return false;var m=this.frontEnemy(f);if(!m)return false;
+Arena.prototype.send=function(user){if(this.phase!=='pick'||this.paused)return false;this.card=null;user=user||this.nextFighter();var f=this.fOf(user);if(!f||!f.alive)return false;var m=this.frontEnemy(null); /* round 8: the fighter always meets the mob that is waiting in the middle (the one the ▲/▼ markers are about) */if(!m)return false;
   this.m.forEach(function(o){if(o!==m&&o.st==='ready'){o.st='back';o.nx=o.hx;o.ny=o.hy;o.backT=0;}});f.st='out';f.nx=DUELF[0];f.ny=DUELF[1];m.st='out';m.nx=DUELM[0]+(m.boss?.03:0);m.ny=DUELM[1];f.pwAuto=0; /* Nov 4: no refill at duel start — the heart fills slowly over the fighter's turns */f.shield=0;m.frozen=0;f.dot=null;f.stun=0;f.slowed=0;f.noDodge=0;f.weak=1;f.buffNext=0;
   var w=this.waiting[user];if(w){w.jump=false;w.votes=0;}f.jump=0;f.votes=0;var s=this;Object.keys(this.voted).forEach(function(k){if(s.voted[k]===user)delete s.voted[k];});
   var first;if(hasPerk(f,'first',m.fam))first='f';else if(m.trait==='swoop'||m.trait==='leap')first='m';else first=this.r()<(.55+(f.agi-m.agi)+(f.spd-5)*.02)?'f':'m';
@@ -201,7 +225,9 @@ Arena.prototype.strike=function(att,def,mult,how,opt){opt=opt||{};var s=this,isF
            :{agi:def.agi,def:def.def,hard:def.hard,res:def.res,perks:def.perks,slowed:def.slowed,noDodge:def.noDodge,fam:''};
   var dodgeOk=!(how==='bolt'||how==='tnt'||how==='fire'||opt.noDodge);if(!dodgeOk)D.agi=0;
   if(isF&&def.fam==='')D.fam='';
-  var r=BTR.hit(A,D,{r:this.r,type:type,mult:mult||1,ignoreDef:opt.ignoreDef,event:this.event,avenged:isF&&def.killedMate});
+  /* round 8: the class COUNTER — ▲ strong: deal ×1.6, take ×0.65 · ▼ weak: deal ×0.5, take ×1.6 */
+  var fx=isF?att:def,mx=isF?def:att,soft=this.cfg.counters!==false,cmo=soft&&fx.u&&mx.role?BTR.counterMult(BTR.counter(fx.cls,mx.role)):null;
+  var r=BTR.hit(A,D,{r:this.r,type:type,mult:mult||1,ignoreDef:opt.ignoreDef,event:this.event,avenged:isF&&def.killedMate,soft:soft,cm:cmo?(isF?cmo.out:cmo.inc):1});
   if(isF&&att.buffNext)att.buffNext=0;if(!isF&&def.noDodge)def.noDodge=0;
   if(r.dodge){this.emit({k:'hit',a:isF?'f':'m',from:att.id,to:def.id,n:0,dodge:1,how:how||''});
     if(!isF){var cv=perkV(def,'counter',att.fam);if(cv)def.buffNext=cv;}return r;}
@@ -216,7 +242,7 @@ Arena.prototype.strike=function(att,def,mult,how,opt){opt=opt||{};var s=this,isF
 /* damage over time / statuses */
 function applyDot(s,to,k,d){var t=k==='burn'?'fire':k==='poison'?'poison':'magic';var rm=to.res&&to.res[t]!=null?to.res[t]:1;if(rm===0){s.emit({k:'immune',to:to.id,how:k});return;}to.dot={k:k,n:3,d:Math.max(1,Math.round(d*rm))};s.emit({k:'status',to:to.id,st:k});}
 function tickDot(s,x){if(!x.dot||x.hp<=0)return;x.hp=Math.max(0,x.hp-x.dot.d);s.emit({k:'hit',a:x.u?'m':'f',from:x.id,to:x.id,n:x.dot.d,how:x.dot.k,dot:1});if(--x.dot.n<=0)x.dot=null;}
-Arena.prototype.firePower=function(f){var d=this.duel;if(!d||d.f!==f.id||(f.pc||0)<1||d.end)return false;var m=this.byId(d.m);if(!m)return false;var p=POWERS[f.pw],pow=1+(f.lv-10)*.03;f.pc=0;f.armed=0;
+Arena.prototype.firePower=function(f){var d=this.duel;if(!d||d.f!==f.id||(f.pc||0)<1||d.end)return false;var m=this.byId(d.m);if(!m)return false;var p=POWERS[f.pw],pow=1+Math.min(30,f.lv||0)*.02;f.pc=0;f.armed=0;
   this.emit({k:'power',p:p,fid:f.id,mid:m.id,name:f.name,c:f.color,u:f.u});
   if(p==='bolt')this.strike(f,m,2.3*pow,'bolt');else if(p==='fire'){this.strike(f,m,2*pow,'fire');if(m.hp>0)applyDot(this,m,'burn',4+f.lv*.3);}else if(p==='tnt'){this.strike(f,m,2.7*pow,'tnt');f.hp=Math.max(1,f.hp-Math.round(f.max*.08));}
   else if(p==='arrows'){for(var i=0;i<3;i++)this.strike(f,m,.75*pow,'arrows');}else if(p==='shield')f.shield=2;else if(p==='heal'){f.hp=Math.min(f.max,f.hp+Math.round(f.max*.4));f.dot=null;}else if(p==='freeze')m.frozen=2;
@@ -241,7 +267,7 @@ Arena.prototype.checkEnd=function(){var d=this.duel;if(!d||d.end)return;var f=th
   /* Nov 7: a third boss phase — the last quarter of its HP it fights in a fury (+25% damage), so the end of a boss fight is a climax, not a mop-up */
   if(m.boss&&m.phase2&&!m.fury&&m.hp>0&&m.hp<=m.max*.25){m.fury=1;this.emit({k:'phase',to:m.id,p:'fury',kind:m.kind});}
   if(m.hp<=0||f.hp<=0){d.end=this.t+ENDT;d.win=m.hp<=0?'f':'m';
-    if(d.win==='f'){f.kills++;f.wins++;var xp=Math.round((m.boss?60:15)*(this.event==='blood'?1.5:1));this.xp[f.u]=(this.xp[f.u]||0)+xp;this.roomKills[f.u]=(this.roomKills[f.u]||0)+1;
+    if(d.win==='f'){f.kills++;f.wins++;var xp=Math.round((m.boss?60:15)*(this.event==='blood'?1.5:1));this.xp[f.u]=(this.xp[f.u]||0)+xp;this.axp[f.u]=(this.axp[f.u]||0)+xp;this.roomKills[f.u]=(this.roomKills[f.u]||0)+1;
       var fv=perkV(f,'feast',m.fam);if(fv)f.hp=Math.min(f.max,f.hp+Math.round(f.max*fv));var hv=perkV(f,'harden',m.fam);if(hv)f.hard=Math.min(.3,f.hard+hv);
       this.emit({k:'kill',fid:f.id,mid:m.id,mk:m.kind,boss:m.boss,by:f.name,bc:f.color,bu:f.u,xp:xp});this.feed.push({by:f.name,bc:f.color,mk:m.kind,boss:m.boss,t:this.t});}
     else{f.alive=0;m.killedMate=1;this.emit({k:'die',fid:f.id,mid:m.id,name:f.name,c:f.color,src:m.kind});this.feed.push({dead:f.name,dc:f.color,mk:m.kind,t:this.t});}
@@ -262,16 +288,17 @@ Arena.prototype.dropLoot=function(boss){if(!this.cfg.loot)return;var al=this.ali
 Arena.prototype.endDuel=function(){var d=this.duel,f=this.byId(d.f),m=this.byId(d.m);
   if(d.win==='f'){this.m=this.m.filter(function(x){return x!==m});f.st='back';f.nx=f.hx;f.ny=f.hy;}else{f.st='dead';f.nx=f.hx;f.ny=f.hy;m.st='back';m.nx=m.hx;m.ny=m.hy;}
   f.dot=null;f.stun=0;this.duel=null;
-  if(!this.alive().length){this.phase='lost';this.gameNo++;this.levels[this.cfg.map]=Math.max(1,this.level()-1);this.result='lost';this.emit({k:'lost'});return;}
+  if(!this.alive().length){this.phase='lost';this.gameNo++; /* round 8: a wipe ends the run at this level — the level is NOT lowered; «إعادة المرحلة» tries it again */
+    var s0=this;this.f.forEach(function(x){s0.axp[x.u]=(s0.axp[x.u]||0)+10;});this.result='lost';this.emit({k:'lost'});return;}
   if(!this.m.length){var wasBoss=this.isBossWave(this.wave);this.dropLoot(wasBoss);
-    if(this.cfg.waves>0&&this.wave>=this.cfg.waves){this.phase='won';this.gameNo++;this.levels[this.cfg.map]=this.level()+1;this.result='won';var s2=this;this.alive().forEach(function(x){s2.xp[x.u]=(s2.xp[x.u]||0)+40;});this.emit({k:'won'});}
+    if(this.cfg.waves>0&&this.wave>=this.cfg.waves){this.phase='won';this.gameNo++;this.best=Math.max(this.best||1,this.level()+1);this.result='won';var s2=this;this.alive().forEach(function(x){s2.xp[x.u]=(s2.xp[x.u]||0)+40;s2.axp[x.u]=(s2.axp[x.u]||0)+40;});this.f.forEach(function(x){if(!x.alive)s2.axp[x.u]=(s2.axp[x.u]||0)+10;});this.emit({k:'won'});}
     else{this.phase='break';this.nextAt=this.cfg.breakSecs>0?this.t+this.cfg.breakSecs:0;this.alive().forEach(function(x){x.hp=Math.min(x.max,x.hp+Math.round(x.max*.3));});this.emit({k:'cleared',w:this.wave});}return;}
   this.toPick();};
 Arena.prototype.summonBoss=function(){if(!this.inRaid()||this.phase==='duel')return false;if(this.m.some(function(m){return m.boss}))return false;
   var target=this.cfg.waves>0?this.cfg.waves:Math.ceil((this.wave+1)/5)*5;this.wave=target-1;this.startWave();return true;};
 /* Mohammad #13: at the end of a level — «إعادة المرحلة» replays the same level, «المستوى التالي» goes one level up (after a win) */
 Arena.prototype.again=function(next){if(this.phase!=='won'&&this.phase!=='lost')return false;var lv=this.startLv||this.level();if(next&&this.phase!=='won')return false;
-  this.levels[this.cfg.map]=Math.max(1,next?lv+1:lv);this.phase='lobby';return this.start();};
+  this.setStage(Math.max(1,next?lv+1:lv),true);this.phase='lobby';return this.start();};
 Arena.prototype.next=function(){if(this.phase==='won')return this.again(true);if(this.phase==='lost')return this.again(false);if(this.card)return this.skipCard();if(this.phase==='break'){this.nextAt=this.t;return true;}if(this.phase==='pick')return this.send(this.nextFighter());return false;};
 /* the fighter's turn */
 /* Nov 7 (Mohammad): the power («القوة», the brown heart) fills SLOWLY like an HP bar — every blow you strike, every blow you take and,
@@ -296,7 +323,7 @@ Arena.prototype.mTurn=function(m,f){if(m.dot){tickDot(this,m);this.checkEnd();if
   if(tr==='explode'&&m.turns>=3){this.strike(m,f,2.5,'',{type:'blast'});m.hp=0;this.emit({k:'boom',to:m.id});return;}
   var opt={},mult=1;
   if(tr==='fangs')opt.ignoreDef=true;
-  if((tr==='roots'||p2==='vines')&&m.hp<m.max){var rg=Math.max(1,Math.round(m.max*(p2==='vines'?.04:.05)));m.hp=Math.min(m.max,m.hp+rg);this.emit({k:'regen',to:m.id,n:rg});}
+  if((tr==='roots'||p2==='vines')&&m.hp<m.max){var rg=Math.max(1,Math.round(m.max*(this.cfg.counters!==false?(m.boss?.015:.03):(p2==='vines'?.04:.05)))); /* round 8: regen toned down — a counter pick must be able to out-damage it */m.hp=Math.min(m.max,m.hp+rg);this.emit({k:'regen',to:m.id,n:rg});}
   if(tr==='gust')opt.noDodge=true;
   if(tr==='leap'&&m.turns===1){mult*=1.8;this.emit({k:'special',to:m.id,sp:'leap'});}
   if(tr==='chill'&&m.turns%3===0){opt.noDodge=true;mult*=1.6;opt.type='magic';this.emit({k:'special',to:m.id,sp:'chill'});}
@@ -330,11 +357,11 @@ Arena.prototype.step=function(dt){dt=Math.min(dt,.1);if(this.paused)return;this.
 /* ---------- !معلومات / !getinfo cards (shown on stream, one at a time) and "candidates can speak" ---------- */
 Arena.prototype.tickSide=function(dt){this.ct=(this.ct||0)+dt;if(this.info&&this.ct>=this.info.until)this.info=null;if(!this.info&&this.infoQ.length){var c=this.infoQ.shift();c.until=this.ct+(this.cfg.infoSecs||7);this.info=c;}
   var s=this;Object.keys(this.says).forEach(function(u){if(s.ct>=s.says[u].until)delete s.says[u];});};
-Arena.prototype.cardFor=function(u){var w=this.waiting[u],f=this.fOf(u);if(!w&&!f)return null;var S=f||this.sheetOf(u),lv=lvlOf(this.xp[u]),xp=this.xp[u]||0;
-  return {t:'p',u:u,name:(f||w).name,c:(f||w).color||'',lv:lv,xp:xp%120,xpN:lv>=20?0:120,cls:S.cls,atkT:S.atkT,hp:f?f.hp:S.hp,max:f?f.max:S.hp,atk:Math.round(S.atk),def:Math.round(((S.def||0)+(f?f.hard:0))*100),agi:Math.round(S.agi*100),crit:Math.round(S.crit*100),spd:S.spd,
+Arena.prototype.cardFor=function(u){var w=this.waiting[u],f=this.fOf(u);if(!w&&!f)return null;var S=f||this.sheetOf(u),pg=BTR.alvProg(this.axp[u]),lv=pg.lv;
+  return {t:'p',u:u,name:(f||w).name,c:(f||w).color||'',lv:lv,xp:pg.xp,xpN:pg.need,cls:S.cls,atkT:S.atkT,hp:f?f.hp:S.hp,max:f?f.max:S.hp,atk:Math.round(S.atk),def:Math.round(((S.def||0)+(f?f.hard:0))*100),agi:Math.round(S.agi*100),crit:Math.round(S.crit*100),spd:S.spd,
     res:S.res,perks:S.perks,gear:{a:S.gear.a,ae:S.gear.ae,w:S.gear.w,we:S.gear.we,items:S.gear.items.slice()},pw:f?f.pw:POWERS.indexOf(this.rollFor(u).pw),pwUsed:f?((f.pc||0)>=1?0:1):1,pc:f?Math.round((f.pc||0)*100):0,armed:f&&f.armed?1:0,kills:f?f.kills:0,alive:f?f.alive:1,inSquad:f?1:this.squad.indexOf(u)>=0?1:0,id:f?f.id:0};};
 Arena.prototype.mobCard=function(m,kind,boss){var S=boss?BOSSTAT[kind]:MOBSTAT[kind];if(!S)return null;var L0=this.level(),ms=this.mobStats(kind,boss,Math.max(1,this.wave),Math.max(1,this.f.length||this.squad.length));
-  return {t:'m',kind:kind,boss:boss?1:0,id:m?m.id:0,lv:m?m.lv:9+L0+(boss?5:0),hp:m?m.hp:ms.hp,max:m?m.max:ms.hp,dmg:m?Math.round(m.dmg):Math.round(ms.dmg),def:Math.round(S.def*100),agi:Math.round(S.agi*100),crit:Math.round(S.crit*100),fam:S.fam,atkT:S.atk,atk2:S.atk2||'',res:S.res,trait:S.trait||'',p2:S.p2||'',phase2:m?m.phase2:0};};
+  return {t:'m',kind:kind,boss:boss?1:0,id:m?m.id:0,lv:m?m.lv:L0+Math.max(1,this.wave)-1+(boss?2:0),role:m?m.role:BTR.roleOf(kind,boss),hp:m?m.hp:ms.hp,max:m?m.max:ms.hp,dmg:m?Math.round(m.dmg):Math.round(ms.dmg),def:Math.round(S.def*100),agi:Math.round(S.agi*100),crit:Math.round(S.crit*100),fam:S.fam,atkT:S.atk,atk2:S.atk2||'',res:S.res,trait:S.trait||'',p2:S.p2||'',phase2:m?m.phase2:0};};
 /* !getinfo [name]: the asker, a candidate / fighter by name, or an enemy (in this room, else from the bestiary) */
 Arena.prototype.closeInfo=function(){if(!this.info)return false;this.info=null;return true;};
 Arena.prototype.askInfo=function(user,arg,name,color){var a=norm(arg).replace(/^@/,''),c=null,self=this;
@@ -347,12 +374,13 @@ Arena.prototype.askInfo=function(user,arg,name,color){var a=norm(arg).replace(/^
 Arena.prototype.enemyInfo=function(id){var m=this.byId(id);if(!m||m.u)return false;this.info=null;var c=this.mobCard(m,m.kind,m.boss);c.key='m'+m.id;this.infoQ.unshift(c);this.tickSide(0);return true;};
 Arena.prototype.say=function(user,text){if(!this.cfg.speak||!this.waiting[user])return false;var t=String(text||'').replace(/\s+/g,' ').trim();if(!t||t.charAt(0)==='!')return false;if(t.length>40)t=t.slice(0,39)+'…';this.says[user]={txt:t,until:(this.ct||0)+4};return true;};
 Arena.prototype.pub=function(){var s=this,r3=function(v){return Math.round(v*1000)/1000},d=this.duel;
-  return {ph:this.phase,w:this.wave,ws:this.cfg.waves,map:this.cfg.map,lv:this.level(),pa:this.paused?1:0,af:this.cfg.autoFight?1:0,ev2:this.event,rooms:this.rooms.slice(),
-  f:this.f.map(function(f){return [f.id,f.u,f.name,f.color,r3(f.nx),r3(f.ny),f.hp,f.max,f.lv,f.pw,f.alive,f.kills,f.st,f.jump,f.votes,f.hide,(f.pc||0)>=1?0:1,f.shield,f.cls,f.atkT,f.gear.a,f.gear.w,f.dot?f.dot.k:'',f.stun,f.gear.ae,f.gear.we,Math.round((f.pc||0)*100),f.armed?1:0];}),
-  m:this.m.map(function(m){return [m.id,m.k,r3(m.nx),r3(m.ny),m.hp,m.max,m.lv,m.boss,m.scale,m.mid?1:0,m.st,m.frozen,m.fam,m.phase2,m.trait,m.dot?m.dot.k:'',m.fury?1:0];}),
-  d:d?[d.f,d.m,d.end?1:0]:null,wc:this.card&&this.phase==='pick'?[this.card.w,this.card.boss,this.card.e,(+this.cfg.cardSecs>0||this.cfg.autoFight)?Math.max(0,Math.ceil(this.card.at+(+this.cfg.cardSecs>0?+this.cfg.cardSecs:4)-this.t)):-1]:null,ev:this.ev.slice(-40),feed:this.feed.slice(-6),gi:this.info,say:Object.keys(this.says).map(function(u){return [u,s.says[u].txt];}),
-  q:this.queue().slice(0,60).map(function(u){var w=s.waiting[u];return [u,w.name,w.color,w.jump?1:0,w.hide?1:0,w.votes];}),sq:this.squad.map(function(u){var w=s.waiting[u]||{name:u},L=s.rollFor(u);return [u,w.name,w.color||'',lvlOf(s.xp[u]),POWERS.indexOf(L.pw),L.cls];}),nq:this.order.length};};
-api.partySlot=partySlot;api.enemySlot=enemySlot;api.DUELF=DUELF;api.DUELM=DUELM;api.Arena=Arena;api.POWERS=POWERS;api.MOBSTAT=MOBSTAT;api.BOSSTAT=BOSSTAT;api.MAPMOBS=MAPMOBS;api.MAPBOSS=MAPBOSS;api.powerOf=powerOf;api.lvlOf=lvlOf;api.BTR=BTR;api.mobFromWord=mobFromWord;
+  var SI=stageOf(this.level()),rm=(this.phase==='pick'||this.phase==='duel')?(d?this.byId(d.m):this.frontEnemy(null)):null;
+  return {ph:this.phase,w:this.wave,ws:this.cfg.waves,map:this.cfg.map,lv:this.level(),stg:[SI.L,SI.loop,SI.idx,this.best||SI.L],pa:this.paused?1:0,af:this.cfg.autoFight?1:0,ev2:this.event,rooms:this.rooms.slice(),
+  f:this.f.map(function(f){return [f.id,f.u,f.name,f.color,r3(f.nx),r3(f.ny),f.hp,f.max,f.lv,f.pw,f.alive,f.kills,f.st,f.jump,f.votes,f.hide,(f.pc||0)>=1?0:1,f.shield,f.cls,f.atkT,f.gear.a,f.gear.w,f.dot?f.dot.k:'',f.stun,f.gear.ae,f.gear.we,Math.round((f.pc||0)*100),f.armed?1:0,rm&&rm.role?BTR.counter(f.cls,rm.role):0];}),
+  m:this.m.map(function(m){return [m.id,m.k,r3(m.nx),r3(m.ny),m.hp,m.max,m.lv,m.boss,m.scale,m.mid?1:0,m.st,m.frozen,m.fam,m.phase2,m.trait,m.dot?m.dot.k:'',m.fury?1:0,m.role||''];}),
+  d:d?[d.f,d.m,d.end?1:0]:null,rm:rm?rm.id:0,wc:this.card&&this.phase==='pick'?[this.card.w,this.card.boss,this.card.e,(+this.cfg.cardSecs>0||this.cfg.autoFight)?Math.max(0,Math.ceil(this.card.at+(+this.cfg.cardSecs>0?+this.cfg.cardSecs:4)-this.t)):-1]:null,ev:this.ev.slice(-40),feed:this.feed.slice(-6),gi:this.info,say:Object.keys(this.says).map(function(u){return [u,s.says[u].txt];}),
+  q:this.queue().slice(0,60).map(function(u){var w=s.waiting[u];return [u,w.name,w.color,w.jump?1:0,w.hide?1:0,w.votes];}),sq:this.squad.map(function(u){var w=s.waiting[u]||{name:u},L=s.rollFor(u);return [u,w.name,w.color||'',alvOf(s.axp[u]),POWERS.indexOf(L.pw),L.cls];}),nq:this.order.length};};
+api.partySlot=partySlot;api.enemySlot=enemySlot;api.DUELF=DUELF;api.DUELM=DUELM;api.Arena=Arena;api.POWERS=POWERS;api.MOBSTAT=MOBSTAT;api.BOSSTAT=BOSSTAT;api.MAPMOBS=MAPMOBS;api.MAPBOSS=MAPBOSS;api.powerOf=powerOf;api.lvlOf=lvlOf;api.alvOf=alvOf;api.ORDER=ORDER;api.stageOf=stageOf;api.wavesFor=wavesFor;api.BTR=BTR;api.mobFromWord=mobFromWord;
 
 /* ---------- اهرب من الـTNT: Kukoro "Blade" — the MOST CROWDED side blows up when the fuse runs out ---------- */
 var ZW={0:['l','left','يسار','شمال','ي س'],1:['r','right','يمين'],2:['m','mid','middle','نص','وسط']};
@@ -645,8 +673,23 @@ function chan(){return (typeof window!=='undefined'&&window.App&&window.App.chan
 function lsGet(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function skMap(){if(!SKN.map)SKN.map=lsGet('lamma-skins-'+chan(),{})||{};return SKN.map;}
-function xpLevel(u){var s=lsGet('lamma-ba-'+chan(),{})||{};var xp=(s.xp||{})[u];return lvlOf(xp);}
-api.skinMinLv=function(v){var k='lamma-skinlv-'+chan();if(v!=null){lsSet(k,+v);return +v;}var x=lsGet(k,12);return x==null?12:+x;};
+/* ---------- round 8: ONE store for every player's level (api.plv) ----------
+   Mohammad: "each player's level is saved on the site and is the same everywhere (like Kukoro)". Real cross-device / cross-channel
+   saving needs the online database, which is not connected yet — so today the XP lives in this browser's localStorage under ONE key
+   ("lamma-player-xp", the same for every channel), behind these four functions only. To go global later, fill api.plv.remote with
+   {load(cb), push(map)} (e.g. Supabase REST) and nothing else in the games has to change. */
+var PLV_KEY='lamma-player-xp';
+api.plv={remote:null,_m:null,
+  all:function(){if(!this._m){this._m=lsGet(PLV_KEY,{})||{};}return this._m;},
+  get:function(u){return +(this.all()[u]||0);},
+  level:function(u){return BTR.alvOf(this.get(u));},
+  set:function(map){var m=this.all();Object.keys(map||{}).forEach(function(u){m[u]=Math.max(0,Math.round(+map[u]||0));});lsSet(PLV_KEY,m);if(this.remote&&this.remote.push){try{this.remote.push(map);}catch(e){}}},
+  reload:function(){this._m=null;return this.all();}};
+if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('storage',function(e){if(e.key===PLV_KEY)api.plv._m=null;});
+/* the !سكن skin follows the player's level (no setting any more): from LV3 */
+var SKIN_LV=3;
+function xpLevel(u){return api.plv.level(u);}
+api.skinMinLv=function(){return SKIN_LV;};
 api.skinLevel=xpLevel;
 api.setSkin=function(user,name){name=String(name||'').trim().replace(/^@/,'');var m=skMap();
   if(!name){if(m[user]){delete m[user];lsSet('lamma-skins-'+chan(),m);}return 'cleared';}
@@ -694,7 +737,7 @@ api.tmr=function(row,get,set,def){if(!row)return;var inp=row.querySelector('inpu
   sb.forEach(function(b){b.addEventListener('click',function(){var want=b.getAttribute('data-v')==='1';if(want===(get()>0))return;set(want?Math.max(1,+inp.value||def):0);show();if(want)inp.focus();});});
   inp.addEventListener('change',function(){if(get()>0){set(Math.max(1,Math.min(3600,Math.round(+inp.value||def))));show();}});
   show();return show;};
-api.xtra=function(d,key){if(!d)return;try{api.skinRow(d);}catch(e){}try{d.open=localStorage.getItem(key)==='1';}catch(e){}d.addEventListener('toggle',function(){try{localStorage.setItem(key,d.open?'1':'0');}catch(e){}});};
+api.xtra=function(d,key){if(!d)return; /* round 8: the skin-level row is gone (skins follow the player's level) */try{d.open=localStorage.getItem(key)==='1';}catch(e){}d.addEventListener('toggle',function(){try{localStorage.setItem(key,d.open?'1':'0');}catch(e){}});};
 api.logo=function(host){if(host&&!host.firstChild){var s=document.createElement('span');s.className='s-logo';var b=document.createElement('b');b.textContent='لَمّة';var i=document.createElement('i');i.textContent='LAMMA';s.appendChild(b);s.appendChild(i);host.appendChild(s);}};
 api.name=function(name,color,cls){var b=document.createElement('bdi');b.className=cls||'bt-nm';b.textContent=String(name||'');if(color&&window.MC)b.style.color=window.MC.readableColor(color);return b;};
 /* a chat command as the site shows it: isolated direction, the "!" in the accent colour */

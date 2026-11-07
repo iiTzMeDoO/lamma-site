@@ -265,3 +265,44 @@ html:not(.obs) .bt-win.ba-top3{--cs:min(.95vw,calc((100vh - var(--hdr,64px) - 96
 }
 
 .btg.tw-on .lay-el:not(.lay-arena),.btg.tw-on .ba-info,.btg.tw-on .bt-banner,.btg.tw-on .ba-wave,.btg.tw-on .ba-cmenu{visibility:hidden}
+
+/* ---------- round 8: the Minecraft run, counters, simpler settings ---------- */
+/* «المستوى 7 · الصحراء · الدورة 2» — small, top centre, only in the lobby (during the battle it is in the wave bar) */
+.g-battle-arena .ba-stagechip{position:absolute;z-index:6;top:calc(var(--hdr,64px) + 12px);left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap;
+  font:800 clamp(12px,1.05vw,17px)/1 Cairo,system-ui,sans-serif;color:#f1e6c4;padding:.5em 1.1em;border-radius:999px;background:rgba(11,11,15,.66);border:1px solid rgba(232,190,90,.55);
+  box-shadow:0 2px 10px rgba(0,0,0,.35);transition:opacity .3s ease;letter-spacing:.01em}
+html.obs .g-battle-arena .ba-stagechip{top:12px}
+.g-battle-arena .ba-stagechip.off,.g-battle-arena .ba-stagechip:empty{opacity:0;visibility:hidden}
+.btg.tw-on .ba-stagechip{visibility:hidden}
+/* the stage selector + its note */
+.g-battle-arena .ba-stage-row .ssel{max-width:62%}
+.g-battle-arena .ba-stage-n{margin:-.2rem 0 .3rem}
+.g-battle-arena .ba-autosub{margin-inline-start:.6rem;padding-inline-start:.6rem;border-inline-start:2px solid rgba(134,140,188,.35)}
+.g-battle-arena .ba-autosub[hidden]{display:none}
+/* ▲ / ▼ / ● markers in the squad lists */
+.ba-cm{display:inline-grid;place-items:center;min-width:1.35em;height:1.35em;border-radius:50%;font-size:.78em;font-weight:900;line-height:1;margin-inline-end:.3em;flex:none}
+.ba-cm.s{background:#1f8a43;color:#eaffef;box-shadow:0 0 6px rgba(80,255,120,.55)}
+.ba-cm.w{background:#a8241f;color:#ffecec;box-shadow:0 0 6px rgba(255,70,70,.5)}
+.ba-cm.n{background:rgba(120,124,140,.45);color:#e4e6ee}
+.ba-pick.cm-s{border-color:rgba(80,220,120,.65)!important}.ba-pick.cm-w{border-color:rgba(230,80,80,.6)!important;opacity:.85}
+/* the monster card: role + who beats it */
+.ba-info .gi-role{display:block;font-size:.88em;font-weight:800;margin-top:.15em}
+.ba-info .gi-cm{display:block;font-size:.8em;line-height:1.35;margin-top:.1em}
+.ba-info .gi-cm.s{color:#8ff0a8}.ba-info .gi-cm.w{color:#ff9d9d}
+/* help: who beats whom */
+.ba-help .bh-cm{display:flex;flex-direction:column;gap:3px;margin:.1rem 0 .5rem}
+.ba-help .bh-cmr{display:grid;grid-template-columns:7.5em 1fr 1fr;gap:.5em;align-items:center;font-size:.86rem;padding:.25rem .45rem;border-radius:8px;background:rgba(255,255,255,.035)}
+.ba-help .bh-cmr b{font-weight:800;white-space:nowrap}
+.ba-help .bh-cmr .s{color:#8ff0a8}.ba-help .bh-cmr .w{color:#ff9d9d}
+@media (max-width:560px){.ba-help .bh-cmr{grid-template-columns:1fr;gap:.1em}}
+/* «أضف البوت» — the first-time step */
+.ba-botnote{position:fixed;z-index:62;top:calc(var(--hdr,64px) + 58px);left:50%;transform:translateX(-50%);max-width:min(360px,88vw);text-align:center;padding:.75rem .9rem .8rem;border-radius:14px;direction:rtl;
+  background:rgba(14,14,20,.94);border:1px solid rgba(232,190,90,.6);box-shadow:0 8px 26px rgba(0,0,0,.45);color:#ece9f4;font:500 .9rem/1.55 Cairo,system-ui,sans-serif;animation:twPop .35s ease}
+html[lang="en"] .ba-botnote{direction:ltr}
+.ba-botnote b{display:block;color:#e8be5a;font-weight:800;font-size:1rem;margin-bottom:.15rem}
+.ba-botnote p{margin:0 0 .55rem}
+html.obs .ba-botnote,.ba-botnote[hidden]{display:none}
+.ba-botnote{animation:none}
+
+@media (max-width:560px){.g-battle-arena .ba-stage-row{flex-wrap:wrap;gap:.35rem}.g-battle-arena .ba-stage-row .ssel{max-width:100%;width:100%}}
+@media (max-width:560px){.ba-botnote{font-size:.8rem;max-width:300px;padding:.6rem .75rem .65rem;top:calc(var(--hdr,64px) + 62px)}.ba-botnote b{font-size:.92rem}}

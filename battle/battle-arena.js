@@ -35,7 +35,7 @@ A.strings({
   bt_settings:'الإعدادات',ba_wcard:'شاشة الموجة تُغلق تلقائيًا بعد',ba_bot:'الرد في الشات (يحتاج حساب بوت)',ba_bot_n:'عند التفعيل يرسل البوت ردّ !معلومات في شات تويتش بدل الشاشة. يلزم ربط حساب بوت يكتب في الشات، وحتى يُربط تبقى البطاقة على الشاشة.',ba_waves:'عدد الموجات',ba_diff:'الصعوبة',ba_d_easy:'سهل',ba_d_normal:'عادي',ba_d_hard:'صعب',ba_d_hell:'جحيم',ba_break:'الموجة القادمة تلقائيًا بعد',bt_more:'خيارات إضافية',
   ba_bosssel:'الزعيم',ba_b_auto:'حسب الخريطة',boss_wither:'الذابل',boss_dragon:'تنين النهاية',boss_golem:'الحارس الحديدي',boss_king:'ملك الزومبي',boss_warden:'حارس الأعماق',boss_ravagerk:'ملك المدمّرين',boss_evokerm:'سيد الاستحضار',boss_blazek:'ملك البليز',boss_elder:'الحارس العتيق',ba_size:'حجم الفريق',bt_join_t:'وقت الدخول',
   ba_autop:'تنطلق القوة تلقائيًا إذا لم يكتب !قوة',bt_av:'صور تويتش على الرأس',bt_map:'الخريطة',bt_nolimit:'بلا وقت',bt_manual:'أنت تضغط',bt_sec:'ث',
-  map_plains:'سهول',map_desert:'صحراء',map_nether:'النذر',map_end:'النهاية',map_cave:'الكهف',
+  map_plains:'السهول',map_desert:'الصحراء',map_nether:'النذر',map_end:'النهاية',map_cave:'الكهف',
   ba_wave:'الموجة {w}/{n}',ba_wave_inf:'الموجة {w}',ba_lvl:'{m} · المستوى {l}',ba_lobby_t:'اللوبي',ba_boss_w:'موجة الزعيم!',ba_wave_b:'الموجة {w}',ba_cleared:'تم تطهير الموجة!',ba_won:'انتصار! 🏆',ba_lost:'خسرنا… 💀',
   ba_won_s:'أصبح المستوى {l}',ba_lost_s:'عاد المستوى إلى {l}',ba_mvp:'الأقوى',ba_kills:'القتلى',ba_join1:'اكتب {a} لتدخل',ba_join2:'{a} اخترني · {b} لا تخترني · {c} اسم',ba_inq:'في الانتظار: {n}',ba_picked:'الفريق ({n}/{m})',
   ba_fight_j:'{a} اخترني · {c} اسم · {b} أثناء قتالك',ba_none:'لم يدخل أحد بعد',ba_st_lobby:'اللوبي: {s} في الفريق. اضغط "ابدأ المعركة" حين تكون جاهزًا.',ba_st_fight:'الموجة {w}: اختر من يخرج للقتال (اضغط عليه في الساحة أو في القائمة، أو "التالي"). {a} أحياء، {m} أعداء.',ba_st_duel:'{f} يقاتل {m}…',ba_st_break:'استراحة… الموجة القادمة بعد قليل.',ba_st_break_m:'تم تطهير الموجة. اضغط "التالي".',ba_autof:'قتال تلقائي (التالي يظهر تلقائيًا)',ba_pick_t:'من يخرج للقتال؟',ba_dodge:'تفادى!',ba_crit:'ضربة حرجة!',ba_block:'صد!',ba_frozen:'متجمد',ba_party:'الفريق',
@@ -81,25 +81,66 @@ A.strings({
   ba_h7:'Maps: Plains, Desert, Nether, The End, Cave, Snowy peaks, Jungle, Ocean ruins — or “Random” for a new map every game. Each win raises the map level, so it gets harder.',
   gi_pc:'{p}%'}
 });
+/* round 8 (Mohammad, 5:43 AM): the Minecraft run + counters + saved progress */
+A.strings({
+ ar:{ba_open:'الدخول مفتوح',ba_open_n:'يُقفل وحده حين تضغط «ابدأ المعركة»، ويبقى مقفلًا حتى تفتحه.',ba_locked:'الدخول مقفل',ba_autop:'لعب تلقائي',
+  ba_bot_t:'🤖 أضف البوت',ba_bot_x:'حتى يرد البوت على اللاعبين في الشات (معلوماتهم وردود الأوامر)، أضِف البوت إلى قناتك. وإلى أن يُضاف، تظهر المعلومات على الشاشة كالعادة.',ba_bot_ok:'فهمت',
+  bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل من المستوى 3، وقبلها تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.',
+  ba_stage:'المستوى {l} · {m} · الدورة {k}',ba_stage_s:'المستوى {l} · {m}',ba_stsel:'المرحلة',ba_stsel_n:'يمكنك الرجوع إلى أي مستوى وصلته، لكن لا يمكنك تخطّي أعلى مستوى ({b}).',
+  ba_won_s:'فتحت المستوى {l} · {m}',ba_lost_s:'انتهت الرحلة عند المستوى {l} · {m}',ba_st_won:'انتصرنا! فُتح المستوى {l}.',ba_st_lost:'سقط الفريق كله في المستوى {l}. أعد المحاولة أو ارجع لمستوى أسهل.',
+  ba_cm_s:'قوي',ba_cm_w:'ضعيف',ba_cm_n:'عادي',gi_role:'النوع',gi_sv:'يغلبه',gi_wv:'يغلب',
+  ba_h7:'الخرائط بالترتيب مثل رحلة ماينكرافت: سهول ← أدغال ← صحراء ← ثلج ← كهف ← أطلال المحيط ← النذر ← النهاية. كل فوز يفتح المستوى التالي بخريطته، وكل مستوى أصعب. بعد النهاية تبدأ دورة جديدة من السهول أصعب من قبل — بلا نهاية حتى يسقط الفريق كله.',
+  ba_h8:'لعبة استراتيجية: لكل صنف نقاط قوة وضعف. حين يقف الوحش في المنتصف تظهر فوق كل لاعب علامة: ▲ أخضر = قوي ضده، ▼ أحمر = ضعيف، ● = عادي. أرسل الصحيح! المستوى العالي لا ينقذ لاعبًا ضعيفًا أمام وحشه.',
+  ba_h1:'يكتب المشاهدون !دخول فيدخلون الفريق مباشرة ويظهرون في الساحة (حتى 16). حين تضغط «ابدأ المعركة» يُقفل الدخول، وتفتحه من ⚙ «الدخول مفتوح».',
+  ba_h2:'تطرد أي لاعب في اللوبي بالضغط على ✕ جنب اسمه. وحين تكون جاهزًا اضغط «ابدأ المعركة». عدد الموجات والصعوبة تلقائيان حسب عدد اللاعبين والمستوى.',
+  ba_h4:'بعد كل موجة استراحة، ولاعب يأخذ غنيمة صغيرة (تظهر فوق رأسه، مثل «+ درع حديد»). الأحداث عشوائية (ليل، مطر، ضباب…). والموجة الأخيرة فيها زعيم الخريطة: مرحلة ثانية عند نصف صحته، وغضب أخير عند الربع.',
+  ba_h6:'كل لعبة جديدة: كل لاعب يأخذ صنفًا وسلاحًا وعدّة وقوة عشوائية، والفريق دائمًا مختلط الأصناف حتى يكون عندك لاعب مناسب لكل وحش.',
+  ba_h5:'الفوز: اهزموا الزعيم فيُفتح المستوى التالي. وإذا سقط الفريق كله تنتهي الرحلة عند هذا المستوى (لا ينزل المستوى): أعد المحاولة أو ارجع لمستوى أسهل.',
+  ba_h10:'🤖 حتى يرد البوت على اللاعبين في الشات، أضف البوت لقناتك. وإلى ذلك الحين تظهر المعلومات على الشاشة.',
+  ba_h9:'تقدمك محفوظ: أعلى مستوى وصلته يبقى، وتقدر ترجع لأي مستوى أقل من ⚙ «المرحلة». ومستوى كل لاعب محفوظ أيضًا: يبدأ من 0 ويرتفع ببطء.'},
+ en:{ba_open:'Joining open',ba_open_n:'Locks by itself when you press “Start battle” and stays locked until you open it.',ba_locked:'Joining is locked',ba_autop:'Auto play',
+  ba_bot_t:'🤖 Add the bot',ba_bot_x:'To answer players in chat (their info and command replies) you need to add the bot to your channel. Until then the info shows on screen as usual.',ba_bot_ok:'Got it',
+  bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works from level 3; until then you are Steve. !skin alone goes back to Steve.',
+  ba_stage:'Level {l} · {m} · Loop {k}',ba_stage_s:'Level {l} · {m}',ba_stsel:'Stage',ba_stsel_n:'You can go back to any level you reached, but not past your best ({b}).',
+  ba_won_s:'Level {l} unlocked · {m}',ba_lost_s:'The run ended at level {l} · {m}',ba_st_won:'Victory! Level {l} unlocked.',ba_st_lost:'The whole squad fell on level {l}. Try again or go back to an easier level.',
+  ba_cm_s:'strong',ba_cm_w:'weak',ba_cm_n:'even',gi_role:'Role',gi_sv:'Beaten by',gi_wv:'Beats',
+  ba_h7:'The maps come in order like a Minecraft run: Plains → Jungle → Desert → Snowy peaks → Cave → Ocean ruins → Nether → The End. Each win unlocks the next level and its map, each one harder. After The End a new loop starts at the Plains, harder than before — endless until the whole squad falls.',
+  ba_h8:'A strategy game: every class has strengths and weaknesses. When a mob stands in the middle, every player shows a mark: green ▲ = strong against it, red ▼ = weak, ● = even. Send the right one! A high level does not save a player sent against what he is weak to.',
+  ba_h1:'Viewers type !join and go straight into the squad, on the field (up to 16). Pressing “Start battle” locks joining; open it again from ⚙ “Joining open”.',
+  ba_h2:'In the lobby you kick anyone with the ✕ next to their name. When you are ready press “Start battle”. The number of waves and the difficulty follow the squad size and the level.',
+  ba_h4:'After each wave comes a short break and one player gets a small loot (shown over their head, e.g. “+ Iron armour”). Events are random (night, rain, fog…). The last wave holds the map’s boss: a second phase at half HP and a last fury at a quarter.',
+  ba_h6:'Every new game each player gets a random class, weapon, gear and power, and the squad is always a mix of classes so you have a right pick for every mob.',
+  ba_h5:'To win: beat the boss and the next level unlocks. If the whole squad falls the run ends on that level (the level does not drop): try again or go back to an easier one.',
+  ba_h10:'🤖 For the bot to answer players in chat, add the bot to your channel. Until then the info shows on screen.',
+  ba_h9:'Your progress is saved: your best level stays, and you can go back to any lower level from ⚙ «Stage». Every player’s level is saved too: it starts at 0 and climbs slowly.'}
+});
+function stageTxt(L,short){var S=BT.stageOf(L||1);return T(short?'ba_stage_s':'ba_stage',{l:S.L,m:T('map_'+S.map),k:S.loop});}
 function T(k,o){var s=A.t(k);if(o)Object.keys(o).forEach(function(x){s=s.split('{'+x+'}').join(o[x])});return s;}
 var EN=function(){return A.lang()==='en'};
 var MAPS=['plains','desert','nether','end','cave','snow','jungle','ocean'];
 var KEY='lamma-ba-'+A.channel,store=BT.store(KEY),sv=A.obs?null:store.get();
-var CFG={card:0,bot:false,waves:5,diff:'normal',brk:4,map:'nether',boss:'auto',size:10,join:0,pwR:'normal',giOn:true,giX:null,giY:null,giW:0,giS:1,av:true,autoF:false,speak:true,events:true,loot:true};
+var CFG={card:6,bot:true,waves:5,diff:'normal',brk:4,map:'plains',boss:'auto',size:16,join:0,pwR:'calm',giOn:true,giX:null,giY:null,giW:0,giS:1,av:true,autoF:false,speak:true,events:true,loot:true,open:true,autoP:false};
 if(sv&&sv.cfg)Object.keys(CFG).forEach(function(k){if(sv.cfg[k]!=null)CFG[k]=sv.cfg[k]});
-var Q=A.Q;if(A.obs){if(Q.get('map')&&(MAPS.indexOf(Q.get('map'))>=0||Q.get('map')==='random'))CFG.map=Q.get('map');if(Q.get('wv')!=null)CFG.waves=+Q.get('wv')||0;if(Q.get('df'))CFG.diff=Q.get('df');if(Q.get('av'))CFG.av=Q.get('av')==='1';if(Q.get('bs'))CFG.boss=Q.get('bs');if(Q.get('af'))CFG.autoF=Q.get('af')==='1';if(Q.get('wc')!=null)CFG.card=+Q.get('wc')||0;if(Q.get('gi')==='0')CFG.giOn=false;if(Q.get('gx')!=null&&Q.get('gy')!=null){CFG.giX=+Q.get('gx');CFG.giY=+Q.get('gy');}if(Q.get('gw'))CFG.giW=+Q.get('gw');if(Q.get('gs'))CFG.giS=+Q.get('gs');}
-var E=new BT.Arena({cfg:{cardSecs:+CFG.card||0,waves:CFG.waves,diff:CFG.diff,squadMax:+CFG.size||10,map:realMap(CFG.map),boss:CFG.boss,autoPower:false,pwRate:'calm',autoFight:!!CFG.autoF,breakSecs:CFG.brk,speak:CFG.speak,events:CFG.events,loot:CFG.loot}});
-if(sv){E.levels=sv.levels||{};E.xp=sv.xp||{};} /* Nov 7: gear / classes no longer carry over — every game rolls a new loadout */
-/* «عشوائي»: a real map is drawn at the start of every game (never the same one twice in a row) */
-function realMap(m){return MAPS.indexOf(m)>=0?m:(E&&MAPS.indexOf(E.cfg.map)>=0?E.cfg.map:MAPS[Math.floor(Math.random()*MAPS.length)]);}
-function pickMap(){if(CFG.map!=='random')return false;var last=E.cfg.map,pool=MAPS.filter(function(m){return m!==last});E.cfg.map=pool[Math.floor(Math.random()*pool.length)];return true;}
-function applyCfg(){E.cfg.cardSecs=+CFG.card||0;E.cfg.autoFight=!!CFG.autoF;if(E.phase==='pick')E.toPick();E.cfg.waves=+CFG.waves;E.cfg.diff=CFG.diff;E.cfg.squadMax=+CFG.size||10;if(CFG.map!=='random')E.cfg.map=CFG.map;E.cfg.boss=CFG.boss;E.cfg.autoPower=false;E.cfg.pwRate='calm';E.cfg.breakSecs=+CFG.brk;E.cfg.speak=!!CFG.speak;E.cfg.events=!!CFG.events;E.cfg.loot=!!CFG.loot;}
-function save(){if(A.obs)return;store.set({cfg:CFG,levels:E.levels,xp:E.xp});A.updateObsUrl();}
-A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&bs='+CFG.boss+'&av='+(CFG.av?1:0)+'&af='+(CFG.autoF?1:0)+'&wc='+(+CFG.card||0)+(CFG.giOn===false?'&gi=0':'')+(CFG.giX!=null&&CFG.giY!=null?'&gx='+(+CFG.giX).toFixed(3)+'&gy='+(+CFG.giY).toFixed(3):'')+(CFG.giW?'&gw='+(+CFG.giW).toFixed(3):'')+(CFG.giS&&CFG.giS!==1?'&gs='+(+CFG.giS).toFixed(2):'');});
+/* round 8 (Mohammad, 5:57 AM): a much simpler panel — these are no longer settings, they are fixed:
+   no auto-fight, waves follow the squad size, difficulty follows squad size + level/loop, the boss is the map's own, squad up to 16,
+   power fills calmly, the !معلومات card is always on screen (the bot answers in chat once the bot is added), candidates always talk,
+   wave events always random, loot always on, no join timer (the join is a switch: open / locked). */
+CFG.autoF=false;CFG.diff='normal';CFG.boss='auto';CFG.size=16;CFG.pwR='calm';CFG.giOn=true;CFG.bot=true;CFG.speak=true;CFG.events=true;CFG.loot=true;CFG.join=0;
+if(!(+CFG.card>0))CFG.card=6;if(!(+CFG.brk>0))CFG.brk=4;
+/* round 8 (Mohammad: "make it like a Minecraft run"): no map choice any more — the level decides the map (BT.ORDER).
+   The host's progress per channel: best = the highest level reached (he can go back to any level ≤ best, never past it), stage = the level he is on. */
+var PROG={best:1,stage:1};if(sv&&sv.prog){PROG.best=Math.max(1,+sv.prog.best||1);PROG.stage=Math.max(1,Math.min(PROG.best,+sv.prog.stage||1));}
+var Q=A.Q;if(A.obs){if(Q.get('st'))PROG.stage=PROG.best=Math.max(1,+Q.get('st')||1);if(Q.get('wv')!=null)CFG.waves=+Q.get('wv')||0;if(Q.get('df'))CFG.diff=Q.get('df');if(Q.get('av'))CFG.av=Q.get('av')==='1';if(Q.get('bs'))CFG.boss=Q.get('bs');if(Q.get('af'))CFG.autoF=Q.get('af')==='1';if(Q.get('wc')!=null)CFG.card=+Q.get('wc')||0;if(Q.get('gi')==='0')CFG.giOn=false;if(Q.get('gx')!=null&&Q.get('gy')!=null){CFG.giX=+Q.get('gx');CFG.giY=+Q.get('gy');}if(Q.get('gw'))CFG.giW=+Q.get('gw');if(Q.get('gs'))CFG.giS=+Q.get('gs');}
+var E=new BT.Arena({cfg:{cardSecs:+CFG.card||0,waves:CFG.waves,diff:CFG.diff,squadMax:16,autoWaves:true,stage:PROG.stage,boss:CFG.boss,autoPower:false,pwRate:'calm',autoFight:!!CFG.autoF,breakSecs:CFG.brk,speak:CFG.speak,events:CFG.events,loot:CFG.loot}});
+E.best=PROG.best;if(sv){E.levels=sv.levels||{};E.xp=sv.xp||{};}E.axp=BT.plv.all(); /* round 8: E.axp = every player's arena XP, kept in ONE store for the whole site (BT.plv — today this browser, ready for the online database); everyone starts at LV0. E.xp (the old one, read by hero / tnt) keeps growing too */ /* Nov 7: gear / classes no longer carry over — every game rolls a new loadout */
+function pickMap(){return false;} /* round 8: the map is the level's (no «عشوائي» any more) */
+function applyCfg(){var ap=!!CFG.autoP;E.cfg.cardSecs=ap?(+CFG.card||0):0;E.cfg.autoFight=false;if(E.phase==='pick')E.toPick();E.cfg.autoWaves=true;if(E.phase==='lobby'||E.phase==='won'||E.phase==='lost')E.cfg.waves=BT.wavesFor(Math.max(1,E.squad.length));E.cfg.diff='normal';E.cfg.squadMax=16;E.cfg.boss='auto';E.cfg.autoPower=false;E.cfg.pwRate='calm';E.cfg.breakSecs=ap?(+CFG.brk||0):0;E.cfg.speak=true;E.cfg.events=true;E.cfg.loot=true;}
+function save(){if(A.obs)return;PROG.best=Math.max(PROG.best,E.best||1);E.best=PROG.best;PROG.stage=E.level();store.set({cfg:CFG,levels:E.levels,xp:E.xp,prog:{best:PROG.best,stage:PROG.stage}});BT.plv.set(E.axp);A.updateObsUrl();if(typeof stageSel==='function')stageSel();}
+A.obsExtra(function(){return '&av='+(CFG.av?1:0)+(CFG.giOn===false?'&gi=0':'')+(CFG.giX!=null&&CFG.giY!=null?'&gx='+(+CFG.giX).toFixed(3)+'&gy='+(+CFG.giY).toFixed(3):'')+(CFG.giW?'&gw='+(+CFG.giW).toFixed(3):'')+(CFG.giS&&CFG.giS!==1?'&gs='+(+CFG.giS).toFixed(2):'');});
 var P=E.pub(); /* the state both sides draw */
 if(/[?&]qa=1(&|$)/.test(location.search))window.__BA={E:E,sync:function(){P=E.pub();A.publish(P);hud(true);},cfg:CFG,fxk:function(){return fx.map(function(f){return f.k+':'+(f.st||'')});},slow:function(k){QS=k;}}; /* test hook (only with ?qa=1) */
 /* Nov 6: every publish from the control page carries where the host put the !معلومات card, so the OBS overlay follows live */
-if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jp=jumpList();s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;if(E.phase==='won'){topCalc();s.top=TOP;s.tb=TB;}}return _pub.apply(this,arguments);};}
+if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jo=CFG.open?1:0;s.jp=jumpList();s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;if(E.phase==='won'){topCalc();s.top=TOP;s.tb=TB;}}return _pub.apply(this,arguments);};}
 
 /* ---------- engine loop (control, or overlay alone) ---------- */
 var lastT=performance.now(),pubAt=0,joinEnd=0;
@@ -114,18 +155,20 @@ A.onMirror(function(s){if(s&&s.f){P=s;if(s.jp){var nw=Date.now();JUMPM={};Object
 /* Nov 6 (Mohammad): a click anywhere outside the !معلومات card closes it (inside it you move / resize it) */
 if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(!el||el.hidden||el.contains(ev.target))return;var t=ev.target;if(t.closest&&t.closest('#side,.ba-help,.ba-cmenu'))return;closeInfo();},true);
 A.allowSolo();
-function startBattle(){applyCfg();var rnd=pickMap();if(!E.start()){status(T('ba_need'));baToast(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);/* Nov 7: no random-map banner */}
-function nextOrAgain(){var again=E.phase==='won'||E.phase==='lost',rnd=again&&pickMap();E.next();P=E.pub();A.publish(P);hud(true);/* Nov 7: no random-map banner */}
+function startBattle(){applyCfg();var rnd=pickMap();if(!E.start()){status(T('ba_need'));baToast(T('ba_need'));return;}setOpen(false); /* round 8: starting the battle locks the join until the host opens it again */A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);/* Nov 7: no random-map banner */}
+function nextOrAgain(){var again=E.phase==='won'||E.phase==='lost',rnd=again&&pickMap();E.next();if(again)save();P=E.pub();A.publish(P);hud(true);/* Nov 7: no random-map banner */}
 function pauseT(){if(!E.inRaid())return;E.paused=!E.paused;P=E.pub();A.publish(P);hud(true);}
 function toLobby(){var keep=E.squad.slice();if(E.phase!=='lobby'&&E.phase!=='won'&&E.phase!=='lost')E.gameNo++; /* a game stopped half-way also counts: the next one rolls new loadouts */E.reset();E.squad=keep;fillSquad();V={};P=E.pub();A.publish(P);hud(true);}
 /* Nov 6 (Mohammad): no waiting list — whoever types !دخول / !join goes straight into the squad; the host can kick anyone.
    Someone who joins during a battle steps in when it is back in the lobby. A full squad = a short «الفريق ممتلئ» note. */
 function baToast(t){if(A.obs)return;var el=$('baToast');if(!el){el=document.createElement('div');el.id='baToast';el.className='ba-toast';el.setAttribute('role','status');document.body.appendChild(el);}
   el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('on');},2600);}
+var lockT=0;function lockNote(n){var now=Date.now();if(now-lockT<4000)return;lockT=now;baToast('🔒 '+T('ba_locked')+(n?' — '+n:''));}
+function setOpen(on){CFG.open=!!on;var cb=$('baOpen');if(cb)cb.checked=CFG.open;if(CFG.open)fillSquad();save();P=E.pub();A.publish(P);hud(true);}
 function fullNote(n){baToast('⚠ '+T('ba_m_full')+(n?' — '+n:''));}
-function joinNow(u,n,c){if(n!==undefined)E.join(u,n,c);var w=E.waiting[u];if(!w||E.squad.indexOf(u)>=0)return;if(E.phase!=='lobby')return;
+function joinNow(u,n,c){if(!CFG.open){if(n!==undefined&&!E.waiting[u])lockNote(n);return;}if(n!==undefined)E.join(u,n,c);var w=E.waiting[u];if(!w||E.squad.indexOf(u)>=0)return;if(E.phase!=='lobby')return;
   if(!E.pick(u)){fullNote(w.name);E.leave(u);}}
-function fillSquad(){if(E.phase!=='lobby')return;E.order.slice().forEach(function(u){if(E.squad.indexOf(u)>=0)return;var w=E.waiting[u];if(!E.pick(u)){if(w)fullNote(w.name);E.leave(u);}});}
+function fillSquad(){if(E.phase!=='lobby'||!CFG.open)return;E.order.slice().forEach(function(u){if(E.squad.indexOf(u)>=0)return;var w=E.waiting[u];if(!E.pick(u)){if(w)fullNote(w.name);E.leave(u);}});}
 function kick(u){if(E.inRaid())return false;var ok=E.leave(u);if(ok){P=E.pub();A.publish(P);hud(true);}return ok;}
 A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);
   topSay(m); /* Nov 7: the top-3 players' chat sticks to their card on the win screen */
@@ -230,7 +273,7 @@ function onEvent(e){
   else if(e.k==='boom'){var bv=vOf(e.to);if(bv){addParts(bv.x,bv.y,.4,50,['#fff','#ffd23d','#ff7a1a','#4fbf3a','#444'],4.5,.11,1);fx.push({k:'boom',x:bv.x,y:bv.y,t:0,life:.6});bv.gone=1;}shake=1;A.sfx('boom');floatTxt(e.to,T('ba_boom'),'#ffb347',true);}
   else if(e.k==='mheal'){floatTxt(e.to,T('ba_mheal'),'#7dff7a',false,true);}
   else if(e.k==='item'){floatTxt(e.to,(BTR.ITEMS[e.it]||{}).ic||'✨','#fff',true);}
-  else if(e.k==='loot'){var lv=vOf(e.fid);if(lv)addParts(lv.x,lv.y,1.2,18,['#ffd23d','#fff','#7fe3ff'],1.6,.07,1);banner(T('ba_loot')+' '+lootName(e.it,e.cls),false,e.name,e.c);A.sfx('win');}
+  else if(e.k==='loot'){var lv=vOf(e.fid);if(lv)addParts(lv.x,lv.y,1.2,18,['#ffd23d','#fff','#7fe3ff'],1.6,.07,1);floatTxt(e.fid,'🎁 +'+lootName(e.it,e.cls),'#ffd23d',false,true);A.sfx('win');} /* round 8: loot = one tiny line over the player (no banner) */
   else if(e.k==='frozen'){floatTxt(e.to,'❄ '+T('ba_frozen'),'#bff4ff',false);}
   else if(e.k==='send'){banner('⚔',false,e.name,e.c);A.sfx('go');}
   else if(e.k==='kill'){var mv=vOf(e.mid),kv=vOf(e.fid);if(mv){var kd=mv;later(260,function(){addParts(kd.x,kd.y,.7,e.boss?70:22,['#ddd','#bbb','#fff','#999'],e.boss?4:2.6,e.boss?.14:.09,e.boss?1.4:.8);fx.push({k:'poof',x:kd.x,y:kd.y,t:0,life:e.boss?1.2:.8,big:e.boss?1:0,seed:Math.random()*99});if(kv)for(var oi=0;oi<(e.boss?10:4);oi++)fx.push({k:'orb_xp',x:kd.x,y:kd.y,tx:kv.x,ty:kv.y,t:-oi*.06,life:.7});});mv.gone=1;}floatTxt(e.fid,'+'+e.xp+'xp','#7dff7a',false);if(e.boss){shake=1;flashT=.4;A.sfx('win');}else A.sfx('pop');}
@@ -252,6 +295,9 @@ function onEvent(e){
 var bnT=null;
 function banner(text,big,who,col){var el=$('baBanner');A.clear(el);if(who){el.appendChild(BT.name(who,col,'bt-nm'));el.appendChild(document.createTextNode(' '));}el.appendChild(document.createTextNode(text));el.className='bt-banner'+(big?' big':'')+(who?' who':'')+(String(text).length>26?' long':'');el.hidden=false;clearTimeout(bnT);bnT=setTimeout(function(){el.hidden=true},big?2600:1600);}
 function status(t){var s=$('baStatus');if(s)s.textContent=t;}
+function stageSel(){var ss=$('baStageSel');if(!ss||A.obs)return;var best=Math.max(1,E.best||1),cur=E.level(),k=best+':'+cur+':'+EN();ss.disabled=E.inRaid();if(ss._k===k)return;ss._k=k;A.clear(ss);
+  for(var l=best;l>=1;l--){var o=document.createElement('option');o.value=String(l);o.textContent=stageTxt(l)+(l===best?' ★':'');ss.appendChild(o);}ss.value=String(cur);
+  var n=$('baStageN');if(n)n.textContent=T('ba_stsel_n',{b:best});}
 
 /* ---------- canvas: the wide raid field ---------- */
 var STG=$('stage'),cv=$('baCanvas'),ctx=cv.getContext('2d'),W=0,H=0,DPR=1,iso=new MC.Iso(ctx,{tw:40}),room=null,roomKey='',FLD=MC.FIELD;
@@ -375,6 +421,12 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
       ctx.textBaseline='middle';ctx.textAlign='left';ctx.direction='ltr';ctx.fillStyle='#ffd23d';ctx.font='900 '+Math.round(nsz*.78)+'px Cairo,system-ui,sans-serif';ctx.fillText(lvT,pX+padX,pY+pillH/2+1);
       ctx.font='800 '+nsz+'px Cairo,system-ui,sans-serif';ctx.direction='auto';ctx.textAlign='center';ctx.fillStyle=col;ctx.fillText(f[2],pX+padX*2+lw2+nw/2,pY+pillH/2+1);ctx.textBaseline='bottom';ctx.direction='ltr';
       var topY=pY-2;
+      /* round 8: the counter marker while the host picks — green ▲ strong / red ▼ weak / grey ● even, against the mob waiting in the middle */
+      if(P.ph==='pick'&&f[10]&&!P.wc&&P.rm){var cv=f[28]||0,ct=cv>0?'▲ '+T('ba_cm_s'):cv<0?'▼ '+T('ba_cm_w'):'● '+T('ba_cm_n'),cz=fs(cv?13:11);ctx.font='900 '+cz+'px Cairo,system-ui,sans-serif';ctx.direction=EN()?'ltr':'rtl';
+        var cw=ctx.measureText(ct).width+cz*1.1,ch=cz*1.5,cy=topY-ch-2,pul=cv?1+Math.sin(t*5+f[0])*.04:1;
+        ctx.save();ctx.translate(p[0],cy+ch/2);ctx.scale(pul,pul);ctx.fillStyle=cv>0?'rgba(22,120,52,.95)':cv<0?'rgba(150,26,26,.95)':'rgba(40,42,52,.82)';if(cv){ctx.shadowColor=cv>0?'rgba(80,255,120,.7)':'rgba(255,70,70,.7)';ctx.shadowBlur=10;}
+        rr(-cw/2,-ch/2,cw,ch,ch/2);ctx.fill();ctx.shadowBlur=0;ctx.lineWidth=1.5;ctx.strokeStyle=cv>0?'#7dff9a':cv<0?'#ff8a8a':'rgba(200,204,220,.5)';rr(-cw/2,-ch/2,cw,ch,ch/2);ctx.stroke();
+        ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=cv>0?'#eaffef':cv<0?'#ffecec':'#c9ccd8';ctx.fillText(ct,0,1);ctx.restore();ctx.textBaseline='bottom';ctx.direction='ltr';topY=cy-2;}
       var tag='';if(f[14])tag+='★'+f[14]; /* !قفز now makes the character really jump (no arrow over the head) */
       if(false&&full){var bob=Math.abs(Math.sin(t*4+f[0]))*iso.tw*.07,rt=f[27]?T('ba_pw_armed'):(EN()?'⚡ !power':'⚡ !قوة'),rs=fs(12);ctx.font='900 '+rs+'px Cairo,system-ui,sans-serif';ctx.direction=f[27]&&!EN()?'rtl':'ltr';var rw=ctx.measureText(rt).width+rs*1.1,rh=rs*1.45,ry=topY-rh-bob;
         ctx.save();ctx.shadowColor='rgba(255,190,110,.9)';ctx.shadowBlur=8+Math.sin(t*6)*3;ctx.fillStyle='rgba(58,32,12,.92)';rr(p[0]-rw/2,ry,rw,rh,rh/2);ctx.fill();ctx.restore();ctx.strokeStyle='#e8be5a';ctx.lineWidth=1.5;rr(p[0]-rw/2,ry,rw,rh,rh/2);ctx.stroke();
@@ -384,7 +436,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
       var mbw=Math.max(32,iso.tw*(boss?2.2:1.0)),mbh=Math.max(5,Math.round(fs(boss?14:12)*.42));pbar(p[0]-mbw/2,y-mbh,mbw,mbh,mf,boss?(m[16]?'#ff3a2a':'#d8402e'):'#e04a4a',boss?'#ff8a6a':'#ff8a8a',v.hpT,boss&&m[16]?(.5+Math.sin(t*8)*.5):0);
       if(boss){/* the phase marks at 50% and 25% */ctx.fillStyle='rgba(0,0,0,.75)';[.5,.25].forEach(function(q){ctx.fillRect(Math.round(p[0]-mbw/2+mbw*q),Math.round(y-mbh),2,mbh);});}
       /* name and level drawn apart so Arabic names never get mixed up with «Lv» */
-      var lz=fs(boss?11:9),nz=fs(boss?15:12),nm=mobLabel(boss?m[1].slice(5):m[1])+(m[9]?' 👑':'');ctx.textAlign='right';ctx.direction='ltr';ctx.textBaseline='middle';label(p[0]-mbw/2-3,y-mbh/2,'Lv'+m[6],'#ffd23d',lz,900);ctx.textBaseline='bottom';ctx.textAlign='center';ctx.direction='rtl';label(p[0],y-mbh-3,nm,boss?'#ffcf5a':'#ffe2e2',nz);ctx.direction='ltr';}});
+      var lz=fs(boss?11:9),nz=fs(boss?15:12),nm=(m[17]&&BTR.ROLE[m[17]]?BTR.ROLE[m[17]].ic+' ':'')+mobLabel(boss?m[1].slice(5):m[1])+(m[9]?' 👑':''); /* round 8: the mob's role icon in front of its name */ctx.textAlign='right';ctx.direction='ltr';ctx.textBaseline='middle';label(p[0]-mbw/2-3,y-mbh/2,'Lv'+m[6],'#ffd23d',lz,900);ctx.textBaseline='bottom';ctx.textAlign='center';ctx.direction='rtl';label(p[0],y-mbh-3,nm,boss?'#ffcf5a':'#ffe2e2',nz);ctx.direction='ltr';}});
   ctx.direction='ltr';
   /* statuses over heads (burn / poison / wither / stunned) and the boss's second phase */
   list.forEach(function(e){var v=e.V;if(e.F&&e.dead)return;var st=e.F?e.F[22]:e.M?e.M[15]:'',stun=e.F?e.F[23]:0;var p=iso.p(e.x,e.y,v.h+(e.kind==='blaze'?.6:0));
@@ -489,7 +541,10 @@ function buildCard(g){var en=EN(),box=document.createElement('div');box.classNam
     var xp=document.createElement('div');xp.className='gi-xp';var xb=document.createElement('span');xb.className='gi-bar xp';var xi=document.createElement('i');xi.style.width=(g.xpN?Math.round(g.xp/g.xpN*100):100)+'%';xb.appendChild(xi);xp.appendChild(document.createTextNode(T('gi_xp')+' '));xp.appendChild(xb);var xt=document.createElement('small');xt.textContent=g.xpN?g.xp+'/'+g.xpN:T('gi_max');xp.appendChild(xt);tx.appendChild(xp);hd.appendChild(tx);}
   else{var S=g.boss?BTR.BOSSES[g.kind]:BTR.MOBS[g.kind];hd.appendChild(portrait({kind:g.boss?'boss:'+g.kind:g.kind,scale:g.boss?.62:1,face:0,anim:{},h:(MC.MOBH[g.boss?'boss:'+g.kind:g.kind]||2.1)*(g.boss?.62:1)},120,150));
     var tx2=document.createElement('div');tx2.className='gi-tx';var nm2=document.createElement('div');nm2.className='gi-nm';nm2.textContent=(g.boss?'👑 ':'')+L2(S);tx2.appendChild(nm2);var F=BTR.FAM[g.fam];var sub2=document.createElement('div');sub2.className='gi-sub';[(g.boss?'👑 '+T('gi_boss'):''),'LV '+g.lv,F.ic+' '+L2(F)].filter(Boolean).forEach(function(x){var c=document.createElement('span');c.className='gi-chip';c.textContent=x;sub2.appendChild(c);});tx2.appendChild(sub2);
-    var ty=document.createElement('div');ty.className='gi-sub';ty.className='gi-sub gi-type';ty.textContent=T('gi_type')+': '+tname(g.atkT)+(g.atk2?' + '+tname(g.atk2):'');tx2.appendChild(ty);hd.appendChild(tx2);}
+    var ty=document.createElement('div');ty.className='gi-sub';ty.className='gi-sub gi-type';ty.textContent=T('gi_type')+': '+tname(g.atkT)+(g.atk2?' + '+tname(g.atk2):'');tx2.appendChild(ty);
+    /* round 8: its role and who beats it / who it beats (the strategy) */
+    var R0=BTR.ROLE[g.role];if(R0){var cn=function(k){var C=BTR.CLASSES[k];return C.ic+' '+L2(C);};var rl=document.createElement('div');rl.className='gi-sub gi-role';rl.textContent=T('gi_role')+': '+R0.ic+' '+L2(R0);tx2.appendChild(rl);
+}hd.appendChild(tx2);}
   box.appendChild(hd);
   var st=document.createElement('div');st.className='gi-grid';
   if(g.t==='p'){st.appendChild(giRow('❤️',T('gi_hp'),g.hp+'/'+g.max,g.hp/g.max,g.hp/g.max>.35?'#5cd65c':'#ffb347'));st.appendChild(giRow('🗡️',T('gi_atk'),String(g.atk)+' '+BTR.TYPE[g.atkT].ic));st.appendChild(giRow('🛡️',T('gi_def'),g.def+'%'));
@@ -505,7 +560,7 @@ function buildCard(g){var en=EN(),box=document.createElement('div');box.classNam
     var it=g.gear.items.map(function(k){var I=BTR.ITEMS[k];return I.ic+' '+L2(I);});var il=document.createElement('div');il.textContent='🎒 '+(it.length?it.join(' · '):T('gi_none'));ge.appendChild(il);box.appendChild(ge);
     var res=[];BTR.TYPES.forEach(function(t){var v=g.res[t];if(v!=null&&v!==1)res.push(BTR.TYPE[t].ic+' ×'+v);});chips(box,T('gi_res'),res,'res');
     var ft=document.createElement('div');ft.className='gi-ft';var pw=BT.POWERS[g.pw];ft.textContent=T('gi_power')+': '+PW_IC[pw]+' '+(en?PW_EN[pw]:PW_AR[pw])+' ('+(g.pwUsed?T('gi_pc',{p:g.pc||0}):T('gi_ready'))+')';box.appendChild(ft);}
-  else{var wl2=BTR.weakList(g.boss?BTR.BOSSES[g.kind]:BTR.MOBS[g.kind]);chips(box,T('gi_weak'),wl2.weak.map(tname),'weak');chips(box,T('gi_res'),wl2.res.map(tname),'res');chips(box,T('gi_imm'),wl2.immune.map(tname),'imm');
+  else{ /* round 8: the old weak / resist damage-type chips are replaced by the counter — which classes beat it (▲) and which it beats (▼) */var cn2=function(k){var C=BTR.CLASSES[k];return C.ic+' '+L2(C);};chips(box,'▲ '+T('gi_sv'),BTR.strongVs(g.role).map(cn2),'weak');chips(box,'▼ '+T('gi_wv'),BTR.weakVs(g.role).map(cn2),'res');
     if(g.trait){var tr=document.createElement('div');tr.className='gi-sec';var h3=document.createElement('h5');h3.textContent=T('gi_trait');tr.appendChild(h3);var d3=document.createElement('div');d3.textContent=L2(BTR.TRAIT[g.trait]);tr.appendChild(d3);box.appendChild(tr);}
     if(g.p2){var p2=document.createElement('div');p2.className='gi-sec'+(g.phase2?' on':'');var h4=document.createElement('h5');h4.textContent=T('gi_p2');p2.appendChild(h4);var d4=document.createElement('div');d4.textContent=L2(BTR.PHASE2[g.p2]);p2.appendChild(d4);box.appendChild(p2);}}
   var lc=document.createElement('div');lc.className='gi-l2';while(main.firstChild)lc.appendChild(main.firstChild);main.appendChild(lc);main.appendChild(rc);
@@ -644,7 +699,7 @@ setInterval(jbClear,500);window.addEventListener('resize',function(){setTimeout(
 var TOP=[],TOPK=-1,TB={},TBN=0;
 function topCalc(){if(A.obs)return TOP;if(TOPK===E.gameNo&&TOP.length)return TOP;TOPK=E.gameNo;TB={};
   var L=E.f.map(function(f){var g=E.cardFor(f.u)||{};var d=Math.round(f.dealt||0),k=f.kills||0;
-    return {u:f.u,n:f.name,c:f.color||'',lv:g.lv||f.lv||1,cls:f.cls||g.cls||'warrior',w:(f.gear||g.gear||{}).w||0,a:(f.gear||g.gear||{}).a||0,
+    return {u:f.u,n:f.name,c:f.color||'',lv:g.lv!=null?g.lv:(f.lv||0),cls:f.cls||g.cls||'warrior',w:(f.gear||g.gear||{}).w||0,a:(f.gear||g.gear||{}).a||0,
       hp:Math.max(0,Math.round(f.hp)),max:Math.round(f.max),al:f.alive&&f.hp>0?1:0,k:k,d:d,sc:k*100+d,atk:g.atk||Math.round(f.atk||0),def:g.def||0,agi:g.agi||0,crit:g.crit||0};});
   L.sort(function(a,b){return (b.sc-a.sc)||(b.al-a.al)||(b.hp-a.hp)||(b.k-a.k);});
   TOP=L.slice(0,3);TOP.forEach(function(x,i){x.r=i+1;});return TOP;}
@@ -675,10 +730,10 @@ function top3Hud(end){var gs=$('gs');if(gs)gs.classList.add('tw-on');var list=A.
   if(end._k!==ek){end._k=ek;A.clear(end);end.className='bt-win won ba-top3 n'+list.length;end.hidden=false;
     end.appendChild(twEl('h3','tw-h',T('ba_won')));
     var row=twEl('div','tw-row');[list[1],list[0],list[2]].forEach(function(x){if(x)row.appendChild(twCard(x));});end.appendChild(row);
-    var ft=twEl('div','tw-ft');ft.appendChild(twEl('p','tw-lv',T('ba_won_s',{l:P.lv})));
+    var ft=twEl('div','tw-ft');ft.appendChild(twEl('p','tw-lv',T('ba_won_s',{l:(P.lv||1)+1,m:T('map_'+BT.stageOf((P.lv||1)+1).map)})));
     if(!A.obs){var br=twEl('div','ba-endbtns');
-      var rb=twEl('button','btn btn-ghost btn-sm','🔁 '+(EN()?'Replay the level':'إعادة المرحلة'));rb.type='button';rb.addEventListener('click',function(){if(E.again(false)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});br.appendChild(rb);
-      var nb=twEl('button','btn btn-main btn-sm','⏭ '+(EN()?'Next level':'المستوى التالي'));nb.type='button';nb.addEventListener('click',function(){if(E.again(true)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});br.appendChild(nb);
+      var rb=twEl('button','btn btn-ghost btn-sm','🔁 '+(EN()?'Replay the level':'إعادة المرحلة'));rb.type='button';rb.addEventListener('click',function(){if(E.again(false)){save();A.sfx('start');P=E.pub();A.publish(P);hud(true);}});br.appendChild(rb);
+      var nb=twEl('button','btn btn-main btn-sm','⏭ '+(EN()?'Next level':'المستوى التالي'));nb.type='button';nb.addEventListener('click',function(){if(E.again(true)){save();A.sfx('start');P=E.pub();A.publish(P);hud(true);}});br.appendChild(nb);
       var lb2=twEl('button','btn btn-ghost btn-sm',EN()?'Lobby':'اللوبي');lb2.type='button';lb2.addEventListener('click',toLobby);br.appendChild(lb2);ft.appendChild(br);}
     end.appendChild(ft);}
   [].forEach.call(end.querySelectorAll('.tw-slot'),function(s){var u=s.getAttribute('data-u'),b=s.querySelector('.tw-bub'),m=tb[u];
@@ -689,20 +744,21 @@ function hudSoon(){setTimeout(function(){hud(true)},30);}
 function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* waves bar */
   var wt=$('baWaveT');wt.textContent=ph==='lobby'?T('ba_lobby_t'):P.ws>0?T('ba_wave',{w:Math.max(1,P.w),n:P.ws}):T('ba_wave_inf',{w:Math.max(1,P.w)});
-  $('baMapT').textContent=T('ba_lvl',{m:(CFG.map==='random'&&(P.ph||'lobby')==='lobby'?'🎲 '+T('map_random'):T('map_'+(P.map||CFG.map))),l:P.lv||1});
+  var stT=stageTxt(P.lv||1);$('baMapT').textContent=stT;var chip=$('baStageChip');if(chip){if(chip.textContent!==stT)chip.textContent=stT;chip.classList.toggle('off',ph!=='lobby');} /* round 8: «المستوى 7 · الصحراء · الدورة 2» — small, top centre in the lobby; in the wave bar during the battle */
   var wb=$('baWbar'),n=P.ws>0?P.ws:Math.max(5,Math.ceil((P.w||1)/5)*5),key=n+':'+P.w+':'+ph+':'+(P.rooms||[]).join(',');var live=ph==='pick'||ph==='duel';if(wb._k!==key){wb._k=key;A.clear(wb);for(var i=1;i<=n;i++){var s=document.createElement('span');var boss=P.ws>0?i===n:i%5===0;s.className='ba-ws'+(boss?' boss':'')+(i<P.w||(i===P.w&&(ph==='break'||ph==='won'))?' done':'')+(i===P.w&&live?' now':'');var evk=(P.rooms||[])[i-1];s.textContent=boss?'💀':(evk&&BTR.EVENTS[evk]?BTR.EVENTS[evk].ic:'');if(evk&&!boss)s.classList.add('ev');wb.appendChild(s);}}
   $('baWaves').classList.toggle('off',ph==='lobby'); /* Nov 6: the waves bar shows only once the battle runs */
   /* boss bar */
   var bm=(P.m||[]).find(function(m){return m[7]});var bb=$('baBoss');bb.classList.toggle('off',!bm);
   if(bm){var bk=bm[1].slice(5);$('baBname').textContent=T('boss_'+bk);$('baBhp').style.width=Math.round(bm[4]/bm[5]*100)+'%';$('baBhpT').textContent=bm[4]+' / '+bm[5];}
   /* squad */
-  var sq=$('baSquad');var fs=P.f||[];var sk=JSON.stringify([ph,fs.map(function(f){return [f[0],f[6],f[16],f[11],f[10],f[13],f[14]]}),P.sq,EN_,CFG.av,P.d]);
+  var sq=$('baSquad');var fs=P.f||[];var sk=JSON.stringify([ph,fs.map(function(f){return [f[0],f[6],f[16],f[11],f[10],f[13],f[14],f[28]]}),P.sq,EN_,CFG.av,P.d,ph==='pick'?P.rm:0]);
   if(sq._k!==sk||force){sq._k=sk;A.clear(sq);
-    var rows=ph==='lobby'?(P.sq||[]).map(function(s){return {u:s[0],name:s[1],col:s[2],lv:s[3],pw:s[4],cls:s[5],hp:1,max:1,ch:0,k:0,alive:1}}):fs.map(function(f){return {u:f[1],name:f[2],col:f[3],lv:f[8],pw:f[9],cls:f[18],hp:f[6],max:f[7],ch:f[16]?0:1,k:f[11],alive:f[10],duel:P.d&&P.d[0]===f[0]}});
+    var rows=ph==='lobby'?(P.sq||[]).map(function(s){return {u:s[0],name:s[1],col:s[2],lv:s[3],pw:s[4],cls:s[5],hp:1,max:1,ch:0,k:0,alive:1}}):fs.map(function(f){return {u:f[1],name:f[2],col:f[3],lv:f[8],pw:f[9],cls:f[18],hp:f[6],max:f[7],ch:f[16]?0:1,k:f[11],alive:f[10],duel:P.d&&P.d[0]===f[0],cm:ph==='pick'&&P.rm&&!P.wc?(f[28]||0):null}});
     var h=document.createElement('div');h.className='ba-sqh';h.textContent=T('ba_picked',{n:rows.length,m:A.obs?rows.length:E.cfg.squadMax});sq.appendChild(h);
     if(!rows.length){var em=document.createElement('div');em.className='ba-empty';em.textContent=T('ba_none');sq.appendChild(em);}
     var ul=document.createElement('ul');ul.className='ba-sql'+(rows.length>6?' tight':'');rows.forEach(function(r){var li=document.createElement('li');if(!r.alive)li.className='dead';else if(r.duel)li.className='duel';
       li.appendChild(headEl(r.u,r.col,r.name));var mid=document.createElement('div');mid.className='ba-sqm';var top=document.createElement('div');top.className='ba-sqt';
+      if(r.cm!=null&&r.alive){var cmk=document.createElement('span');cmk.className='ba-cm '+(r.cm>0?'s':r.cm<0?'w':'n');cmk.textContent=r.cm>0?'▲':r.cm<0?'▼':'●';top.appendChild(cmk);} /* round 8: ▲ / ▼ / ● next to the name while picking */
       top.appendChild(BT.name(r.name,r.col));var lv=document.createElement('span');lv.className='ba-lv';lv.textContent=(r.cls&&BTR.CLASSES[r.cls]?BTR.CLASSES[r.cls].ic+' ':'')+'LV'+r.lv;top.appendChild(lv);mid.appendChild(top);
       mid.appendChild(bar('hp',r.hp/r.max));var pwn=BT.POWERS[r.pw];li.appendChild(mid);
       var side=document.createElement('div');side.className='ba-sqs';var ic=document.createElement('span');ic.className='ba-pic';ic.textContent=PW_IC[pwn];ic.title=EN_?PW_EN[pwn]:PW_AR[pwn];side.appendChild(ic);var kk=document.createElement('span');kk.className='ba-k';kk.textContent='☠'+r.k;side.appendChild(kk);li.appendChild(side);ul.appendChild(li);});
@@ -712,9 +768,9 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
     if(x.dead){r.appendChild(document.createTextNode('💀 '));r.appendChild(BT.name(x.dead,x.dc));}else{r.appendChild(BT.name(x.by||'?',x.bc));r.appendChild(document.createTextNode(' ⚔ '+(x.boss?'👑 ':'')));var mb=document.createElement('bdi');mb.textContent=mobName(x.mk);r.appendChild(mb);}fd.appendChild(r);});}
   fd.classList.toggle('off',!(P.feed||[]).length);
   /* lobby / join box */
-  var lb=$('baLobby');var lk=JSON.stringify([ph==='lobby'?'l':'r',P.q,P.nq,P.sq,EN_]);if(lb._k!==lk){lb._k=lk;A.clear(lb);
+  var jOpen=A.obs?P.jo!==0:!!CFG.open;var lb=$('baLobby');var lk=JSON.stringify([ph==='lobby'?'l':'r',P.q,P.nq,P.sq,EN_,jOpen]);if(lb._k!==lk){lb._k=lk;A.clear(lb);
     var l1=document.createElement('div');l1.className='bt-join-l';
-    BT.fill(l1,T('ba_join1',{a:'\u0001'}),[BT.cmdEl(EN_?'!join':'!دخول')]);lb.appendChild(l1);lb.classList.add('slim'); /* Nov 6 (Mohammad): the join box says only «اكتب !دخول لتدخل» */
+    if(jOpen)BT.fill(l1,T('ba_join1',{a:'\u0001'}),[BT.cmdEl(EN_?'!join':'!دخول')]);else l1.textContent='🔒 '+T('ba_locked'); /* round 8: the join is locked once the battle started, until the host opens it */lb.appendChild(l1);lb.classList.add('slim'); /* Nov 6 (Mohammad): the join box says only «اكتب !دخول لتدخل» */
     if(ph==='lobby'){var lc=$('baLobbyCard');A.clear(lc);
       /* the squad, in the middle of the lobby (control page: click a name = kick) */
       if((P.sq||[]).length){var sh=document.createElement('div');sh.className='ba-qh ba-sqh2';sh.textContent=T('ba_picked',{n:P.sq.length,m:A.obs?P.sq.length:E.cfg.squadMax});lc.appendChild(sh);var su=document.createElement('ul');su.className='ba-ql ba-sq2';
@@ -724,53 +780,50 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* the join timer (⚙ «وقت الدخول»): a countdown in the join box while it runs */
   jcSync();
   /* end card */
-  var end=$('baEnd');if(ph==='won'){top3Hud(end);}else if(ph==='lost'){if(end.classList.contains('ba-top3'))end._k='';var ek=ph+P.lv+fs.length;if(end._k!==ek){end._k=ek;A.clear(end);var h3=document.createElement('h3');h3.textContent=T(ph==='won'?'ba_won':'ba_lost');end.appendChild(h3);var sub=document.createElement('p');sub.textContent=T(ph==='won'?'ba_won_s':'ba_lost_s',{l:P.lv});end.appendChild(sub);
+  var end=$('baEnd');if(ph==='won'){top3Hud(end);}else if(ph==='lost'){if(end.classList.contains('ba-top3'))end._k='';var ek=ph+P.lv+fs.length;if(end._k!==ek){end._k=ek;A.clear(end);var h3=document.createElement('h3');h3.textContent=T(ph==='won'?'ba_won':'ba_lost');end.appendChild(h3);var sub=document.createElement('p');sub.textContent=T(ph==='won'?'ba_won_s':'ba_lost_s',{l:P.lv,m:T('map_'+BT.stageOf(P.lv||1).map)});end.appendChild(sub);
       var best=fs.slice().sort(function(a,b){return b[11]-a[11]})[0];if(best){var mv=document.createElement('div');mv.className='ba-mvp';mv.appendChild(document.createTextNode('👑 '+T('ba_mvp')+': '));mv.appendChild(headEl(best[1],best[3],best[2]));mv.appendChild(BT.name(best[2],best[3]));mv.appendChild(document.createTextNode(' · ☠'+best[11]));end.appendChild(mv);}
       if(!A.obs){var row=document.createElement('div');row.className='ba-endbtns';
-        var rb=document.createElement('button');rb.type='button';rb.className='btn btn-ghost btn-sm';rb.textContent='🔁 '+(EN()?'Replay the level':'إعادة المرحلة');rb.addEventListener('click',function(){if(E.again(false)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(rb);
-        var nb=document.createElement('button');nb.type='button';nb.className='btn btn-main btn-sm';nb.textContent='⏭ '+(EN()?'Next level':'المستوى التالي');nb.disabled=ph!=='won';nb.addEventListener('click',function(){if(E.again(true)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(nb);
+        var rb=document.createElement('button');rb.type='button';rb.className='btn btn-ghost btn-sm';rb.textContent='🔁 '+(EN()?'Replay the level':'إعادة المرحلة');rb.addEventListener('click',function(){if(E.again(false)){save();A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(rb);
+        var nb=document.createElement('button');nb.type='button';nb.className='btn btn-main btn-sm';nb.textContent='⏭ '+(EN()?'Next level':'المستوى التالي');nb.disabled=ph!=='won';nb.addEventListener('click',function(){if(E.again(true)){save();A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(nb);
         var lb2=document.createElement('button');lb2.type='button';lb2.className='btn btn-ghost btn-sm';lb2.textContent=EN()?'Lobby':'اللوبي';lb2.addEventListener('click',toLobby);row.appendChild(lb2);end.appendChild(row);}
       end.className='bt-win '+(ph==='won'?'won':'lost');end.hidden=false;}}else{end.hidden=true;end._k='';if(end.classList.contains('ba-top3'))A.clear(end);end.className='bt-win';}if(ph!=='won'&&$('gs'))$('gs').classList.remove('tw-on');if(ph!=='won'&&!A.obs){TB={};}
   /* control panel */
   if(!A.obs)ctrlHud(force);
+  var bn=$('baBotNote');if(bn)bn.hidden=ph!=='lobby'||document.body.classList.contains('drawer-open');
 }
 function mobName(k){var M=MC.MOBS[k]||MC.BOSSES[k];return M?(EN()?M.en:M.ar):k;}
-function ctrlHud(force){var ph=E.phase,EN_=EN(),raid=E.inRaid();
+function ctrlHud(force){var ph=E.phase,EN_=EN(),raid=E.inRaid();stageSel();
   $('baGo').textContent=T(ph==='lobby'?'ba_start':(ph==='won'||ph==='lost')?'ba_again':E.paused?'ba_resume':'ba_start');$('baGo').disabled=raid&&!E.paused;
   $('baPause').textContent=T(E.paused?'ba_resume':'ba_pause');$('baPause').disabled=!raid;$('baNext').disabled=!(ph==='pick'||ph==='break')||E.paused;$('baBossBtn').disabled=!(ph==='pick'||ph==='break')||E.m.some(function(m){return m.boss});
   var dl=E.duel&&[E.byId(E.duel.f),E.byId(E.duel.m)];
-  var st=E.paused?T('ba_st_paused'):ph==='lobby'?T('ba_st_lobby',{q:E.queue().length,s:E.squad.length}):ph==='pick'?T('ba_st_fight',{w:E.wave,a:E.alive().length,m:E.m.length}):ph==='duel'?T('ba_st_duel',{f:dl&&dl[0]?dl[0].name:'',m:dl&&dl[1]?mobLabel(dl[1].kind):''}):ph==='break'?(E.nextAt?T('ba_st_break'):T('ba_st_break_m')):ph==='won'?T('ba_st_won',{l:E.level()}):T('ba_st_lost',{l:E.level()});status(st);
-  var key=JSON.stringify([E.squad,E.queue().map(function(u){var w=E.waiting[u];return [u,w.jump,w.hide,w.votes]}),ph,EN_,E.paused,E.f.map(function(f){return [f.alive,f.hp,f.jump,f.votes,f.hide]})]);var sl=$('baSqList'),ql=$('baQList')||document.createElement('ul');if(sl._k===key&&!force)return;sl._k=key;
+  var st=E.paused?T('ba_st_paused'):ph==='lobby'?T('ba_st_lobby',{q:E.queue().length,s:E.squad.length}):ph==='pick'?T('ba_st_fight',{w:E.wave,a:E.alive().length,m:E.m.length}):ph==='duel'?T('ba_st_duel',{f:dl&&dl[0]?dl[0].name:'',m:dl&&dl[1]?mobLabel(dl[1].kind):''}):ph==='break'?(E.nextAt?T('ba_st_break'):T('ba_st_break_m')):ph==='won'?T('ba_st_won',{l:E.level()+1}):T('ba_st_lost',{l:E.level()});if(ph==='lobby'&&!E.paused)st=''; /* round 8: no «اللوبي: 0 في الفريق…» line */status(st);
+  var key=JSON.stringify([E.squad,E.queue().map(function(u){var w=E.waiting[u];return [u,w.jump,w.hide,w.votes]}),ph,EN_,E.paused,E.f.map(function(f){return [f.alive,f.hp,f.jump,f.votes,f.hide]}),P.rm||0]);var sl=$('baSqList'),ql=$('baQList')||document.createElement('ul');if(sl._k===key&&!force)return;sl._k=key;
   A.clear(sl);A.clear(ql);$('baSqN').textContent=E.squad.length+'/'+E.cfg.squadMax;
+  var rmM=ph==='pick'&&P.rm?E.byId(P.rm):null;
   E.squad.forEach(function(u){var w=E.waiting[u]||{name:u},f=E.fOf(u);var li=document.createElement('li');var b=document.createElement('button');b.type='button';b.className='ba-pick'+(f&&!f.alive?' dead':'');
+    if(rmM&&f&&f.alive){var cv=BTR.counter(f.cls,rmM.role),cm=document.createElement('span');cm.className='ba-cm '+(cv>0?'s':cv<0?'w':'n');cm.textContent=cv>0?'▲':cv<0?'▼':'●';cm.title=T(cv>0?'ba_cm_s':cv<0?'ba_cm_w':'ba_cm_n');b.appendChild(cm);b.classList.add(cv>0?'cm-s':cv<0?'cm-w':'cm-n');}
     if(raid){/* during the raid: click = this one walks out to fight */b.disabled=!(ph==='pick'&&f&&f.alive&&!E.paused);var sw=document.createElement('span');sw.className='go';sw.textContent=f&&!f.alive?'💀':'⚔️';b.appendChild(sw);if(f&&f.jump){var jb=document.createElement('b');jb.textContent='⬆ ';b.appendChild(jb);}}
-    b.appendChild(BT.name(w.name,w.color));var lv=document.createElement('small');lv.textContent=' LV'+BT.lvlOf(E.xp[u])+' '+PW_IC[BT.powerOf(u)]+(f&&raid?' ❤'+f.hp:'')+(f&&f.votes?' ★'+f.votes:'');b.appendChild(lv);
+    b.appendChild(BT.name(w.name,w.color));var lv=document.createElement('small');lv.textContent=' LV'+BT.alvOf(E.axp[u])+' '+PW_IC[BT.powerOf(u)]+(f&&raid?' ❤'+f.hp:'')+(f&&f.votes?' ★'+f.votes:'');b.appendChild(lv);
     if(!raid){var x=document.createElement('span');x.className='x';x.textContent='✖';b.appendChild(x);b.title=T('ba_m_rem');b.addEventListener('click',function(){kick(u);});}
     else b.addEventListener('click',function(){sendF(u);});
     li.appendChild(b);sl.appendChild(li);});
-  E.queue().forEach(function(u){var w=E.waiting[u];var li=document.createElement('li');var b=document.createElement('button');b.type='button';b.className='ba-pick'+(w.hide?' hid':'');b.disabled=E.squad.length>=E.cfg.squadMax||ph==='duel';if(w.jump){var j=document.createElement('b');j.textContent='⬆ ';b.appendChild(j);}b.appendChild(BT.name(w.name,w.color));var lv=document.createElement('small');lv.textContent=' LV'+BT.lvlOf(E.xp[u])+(w.votes?' ★'+w.votes:'');b.appendChild(lv);b.addEventListener('click',function(){E.pick(u);P=E.pub();A.publish(P);hud(true);});li.appendChild(b);ql.appendChild(li);});
+  E.queue().forEach(function(u){var w=E.waiting[u];var li=document.createElement('li');var b=document.createElement('button');b.type='button';b.className='ba-pick'+(w.hide?' hid':'');b.disabled=E.squad.length>=E.cfg.squadMax||ph==='duel';if(w.jump){var j=document.createElement('b');j.textContent='⬆ ';b.appendChild(j);}b.appendChild(BT.name(w.name,w.color));var lv=document.createElement('small');lv.textContent=' LV'+BT.alvOf(E.axp[u])+(w.votes?' ★'+w.votes:'');b.appendChild(lv);b.addEventListener('click',function(){E.pick(u);P=E.pub();A.publish(P);hud(true);});li.appendChild(b);ql.appendChild(li);});
 }
 /* ---------- control panel wiring ---------- */
 if(!A.obs){
   $('baGo').addEventListener('click',function(){if(E.paused){pauseT();return;}if(E.phase==='won'||E.phase==='lost'){toLobby();startBattle();return;}startBattle();});
   $('baPause').addEventListener('click',pauseT);$('baNext').addEventListener('click',nextOrAgain);$('baBossBtn').addEventListener('click',function(){E.summonBoss();P=E.pub();A.publish(P);hud(true);});$('baReset').addEventListener('click',toLobby);
   
-  $('baEmpty').addEventListener('click',function(){if(E.inRaid())return;E.squad.slice().forEach(function(u){E.leave(u);});P=E.pub();A.publish(P);hud(true);});
-  var mp=$('baMaps');MAPS.concat(['random']).forEach(function(m){var b=document.createElement('button');b.type='button';b.className='seg ba-map'+(m==='random'?' ba-map-rnd':'')+(CFG.map===m?' on':'');b.setAttribute('data-map',m);b.setAttribute('role','radio');var sw=document.createElement('canvas');sw.width=16;sw.height=16;var sg=sw.getContext('2d');
-    if(m==='random'){/* a 2x2 of four map floors + a die: «عشوائي» */['grass','snow','netherrack','jgrass'].forEach(function(tn,i){sg.drawImage(MC.tex(tn,2),0,0,16,16,(i%2)*8,Math.floor(i/2)*8,8,8);});sg.fillStyle='#f4f1e8';sg.fillRect(4,4,8,8);sg.fillStyle='#1a1a22';[[6,6],[9,9],[6,9],[9,6]].forEach(function(q){sg.fillRect(q[0],q[1],2,2);});}
-    else sg.drawImage(MC.tex(MC.MAPS[m].floor[0],2),0,0);b.appendChild(sw);var s=document.createElement('span');s.setAttribute('data-i18n','map_'+m);s.textContent=T('map_'+m);b.appendChild(s);
-    b.addEventListener('click',function(){if(E.inRaid())return;CFG.map=m;applyCfg();[].forEach.call(mp.children,function(x){x.classList.toggle('on',x.getAttribute('data-map')===m);x.setAttribute('aria-checked',String(x.getAttribute('data-map')===m))});save();P=E.pub();A.publish(P);hud(true);});mp.appendChild(b);});
-  var wv=$('baWavesSel');wv.value=String(CFG.waves);wv.addEventListener('change',function(){CFG.waves=+wv.value;applyCfg();save();P=E.pub();A.publish(P);hud(true);});
-  var pwr=$('baPwRate');if(pwr){pwr.value=CFG.pwR||'normal';pwr.addEventListener('change',function(){CFG.pwR=pwr.value;applyCfg();save();});}
-  var df=$('baDiff');df.value=CFG.diff;df.addEventListener('change',function(){CFG.diff=df.value;applyCfg();save();});
-  var bs=$('baBossSel');bs.value=CFG.boss;bs.addEventListener('change',function(){CFG.boss=bs.value;applyCfg();save();});
-  var sz=$('baSize');sz.value=String(CFG.size);sz.addEventListener('change',function(){CFG.size=+sz.value;applyCfg();while(E.squad.length>E.cfg.squadMax&&E.phase==='lobby')E.squad.pop();save();hud(true);});
+  /* round 8: «أفرغ الفريق» lives only in the bottom dock, next to «ابدأ المعركة» */
+  var dqe=$('dqEmpty');if(dqe)dqe.addEventListener('click',function(){if(E.inRaid())return;E.squad.slice().forEach(function(u){E.leave(u);});P=E.pub();A.publish(P);hud(true);dockSync();});
+  /* round 8: the stage selector — only the levels already reached (1 … best); a lower one can be picked, never one past the best */
+  stageSel();var ss=$('baStageSel');if(ss)ss.addEventListener('change',function(){if(E.inRaid()){stageSel();return;}var v=+ss.value;if(E.setStage(v)){save();P=E.pub();A.publish(P);hud(true);}else stageSel();});
+  /* round 8: «لعب تلقائي» (off by default) holds the two timers; they only show while it is on */
+  var apc=$('baAutoP'),aps=$('baAutoSub');function apSync(){apc.checked=!!CFG.autoP;aps.hidden=!CFG.autoP;}apSync();apc.addEventListener('change',function(){CFG.autoP=apc.checked;apSync();applyCfg();save();hud(true);});
   BT.tmr($('baBreakRow'),function(){return CFG.brk},function(v){CFG.brk=v;applyCfg();save();},4);
   BT.tmr($('baCardRow'),function(){return CFG.card},function(v){CFG.card=v;applyCfg();save();},6);
-  BT.tmr($('baJoinRow'),function(){return CFG.join},function(v){CFG.join=v;joinEnd=v>0?Date.now()+v*1000:0;save();},60);
-  [['baGiOn','giOn'],['baBot','bot'],['baAv','av'],['baAutoF','autoF'],['baSpeak','speak'],['baEvents','events'],['baLoot','loot']].forEach(function(a){var e=$(a[0]);e.checked=!!CFG[a[1]];e.addEventListener('change',function(){CFG[a[1]]=e.checked;applyCfg();save();hud(true);});});
-  BT.xtra($('baXtra'),'lamma-baxtra');
-  if(CFG.join>0)joinEnd=Date.now()+CFG.join*1000;
+  /* round 8: «الدخول مفتوح / مقفل» */
+  var opc=$('baOpen');opc.checked=!!CFG.open;opc.addEventListener('change',function(){setOpen(opc.checked);});
   A.onLang(function(){hud(true);});
 }
 if(window.LammaAvatars&&LammaAvatars.onChange)LammaAvatars.onChange(function(){hud(true);});
@@ -779,16 +832,16 @@ if(window.LammaAvatars&&LammaAvatars.onChange)LammaAvatars.onChange(function(){h
    The side panel (commands / how to play / cam / buttons) is gone. Top-left: «?» = a centred popup with how the game works and
    every chat command, and ⚙ = the settings drawer (squad & waiting lists, maps, settings, layout editor, OBS link).
    Bottom bar: ⛶ fullscreen, the status line, and only the buttons that make sense right now. */
-var HELP={all:[['!دخول','!join','ادخل الفريق مباشرة.','Go straight into the squad.'],
+var HELP={all:[['!دخول','!join','ادخل الفريق مباشرة (حين يكون الدخول مفتوحًا).','Go straight into the squad (while joining is open).'],
   ['!قفز','!jump','يقفز شخصك في الساحة لمدة 5 ثوانٍ.','Your character bounces on the field for 5 seconds.'],
   ['!اختبي','!hide','ليس أنا الآن: تخرج للمبارزة في الآخر.','Not me for now: you fight last.'],
   ['!صوت اسم','!vote name','صوّت لمن يخرج للمبارزة التالية (★ فوق رأسه).','Vote who fights the next duel (★ over their head).'],
   ['!قوة','!power','القوة تمتلئ ببطء (الشريط البني). حين يتوهّج القلب اكتب !قوة لتطلقها في مبارزتك — لا تنطلق وحدها.','Your power fills slowly (the brown bar). When the heart glows type !power to fire it in your duel — it never fires by itself.'],
   ['!معلومات','!getinfo','بطاقتك: الصنف والمستوى والصحة والعدّة. أو اكتب بعده اسم لاعب (معلومات الوحوش للستريمر فقط).','Your card: class, level, HP and gear. Or add a player’s name (monster stats are for the streamer only).'],
-  ['!سكن اسم','!skin name','سكن ماينكرافت الخاص بك، من مستوى يحدده الستريمر.','Your own Minecraft skin, from a level the streamer sets.'],
+  ['!سكن اسم','!skin name','سكن ماينكرافت الخاص بك، من المستوى 3.','Your own Minecraft skin, from level 3.'],
   ['!خروج','!leave','اخرج من الفريق — في اللوبي فقط، لا خروج بعد بدء المعركة.','Leave the squad — lobby only, no leaving once the battle starts.']],
  mod:[['!ابدأ','!start','ابدأ المعركة','Start the battle'],['!وقف','!pause','إيقاف / استئناف','Pause / resume'],['!التالي','!next','المقاتل التالي','Next fighter'],['!زعيم','!boss','اذهب إلى الزعيم','Go to the boss'],['!جديد','!reset','رجوع إلى اللوبي','Back to the lobby']],
- keys:[['🖱 وحش','🖱 Mob','اضغط على وحش أو الزعيم في الساحة لتفتح بطاقة معلوماته (للستريمر فقط، لا أمر لها في الشات).','Click a mob or the boss on the field to open its stats card (streamer only, no chat command).'],['Space','Space','إيقاف / استئناف','Pause / resume'],['N','N','المقاتل التالي','Next fighter'],['F','F','شاشة كاملة','Fullscreen'],['Esc','Esc','إغلاق النوافذ','Close popups']]};
+ keys:[['🖱 وحش','🖱 Mob','اضغط على وحش أو الزعيم في الساحة لتفتح بطاقة معلوماته: نوعه ومن يقتله (للستريمر فقط، لا أمر لها في الشات).','Click a mob or the boss on the field to open its stats card: its type and who beats it (streamer only, no chat command).'],['Space','Space','إيقاف / استئناف','Pause / resume'],['N','N','المقاتل التالي','Next fighter'],['F','F','شاشة كاملة','Fullscreen'],['Esc','Esc','إغلاق النوافذ','Close popups']]};
 /* Nov 6, 10:33 PM (Mohammad): closing the help shrinks it and flies it into the «?» button top-left, where it disappears,
    then «?» pulses once — so the host learns where to find it again. */
 function closeHelp(){var m=$('baHelp');if(!m||m._closing)return;m._closing=true;var b=$('baHelpBtn');if(b)b.setAttribute('aria-expanded','false');
@@ -803,6 +856,11 @@ function closeHelp(){var m=$('baHelp');if(!m||m._closing)return;m._closing=true;
     {duration:620,easing:'cubic-bezier(.55,.05,.35,1)',fill:'forwards'});
   m.animate([{backgroundColor:'rgba(6,7,10,.62)'},{backgroundColor:'rgba(6,7,10,0)'}],{duration:520,easing:'ease-out',fill:'forwards'});
   var fin=false;function f(){if(fin)return;fin=true;done();}an.onfinish=f;setTimeout(f,900);}
+/* round 8: the counter table in the help — one row per class: ▲ strong against · ▼ weak against */
+function cmTable(bd,en){var t=document.createElement('div');t.className='bh-cm';BTR.CLASSK.forEach(function(k){var C=BTR.CLASSES[k],X=BTR.COUNTER[k];var r=document.createElement('div');r.className='bh-cmr';
+  var a=document.createElement('b');a.textContent=C.ic+' '+(en?C.en:C.ar);r.appendChild(a);
+  function cell(cls,sym,list){var s=document.createElement('span');s.className=cls;s.textContent=sym+' '+list.map(function(x){var R=BTR.ROLE[x];return R.ic+' '+(en?R.en:R.ar);}).join('، ');r.appendChild(s);}
+  cell('s','▲',X.s);cell('w','▼',X.w);t.appendChild(r);});bd.appendChild(t);}
 function openHelp(){if(A.obs)return;var o=$('baHelp');if(o){if(o._closing)o.remove();else{closeHelp();return;}}setDrawer(false);var en=EN();
   var ov=document.createElement('div');ov.id='baHelp';ov.className='ba-help';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-labelledby','baHelpT');ov.dir=en?'ltr':'rtl';
   var c=document.createElement('div');c.className='bh-card';ov.appendChild(c);
@@ -810,13 +868,19 @@ function openHelp(){if(A.obs)return;var o=$('baHelp');if(o){if(o._closing)o.remo
   var x=document.createElement('button');x.type='button';x.className='bh-x';x.textContent='✕';x.setAttribute('aria-label',T('ba_close'));x.addEventListener('click',closeHelp);hd.appendChild(x);c.appendChild(hd);
   var bd=document.createElement('div');bd.className='bh-body';c.appendChild(bd);
   function sub(t){var s=document.createElement('h4');s.textContent=t;bd.appendChild(s);}
-  sub('🎮 '+T('ba_help_how'));var ol=document.createElement('ol');ol.className='bh-how';['ba_h1','ba_h2','ba_h3','ba_h4','ba_h6','ba_h7','ba_h5'].forEach(function(k){var li=document.createElement('li');li.textContent=T(k);ol.appendChild(li);});bd.appendChild(ol);
+  sub('🎮 '+T('ba_help_how'));var ol=document.createElement('ol');ol.className='bh-how';['ba_h1','ba_h2','ba_h3','ba_h8','ba_h4','ba_h6','ba_h7','ba_h9','ba_h5','ba_h10'].forEach(function(k){var li=document.createElement('li');li.textContent=T(k);ol.appendChild(li);});bd.appendChild(ol);
   function list(rows){var ul=document.createElement('ul');ul.className='bh-cmds';rows.forEach(function(r){var li=document.createElement('li');var k=document.createElement('span');k.className='bh-k';
     (en?[r[1],r[0]]:[r[0],r[1]]).forEach(function(w,i){if(i&&w===r[0]&&r[0]===r[1])return;var ch=document.createElement('bdi');ch.className='bh-chip';ch.dir=/[\u0600-\u06ff]/.test(w)?'rtl':'ltr';ch.textContent=w;k.appendChild(ch);});
     li.appendChild(k);var d=document.createElement('span');d.className='bh-d';d.textContent=en?r[3]:r[2];li.appendChild(d);ul.appendChild(li);});bd.appendChild(ul);}
-  sub('💬 '+T('ba_help_all'));list(HELP.all);sub('🛡 '+T('ba_help_mod'));list(HELP.mod);sub('⌨️ '+T('ba_help_keys'));list(HELP.keys);
+  sub('⚔️ '+(en?'Who beats whom':'مَن يغلب مَن'));cmTable(bd,en);sub('💬 '+T('ba_help_all'));list(HELP.all);sub('🛡 '+T('ba_help_mod'));list(HELP.mod);sub('⌨️ '+T('ba_help_keys'));list(HELP.keys);
   ov.addEventListener('pointerdown',function(e){if(e.target===ov)closeHelp();});
   document.body.appendChild(ov);var b=$('baHelpBtn');if(b)b.setAttribute('aria-expanded','true');x.focus();}
+/* round 8 (Mohammad, item K): no bot settings — instead, the first time the host opens the game, a small «أضف البوت» step */
+function botNote(){if(A.obs)return;try{if(localStorage.getItem('lamma-ba-botnote')==='1')return;}catch(e){}if(BT.bot&&BT.bot.ready&&BT.bot.ready())return;if($('baBotNote'))return;
+  var n=document.createElement('div');n.id='baBotNote';n.className='ba-botnote';n.setAttribute('role','note');var h=document.createElement('b');h.textContent=T('ba_bot_t');n.appendChild(h);
+  var p=document.createElement('p');p.textContent=T('ba_bot_x');n.appendChild(p);var ok=document.createElement('button');ok.type='button';ok.className='btn btn-main btn-sm';ok.textContent=T('ba_bot_ok');
+  ok.addEventListener('click',function(){try{localStorage.setItem('lamma-ba-botnote','1');}catch(e){}n.remove();});n.appendChild(ok);document.body.appendChild(n);}
+if(!A.obs)setTimeout(botNote,600);
 function setDrawer(on){var b=document.body,btn=$('drawerBtn');if(!btn)return;b.classList.toggle('drawer-open',!!on);btn.setAttribute('aria-expanded',String(!!on));}
 function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
 function toggleFs(){var de=document.documentElement;if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}var r=de.requestFullscreen||de.webkitRequestFullscreen,pr=r&&r.call(de);if(pr&&pr.catch)pr.catch(function(){});}
@@ -849,7 +913,7 @@ if(!A.obs){
     var tg=e.target,tn=tg&&tg.tagName;if(tn==='INPUT'||tn==='TEXTAREA'||tn==='SELECT'||(tg&&tg.isContentEditable)||e.ctrlKey||e.metaKey||e.altKey||giEditing())return;
     var k=(e.key||'').toLowerCase();if(k===' '){if(tn==='BUTTON'||!E.inRaid())return;e.preventDefault();pauseT();}else if(k==='n'||k==='ى'||k==='ن'){var nb=$('baNext');if(nb&&!nb.disabled)nb.click();}else if(k==='f'||k==='ب'){toggleFs();}});
   /* bottom bar: the real buttons stay in the drawer's code; these call them and show only what fits the moment */
-  [['dqGo','baGo'],['dqPause','baPause'],['dqNext','baNext'],['dqBoss','baBossBtn'],['dqLobby','baReset'],['dqEmpty','baEmpty']].forEach(function(p){var m=$(p[0]),o=$(p[1]);if(m&&o)m.addEventListener('click',function(){if(!o.disabled)o.click();dockSync();});});
+  [['dqGo','baGo'],['dqPause','baPause'],['dqNext','baNext'],['dqBoss','baBossBtn'],['dqLobby','baReset']].forEach(function(p){var m=$(p[0]),o=$(p[1]);if(m&&o)m.addEventListener('click',function(){if(!o.disabled)o.click();dockSync();});});
 }
 function dockSync(){if(A.obs)return;var ph=E.phase,raid=E.inRaid(),end=ph==='won'||ph==='lost';
   function set(id,show,dis,lbl,ic){var b=$(id);if(!b)return;b.hidden=!show;b.disabled=!!dis;if(lbl!=null){var l=b.querySelector('.dl');if(l&&l.textContent!==lbl)l.textContent=lbl;b.title=lbl;}if(ic!=null){var i=b.querySelector('.di');if(i)i.textContent=ic;}}
@@ -861,7 +925,7 @@ function dockSync(){if(A.obs)return;var ph=E.phase,raid=E.inRaid(),end=ph==='won
   set('dqLobby',raid||end);
   
   set('dqEmpty',ph==='lobby'&&E.squad.length>0);
-  var st=$('dockStatus'),src=$('baStatus');if(st&&src){var t=src.textContent.trim();if(st.textContent!==t){st.textContent=t;st.title=t;}}
+  var st=$('dockStatus'),src=$('baStatus');if(st&&src){var t=ph==='lobby'&&!E.paused?'':src.textContent.trim();if(st.textContent!==t){st.textContent=t;st.title=t;}} /* round 8 (Mohammad): the lobby has no status line in the dock */
   [['baHelpBtn','ba_help_t'],['drawerBtn','bt_settings']].forEach(function(a){var b=$(a[0]);if(b){var t=T(a[1]);b.title=t;b.setAttribute('aria-label',t);}});}
 if(!A.obs)setInterval(dockSync,250);
 /* ---------- layout editor ---------- */
