@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="/shared/css/layout.css">
 <link rel="stylesheet" href="/battle/battle.css">
 <link rel="stylesheet" href="/shared/css/theme.css">
+<link rel="stylesheet" href="/battle/arena-shell.css">
 <script src="/shared/js/theme.js"></script>
 </head>
 <body class="gpage g-battle-arena" data-game="battle-arena" data-title-ar="معركة الساحة — لَمّة" data-title-en="Arena Battle — Lamma">
@@ -65,7 +66,8 @@
         <p class="wait-ctrl" id="waitCtrl" hidden data-i18n="waiting_ctrl">بانتظار لوحة التحكم</p>
       </div>
     </section>
-    <aside class="side" id="side">
+    <aside class="side" id="side" aria-label="settings">
+      <div class="drawer-head"><div class="dh-t"><b data-i18n="g_title">معركة الساحة</b><a href="/battle/" data-keep>‹ <span data-i18n="all_battle">كل المعركة</span></a></div><button class="drawer-x" id="drawerClose" type="button" aria-label="✕">✕</button></div>
       <div class="card ctrl ctrl-only" id="ctrl">
         <div class="w2-status bt-status" id="baStatus" aria-live="polite"></div>
         <div class="btn-row"><button class="btn btn-main" id="baGo" type="button" data-i18n="ba_start">ابدأ المعركة</button><button class="btn btn-ghost" id="baPause" type="button" data-i18n="ba_pause">إيقاف</button></div>
@@ -114,15 +116,29 @@
         <div class="copy-row"><input id="obsUrl" readonly dir="ltr" aria-label="OBS URL"><button class="btn btn-ghost" id="obsCopy" type="button" data-i18n="copy">نسخ</button></div>
         <p class="small muted" data-i18n="obs_dock"></p>
       </details>
-      <details class="card cmd-card ctrl-only" open>
-        <summary data-i18n="cmds">أوامر الشات</summary>
-        <h4 data-i18n="cmds_all">للجميع</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!join</bdi> · <bdi class="cmd-i" dir="rtl">!دخول</bdi></code> <span data-i18n="bt_c_join"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!jump</bdi> · <bdi class="cmd-i" dir="rtl">!قفز</bdi></code> <span data-i18n="bt_c_jump"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!hide</bdi> · <bdi class="cmd-i" dir="rtl">!اختبي</bdi></code> <span data-i18n="bt_c_hide"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!vote</bdi> · <bdi class="cmd-i" dir="rtl">!صوت</bdi></code> <span data-i18n="bt_c_vote"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!power</bdi> · <bdi class="cmd-i" dir="rtl">!قوة</bdi></code> <span data-i18n="bt_c_power"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!getinfo</bdi> · <bdi class="cmd-i" dir="rtl">!معلومات</bdi></code> <span data-i18n="bt_c_info"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!stop</bdi> · <bdi class="cmd-i" dir="rtl">!الغي</bdi></code> <span data-i18n="bt_c_cancel"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!skin</bdi> name · <bdi class="cmd-i" dir="rtl">!سكن</bdi> اسم</code> <span data-i18n="bt_c_skin"></span></li></ul>
-        <h4 data-i18n="cmds_mod">للستريمر والمشرفين</h4><ul class="cmds"><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!start</bdi> · <bdi class="cmd-i" dir="rtl">!ابدأ</bdi></code> <span data-i18n="bt_c_start"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!pause</bdi> · <bdi class="cmd-i" dir="rtl">!وقف</bdi></code> <span data-i18n="bt_c_pause"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!next</bdi> · <bdi class="cmd-i" dir="rtl">!التالي</bdi></code> <span data-i18n="bt_c_next"></span></li><li><code dir="ltr"><bdi class="cmd-i" dir="ltr">!boss</bdi> · <bdi class="cmd-i" dir="rtl">!زعيم</bdi></code> <span data-i18n="bt_c_boss"></span></li></ul>
-      </details>
+      
 
     </aside>
   </div>
 </main>
+<div class="ba-corner ctrl-only" id="baCorner">
+  <button class="ba-cbtn" id="baHelpBtn" type="button" aria-haspopup="dialog" data-i18n-aria="ba_help_t" aria-label="شرح اللعبة والأوامر" title="">?</button>
+  <button class="ba-cbtn" id="drawerBtn" type="button" aria-expanded="false" aria-controls="side" data-i18n-aria="bt_settings" aria-label="الإعدادات" title="">⚙</button>
+</div>
+<div class="fs-dock ba-dock ctrl-only" id="baDock">
+  <button class="dock-btn dock-fs" id="dockFs" type="button">⛶</button>
+  <div class="dock-status" id="dockStatus" aria-live="off"></div>
+  <div class="dock-quick" id="dockQuick">
+    <button class="dock-btn" id="dqEmpty" type="button"><span class="di" aria-hidden="true">🗑</span><span class="dl" data-i18n="ba_empty">أفرغ الفريق</span></button>
+    <button class="dock-btn" id="dqAddR" type="button"><span class="di" aria-hidden="true">🎲</span><span class="dl" data-i18n="ba_add_r">أضف عشوائيًا</span></button>
+    <button class="dock-btn" id="dqAddJ" type="button"><span class="di" aria-hidden="true">⬆</span><span class="dl" data-i18n="ba_add_j2">أضف من قفزوا</span></button>
+    <button class="dock-btn" id="dqLobby" type="button"><span class="di" aria-hidden="true">↩</span><span class="dl" data-i18n="ba_lobby_b">اللوبي</span></button>
+    <button class="dock-btn" id="dqBoss" type="button"><span class="di" aria-hidden="true">👑</span><span class="dl" data-i18n="ba_boss">اذهب إلى الزعيم</span></button>
+    <button class="dock-btn" id="dqPause" type="button"><span class="di" aria-hidden="true">⏸</span><span class="dl"></span></button>
+    <button class="dock-btn" id="dqNext" type="button"><span class="di" aria-hidden="true">⚔️</span><span class="dl" data-i18n="ba_next2">التالي</span></button>
+    <button class="dock-btn dock-main" id="dqGo" type="button"><span class="di" aria-hidden="true">▶</span><span class="dl"></span></button>
+  </div>
+</div>
 <footer class="foot"><p class="foot-cr"><span data-i18n="footer_c">حقوق النشر ©</span> <span id="year">2026</span> <span data-i18n="footer_r">لَمّة. جميع الحقوق محفوظة — صُنع بواسطة</span> <bdi class="foot-by" dir="ltr">iiTzMeDoO</bdi></p></footer>
 <script src="/shared/js/core.js"></script>
 <script src="/shared/js/words.js"></script>

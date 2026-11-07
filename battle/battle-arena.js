@@ -40,7 +40,10 @@ A.strings({
   ba_won_s:'أصبح المستوى {l}',ba_lost_s:'عاد المستوى إلى {l}',ba_mvp:'الأقوى',ba_kills:'القتلى',ba_join1:'اكتب {a} لتدخل في الانتظار',ba_join2:'{a} اخترني · {b} لا تخترني · {c} اسم',ba_inq:'في الانتظار: {n}',ba_picked:'الفريق ({n}/{m})',
   ba_fight_j:'{a} اخترني · {c} اسم · {b} أثناء قتالك',ba_none:'لم يدخل أحد بعد',ba_st_lobby:'اللوبي: {q} في الانتظار، {s} في الفريق. اختر الفريق واضغط "ابدأ المعركة".',ba_st_fight:'الموجة {w}: اختر من يخرج للقتال (اضغط عليه في الساحة أو في القائمة، أو "التالي"). {a} أحياء، {m} أعداء.',ba_st_duel:'{f} يقاتل {m}…',ba_st_break:'استراحة… الموجة القادمة بعد قليل.',ba_st_break_m:'تم تطهير الموجة. اضغط "التالي".',ba_autof:'قتال تلقائي (التالي يظهر تلقائيًا)',ba_pick_t:'من يخرج للقتال؟',ba_dodge:'تفادى!',ba_crit:'ضربة حرجة!',ba_block:'صد!',ba_frozen:'متجمد',ba_party:'الفريق',
   ba_st_won:'انتصرنا! أصبح المستوى {l}.',ba_st_lost:'خسرنا. عاد المستوى إلى {l}.',ba_st_paused:'متوقفة',ba_need:'لا يوجد أحد في الفريق ولا في الانتظار',ba_power_ready:'القوة جاهزة',ba_gion:'كرت معلومات الشخصية على الشاشة',ba_gion_n:'أطفئه إذا كنت تعتمد على رد البوت في الشات. حين يظهر الكرت: ✥ لتحريكه، ⤡ لتكبيره أو تصغيره، ↺ لإرجاعه بجانب الشخصية. يُحفظ كل ذلك تلقائيًا.',ba_pwt:'وقت شحن القوة بعد استخدامها',ba_pwt_n:'{n} أدوار',
-  bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر، وإلا تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.',bt_c_join:'اكتب !دخول لتنضمّ إلى قائمة الانتظار وتظهر مرشّحًا حول الساحة. لا تقاتل حتى يضعك الستريمر في الفريق.',bt_c_jump:'تطوّع للقتال: يقفز شخصك فعلًا في الساحة ليراه الستريمر، ويظهر اسمك في قائمة المتطوعين. الستريمر يختار من بينهم.',bt_c_hide:'اطلب ألّا يختارك الستريمر الآن: يصبح شخصك شبه شفاف ويبقى في الانتظار.',bt_c_vote:'صوّت لمرشّح ليدخل الفريق، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه، ويرى الستريمر الأكثر تصويتًا.',bt_c_power:'أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.',bt_c_focus:'اختر العدو الذي تريد مواجهته حين يخرجك الستريمر، مثل: !ركز زعيم أو !ركز هيكل.',bt_c_start:'ابدأ المعركة',bt_c_pause:'إيقاف / استئناف',bt_c_next:'أخرج المقاتل التالي',bt_c_boss:'اذهب إلى موجة الزعيم',ba_eff_super:'فعّال جدًا!',ba_eff_resist:'مقاوم',ba_eff_immune:'مناعة!',ba_st_burn:'🔥 احتراق',ba_st_poison:'🧪 تسمم',ba_st_wither:'💀 ذبول',ba_stun:'💫 دائخ',ba_split:'انقسم!',ba_totem:'🗿 قام من الموت!',ba_save:'❤ نجا!',ba_phase:'المرحلة الثانية!',ba_loot:'🎁 غنيمة:',ba_boom:'💥 انفجر!',ba_mheal:'🧪 شربت جرعة!',ba_sp_sonic:'صرخة صوتية!',ba_sp_roar:'زئير!',ba_sp_charge:'هجمة!',bt_c_info:'يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. وتستطيع كتابة اسم وحش أو زعيم، مثل !معلومات زومبي، لترى بطاقته ونقاط ضعفه.',bt_c_cancel:'تراجع عن !قفز إذا غيّرت رأيك قبل أن يختارك الستريمر.',bt_c_class:'غيّر صنفك',ba_speak:'المرشحون يتحدثون (كلامهم فوق رؤوسهم)',ba_events:'أحداث الموجات (ليل، مطر، كنز…)',ba_lootopt:'غنائم بعد كل موجة',ba_resetgear:'امسح العدّة والأصناف',ba_resetq:'هل أنت متأكد؟ ستعود عدّة الجميع إلى البداية',gi_hp:'صحة',gi_atk:'هجوم',gi_def:'دفاع',gi_spd:'سرعة',gi_agi:'تفادي',gi_crit:'ضربة حرجة',gi_xp:'خبرة',gi_perks:'القدرات',gi_res:'مقاوم',gi_weak:'ضعيف أمام',gi_imm:'مناعة',gi_gear:'العدّة',gi_items:'أغراض',gi_power:'القوة',gi_used:'استُخدمت',gi_ready:'جاهزة',gi_kills:'القتلى',gi_fam:'الفصيلة',gi_trait:'ميزة',gi_p2:'بنصف صحته',gi_boss:'زعيم',gi_none:'لا شيء',gi_out:'ليس في الفريق',gi_dmg:'ضرر',gi_armour:'درع',gi_type:'ضربه',gi_max:'أعلى مستوى',ba_card_t:'!معلومات',bt_c_infomob:'معلومات وحش (مثلاً !معلومات زومبي)'},
+  bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر، وإلا تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.',bt_c_join:'اكتب !دخول لتنضمّ إلى قائمة الانتظار وتظهر مرشّحًا حول الساحة. لا تقاتل حتى يضعك الستريمر في الفريق.',bt_c_jump:'تطوّع للقتال: يقفز شخصك فعلًا في الساحة ليراه الستريمر، ويظهر اسمك في قائمة المتطوعين. الستريمر يختار من بينهم.',bt_c_hide:'اطلب ألّا يختارك الستريمر الآن: يصبح شخصك شبه شفاف ويبقى في الانتظار.',bt_c_vote:'صوّت لمرشّح ليدخل الفريق، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه، ويرى الستريمر الأكثر تصويتًا.',bt_c_power:'أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.',bt_c_focus:'اختر العدو الذي تريد مواجهته حين يخرجك الستريمر، مثل: !ركز زعيم أو !ركز هيكل.',bt_c_start:'ابدأ المعركة',bt_c_pause:'إيقاف / استئناف',bt_c_next:'أخرج المقاتل التالي',bt_c_boss:'اذهب إلى موجة الزعيم',ba_eff_super:'فعّال جدًا!',ba_eff_resist:'مقاوم',ba_eff_immune:'مناعة!',ba_st_burn:'🔥 احتراق',ba_st_poison:'🧪 تسمم',ba_st_wither:'💀 ذبول',ba_stun:'💫 دائخ',ba_split:'انقسم!',ba_totem:'🗿 قام من الموت!',ba_save:'❤ نجا!',ba_phase:'المرحلة الثانية!',ba_loot:'🎁 غنيمة:',ba_boom:'💥 انفجر!',ba_mheal:'🧪 شربت جرعة!',ba_sp_sonic:'صرخة صوتية!',ba_sp_roar:'زئير!',ba_sp_charge:'هجمة!',bt_c_info:'يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. واكتب اسم لاعب بعده لترى بطاقته.',bt_c_cancel:'تراجع عن !قفز إذا غيّرت رأيك قبل أن يختارك الستريمر.',bt_c_class:'غيّر صنفك',ba_speak:'المرشحون يتحدثون (كلامهم فوق رؤوسهم)',ba_events:'أحداث الموجات (ليل، مطر، كنز…)',ba_lootopt:'غنائم بعد كل موجة',ba_resetgear:'امسح العدّة والأصناف',ba_resetq:'هل أنت متأكد؟ ستعود عدّة الجميع إلى البداية',gi_hp:'صحة',gi_atk:'هجوم',gi_def:'دفاع',gi_spd:'سرعة',gi_agi:'تفادي',gi_crit:'ضربة حرجة',gi_xp:'خبرة',gi_perks:'القدرات',gi_res:'مقاوم',gi_weak:'ضعيف أمام',gi_imm:'مناعة',gi_gear:'العدّة',gi_items:'أغراض',gi_power:'القوة',gi_used:'استُخدمت',gi_ready:'جاهزة',gi_kills:'القتلى',gi_fam:'الفصيلة',gi_trait:'ميزة',gi_p2:'بنصف صحته',gi_boss:'زعيم',gi_none:'لا شيء',gi_out:'ليس في الفريق',gi_dmg:'ضرر',gi_armour:'درع',gi_type:'ضربه',gi_max:'أعلى مستوى',ba_card_t:'!معلومات',bt_c_infomob:'',
+  ba_help_t:'شرح اللعبة والأوامر',ba_help_how:'طريقة اللعب',ba_help_all:'أوامر الشات للجميع',ba_help_mod:'للستريمر والمشرفين',ba_help_keys:'اختصارات لوحة المفاتيح',ba_add_j2:'أضف من قفزوا',ba_lobby_b:'اللوبي',ba_next2:'التالي',ba_jcount:'تبدأ المعركة بعد {s} ث',
+  ba_m_add:'➕ أضفه إلى الفريق',ba_m_rem:'➖ أخرجه من الفريق',ba_m_full:'الفريق ممتلئ',ba_gi_drag:'اسحب للتحريك',ba_gi_rs:'اسحب لتكبير البطاقة أو تصغيرها',ba_gi_rt:'أرجعها بجانب الشخصية',ba_fs:'شاشة كاملة',ba_fs_x:'الخروج من الشاشة الكاملة',ba_close:'إغلاق',
+  ba_h1:'يكتب المشاهدون !دخول فيقفون مرشّحين حول الساحة، ومن يريد القتال يكتب !قفز.',ba_h2:'أنت تختار الفريق: اضغط على اسم في بطاقة «في الانتظار» وسط الساحة، أو استعمل «أضف من قفزوا» / «أضف عشوائيًا» في الشريط السفلي، ثم «ابدأ المعركة».',ba_h3:'كل موجة: تختار من يخرج إلى منتصف الجسر ليبارز وحشًا واحدًا ضد واحد، ضربة بضربة. ومن يبارز يطلق قوته بـ !قوة حين يتوهّج القلب البني.',ba_h4:'بعد كل موجة استراحة وغنائم، والموجة الأخيرة فيها الزعيم (له مرحلة ثانية عند نصف صحته).',ba_h5:'الفوز: اهزموا الزعيم فيرتفع مستوى الخريطة. وإذا سقط الفريق كله تخسرون ويرجع المستوى.'},
  en:{g_title:'Arena Battle',g_how:'Chat joins with !join and types !jump to get picked. You pick the party; in every wave you choose who walks out for a 1v1 duel in the middle, then the boss. The one fighting fires their power with !power.',
   ba_start:'Start battle',ba_again:'New battle',ba_pause:'Pause',ba_resume:'Resume',ba_next:'Next ⚔️',ba_boss:'Go to the boss',ba_reset:'Back to lobby',ba_squad:'Squad',ba_wait:'Waiting',
   ba_add_j:'Add jumpers ⬆',ba_add_r:'Add random',ba_empty:'Empty squad',ba_hint:'Before the raid: click a waiting name to add it to the party. During the raid: click a fighter (on the map or here ⚔) to send them out for a 1v1. ⬆ = typed !jump.',
@@ -52,7 +55,10 @@ A.strings({
   ba_won_s:'Level is now {l}',ba_lost_s:'Level back to {l}',ba_mvp:'MVP',ba_kills:'kills',ba_join1:'Type {a} to join the waiting list',ba_join2:'{a} pick me · {b} not me · {c} name',ba_inq:'Waiting: {n}',ba_picked:'Squad ({n}/{m})',
   ba_fight_j:'{a} pick me · {c} name · {b} in your duel',ba_none:'Nobody joined yet',ba_st_lobby:'Lobby: {q} waiting, {s} in the squad. Pick the squad and press "Start battle".',ba_st_fight:'Wave {w}: choose who walks out (click them on the map or in the list, or "Next"). {a} alive, {m} enemies.',ba_st_duel:'{f} is fighting {m}…',ba_st_break:'Break… next wave soon.',ba_st_break_m:'Wave cleared. Press "Next".',ba_autof:'Auto fight (next fighter goes by itself)',ba_pick_t:'Who walks out to fight?',ba_dodge:'DODGE',ba_crit:'CRIT',ba_block:'BLOCK',ba_frozen:'Frozen',ba_party:'Party',
   ba_st_won:'Victory! Level is now {l}.',ba_st_lost:'Defeated. Level back to {l}.',ba_st_paused:'Paused',ba_need:'Nobody in the squad or the waiting list',ba_power_ready:'Power ready',ba_gion:'Character info card on screen',ba_gion_n:'Turn it off if you rely on the bot reply in chat. When the card shows: ✥ moves it, ⤡ makes it bigger or smaller, ↺ puts it back beside the character. All saved automatically.',ba_pwt:'Power recharge after use',ba_pwt_n:'{n} turns',
-  bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve. !skin alone goes back to Steve.',bt_c_join:'Type !join to enter the waiting list and appear as a candidate around the field. You only fight once the streamer puts you in the squad.',bt_c_jump:'Volunteer to fight: your character really jumps on the field so the streamer sees you, and your name shows in the volunteers list. The streamer picks from them.',bt_c_hide:'Ask the streamer not to pick you for now: your character turns see-through and stays waiting.',bt_c_vote:'Vote for a candidate to join the squad, e.g. !vote Mohammad. The vote count ★ shows over their head and the streamer sees who has the most.',bt_c_power:'Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.',bt_c_focus:'Choose which enemy you face when the streamer sends you out, e.g. !focus boss or !focus skeleton.',bt_c_start:'start the battle',bt_c_pause:'pause / resume',bt_c_next:'send the next fighter',bt_c_boss:'go to the boss wave',ba_eff_super:'Super effective!',ba_eff_resist:'Resisted',ba_eff_immune:'Immune!',ba_st_burn:'🔥 Burning',ba_st_poison:'🧪 Poisoned',ba_st_wither:'💀 Withering',ba_stun:'💫 Stunned',ba_split:'Split!',ba_totem:'🗿 Rose from death!',ba_save:'❤ Survived!',ba_phase:'Phase two!',ba_loot:'🎁 Loot:',ba_boom:'💥 Exploded!',ba_mheal:'🧪 Drank a potion!',ba_sp_sonic:'Sonic boom!',ba_sp_roar:'Roar!',ba_sp_charge:'Charge!',bt_c_info:'Shows your card: class, level, HP, attack, defence, abilities and gear. Add a mob or boss name, e.g. !getinfo zombie, to see its card and weaknesses.',bt_c_cancel:'Take back your !jump if you change your mind before the streamer picks you.',bt_c_class:'Change your class',ba_speak:'Candidates can speak (their chat over their head)',ba_events:'Wave events (night, rain, treasure…)',ba_lootopt:'Loot after every wave',ba_resetgear:'Reset gear and classes',ba_resetq:'Sure? Everyone’s gear goes back to the start',gi_hp:'HP',gi_atk:'ATK',gi_def:'DEF',gi_spd:'SPD',gi_agi:'Dodge',gi_crit:'Crit',gi_xp:'XP',gi_perks:'Abilities',gi_res:'Resists',gi_weak:'Weak to',gi_imm:'Immune',gi_gear:'Gear',gi_items:'Items',gi_power:'Power',gi_used:'used',gi_ready:'ready',gi_kills:'kills',gi_fam:'Family',gi_trait:'Trait',gi_p2:'At half HP',gi_boss:'Boss',gi_none:'none',gi_out:'not in the squad',gi_dmg:'DMG',gi_armour:'Armour',gi_type:'Hits with',gi_max:'max level',ba_card_t:'!getinfo',bt_c_infomob:'Enemy info (e.g. !getinfo zombie)'}
+  bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve. !skin alone goes back to Steve.',bt_c_join:'Type !join to enter the waiting list and appear as a candidate around the field. You only fight once the streamer puts you in the squad.',bt_c_jump:'Volunteer to fight: your character really jumps on the field so the streamer sees you, and your name shows in the volunteers list. The streamer picks from them.',bt_c_hide:'Ask the streamer not to pick you for now: your character turns see-through and stays waiting.',bt_c_vote:'Vote for a candidate to join the squad, e.g. !vote Mohammad. The vote count ★ shows over their head and the streamer sees who has the most.',bt_c_power:'Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.',bt_c_focus:'Choose which enemy you face when the streamer sends you out, e.g. !focus boss or !focus skeleton.',bt_c_start:'start the battle',bt_c_pause:'pause / resume',bt_c_next:'send the next fighter',bt_c_boss:'go to the boss wave',ba_eff_super:'Super effective!',ba_eff_resist:'Resisted',ba_eff_immune:'Immune!',ba_st_burn:'🔥 Burning',ba_st_poison:'🧪 Poisoned',ba_st_wither:'💀 Withering',ba_stun:'💫 Stunned',ba_split:'Split!',ba_totem:'🗿 Rose from death!',ba_save:'❤ Survived!',ba_phase:'Phase two!',ba_loot:'🎁 Loot:',ba_boom:'💥 Exploded!',ba_mheal:'🧪 Drank a potion!',ba_sp_sonic:'Sonic boom!',ba_sp_roar:'Roar!',ba_sp_charge:'Charge!',bt_c_info:'Shows your card: class, level, HP, attack, defence, abilities and gear. Add a player name to see theirs.',bt_c_cancel:'Take back your !jump if you change your mind before the streamer picks you.',bt_c_class:'Change your class',ba_speak:'Candidates can speak (their chat over their head)',ba_events:'Wave events (night, rain, treasure…)',ba_lootopt:'Loot after every wave',ba_resetgear:'Reset gear and classes',ba_resetq:'Sure? Everyone’s gear goes back to the start',gi_hp:'HP',gi_atk:'ATK',gi_def:'DEF',gi_spd:'SPD',gi_agi:'Dodge',gi_crit:'Crit',gi_xp:'XP',gi_perks:'Abilities',gi_res:'Resists',gi_weak:'Weak to',gi_imm:'Immune',gi_gear:'Gear',gi_items:'Items',gi_power:'Power',gi_used:'used',gi_ready:'ready',gi_kills:'kills',gi_fam:'Family',gi_trait:'Trait',gi_p2:'At half HP',gi_boss:'Boss',gi_none:'none',gi_out:'not in the squad',gi_dmg:'DMG',gi_armour:'Armour',gi_type:'Hits with',gi_max:'max level',ba_card_t:'!getinfo',bt_c_infomob:'',
+  ba_help_t:'How to play & commands',ba_help_how:'How to play',ba_help_all:'Chat commands for everyone',ba_help_mod:'Streamer & mods',ba_help_keys:'Keyboard shortcuts',ba_add_j2:'Add jumpers',ba_lobby_b:'Lobby',ba_next2:'Next',ba_jcount:'Battle starts in {s} s',
+  ba_m_add:'➕ Add to the squad',ba_m_rem:'➖ Remove from the squad',ba_m_full:'The squad is full',ba_gi_drag:'Drag to move',ba_gi_rs:'Drag to make the card bigger or smaller',ba_gi_rt:'Back beside the character',ba_fs:'Fullscreen',ba_fs_x:'Exit fullscreen',ba_close:'Close',
+  ba_h1:'Viewers type !join and stand around the field as candidates; whoever wants to fight types !jump.',ba_h2:'You pick the squad: click a name on the “Waiting” card in the middle of the field, or use “Add jumpers” / “Add random” in the bottom bar, then “Start battle”.',ba_h3:'Every wave you choose who walks to the middle of the bridge for a 1v1 duel with one mob, blow for blow. The fighter fires their power with !power when the brown heart glows.',ba_h4:'After each wave comes a short break and loot; the last wave holds the boss (it gets a second phase at half HP).',ba_h5:'To win: beat the boss and the map level goes up. If the whole squad falls you lose and the level drops back.'}
 });
 function T(k,o){var s=A.t(k);if(o)Object.keys(o).forEach(function(x){s=s.split('{'+x+'}').join(o[x])});return s;}
 var EN=function(){return A.lang()==='en'};
@@ -67,18 +73,21 @@ function applyCfg(){E.cfg.cardSecs=+CFG.card||0;E.cfg.autoFight=!!CFG.autoF;if(E
 function save(){if(A.obs)return;store.set({cfg:CFG,levels:E.levels,xp:E.xp,gear:E.gear,cls:E.cls});A.updateObsUrl();}
 A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&bs='+CFG.boss+'&av='+(CFG.av?1:0)+'&af='+(CFG.autoF?1:0)+'&wc='+(+CFG.card||0)+(CFG.giOn===false?'&gi=0':'')+(CFG.giX!=null&&CFG.giY!=null?'&gx='+(+CFG.giX).toFixed(3)+'&gy='+(+CFG.giY).toFixed(3):'')+(CFG.giW?'&gw='+(+CFG.giW).toFixed(3):'')+(CFG.giS&&CFG.giS!==1?'&gs='+(+CFG.giS).toFixed(2):'');});
 var P=E.pub(); /* the state both sides draw */
+/* Nov 6: every publish from the control page carries where the host put the !معلومات card, so the OBS overlay follows live */
+if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;}return _pub.apply(this,arguments);};}
 
 /* ---------- engine loop (control, or overlay alone) ---------- */
 var lastT=performance.now(),pubAt=0,joinEnd=0;
 function engine(){return A.runsEngine();}
 setInterval(function(){var now=performance.now(),dt=(now-lastT)/1000;lastT=now;if(!engine())return;
-  var ph=E.phase;E.step(dt);if(E.phase!==ph&&(E.phase==='won'||E.phase==='lost'||E.phase==='break'))save();
+  var ph=E.phase;if(giHold&&E.info)E.info.until=Math.max(E.info.until||0,(E.ct||0)+1.5);E.step(dt);if(E.phase!==ph&&(E.phase==='won'||E.phase==='lost'||E.phase==='break'))save();
   if(E.phase!==ph&&(E.phase==='won'||E.phase==='lost')){var sq=E.squad.map(function(u){return [u,(E.waiting[u]||{}).name||u]});A.roundEnd({players:sq,winners:E.phase==='won'?sq:[]});}
   P=E.pub();if(now-pubAt>120){pubAt=now;A.publish(P);}
   if(E.phase==='lobby'&&joinEnd&&Date.now()>=joinEnd){joinEnd=0;startBattle();}
 },33);
-A.onMirror(function(s){if(s&&s.f)P=s;});
-if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(el&&!el.hidden&&$('stage').contains(ev.target))closeInfo();},true);
+A.onMirror(function(s){if(s&&s.f){P=s;if(s.gp&&A.obs){CFG.giX=s.gp[0];CFG.giY=s.gp[1];CFG.giS=s.gp[2]||1;}}});
+/* Nov 6 (Mohammad): a click anywhere outside the !معلومات card closes it (inside it you move / resize it) */
+if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(!el||el.hidden||el.contains(ev.target))return;var t=ev.target;if(t.closest&&t.closest('#side,.ba-help,.ba-cmenu'))return;closeInfo();},true);
 A.allowSolo();
 function startBattle(){applyCfg();if(!E.start()){status(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);}
 function pauseT(){if(!E.inRaid())return;E.paused=!E.paused;P=E.pub();A.publish(P);hud(true);}
@@ -90,9 +99,11 @@ A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);
   if(c.k==='pause'||c.k==='cancel'){E.cancel(m.user);hudSoon();return;}
   if(BT.MODK[c.k])return;
   if(c.k==='join')E.join(m.user,m.name,m.color);else if(c.k==='leave')E.leave(m.user);else if(c.k==='jump')E.jump(m.user,m.name,m.color);else if(c.k==='hide')E.hide(m.user);
-  else if(c.k==='vote')E.vote(m.user,c.arg);else if(c.k==='power')E.power(m.user);else if(c.k==='focus')E.focus(m.user,c.arg);else if(c.k==='info'){if(!(CFG.bot&&BT.bot.ready()&&BT.bot.say(infoText(m.user,c.arg))))E.askInfo(m.user,c.arg,m.name,m.color);}
+  else if(c.k==='vote')E.vote(m.user,c.arg);else if(c.k==='power')E.power(m.user);else if(c.k==='focus')E.focus(m.user,c.arg);else if(c.k==='info'){if(c.arg&&!playerArg(c.arg)){hudSoon();return;} /* Nov 6 (Mohammad): no more enemy cards — «!معلومات زومبي» does nothing; only your own card or a player's */if(!(CFG.bot&&BT.bot.ready()&&BT.bot.say(infoText(m.user,c.arg))))E.askInfo(m.user,c.arg,m.name,m.color);}
   hudSoon();});
 /* the streamer sends one fighter into the middle (click on the map, the list, or "التالي") */
+/* !معلومات <name>: only a player who joined (enemy / boss names are ignored since Nov 6) */
+function playerArg(arg){var a=String(arg||'').trim().replace(/^@/,'');if(!a)return true;var n=BT.norm(a);return E.order.some(function(u){var w=E.waiting[u];return u===a.toLowerCase()||BT.norm(u)===n||(w&&BT.norm(w.name)===n);});}
 /* !معلومات as one chat line, for the bot path (only used once a bot account is linked) */
 function infoText(u,arg){var g=null;try{E.askInfo(u,arg,'','');g=E.infoQ.length?E.infoQ.pop():(E.info&&E.info.u===u?E.info:null);if(g===E.info)E.info=null;}catch(x){}
   if(!g)return '';if(g.t==='m'){var S=g.boss?BTR.BOSSES[g.kind]:BTR.MOBS[g.kind];return (S?(EN()?S.en:S.ar):g.kind)+' · LV '+g.lv+' · ❤️ '+g.hp+'/'+g.max+' · 🗡️ '+g.dmg+' · 🛡️ '+g.def+'%';}
@@ -279,8 +290,20 @@ function hitMob(ev){var r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.
   (P.m||[]).forEach(function(m){var v=V['m'+m[0]];if(!v)return;var p=iso.p(v.x,v.y,0),top=iso.p(v.x,v.y,v.h||2.2);var cx=p[0],cy=(p[1]+top[1])/2,hw=Math.max(18,iso.tw*.6*(m[8]||1)),hh=Math.max(24,(p[1]-top[1])/2+12);
     if(Math.abs(mx-cx)<hw&&Math.abs(my-cy)<hh){var d=Math.abs(mx-cx)+Math.abs(my-cy);if(d<bd){bd=d;best=m[0];}}});return best;}
 /* Mohammad #4: a click on a character opens a small menu — «هجوم» (send them to duel) or «معلومات الشخصية»; the streamer chooses */
+if(!A.obs){var lcEl=$('baLobbyCard');if(lcEl)lcEl.addEventListener('click',function(e){var li=e.target.closest&&e.target.closest('li[data-u]');if(!li||E.phase!=='lobby')return;var u=li.getAttribute('data-u');
+  if(li.getAttribute('data-a')==='rem')E.unpick(u);else if(!E.pick(u)){A.toast&&A.toast(T('ba_m_full'));return;}P=E.pub();A.publish(P);hud(true);});}
+/* Nov 6: in the lobby a click on a candidate on the field puts them in the squad (or takes them out) — the lists live in ⚙ now */
+function lobbyMenu(u,ev){var w=E.waiting[u],st=$('stage'),r0=st.getBoundingClientRect();var m=document.createElement('div');m.id='baCMenu';m.className='ba-cmenu';
+  var hd=document.createElement('div');hd.className='cm-h';hd.appendChild(BT.name(w.name,w.color));m.appendChild(hd);
+  function btn(txt,ok,fn,main){var b=document.createElement('button');b.type='button';b.className='btn btn-sm '+(main&&ok?'btn-main':'btn-ghost');b.textContent=txt;b.disabled=!ok;b.addEventListener('click',function(e){e.stopPropagation();closeCMenu();fn();});m.appendChild(b);}
+  var inSq=E.squad.indexOf(u)>=0,full=E.squad.length>=E.cfg.squadMax;
+  if(inSq)btn(T('ba_m_rem'),true,function(){E.unpick(u);P=E.pub();A.publish(P);hud(true);});
+  else btn(T('ba_m_add'),!full,function(){E.pick(u);P=E.pub();A.publish(P);hud(true);},true);
+  btn('ℹ '+(EN()?'Character info':'معلومات الشخصية'),true,function(){E.closeInfo();E.askInfo(u,'',w.name,w.color);P=E.pub();A.publish(P);hud(true);});
+  if(!inSq&&full){var n=document.createElement('small');n.textContent=T('ba_m_full');m.appendChild(n);}
+  st.appendChild(m);var x=ev.clientX-r0.left+10,y=ev.clientY-r0.top-10;var mw=m.offsetWidth,mh=m.offsetHeight;x=Math.max(6,Math.min(r0.width-mw-6,x));y=Math.max(6,Math.min(r0.height-mh-6,y));m.style.left=x+'px';m.style.top=y+'px';}
 function closeCMenu(){var m=$('baCMenu');if(m)m.remove();}
-function openCMenu(u,ev){closeCMenu();var f=E.fOf(u);if(!f)return;var st=$('stage'),r0=st.getBoundingClientRect();var m=document.createElement('div');m.id='baCMenu';m.className='ba-cmenu';
+function openCMenu(u,ev){closeCMenu();var f=E.fOf(u);if(E.phase==='lobby'&&E.waiting[u]){lobbyMenu(u,ev);return;}if(!f)return;var st=$('stage'),r0=st.getBoundingClientRect();var m=document.createElement('div');m.id='baCMenu';m.className='ba-cmenu';
   var hd=document.createElement('div');hd.className='cm-h';hd.appendChild(BT.name(f.name,f.color));m.appendChild(hd);
   function btn(txt,ok,fn){var b=document.createElement('button');b.type='button';b.className='btn btn-sm '+(ok?'btn-main':'btn-ghost');b.textContent=txt;b.disabled=!ok;b.addEventListener('click',function(e){e.stopPropagation();closeCMenu();fn();});m.appendChild(b);}
   var canAtk=E.phase==='pick'&&!E.paused&&f.alive;
@@ -290,8 +313,8 @@ function openCMenu(u,ev){closeCMenu();var f=E.fOf(u);if(!f)return;var st=$('stag
   st.appendChild(m);var x=ev.clientX-r0.left+10,y=ev.clientY-r0.top-10;var mw=m.offsetWidth,mh=m.offsetHeight;x=Math.max(6,Math.min(r0.width-mw-6,x));y=Math.max(6,Math.min(r0.height-mh-6,y));m.style.left=x+'px';m.style.top=y+'px';}
 if(!A.obs){document.addEventListener('pointerdown',function(ev){var m=$('baCMenu');if(m&&!m.contains(ev.target))closeCMenu();},true);
   cv.addEventListener('click',function(ev){if(document.body.classList.contains('lay-editing'))return;var u=hitTest(ev);if(u){openCMenu(u,ev);return;}
-    /* click an enemy: its bestiary card (Kukoro) */var mid=hitMob(ev);if(mid&&E.enemyInfo(mid)){P=E.pub();A.publish(P);hud(true);}});
-  cv.addEventListener('mousemove',function(ev){var u=E.inRaid()||E.phase==='lobby'?hitTest(ev):null;hoverU=u||'';cv.style.cursor=u||(E.inRaid()&&hitMob(ev))?'pointer':'';});}
+    /* Nov 6 (Mohammad): enemy cards removed — a click on a mob does nothing */});
+  cv.addEventListener('mousemove',function(ev){var u=E.inRaid()||E.phase==='lobby'?hitTest(ev):null;hoverU=u||'';cv.style.cursor=u?'pointer':'';});}
 
 
 /* ---------- !معلومات / !getinfo card: big and clear on stream, next to the character (Kukoro shows the same sheet) ---------- */
@@ -353,7 +376,7 @@ var giKey='';
 function closeInfo(){if(engine()){E.closeInfo();P=E.pub();A.publish(P);}var el=$('baInfo');if(el){el.hidden=true;}giKey='';}
 function renderInfo(){var el=$('baInfo');if(!el)return;var g=P.gi;if(!g){if(giKey){el.hidden=true;giKey='';}return;}
   if(CFG.giOn===false){if(!el.hidden){el.hidden=true;giKey='';}return;} /* «كرت المعلومات على الشاشة» off: rely on the bot's reply in chat */
-  var k=JSON.stringify([g.key,g.hp,g.max,g.pwUsed,g.kills,g.phase2,EN(),CFG.av]);if(!A.obs&&giEditing()){return;}if(k!==giKey){var was=!el.hidden&&giKey;giKey=k;A.clear(el);var cd=buildCard(g);el.appendChild(cd);lastCard=cd;el.hidden=false;el.className='ba-info'+(g.t==='m'?' mob':'')+(was?' no-anim':'');}
+  var k=JSON.stringify([g.key,g.hp,g.max,g.pwUsed,g.kills,g.phase2,EN(),CFG.av]);if(!A.obs&&giEditing()){return;}if(k!==giKey){var was=!el.hidden&&giKey;giKey=k;A.clear(el);var cd=buildCard(g);el.appendChild(cd);lastCard=cd;el.hidden=false;el.className='ba-info'+(g.t==='m'?' mob':'')+(was?' no-anim':'');giTools(el);}
   placeInfo();}
 function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0,gap=0;el.style.transform='';el.style.width='';el.style.fontSize='';var g=P.gi,v=g.id?V[(g.t==='p'?'f':'m')+g.id]:null,sw=STG.clientWidth,sh=STG.clientHeight,cw=el.offsetWidth,ch=el.offsetHeight,x,y;
   if(v&&v.x!=null){var p=iso.p(v.x,v.y,(v.h||2)*.6);var r1=cv.getBoundingClientRect(),r0=STG.getBoundingClientRect();px=p[0]+(r1.left-r0.left);var py=p[1]+(r1.top-r0.top);gap=Math.max(24,iso.tw*.9);
@@ -366,6 +389,29 @@ function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0
 /* Mohammad Nov 4 (2nd pass): no buttons on the live card. In «تعديل الشكل» a fixed copy of the card appears (it does not close):
    drag it to move it, drag its corner to make it bigger/smaller, ↺ puts it back beside the character. Saved with the settings. */
 var lastCard=null;
+/* Nov 6 (Mohammad): the live card is a little window for the host — drag it by its top (picture + name), drag the ◢ corner to
+   make it bigger / smaller, ↺ puts it back beside the character, a click outside closes it. The place and size are saved and go
+   to the OBS overlay (live, and in the OBS link). While the pointer is on the card it doesn't time out. */
+var giHold=false,giDrag=null;
+function giTools(el){if(A.obs)return;var rs=document.createElement('div');rs.className='gi-rs';rs.title=T('ba_gi_rs');rs.setAttribute('aria-hidden','true');el.appendChild(rs);
+  var rt=document.createElement('button');rt.type='button';rt.className='gi-rt';rt.textContent='↺';rt.title=T('ba_gi_rt');rt.setAttribute('aria-label',T('ba_gi_rt'));rt.hidden=CFG.giX==null&&(CFG.giS||1)===1;el.appendChild(rt);
+  var hd=el.querySelector('.gi-hd');if(hd)hd.title=T('ba_gi_drag');}
+if(!A.obs){(function(){var el=$('baInfo');if(!el)return;
+  el.addEventListener('pointerenter',function(){giHold=true;});el.addEventListener('pointerleave',function(){if(!giDrag)giHold=false;});
+  el.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.gi-rt');if(!b)return;e.stopPropagation();CFG.giX=null;CFG.giY=null;CFG.giW=0;CFG.giS=1;b.hidden=true;placeInfo();save();});
+  el.addEventListener('pointerdown',function(e){if(e.button>0||giEditing())return;var t=e.target;if(t.closest('.gi-x,.gi-rt'))return;var rs=t.closest('.gi-rs'),hd=t.closest('.gi-hd,.gi-cap');if(!rs&&!hd)return;
+    e.preventDefault();e.stopPropagation();var r=el.getBoundingClientRect(),r0=STG.getBoundingClientRect();
+    giDrag={rs:!!rs,x:e.clientX,y:e.clientY,l:r.left-r0.left,t:r.top-r0.top,w:r.width,gs:CFG.giS||1,sw:r0.width,sh:r0.height};giHold=true;el.classList.add('gi-drag');
+    if(CFG.giX==null||CFG.giY==null){CFG.giX=giDrag.l/giDrag.sw;CFG.giY=giDrag.t/giDrag.sh;}
+    try{el.setPointerCapture(e.pointerId)}catch(_){}});
+  el.addEventListener('pointermove',function(e){var d=giDrag;if(!d)return;var dx=e.clientX-d.x,dy=e.clientY-d.y;
+    if(d.rs){var k=(dx+dy)/2;CFG.giW=0;CFG.giS=Math.max(.6,Math.min(1.8,d.gs*(1+k/Math.max(120,d.w))));}
+    else{CFG.giX=(d.l+dx)/d.sw;CFG.giY=(d.t+dy)/d.sh;}
+    placeInfo();var rt=el.querySelector('.gi-rt');if(rt)rt.hidden=false;});
+  function up(e){if(!giDrag)return;giDrag=null;el.classList.remove('gi-drag');
+    /* keep the saved place inside the stage */var sw=STG.clientWidth,sh=STG.clientHeight;CFG.giX=Math.max(0,Math.min(1,el.offsetLeft/Math.max(1,sw)));CFG.giY=Math.max(0,Math.min(1,el.offsetTop/Math.max(1,sh)));
+    giHold=el.matches(':hover');save();P.gp=[CFG.giX,CFG.giY,CFG.giS];A.publish(P);}
+  el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);})();}
 function giEditing(){return STG.classList.contains('lay-editing')||document.body.classList.contains('lay-editing');}
 function giGhost(){var gh=$('baInfoEd');if(gh)return gh;gh=document.createElement('div');gh.id='baInfoEd';gh.className='ba-info ba-info-ed';gh.hidden=true;STG.appendChild(gh);
   var body=document.createElement('div');body.className='gie-body';gh.appendChild(body);
@@ -398,12 +444,17 @@ function headEl(u,col,name){var s=document.createElement('span');s.className='bt
   if(url){var im=document.createElement('img');im.src=url;im.alt='';im.referrerPolicy='no-referrer';s.appendChild(im);}
   else{var lk=BT.lookOf(u,col);var c=document.createElement('canvas');c.width=8;c.height=8;c.getContext('2d').drawImage(MC.face('player',lk.skin,lk.hair,lk.style),0,0);s.appendChild(c);}return s;}
 function bar(cls,v,col){var b=document.createElement('span');b.className='ba-bar '+cls;var i=document.createElement('i');i.style.width=Math.round(Math.max(0,Math.min(1,v))*100)+'%';if(col)i.style.background=col;b.appendChild(i);return b;}
+function jcSecs(){if(P.ph!=='lobby')return 0;if(engine())return joinEnd?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;return +P.jc||0;}
+function jcSync(){var lb=$('baLobby');if(!lb)return;var jc=lb.querySelector('.ba-jc'),js=jcSecs();
+  if(js>0){if(!jc){jc=document.createElement('div');jc.className='ba-jc';lb.appendChild(jc);}var t='⏳ '+T('ba_jcount',{s:js});if(jc.textContent!==t)jc.textContent=t;}else if(jc)jc.remove();}
+setInterval(jcSync,250);
 function hudSoon(){setTimeout(function(){hud(true)},30);}
 function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* waves bar */
   var wt=$('baWaveT');wt.textContent=ph==='lobby'?T('ba_lobby_t'):P.ws>0?T('ba_wave',{w:Math.max(1,P.w),n:P.ws}):T('ba_wave_inf',{w:Math.max(1,P.w)});
   $('baMapT').textContent=T('ba_lvl',{m:T('map_'+(P.map||CFG.map)),l:P.lv||1});
   var wb=$('baWbar'),n=P.ws>0?P.ws:Math.max(5,Math.ceil((P.w||1)/5)*5),key=n+':'+P.w+':'+ph+':'+(P.rooms||[]).join(',');var live=ph==='pick'||ph==='duel';if(wb._k!==key){wb._k=key;A.clear(wb);for(var i=1;i<=n;i++){var s=document.createElement('span');var boss=P.ws>0?i===n:i%5===0;s.className='ba-ws'+(boss?' boss':'')+(i<P.w||(i===P.w&&(ph==='break'||ph==='won'))?' done':'')+(i===P.w&&live?' now':'');var evk=(P.rooms||[])[i-1];s.textContent=boss?'💀':(evk&&BTR.EVENTS[evk]?BTR.EVENTS[evk].ic:'');if(evk&&!boss)s.classList.add('ev');wb.appendChild(s);}}
+  $('baWaves').classList.toggle('off',ph==='lobby'); /* Nov 6: the waves bar shows only once the battle runs */
   /* boss bar */
   var bm=(P.m||[]).find(function(m){return m[7]});var bb=$('baBoss');bb.classList.toggle('off',!bm);
   if(bm){var bk=bm[1].slice(5);$('baBname').textContent=T('boss_'+bk);$('baBhp').style.width=Math.round(bm[4]/bm[5]*100)+'%';$('baBhpT').textContent=bm[4]+' / '+bm[5];}
@@ -424,13 +475,20 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
     if(x.dead){r.appendChild(document.createTextNode('💀 '));r.appendChild(BT.name(x.dead,x.dc));}else{r.appendChild(BT.name(x.by||'?',x.bc));r.appendChild(document.createTextNode(' ⚔ '+(x.boss?'👑 ':'')));var mb=document.createElement('bdi');mb.textContent=mobName(x.mk);r.appendChild(mb);}fd.appendChild(r);});}
   fd.classList.toggle('off',!(P.feed||[]).length);
   /* lobby / join box */
-  var lb=$('baLobby');var lk=JSON.stringify([ph==='lobby'?'l':'r',P.q,P.nq,EN_]);if(lb._k!==lk){lb._k=lk;A.clear(lb);
+  var lb=$('baLobby');var lk=JSON.stringify([ph==='lobby'?'l':'r',P.q,P.nq,P.sq,EN_]);if(lb._k!==lk){lb._k=lk;A.clear(lb);
     var l1=document.createElement('div');l1.className='bt-join-l';
     if(ph==='lobby'){BT.fill(l1,T('ba_join1',{a:'\u0001'}),[BT.cmdEl(EN_?'!join':'!دخول')]);lb.appendChild(l1);var l2=document.createElement('div');l2.className='bt-join-s';
       var p2=T('ba_join2',{a:'\u0001',b:'\u0002',c:'\u0003'}).split(/([\u0001\u0002\u0003])/);p2.forEach(function(x){if(x==='\u0001')l2.appendChild(BT.cmdEl(EN_?'!jump':'!قفز'));else if(x==='\u0002')l2.appendChild(BT.cmdEl(EN_?'!hide':'!اختبي'));else if(x==='\u0003')l2.appendChild(BT.cmdEl(EN_?'!vote':'!صوت'));else if(x)l2.appendChild(document.createTextNode(x));});lb.appendChild(l2);
-      var lc=$('baLobbyCard');A.clear(lc);var qh=document.createElement('div');qh.className='ba-qh';qh.textContent=T('ba_inq',{n:(P.q||[]).length});lc.appendChild(qh);var qu=document.createElement('ul');qu.className='ba-ql';(P.q||[]).slice(0,30).forEach(function(q){var li=document.createElement('li');if(q[3])li.className='jump';if(q[4])li.className='hide';li.appendChild(BT.name(q[1],q[2]));if(q[3]){var j=document.createElement('b');j.textContent='⬆';li.appendChild(j);}if(q[5]){var v=document.createElement('i');v.textContent='★'+q[5];li.appendChild(v);}qu.appendChild(li);});if(!(P.q||[]).length){var e0=document.createElement('p');e0.className='ba-empty';e0.textContent=T('ba_none');lc.appendChild(e0);}lc.appendChild(qu);lb.classList.remove('slim');}
+      var lc=$('baLobbyCard');A.clear(lc);
+      /* Nov 6: the lobby card is the host's picker — click a waiting name to put it in the squad, click a squad name to take it out (control page) */
+      if((P.sq||[]).length){var sh=document.createElement('div');sh.className='ba-qh ba-sqh2';sh.textContent=T('ba_picked',{n:P.sq.length,m:A.obs?P.sq.length:E.cfg.squadMax});lc.appendChild(sh);var su=document.createElement('ul');su.className='ba-ql ba-sq2';
+        P.sq.forEach(function(s){var li=document.createElement('li');li.setAttribute('data-u',s[0]);li.setAttribute('data-a','rem');if(!A.obs)li.title=T('ba_m_rem');li.appendChild(BT.name(s[1],s[2]));if(!A.obs){var x=document.createElement('span');x.className='lq-x';x.textContent='✕';li.appendChild(x);}su.appendChild(li);});lc.appendChild(su);}
+      var qh=document.createElement('div');qh.className='ba-qh';qh.textContent=T('ba_inq',{n:(P.q||[]).length});lc.appendChild(qh);var qu=document.createElement('ul');qu.className='ba-ql';(P.q||[]).slice(0,30).forEach(function(q){var li=document.createElement('li');li.setAttribute('data-u',q[0]);li.setAttribute('data-a','add');if(!A.obs)li.title=T('ba_m_add');if(q[3])li.className='jump';if(q[4])li.className='hide';li.appendChild(BT.name(q[1],q[2]));if(q[3]){var j=document.createElement('b');j.textContent='⬆';li.appendChild(j);}if(q[5]){var v=document.createElement('i');v.textContent='★'+q[5];li.appendChild(v);}qu.appendChild(li);});if(!(P.q||[]).length){var e0=document.createElement('p');e0.className='ba-empty';e0.textContent=T('ba_none');lc.appendChild(e0);}lc.appendChild(qu);lb.classList.remove('slim');}
     else{var p3=T('ba_fight_j',{a:'\u0001',b:'\u0002',c:'\u0003'}).split(/([\u0001\u0002\u0003])/);p3.forEach(function(x){if(x==='\u0001')l1.appendChild(BT.cmdEl(EN_?'!jump':'!قفز'));else if(x==='\u0002')l1.appendChild(BT.cmdEl(EN_?'!power':'!قوة'));else if(x==='\u0003')l1.appendChild(BT.cmdEl(EN_?'!vote':'!صوت'));else if(x)l1.appendChild(document.createTextNode(x));});lb.appendChild(l1);lb.classList.add('slim');}}
-  $('baLobbyCard').hidden=!(ph==='lobby'&&((P.q||[]).length||!(P.sq||[]).length));
+  $('baLobbyCard').hidden=!(ph==='lobby'&&((P.q||[]).length||(P.sq||[]).length)); /* Nov 6: no empty «0 waiting» card on an idle screen */
+  lb.classList.toggle('off',ph==='break'||ph==='won'||ph==='lost'||!!P.wc); /* Nov 6: no join line over the wave screen, the break or the end card */
+  /* the join timer (⚙ «وقت الدخول»): a countdown in the join box while it runs */
+  jcSync();
   /* end card */
   var end=$('baEnd');if(ph==='won'||ph==='lost'){var ek=ph+P.lv+fs.length;if(end._k!==ek){end._k=ek;A.clear(end);var h3=document.createElement('h3');h3.textContent=T(ph==='won'?'ba_won':'ba_lost');end.appendChild(h3);var sub=document.createElement('p');sub.textContent=T(ph==='won'?'ba_won_s':'ba_lost_s',{l:P.lv});end.appendChild(sub);
       var best=fs.slice().sort(function(a,b){return b[11]-a[11]})[0];if(best){var mv=document.createElement('div');mv.className='ba-mvp';mv.appendChild(document.createTextNode('👑 '+T('ba_mvp')+': '));mv.appendChild(headEl(best[1],best[3],best[2]));mv.appendChild(BT.name(best[2],best[3]));mv.appendChild(document.createTextNode(' · ☠'+best[11]));end.appendChild(mv);}
@@ -482,25 +540,92 @@ if(!A.obs){
 }
 if(window.LammaAvatars&&LammaAvatars.onChange)LammaAvatars.onChange(function(){hud(true);});
 
-var PANEL=BT.panel({key:'arena',root:$('gs'),stage:$('stage'),onPause:pauseT,isPaused:function(){return !!E.paused},canPause:function(){return E.inRaid()},onNext:function(){var b=$('baNext');if(b&&!b.disabled)b.click();},
-  speak:{get:function(){return !!CFG.speak},set:function(v){CFG.speak=v;var e=$('baSpeak');if(e)e.checked=v;applyCfg();save();hud(true);}},
-  cmds:[['!دخول','!join','انضم','join','اكتب !دخول لتنضمّ إلى قائمة الانتظار وتظهر مرشّحًا حول الساحة. لا تقاتل حتى يضعك الستريمر في الفريق.','Type !join to enter the waiting list and appear as a candidate around the field. You only fight once the streamer puts you in the squad.'],['!قفز','!jump','تطوّع للقتال','volunteer','تطوّع للقتال: يقفز شخصك فعلًا في الساحة ليراه الستريمر، ويظهر اسمك في قائمة المتطوعين. الستريمر يختار من بينهم.','Volunteer to fight: your character really jumps on the field so the streamer sees you, and your name shows in the volunteers list. The streamer picks from them.'],['!اختبي','!hide','لا تخترني','don’t pick me','اطلب ألّا يختارك الستريمر الآن: يصبح شخصك شبه شفاف ويبقى في الانتظار.','Ask the streamer not to pick you for now: your character turns see-through and stays waiting.'],['!الغي','!stop','تراجع عن القفز','take back !jump','تراجع عن !قفز إذا غيّرت رأيك قبل أن يختارك الستريمر.','Take back your !jump if you change your mind before the streamer picks you.'],['!صوت اسم','!vote name','صوّت لأحد','vote someone','صوّت لمرشّح ليدخل الفريق، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه، ويرى الستريمر الأكثر تصويتًا.','Vote for a candidate to join the squad, e.g. !vote Mohammad. The vote count ★ shows over their head and the streamer sees who has the most.'],['!معلومات','!getinfo','بطاقتك','your card','يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. وتستطيع كتابة اسم وحش أو زعيم، مثل !معلومات زومبي، لترى بطاقته ونقاط ضعفه.','Shows your card: class, level, HP, attack, defence, abilities and gear. Add a mob or boss name, e.g. !getinfo zombie, to see its card and weaknesses.'],['!قوة','!power','أطلق قوتك','fire your power','أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.','Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.'],['!سكن اسم','!skin name','سكن ماينكرافت','your MC skin','اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر في الإعدادات، وإلا تبقى شخصيتك ستيف.','Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve.']],
-  more:['!معلومات زومبي = بطاقة الوحش. الكلام العادي من المرشحين يظهر فوق رأسهم.','!getinfo zombie = the enemy card. Candidates\u2019 normal chat shows over their heads.'],
-  short:['الستريمر يختار من يقاتل. كل مبارزة 1 ضد 1، والموجة الأخيرة فيها الزعيم.','The streamer picks who fights. Every duel is 1v1; the last wave holds the boss.'],
-  how:[['الشات يدخل بـ !دخول ويقف مرشحًا في الساحة. من يريد القتال يكتب !قفز.','اضغط على مرشح لتضعه في الفريق، واضغط على أحد أفراد الفريق لترسله إلى المبارزة في منتصف الجسر: 1 ضد 1، ضربة بضربة.','لكل لاعب صنف وقدرات وعدّة (درع وسلاح وسحر) تكبر مع المستوى ومع الغنائم بعد كل موجة. كل وحش ضعيف أمام نوع من الضرب ومقاوم لنوع آخر.','الموجة الأخيرة فيها زعيم بمرحلة ثانية عند نصف صحته. إذا ربحتموه يرتفع مستوى الخريطة.'],
-       ['Chat joins with !join and stands on the field as a candidate. Whoever wants to fight types !jump.','Click a candidate to add them to the squad; click a squad member to send them to duel in the middle of the bridge: 1v1, blow for blow.','Every player has a class, abilities and gear (armour, weapon, enchants) that grow with the level and with loot after each wave. Every mob is weak to one damage type and resists another.','The last wave holds a boss with a second phase at half HP. Win and the map level goes up.']],
-  ctrl:[['!ابدأ','!start','ابدأ المعركة (مشرف)','start the battle (mod)'],['!وقف','!pause','إيقاف / استئناف (مود)','pause / resume (mod)'],['!التالي','!next','المقاتل التالي (مشرف)','next fighter (mod)'],['!زعيم','!boss','اذهب إلى الزعيم (مود)','go to the boss (mod)'],['كبسة','click','على مرشح: للفريق · على الفريق: يبارز','candidate: to the squad · squad: duels'],['Space','Space','إيقاف / استئناف','pause / resume'],['N','N','المقاتل التالي','next fighter'],['F','F','شاشة كاملة','fullscreen']],
-  def:{x:.8,y:2,w:20.5,h:96,s:1}});
+/* ---------- Nov 6 (Mohammad): the page is the game, full screen like the wheels ----------
+   The side panel (commands / how to play / cam / buttons) is gone. Top-left: «?» = a centred popup with how the game works and
+   every chat command, and ⚙ = the settings drawer (squad & waiting lists, maps, settings, layout editor, OBS link).
+   Bottom bar: ⛶ fullscreen, the status line, and only the buttons that make sense right now. */
+var HELP={all:[['!دخول','!join','انضمّ إلى قائمة الانتظار وقف مرشّحًا حول الساحة.','Join the waiting list and stand around the field as a candidate.'],
+  ['!قفز','!jump','تطوّع للقتال: يقفز شخصك ليراك الستريمر.','Volunteer to fight: your character jumps so the streamer sees you.'],
+  ['!اختبي','!hide','لا تخترني الآن: يصبح شخصك شبه شفاف.','Not me for now: your character turns see-through.'],
+  ['!الغي','!cancel','تراجع عن !قفز قبل أن يختارك الستريمر.','Take back your !jump before the streamer picks you.'],
+  ['!صوت اسم','!vote name','صوّت لمرشّح ليدخل الفريق (★ فوق رأسه).','Vote a candidate into the squad (★ over their head).'],
+  ['!قوة','!power','أثناء مبارزتك: أطلق قوتك حين يتوهّج القلب البني.','During your duel: fire your power when the brown heart glows.'],
+  ['!معلومات','!getinfo','بطاقتك: الصنف والمستوى والصحة والعدّة. أو اكتب بعده اسم لاعب.','Your card: class, level, HP and gear. Or add a player’s name.'],
+  ['!سكن اسم','!skin name','سكن ماينكرافت الخاص بك، من مستوى يحدده الستريمر.','Your own Minecraft skin, from a level the streamer sets.'],
+  ['!خروج','!leave','اخرج من قائمة الانتظار.','Leave the waiting list.']],
+ mod:[['!ابدأ','!start','ابدأ المعركة','Start the battle'],['!وقف','!pause','إيقاف / استئناف','Pause / resume'],['!التالي','!next','المقاتل التالي','Next fighter'],['!زعيم','!boss','اذهب إلى الزعيم','Go to the boss'],['!جديد','!reset','رجوع إلى اللوبي','Back to the lobby']],
+ keys:[['Space','Space','إيقاف / استئناف','Pause / resume'],['N','N','المقاتل التالي','Next fighter'],['F','F','شاشة كاملة','Fullscreen'],['Esc','Esc','إغلاق النوافذ','Close popups']]};
+function closeHelp(){var m=$('baHelp');if(m){m.remove();var b=$('baHelpBtn');if(b){b.setAttribute('aria-expanded','false');b.focus();}}}
+function openHelp(){if(A.obs)return;if($('baHelp')){closeHelp();return;}setDrawer(false);var en=EN();
+  var ov=document.createElement('div');ov.id='baHelp';ov.className='ba-help';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-labelledby','baHelpT');ov.dir=en?'ltr':'rtl';
+  var c=document.createElement('div');c.className='bh-card';ov.appendChild(c);
+  var hd=document.createElement('div');hd.className='bh-hd';var h=document.createElement('h3');h.id='baHelpT';h.textContent=T('ba_help_t');hd.appendChild(h);
+  var x=document.createElement('button');x.type='button';x.className='bh-x';x.textContent='✕';x.setAttribute('aria-label',T('ba_close'));x.addEventListener('click',closeHelp);hd.appendChild(x);c.appendChild(hd);
+  var bd=document.createElement('div');bd.className='bh-body';c.appendChild(bd);
+  function sub(t){var s=document.createElement('h4');s.textContent=t;bd.appendChild(s);}
+  sub('🎮 '+T('ba_help_how'));var ol=document.createElement('ol');ol.className='bh-how';['ba_h1','ba_h2','ba_h3','ba_h4','ba_h5'].forEach(function(k){var li=document.createElement('li');li.textContent=T(k);ol.appendChild(li);});bd.appendChild(ol);
+  function list(rows){var ul=document.createElement('ul');ul.className='bh-cmds';rows.forEach(function(r){var li=document.createElement('li');var k=document.createElement('span');k.className='bh-k';
+    (en?[r[1],r[0]]:[r[0],r[1]]).forEach(function(w,i){if(i&&w===r[0]&&r[0]===r[1])return;var ch=document.createElement('bdi');ch.className='bh-chip';ch.dir=/[\u0600-\u06ff]/.test(w)?'rtl':'ltr';ch.textContent=w;k.appendChild(ch);});
+    li.appendChild(k);var d=document.createElement('span');d.className='bh-d';d.textContent=en?r[3]:r[2];li.appendChild(d);ul.appendChild(li);});bd.appendChild(ul);}
+  sub('💬 '+T('ba_help_all'));list(HELP.all);sub('🛡 '+T('ba_help_mod'));list(HELP.mod);sub('⌨️ '+T('ba_help_keys'));list(HELP.keys);
+  ov.addEventListener('pointerdown',function(e){if(e.target===ov)closeHelp();});
+  document.body.appendChild(ov);var b=$('baHelpBtn');if(b)b.setAttribute('aria-expanded','true');x.focus();}
+function setDrawer(on){var b=document.body,btn=$('drawerBtn');if(!btn)return;b.classList.toggle('drawer-open',!!on);btn.setAttribute('aria-expanded',String(!!on));}
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
+function toggleFs(){var de=document.documentElement;if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}var r=de.requestFullscreen||de.webkitRequestFullscreen,pr=r&&r.call(de);if(pr&&pr.catch)pr.catch(function(){});}
+if(!A.obs){
+  var hb=$('baHelpBtn');if(hb)hb.addEventListener('click',function(e){e.stopPropagation();openHelp();});
+  var db=$('drawerBtn');if(db)db.addEventListener('click',function(e){e.stopPropagation();closeHelp();setDrawer(!document.body.classList.contains('drawer-open'));});
+  var dx=$('drawerClose');if(dx)dx.addEventListener('click',function(){setDrawer(false);var d=$('drawerBtn');if(d)d.focus();});
+  /* a click on the game while the drawer is open just closes the drawer */
+  STG.addEventListener('click',function(e){if(!document.body.classList.contains('drawer-open')||giEditing())return;e.stopPropagation();e.preventDefault();setDrawer(false);},true);
+  document.addEventListener('pointerdown',function(e){if(!document.body.classList.contains('drawer-open'))return;var t=e.target;if(t.closest&&t.closest('#side,#baCorner,.ba-help,.fs-dock'))return;if(STG.contains(t))return;setDrawer(false);},true);
+  /* the «تعديل الشكل» bar that layout.js puts above the stage goes to the top of the drawer */
+  (function(){var wrap=document.querySelector('.stage-wrap'),side=$('side'),head=side&&side.querySelector('.drawer-head');
+    function grab(){var bar=wrap&&wrap.querySelector(':scope>.lay-bar');if(!bar||!side)return false;side.insertBefore(bar,head?head.nextSibling:side.firstChild);return true;}
+    if(!grab()&&wrap&&window.MutationObserver){var mo=new MutationObserver(function(){if(grab())mo.disconnect();});mo.observe(wrap,{childList:true});setTimeout(function(){mo.disconnect();},10000);}
+})();
+  /* header height → the stage sits between the header and the bottom bar */
+  (function(){var top=document.querySelector('header.top');function hdr(){if(top)document.documentElement.style.setProperty('--hdr',top.offsetHeight+'px');}hdr();window.addEventListener('resize',hdr);if(window.ResizeObserver&&top)new ResizeObserver(hdr).observe(top);})();
+  /* ⛶ fullscreen of the whole page; in real fullscreen the header and bar fade after 3 s without movement */
+  (function(){var fb=$('dockFs'),de=document.documentElement,b=document.body,idleT=null;if(!fb)return;if(!(de.requestFullscreen||de.webkitRequestFullscreen))fb.hidden=true;
+    function lbl(){var t=fsEl()?T('ba_fs_x'):T('ba_fs');fb.title=t;fb.setAttribute('aria-label',t);fb.setAttribute('aria-pressed',String(!!fsEl()));}
+    fb.addEventListener('click',toggleFs);
+    function arm(){clearTimeout(idleT);b.classList.remove('ui-idle');if(!fsEl())return;idleT=setTimeout(function(){if(b.classList.contains('drawer-open')||$('baHelp')||!fsEl()){arm();return;}b.classList.add('ui-idle');},3000);}
+    ['pointermove','pointerdown','keydown','touchstart'].forEach(function(n){document.addEventListener(n,arm,{passive:true});});
+    function fsc(){lbl();arm();setTimeout(fitWave,80);}document.addEventListener('fullscreenchange',fsc);document.addEventListener('webkitfullscreenchange',fsc);
+    A.onLang&&A.onLang(lbl);lbl();})();
+  /* keyboard: Space pause/resume, N next fighter, F fullscreen, Esc closes */
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){if($('baHelp')){closeHelp();return;}if(document.body.classList.contains('drawer-open')){setDrawer(false);return;}if(P.gi&&!giEditing()){closeInfo();}closeCMenu();return;}
+    var tg=e.target,tn=tg&&tg.tagName;if(tn==='INPUT'||tn==='TEXTAREA'||tn==='SELECT'||(tg&&tg.isContentEditable)||e.ctrlKey||e.metaKey||e.altKey||giEditing())return;
+    var k=(e.key||'').toLowerCase();if(k===' '){if(tn==='BUTTON'||!E.inRaid())return;e.preventDefault();pauseT();}else if(k==='n'||k==='ى'||k==='ن'){var nb=$('baNext');if(nb&&!nb.disabled)nb.click();}else if(k==='f'||k==='ب'){toggleFs();}});
+  /* bottom bar: the real buttons stay in the drawer's code; these call them and show only what fits the moment */
+  [['dqGo','baGo'],['dqPause','baPause'],['dqNext','baNext'],['dqBoss','baBossBtn'],['dqLobby','baReset'],['dqAddJ','baAddJ'],['dqAddR','baAddR'],['dqEmpty','baEmpty']].forEach(function(p){var m=$(p[0]),o=$(p[1]);if(m&&o)m.addEventListener('click',function(){if(!o.disabled)o.click();dockSync();});});
+}
+function dockSync(){if(A.obs)return;var ph=E.phase,raid=E.inRaid(),end=ph==='won'||ph==='lost';
+  function set(id,show,dis,lbl,ic){var b=$(id);if(!b)return;b.hidden=!show;b.disabled=!!dis;if(lbl!=null){var l=b.querySelector('.dl');if(l&&l.textContent!==lbl)l.textContent=lbl;b.title=lbl;}if(ic!=null){var i=b.querySelector('.di');if(i)i.textContent=ic;}}
+  var hasQ=E.queue().length>0,anyJ=E.queue().some(function(u){return E.waiting[u]&&E.waiting[u].jump});
+  set('dqGo',!raid||E.paused,false,E.paused?T('ba_resume'):end?T('ba_again'):T('ba_start'),E.paused?'▶':end?'🔁':'▶');
+  set('dqPause',raid&&!E.paused,false,T('ba_pause'),'⏸');
+  set('dqNext',raid,!(ph==='pick'||ph==='break')||E.paused);
+  set('dqBoss',raid&&(ph==='pick'||ph==='break')&&!E.m.some(function(m){return m.boss}),E.paused);
+  set('dqLobby',raid||end);
+  set('dqAddJ',ph==='lobby'&&anyJ,E.squad.length>=E.cfg.squadMax);
+  set('dqAddR',ph==='lobby'&&hasQ,E.squad.length>=E.cfg.squadMax);
+  set('dqEmpty',ph==='lobby'&&E.squad.length>0);
+  var st=$('dockStatus'),src=$('baStatus');if(st&&src){var t=src.textContent.trim();if(st.textContent!==t){st.textContent=t;st.title=t;}}
+  [['baHelpBtn','ba_help_t'],['drawerBtn','bt_settings']].forEach(function(a){var b=$(a[0]);if(b){var t=T(a[1]);b.title=t;b.setAttribute('aria-label',t);}});}
+if(!A.obs)setInterval(dockSync,250);
 /* ---------- layout editor ---------- */
 BT.logo($('btLogo'));
-window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:'battle-arena',items:[
-  {id:'arena',z:1,code:'a',kind:'box',ar:'الساحة',en:'Arena',def:{x:22,y:0,w:78,h:100,s:1},minW:30,minH:30},
-  {id:'waves',z:4,code:'w',kind:'box',ar:'الموجات',en:'Waves',def:{x:35,y:1.8,w:52,h:10,s:1},minW:14,minH:5},
-  {id:'boss',z:4,code:'b',kind:'box',ar:'صحة الزعيم',en:'Boss HP',def:{x:41,y:12.8,w:40,h:7.5,s:1},minW:14,minH:5},
-  {id:'squad',z:3,code:'s',kind:'box',ar:'الفريق',en:'Squad',def:{x:23,y:2.5,w:19,h:60,s:1,v:false},minW:10,minH:18},
+/* Nov 6: new default layout (no side panel, the arena fills the screen) — a new key so it applies once */
+window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:'battle-arena2',items:[
+  {id:'arena',z:1,code:'a',kind:'box',ar:'الساحة',en:'Arena',def:{x:0,y:0,w:100,h:100,s:1},minW:30,minH:30},
+  {id:'waves',z:4,code:'w',kind:'box',ar:'الموجات',en:'Waves',def:{x:24,y:2,w:52,h:10,s:1},minW:14,minH:5},
+  {id:'boss',z:4,code:'b',kind:'box',ar:'صحة الزعيم',en:'Boss HP',def:{x:30,y:13,w:40,h:7.5,s:1},minW:14,minH:5},
+  {id:'squad',z:3,code:'s',kind:'box',ar:'الفريق',en:'Squad',def:{x:1.5,y:12,w:19,h:60,s:1,v:false},minW:10,minH:18},
   {id:'feed',z:3,code:'f',kind:'box',ar:'القتلات',en:'Kill feed',def:{x:80,y:80,w:18.5,h:17,s:1},minW:10,minH:8},
-  {id:'lobby',z:2,code:'l',kind:'box',ar:'صندوق الدخول',en:'Join box',def:{x:41,y:89.5,w:40,h:8.5,s:1},minW:12,minH:5},
-  PANEL.item
+  {id:'lobby',z:2,code:'l',kind:'box',ar:'صندوق الدخول',en:'Join box',def:{x:29,y:86.5,w:42,h:11.5,s:1},minW:12,minH:5},
 ]});
 hud(true);A.publish(P);
 A.start();

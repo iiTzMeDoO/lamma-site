@@ -1,0 +1,143 @@
+/* معركة الساحة — Nov 6 (Mohammad): the page is the game, full screen like the wheels.
+   Header on top, the 16:9 game in the middle, a slim bar at the bottom (⛶, status, the buttons that fit the moment),
+   «?» and ⚙ in the top-left corner, settings as a drawer from the left. Everything here is scoped to the arena page and off in OBS. */
+:root{--dock-h:56px}
+html:not(.obs) body.g-battle-arena{overflow:hidden;height:100vh;height:100dvh}
+html:not(.obs) body.g-battle-arena .gp-head,html:not(.obs) body.g-battle-arena footer.foot{display:none}
+html:not(.obs) body.g-battle-arena .gp{max-width:none;margin:0;padding:0}
+html:not(.obs) body.g-battle-arena .gp-grid{display:block}
+html:not(.obs) body.g-battle-arena header.top{position:fixed;top:0;left:0;right:0;z-index:62}
+
+/* the game: as big as fits between the header and the bar, always 16:9 (the same layout as OBS) */
+html:not(.obs) body.g-battle-arena .stage-wrap{position:fixed;inset:0;z-index:1;display:block;height:auto;background:var(--bg,#0c0d12)}
+html:not(.obs) body.g-battle-arena .stage-wrap>.stage{position:absolute;inset:var(--hdr,64px) 0 var(--dock-h) 0;margin:auto;
+  width:min(100vw,calc((100dvh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));height:min(calc(100dvh - var(--hdr,64px) - var(--dock-h)),calc(100vw * 9 / 16));
+  aspect-ratio:auto;max-width:none;border:0;border-radius:0;box-shadow:none}
+html:not(.obs) body.g-battle-arena .stage-wrap>.lay-bar{display:none}
+html:not(.obs) body.g-battle-arena .stage .lay-fs,html:not(.obs) body.g-battle-arena .stage .w-fs-gear{display:none!important}
+/* only what the moment needs: the waves bar from the first wave on, the join line hidden on the wave card / break / end */
+.g-battle-arena .ba-waves.off,.g-battle-arena .ba-lobby.off{opacity:0;visibility:hidden}
+html.lay-editing .g-battle-arena .ba-waves.off,.g-battle-arena .lay-editing .ba-waves.off,.g-battle-arena .lay-editing .ba-lobby.off{opacity:.45;visibility:visible}
+.g-battle-arena .ba-waves,.g-battle-arena .ba-lobby{transition:opacity .3s ease}
+.g-battle-arena .ba-jc{font-weight:800;color:#ffd23d;font-size:.95em;margin-top:.1em}
+
+/* real fullscreen (⛶): header and bar fade after 3 s without movement, back with any move */
+html:not(.obs) body.g-battle-arena header.top,html:not(.obs) body.g-battle-arena .ba-dock,html:not(.obs) body.g-battle-arena .ba-corner{transition:opacity .3s ease,transform .3s ease}
+html:not(.obs) body.g-battle-arena.ui-idle:not(.drawer-open) header.top{opacity:0;pointer-events:none;transform:translateY(-100%)}
+html:not(.obs) body.g-battle-arena.ui-idle:not(.drawer-open) .ba-dock{opacity:0;pointer-events:none;transform:translateY(100%)}
+html:not(.obs) body.g-battle-arena.ui-idle:not(.drawer-open) .ba-corner{opacity:0;pointer-events:none}
+
+/* «?» and ⚙ — small round buttons in the top-left corner of the screen */
+.ba-corner{position:fixed;z-index:63;top:calc(var(--hdr,64px) + 10px);left:12px;display:flex;gap:8px;direction:ltr}
+html.obs .ba-corner,html.obs .ba-dock,html.obs .drawer-head{display:none!important}
+.ba-cbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;padding:0;cursor:pointer;
+  border:1px solid var(--line2,rgba(154,160,208,.3));background:color-mix(in srgb,var(--card,#16171f) 88%,transparent);color:var(--txt,#f2f3fa);
+  font:inherit;font-weight:900;font-size:18px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .15s,border-color .15s,transform .1s}
+.ba-cbtn:hover{background:var(--card2,#20222c);border-color:var(--ta2,#9AA0D0)}
+.ba-cbtn:active{transform:scale(.95)}
+.ba-cbtn[aria-expanded=true]{border-color:var(--ta2,#9AA0D0);background:var(--card2,#20222c)}
+.ba-cbtn:focus-visible{outline:2px solid var(--ta2,#9AA0D0);outline-offset:2px}
+#baHelpBtn{font-family:'Cairo',var(--font,system-ui);font-size:20px}
+
+/* the settings drawer (from the left, under the ⚙) */
+html:not(.obs) body.g-battle-arena .side{position:fixed;top:var(--hdr,64px);bottom:var(--dock-h);left:0;right:auto;
+  width:min(430px,94vw);z-index:64;display:flex!important;flex-direction:column;gap:12px;padding:12px;
+  overflow-y:auto;overscroll-behavior:contain;background:var(--bg,#0c0d12);border-right:1px solid var(--line2);box-shadow:14px 0 40px -10px rgba(0,0,0,.6);
+  transform:translateX(-104%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+html:not(.obs) body.g-battle-arena.drawer-open .side{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+html:not(.obs) body.g-battle-arena .side>.card{margin:0}
+html:not(.obs) body.g-battle-arena .side .lay-bar{margin:0}
+html:not(.obs) body.g-battle-arena #baStatus{display:none}
+.g-battle-arena .drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 2px 4px}
+.g-battle-arena .drawer-head .dh-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.g-battle-arena .drawer-head .dh-t b{font-family:var(--disp);font-weight:400;font-size:1.25rem;line-height:1.2}
+.g-battle-arena .drawer-head .dh-t a{color:var(--mut);font-size:.85rem;text-decoration:none}
+.g-battle-arena .drawer-head .dh-t a:hover{color:var(--txt,#fff)}
+.g-battle-arena .drawer-x{flex:none;width:34px;height:34px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:inherit;font-size:16px;line-height:1;cursor:pointer}
+.g-battle-arena .drawer-x:hover{background:var(--card2)}
+
+/* bottom bar (wheels style): ⛶ on the right, the status in the middle, the buttons of the moment on the left */
+.ba-dock{position:fixed;left:0;right:0;bottom:0;height:var(--dock-h);z-index:61;display:flex;align-items:center;direction:rtl;gap:12px;
+  padding:0 14px;background:color-mix(in srgb,var(--bg,#0c0d12) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+html[dir=ltr] .ba-dock .dock-btn{direction:ltr}
+.ba-dock .dock-btn{flex:none;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);
+  background:var(--card);color:inherit;font:inherit;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s}
+.ba-dock .dock-btn:hover:not(:disabled){background:var(--card2)}
+.ba-dock .dock-btn:disabled{opacity:.45;cursor:not-allowed}
+.ba-dock .dock-btn:focus-visible{outline:2px solid var(--ta2,#9AA0D0);outline-offset:2px}
+.ba-dock .dock-btn .di{font-size:1.02em;line-height:1}
+.ba-dock .dock-fs{padding:0 12px;font-size:1.05rem}
+.ba-dock .dock-status{flex:1 1 0;min-width:0;text-align:center;color:var(--mut);font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ba-dock .dock-quick{flex:none;display:flex;align-items:center;gap:8px}
+.ba-dock .dock-main{background:linear-gradient(180deg,var(--ta2,#9AA0D0),var(--ta,#868CBC));color:var(--tink,#0d0d14);border-color:transparent;font-weight:800;padding:0 20px}
+.ba-dock .dock-main:hover:not(:disabled){filter:brightness(1.08)}
+.ba-dock [hidden]{display:none!important}
+@media (max-width:1100px){.ba-dock .dock-quick .dock-btn:not(.dock-main) .dl{display:none}.ba-dock .dock-quick .dock-btn{padding:0 11px}}
+@media (max-width:760px){
+  :root{--dock-h:52px}
+  .ba-dock{gap:6px;padding:0 6px;overflow-x:auto}
+  .ba-dock .dock-status{display:none}
+  .ba-dock .dock-quick{gap:5px;margin-inline-end:auto}
+  .ba-dock .dock-btn{height:36px;padding:0 10px}
+  .ba-dock .dock-main{padding:0 14px}
+  .ba-corner{top:calc(var(--hdr,64px) + 8px);left:8px;gap:6px}
+  .ba-cbtn{width:36px;height:36px;font-size:16px}
+}
+
+/* the «?» popup: how the game works + every chat command (like the screenshot he sent) */
+.ba-help{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px;background:rgba(6,7,10,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:baHf .16s ease-out}
+@keyframes baHf{from{opacity:0}to{opacity:1}}
+.ba-help .bh-card{width:min(640px,100%);max-height:min(82vh,760px);display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,#1b1c24,#121319);border:1px solid rgba(154,160,208,.28);box-shadow:0 24px 60px rgba(0,0,0,.6);color:#eef0fa;animation:baHp .2s cubic-bezier(.2,1.3,.4,1)}
+@keyframes baHp{from{transform:translateY(8px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.ba-help .bh-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 12px;border-bottom:1px solid rgba(154,160,208,.16)}
+.ba-help h3{margin:0;font-family:var(--disp,'Cairo');font-weight:800;font-size:1.35rem;color:#fff}
+.ba-help .bh-x{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(154,160,208,.3);background:rgba(255,255,255,.06);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.ba-help .bh-x:hover{background:rgba(255,255,255,.14)}
+.ba-help .bh-body{overflow-y:auto;padding:6px 18px 18px;overscroll-behavior:contain}
+.ba-help h4{margin:14px 0 8px;font-size:.92rem;font-weight:800;color:#d8b65e;letter-spacing:.01em}
+.ba-help .bh-how{margin:0;padding-inline-start:1.3em;display:flex;flex-direction:column;gap:6px;font-size:.93rem;line-height:1.6;color:#d9dbe8}
+.ba-help .bh-how li::marker{color:#9AA0D0;font-weight:800}
+.ba-help .bh-cmds{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.ba-help .bh-cmds li{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.03)}
+.ba-help .bh-cmds li:nth-child(odd){background:rgba(255,255,255,.055)}
+.ba-help .bh-k{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:5px;min-width:9.5em}
+.ba-help .bh-chip{display:inline-block;padding:2px 9px;border-radius:7px;background:rgba(154,160,208,.16);border:1px solid rgba(154,160,208,.34);color:#e4e6fb;font-weight:800;font-size:.86rem;white-space:nowrap}
+.ba-help .bh-d{flex:1 1 auto;min-width:0;color:#c9cbd9;font-size:.9rem;line-height:1.5}
+@media (max-width:520px){.ba-help{padding:10px}.ba-help .bh-cmds li{flex-direction:column;align-items:flex-start;gap:5px}.ba-help .bh-k{min-width:0}}
+
+/* the !معلومات card on the host's page: a small window — drag by its top, ◢ to resize, ↺ back beside the character */
+html:not(.obs) .g-battle-arena .ba-info{pointer-events:auto}
+html:not(.obs) .g-battle-arena .ba-info .gi-hd,html:not(.obs) .g-battle-arena .ba-info .gi-cap{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+html:not(.obs) .g-battle-arena .ba-info.gi-drag,html:not(.obs) .g-battle-arena .ba-info.gi-drag .gi-hd{cursor:grabbing}
+html:not(.obs) .g-battle-arena .ba-info.gi-drag{animation:none}
+.g-battle-arena .ba-info .gi-rs{position:absolute;right:.3em;bottom:.3em;width:1.5em;height:1.5em;z-index:3;cursor:nwse-resize;touch-action:none;border-radius:.3em;
+  background:linear-gradient(135deg,transparent 0 46%,rgba(154,160,208,.95) 47% 56%,transparent 57% 66%,rgba(154,160,208,.95) 67% 76%,transparent 77%);opacity:.75}
+.g-battle-arena .ba-info .gi-rs:hover{opacity:1}
+.g-battle-arena .ba-info .gi-rt{position:absolute;top:-.8em;inset-inline-start:1.55em;z-index:3;width:1.7em;height:1.7em;border-radius:50%;border:.1em solid #0a0810;background:#2a2c38;color:#fff;font:inherit;font-weight:900;font-size:.8em;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.g-battle-arena .ba-info .gi-rt:hover{background:#3a3d4e}
+html.obs .g-battle-arena .ba-info .gi-rs,html.obs .g-battle-arena .ba-info .gi-rt{display:none}
+/* card colours: charcoal with a periwinkle edge (no purple) */
+.g-battle-arena .ba-info .gi-in{background:linear-gradient(180deg,rgba(36,38,48,.97),rgba(17,18,24,.97));box-shadow:inset 0 0 0 .14em rgba(154,160,208,.28),inset 0 -.3em 0 rgba(0,0,0,.35),0 .6em 1.6em rgba(0,0,0,.6)}
+.g-battle-arena .ba-cmenu{background:linear-gradient(180deg,rgba(36,38,48,.98),rgba(17,18,24,.98))}
+/* kill feed: only as tall as its lines, sitting at the bottom of its spot (no empty box) */
+.g-battle-arena [data-lay=feed]>.lay-c{display:flex;flex-direction:column;justify-content:flex-end}
+.g-battle-arena .ba-feed{height:auto;max-height:100%;flex:0 0 auto}
+.g-battle-arena .lay-editing .ba-feed{height:100%}
+/* lobby card = the host's picker (control page): names are buttons, ✕ on squad names */
+.g-battle-arena .ba-lobbycard{background:rgba(16,17,23,.9);max-height:62%;overflow-y:auto}
+.g-battle-arena .ba-lobbycard .ba-qh{font-size:1.25em}
+.g-battle-arena .ba-lobbycard .ba-sq2{margin-bottom:.6em}
+.g-battle-arena .ba-sq2 li{background:rgba(216,182,94,.14);border:.06em solid rgba(216,182,94,.4);border-radius:.4em;padding:.05em .45em}
+html:not(.obs) .g-battle-arena .ba-lobbycard li[data-u]{cursor:pointer;border-radius:.4em;padding:.05em .45em;transition:background .12s}
+html:not(.obs) .g-battle-arena .ba-lobbycard .ba-ql:not(.ba-sq2) li[data-u]:hover{background:rgba(154,160,208,.2)}
+html:not(.obs) .g-battle-arena .ba-lobbycard .ba-sq2 li[data-u]:hover{background:rgba(224,74,74,.22);border-color:rgba(224,74,74,.5)}
+.g-battle-arena .ba-lobbycard .lq-x{font-size:.7em;opacity:.55;margin-inline-start:.25em}
+html:not(.obs) .g-battle-arena .ba-lobbycard{pointer-events:auto}
+/* the play buttons live in the bottom bar now — the drawer keeps the lists, maps and settings */
+html:not(.obs) body.g-battle-arena #ctrl .btn-row:has(#baGo),html:not(.obs) body.g-battle-arena #ctrl .btn-row:has(#baNext){display:none}
+html:not(.obs) body.g-battle-arena.drawer-open .ba-corner{left:calc(min(430px,94vw) + 12px)}
+@media (max-width:520px){html:not(.obs) body.g-battle-arena.drawer-open .ba-corner{opacity:0;pointer-events:none}}
+/* phones held upright: the game sits at the top under «?» ⚙ instead of floating in the middle */
+@media (max-aspect-ratio:4/5){html:not(.obs) body.g-battle-arena .stage-wrap>.stage{inset:calc(var(--hdr,64px) + 58px) 0 auto 0;margin:0 auto}}
+.g-battle-arena .ba-wave .bw-in{background:linear-gradient(180deg,rgba(36,38,48,.97),rgba(17,18,24,.97));box-shadow:inset 0 0 0 .14em rgba(154,160,208,.28),0 .8em 2em rgba(0,0,0,.6)}
