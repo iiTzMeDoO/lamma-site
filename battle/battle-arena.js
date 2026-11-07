@@ -402,7 +402,7 @@ function renderInfo(){var el=$('baInfo');if(!el)return;var g=P.gi;if(!g){if(giKe
   placeInfo();}
 function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0,gap=0;el.style.transform='';el.style.width='';el.style.fontSize='';
   var g=P.gi,v=g.id?V[(g.t==='p'?'f':'m')+g.id]:null,Ar=giArea(el),sw=Ar.w,sh=Ar.h,avH=Math.max(60,Ar.bot-Ar.top),cw=el.offsetWidth,ch=el.offsetHeight,x,y;
-  var bar=el.querySelector('.gi-wbar'),bh=bar?bar.offsetHeight+4:0; /* the window bar sits on top of the card (host page only) */
+  var bh=0; /* no bar on top of the card any more (Nov 6, 10:33 PM) */
   if(v&&v.x!=null){var p=iso.p(v.x,v.y,(v.h||2)*.6);var r1=cv.getBoundingClientRect(),r0=(el.offsetParent||STG).getBoundingClientRect();px=p[0]+(r1.left-r0.left);var py=p[1]+(r1.top-r0.top);gap=Math.max(24,iso.tw*.9);
     x=px<sw/2?px+gap:px-gap-cw;y=py-ch/2;}else{x=(sw-cw)/2;y=Ar.top+avH*.12;}
   var fit=Math.min(1,(avH*.9)/Math.max(1,ch+bh),(sw*.96)/Math.max(1,cw)),kmax=Math.min((avH)/Math.max(1,ch+bh),(sw*.98)/Math.max(1,cw));
@@ -423,14 +423,12 @@ var giHold=false,giDrag=null;
    A bar on top of it: ⠿ drag here (mouse or finger), ↺ back beside the character, ✕ close. The ◢ corner resizes it.
    It always stays inside the screen, between the header and the bottom bar (also after the window is resized), and a click
    outside it closes it. Place and size are saved, so it opens where you left it, and go to the OBS overlay. */
-function giTools(el){if(A.obs)return;var en=EN();
-  var bar=document.createElement('div');bar.className='gi-wbar';bar.title=T('ba_gi_drag');
-  var gr=document.createElement('span');gr.className='gi-grip';gr.setAttribute('aria-hidden','true');gr.textContent='⠿';bar.appendChild(gr);
-  var tt=document.createElement('span');tt.className='gi-wt';tt.textContent=(P.gi&&P.gi.t==='m')?(en?'Mob info':'معلومات الوحش'):(en?'Info':'معلومات');bar.appendChild(tt);
-  var rt=document.createElement('button');rt.type='button';rt.className='gi-wb gi-rt';rt.textContent='↺';rt.title=T('ba_gi_rt');rt.setAttribute('aria-label',T('ba_gi_rt'));bar.appendChild(rt);
-  var x=document.createElement('button');x.type='button';x.className='gi-wb gi-wx';x.textContent='✕';x.title=en?'Close':'إغلاق';x.setAttribute('aria-label',x.title);bar.appendChild(x);
-  el.insertBefore(bar,el.firstChild);
-  var rs=document.createElement('div');rs.className='gi-rs';rs.title=T('ba_gi_rs');rs.setAttribute('aria-hidden','true');el.appendChild(rs);}
+function giTools(el){if(A.obs)return;
+  /* Nov 6, 10:33 PM (Mohammad: «بدي ياه مثل قبل بس بقدر حركه براحتي بدون هاد الشريط»): the card looks exactly as before
+     (no bar on top); grab it ANYWHERE to move it. A subtle ◢ corner (or the mouse wheel over the card) makes it bigger/smaller. */
+  var rs=document.createElement('div');rs.className='gi-rs';rs.title=T('ba_gi_rs');rs.setAttribute('aria-hidden','true');el.appendChild(rs);
+  var rt=document.createElement('button');rt.type='button';rt.className='gi-rt';rt.textContent='↺';rt.title=T('ba_gi_rt');rt.setAttribute('aria-label',T('ba_gi_rt'));rt.hidden=CFG.giX==null&&(CFG.giS||1)===1;el.appendChild(rt);
+}
 /* the free area for the card, in the card's own parent coordinates: the whole stage minus the header on top and the bar at the bottom */
 function giArea(el){var op=(el&&el.offsetParent)||STG,r0=op.getBoundingClientRect(),top=0,bot=r0.height;
   if(!A.obs){var hd=document.querySelector('header.top');if(hd){var hr=hd.getBoundingClientRect();if(hr.height&&hr.bottom>r0.top)top=Math.max(top,hr.bottom-r0.top);}
@@ -439,24 +437,29 @@ function giArea(el){var op=(el&&el.offsetParent)||STG,r0=op.getBoundingClientRec
 if(!A.obs){(function(){var el=$('baInfo');if(!el)return;
   el.addEventListener('pointerenter',function(){giHold=true;});el.addEventListener('pointerleave',function(){if(!giDrag)giHold=false;});
   el.addEventListener('click',function(e){var t=e.target;
-    if(t.closest&&t.closest('.gi-wx')){e.stopPropagation();closeInfo();return;}
-    if(t.closest&&t.closest('.gi-rt')){e.stopPropagation();CFG.giX=null;CFG.giY=null;CFG.giW=0;CFG.giS=1;placeInfo();save();P.gp=[null,null,1];A.publish(P);}});
-  el.addEventListener('pointerdown',function(e){if((e.pointerType==='mouse'&&e.button!==0)||giEditing())return;var t=e.target;if(t.closest('.gi-wb,.gi-x'))return;
-    var rs=t.closest('.gi-rs'),hd=t.closest('.gi-wbar,.gi-hd,.gi-cap');if(!rs&&!hd)return;
+    if(t.closest&&t.closest('.gi-rt')){e.stopPropagation();CFG.giX=null;CFG.giY=null;CFG.giW=0;CFG.giS=1;var b=t.closest('.gi-rt');b.hidden=true;placeInfo();save();P.gp=[null,null,1];A.publish(P);}});
+  el.addEventListener('pointerdown',function(e){if((e.pointerType==='mouse'&&e.button!==0)||giEditing())return;var t=e.target;if(t.closest('.gi-x,.gi-rt'))return;
+    var rs=t.closest('.gi-rs'); /* anywhere else on the card = move it */
     e.preventDefault();e.stopPropagation();var A0=giArea(el),r=el.getBoundingClientRect();
     giDrag={rs:!!rs,id:e.pointerId,x:e.clientX,y:e.clientY,l:el.offsetLeft,t:el.offsetTop,vw:r.width,k:el._k||1,fit:el._fit||1,kmax:el._kmax||1.8,A:A0};
     giHold=true;el.classList.add('gi-drag');document.body.classList.add('gi-dragging');
-    if(!rs){CFG.giX=giDrag.l/Math.max(1,A0.w);CFG.giY=giDrag.t/Math.max(1,A0.h);}
+    /* the card is only pinned once it really moves (a plain click on it changes nothing) */
     try{el.setPointerCapture(e.pointerId)}catch(_){}});
   el.addEventListener('pointermove',function(e){var d=giDrag;if(!d||e.pointerId!==d.id)return;e.preventDefault();var dx=e.clientX-d.x,dy=e.clientY-d.y;
+    if(!d.rs&&!d.mv){if(Math.abs(dx)+Math.abs(dy)<3)return;d.mv=true;}
     if(d.rs){var want=d.k*Math.max(.3,(d.vw+(dx+dy)/2)/Math.max(1,d.vw));want=Math.min(want,d.kmax);CFG.giW=0;CFG.giS=Math.max(.6,Math.min(1.8,want/Math.max(.05,d.fit)));}
     else{CFG.giX=(d.l+dx)/Math.max(1,d.A.w);CFG.giY=(d.t+dy)/Math.max(1,d.A.h);}
     placeInfo();});
   function up(e){var d=giDrag;if(!d||(e&&e.pointerId!==d.id))return;giDrag=null;el.classList.remove('gi-drag');document.body.classList.remove('gi-dragging');
     try{el.releasePointerCapture(d.id)}catch(_){}
+    if(!d.rs&&!d.mv){giHold=el.matches(':hover');return;}
     placeInfo();var A1=giArea(el);if(CFG.giX!=null){CFG.giX=Math.max(0,Math.min(1,el.offsetLeft/Math.max(1,A1.w)));CFG.giY=Math.max(0,Math.min(1,el.offsetTop/Math.max(1,A1.h)));}
-    giHold=el.matches(':hover');save();P.gp=[CFG.giX,CFG.giY,CFG.giS];A.publish(P);}
+    giHold=el.matches(':hover');var rb=el.querySelector('.gi-rt');if(rb)rb.hidden=CFG.giX==null&&(CFG.giS||1)===1;save();P.gp=[CFG.giX,CFG.giY,CFG.giS];A.publish(P);}
   el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up);
+  /* the mouse wheel over the card makes it bigger / smaller (no bar needed) */
+  var wT=null;el.addEventListener('wheel',function(e){if(giEditing()||el.hidden)return;e.preventDefault();var k=el._k||1,fit=el._fit||1,kmax=el._kmax||1.8;
+    var want=Math.min(kmax,k*(e.deltaY<0?1.08:1/1.08));CFG.giW=0;CFG.giS=Math.max(.6,Math.min(1.8,want/Math.max(.05,fit)));placeInfo();
+    var rb=el.querySelector('.gi-rt');if(rb)rb.hidden=false;clearTimeout(wT);wT=setTimeout(function(){save();P.gp=[CFG.giX,CFG.giY,CFG.giS];A.publish(P);},250);},{passive:false});
   /* a window change (resize, fullscreen, rotate) never leaves the card off-screen or under the bar */
   function re(){setTimeout(placeInfo,30);}window.addEventListener('resize',re);document.addEventListener('fullscreenchange',re);window.addEventListener('orientationchange',re);})();}
 function giEditing(){return STG.classList.contains('lay-editing')||document.body.classList.contains('lay-editing');}
@@ -602,8 +605,21 @@ var HELP={all:[['!دخول','!join','ادخل الفريق مباشرة.','Go st
   ['!خروج','!leave','اخرج من الفريق — في اللوبي فقط، لا خروج بعد بدء المعركة.','Leave the squad — lobby only, no leaving once the battle starts.']],
  mod:[['!ابدأ','!start','ابدأ المعركة','Start the battle'],['!وقف','!pause','إيقاف / استئناف','Pause / resume'],['!التالي','!next','المقاتل التالي','Next fighter'],['!زعيم','!boss','اذهب إلى الزعيم','Go to the boss'],['!جديد','!reset','رجوع إلى اللوبي','Back to the lobby']],
  keys:[['🖱 وحش','🖱 Mob','اضغط على وحش أو الزعيم في الساحة لتفتح بطاقة معلوماته (للستريمر فقط، لا أمر لها في الشات).','Click a mob or the boss on the field to open its stats card (streamer only, no chat command).'],['Space','Space','إيقاف / استئناف','Pause / resume'],['N','N','المقاتل التالي','Next fighter'],['F','F','شاشة كاملة','Fullscreen'],['Esc','Esc','إغلاق النوافذ','Close popups']]};
-function closeHelp(){var m=$('baHelp');if(m){m.remove();var b=$('baHelpBtn');if(b){b.setAttribute('aria-expanded','false');b.focus();}}}
-function openHelp(){if(A.obs)return;if($('baHelp')){closeHelp();return;}setDrawer(false);var en=EN();
+/* Nov 6, 10:33 PM (Mohammad): closing the help shrinks it and flies it into the «?» button top-left, where it disappears,
+   then «?» pulses once — so the host learns where to find it again. */
+function closeHelp(){var m=$('baHelp');if(!m||m._closing)return;m._closing=true;var b=$('baHelpBtn');if(b)b.setAttribute('aria-expanded','false');
+  var c=m.querySelector('.bh-card');function done(){if(m.parentNode)m.remove();if(b){b.classList.remove('ba-land');void b.offsetWidth;b.classList.add('ba-land');setTimeout(function(){b.classList.remove('ba-land');},1700);try{b.focus({preventScroll:true});}catch(_){}}}
+  var br=b&&b.offsetParent!==null?b.getBoundingClientRect():null;
+  if(!c||!br||!c.animate){done();return;}
+  var cr=c.getBoundingClientRect(),dx=(br.left+br.width/2)-(cr.left+cr.width/2),dy=(br.top+br.height/2)-(cr.top+cr.height/2),sc=Math.max(.02,br.width/Math.max(1,cr.width));
+  m.classList.add('bh-out');m.style.pointerEvents='none';
+  var an=c.animate([{transform:'translate(0,0) scale(1)',opacity:1,borderRadius:'16px'},
+    {transform:'translate('+(dx*.35).toFixed(1)+'px,'+(dy*.2).toFixed(1)+'px) scale(.62)',opacity:1,offset:.35},
+    {transform:'translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px) scale('+sc.toFixed(3)+')',opacity:.15,borderRadius:'50%'}],
+    {duration:620,easing:'cubic-bezier(.55,.05,.35,1)',fill:'forwards'});
+  m.animate([{backgroundColor:'rgba(6,7,10,.62)'},{backgroundColor:'rgba(6,7,10,0)'}],{duration:520,easing:'ease-out',fill:'forwards'});
+  var fin=false;function f(){if(fin)return;fin=true;done();}an.onfinish=f;setTimeout(f,900);}
+function openHelp(){if(A.obs)return;var o=$('baHelp');if(o){if(o._closing)o.remove();else{closeHelp();return;}}setDrawer(false);var en=EN();
   var ov=document.createElement('div');ov.id='baHelp';ov.className='ba-help';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-labelledby','baHelpT');ov.dir=en?'ltr':'rtl';
   var c=document.createElement('div');c.className='bh-card';ov.appendChild(c);
   var hd=document.createElement('div');hd.className='bh-hd';var h=document.createElement('h3');h.id='baHelpT';h.textContent=T('ba_help_t');hd.appendChild(h);
@@ -622,6 +638,8 @@ function fsEl(){return document.fullscreenElement||document.webkitFullscreenElem
 function toggleFs(){var de=document.documentElement;if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}var r=de.requestFullscreen||de.webkitRequestFullscreen,pr=r&&r.call(de);if(pr&&pr.catch)pr.catch(function(){});}
 if(!A.obs){
   var hb=$('baHelpBtn');if(hb)hb.addEventListener('click',function(e){e.stopPropagation();openHelp();});
+  /* Nov 6, 10:33 PM (Mohammad): the help opens by itself every time the host opens the game page (never on OBS, never for a locked visitor) */
+  setTimeout(function(){var b=$('baHelpBtn');if($('baHelp')||document.documentElement.classList.contains('ctrl-locked')||!b||b.offsetParent===null)return;openHelp();},700);
   var db=$('drawerBtn');if(db)db.addEventListener('click',function(e){e.stopPropagation();closeHelp();setDrawer(!document.body.classList.contains('drawer-open'));});
   var dx=$('drawerClose');if(dx)dx.addEventListener('click',function(){setDrawer(false);var d=$('drawerBtn');if(d)d.focus();});
   /* a click on the game while the drawer is open just closes the drawer */
