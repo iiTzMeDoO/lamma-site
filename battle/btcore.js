@@ -206,7 +206,7 @@ Arena.prototype.strike=function(att,def,mult,how,opt){opt=opt||{};var s=this,isF
   if(r.dodge){this.emit({k:'hit',a:isF?'f':'m',from:att.id,to:def.id,n:0,dodge:1,how:how||''});
     if(!isF){var cv=perkV(def,'counter',att.fam);if(cv)def.buffNext=cv;}return r;}
   /* !isF: Kukoro lastStand / totem on a deadly hit */
-  def.hp=Math.max(0,def.hp-r.n);if(!isF&&r.n>0)charge(this,def,PWC.hit);
+  var hp0=def.hp;def.hp=Math.max(0,def.hp-r.n);if(isF)att.dealt=(att.dealt||0)+(hp0-def.hp); /* Nov 7: damage dealt this game (the top-3 cards after a boss win) */if(!isF&&r.n>0)charge(this,def,PWC.hit);
   this.emit({k:'hit',a:isF?'f':'m',from:att.id,to:def.id,n:r.n,c:r.crit?1:0,how:how||type,eff:r.eff});
   if(isF&&def.trait==='anger')def.anger=Math.min(6,def.anger+1);
   if(isF&&r.n>0&&type==='melee'&&def.trait==='puff'&&!att.dot){applyDot(this,att,'poison',2+def.dmg*.3);}

@@ -99,7 +99,7 @@ A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&
 var P=E.pub(); /* the state both sides draw */
 if(/[?&]qa=1(&|$)/.test(location.search))window.__BA={E:E,sync:function(){P=E.pub();A.publish(P);hud(true);},cfg:CFG,fxk:function(){return fx.map(function(f){return f.k+':'+(f.st||'')});},slow:function(k){QS=k;}}; /* test hook (only with ?qa=1) */
 /* Nov 6: every publish from the control page carries where the host put the !معلومات card, so the OBS overlay follows live */
-if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jp=jumpList();s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;}return _pub.apply(this,arguments);};}
+if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jp=jumpList();s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;if(E.phase==='won'){topCalc();s.top=TOP;s.tb=TB;}}return _pub.apply(this,arguments);};}
 
 /* ---------- engine loop (control, or overlay alone) ---------- */
 var lastT=performance.now(),pubAt=0,joinEnd=0;
@@ -128,7 +128,8 @@ function joinNow(u,n,c){if(n!==undefined)E.join(u,n,c);var w=E.waiting[u];if(!w|
 function fillSquad(){if(E.phase!=='lobby')return;E.order.slice().forEach(function(u){if(E.squad.indexOf(u)>=0)return;var w=E.waiting[u];if(!E.pick(u)){if(w)fullNote(w.name);E.leave(u);}});}
 function kick(u){if(E.inRaid())return false;var ok=E.leave(u);if(ok){P=E.pub();A.publish(P);hud(true);}return ok;}
 A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);
-  if(!c){if(E.say(m.user,m.text))hudSoon();return;}
+  topSay(m); /* Nov 7: the top-3 players' chat sticks to their card on the win screen */
+  if(!c){if(E.phase!=='won'&&E.say(m.user,m.text))hudSoon();return;} /* Nov 7: on the win screen only the top-3 cards carry chat */
   if(BT.MODK[c.k]&&A.isCtrl(m)){if(c.k==='start'){if(E.inRaid()){if(E.paused)pauseT();}else startBattle();}else if(c.k==='pause')pauseT();else if(c.k==='next'){nextOrAgain();}else if(c.k==='boss')E.summonBoss();else if(c.k==='reset')toLobby();return;}
   /* Nov 6 (Mohammad): !الغي / !stop are gone (a viewer's !وقف / !stop / !الغي does nothing; a mod's !وقف still pauses, above) */
   if(c.k==='cancel'||BT.MODK[c.k])return;
@@ -637,6 +638,53 @@ setInterval(jcSync,250);
 function jbClear(){if(A.obs)return;var lb=$('baLobby'),lc=lb&&lb.parentNode,dk=$('baDock');if(!lc||!dk)return;if(giEditing()){lc.style.transform='';return;}
   lc.style.transform='';var r=lb.getBoundingClientRect(),d=dk.getBoundingClientRect();if(!r.height||!d.height)return;var over=r.bottom-(d.top-12);if(over>0)lc.style.transform='translateY('+(-Math.ceil(over))+'px)';}
 setInterval(jbClear,500);window.addEventListener('resize',function(){setTimeout(jbClear,40);});
+/* ---------- Nov 7 (Mohammad, 5:30 AM): after a boss win, the TOP 3 players of the game as collectible cards (concept C)
+   score = 100 × kills + damage dealt; ties → survived first, then more HP left. While the cards are up, a top-3 player's chat
+   (not !commands) sticks to their own card until the host moves on (next level / replay / lobby). OBS shows cards + bubbles. ---------- */
+var TOP=[],TOPK=-1,TB={},TBN=0;
+function topCalc(){if(A.obs)return TOP;if(TOPK===E.gameNo&&TOP.length)return TOP;TOPK=E.gameNo;TB={};
+  var L=E.f.map(function(f){var g=E.cardFor(f.u)||{};var d=Math.round(f.dealt||0),k=f.kills||0;
+    return {u:f.u,n:f.name,c:f.color||'',lv:g.lv||f.lv||1,cls:f.cls||g.cls||'warrior',w:(f.gear||g.gear||{}).w||0,a:(f.gear||g.gear||{}).a||0,
+      hp:Math.max(0,Math.round(f.hp)),max:Math.round(f.max),al:f.alive&&f.hp>0?1:0,k:k,d:d,sc:k*100+d,atk:g.atk||Math.round(f.atk||0),def:g.def||0,agi:g.agi||0,crit:g.crit||0};});
+  L.sort(function(a,b){return (b.sc-a.sc)||(b.al-a.al)||(b.hp-a.hp)||(b.k-a.k);});
+  TOP=L.slice(0,3);TOP.forEach(function(x,i){x.r=i+1;});return TOP;}
+function topSay(m){if(E.phase!=='won'||A.obs)return;var t=String(m.text||'').replace(/\s+/g,' ').trim();if(!t||t.charAt(0)==='!'||t.charAt(0)==='！')return;
+  topCalc();var u=m.user;if(!TOP.some(function(x){return x.u===u}))return;if(t.length>90)t=t.slice(0,88).trim()+'…';TB[u]={t:t,n:++TBN};hudSoon();}
+var TW_T={ar:{r:['','المركز الأول','المركز الثاني','المركز الثالث'],k:'القتلى',d:'الضرر المُلحَق',hp:'الصحة',left:'الصحة المتبقية',sc:'النقاط',fell:'سقط',ok:'نجا',def:'دفاع',crit:'حرجة',agi:'تفادٍ',atk:'هجوم'},
+  en:{r:['','1st place','2nd place','3rd place'],k:'Kills',d:'Damage dealt',hp:'HP',left:'HP left',sc:'Score',fell:'Fell',ok:'Survived',def:'Def',crit:'Crit',agi:'Dodge',atk:'ATK'}};
+function twEl(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function twEnt(x){return {kind:'player',scale:1,face:0,name:x.n,color:x.c,look:BT.lookOf(x.u,x.c),avatar:CFG.av&&BT.avatar(x.u)?BT.img(BT.avatar(x.u)):null,weapon:WMAP[(BTR.CLASSES[x.cls]||BTR.CLASSES.warrior).w],wcol:WCOL[x.w],armour:(BTR.ARMOUR[x.a]||BTR.ARMOUR[0]).col,anim:{},h:2.05};}
+function twDraw(c){var ent=c._ent;if(!ent)return;var w=c._w,h=c._h,d=c._d,g=c.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,c.width,c.height);g.setTransform(d,0,0,d,0,0);g.imageSmoothingEnabled=false;
+  var hh=(ent.h||2.2),tw=Math.min(w/1.45,h/(hh*.62+.75));var I=new MC.Iso(g,{tw:tw,ox:w/2,oy:h-tw*.42});I.dpr=d;ent.x=0;ent.y=0;try{MC.drawEntity(I,ent,performance.now()/1000);}catch(e){}}
+function twCard(x){var L=TW_T[EN()?'en':'ar'],C=BTR.CLASSES[x.cls]||BTR.CLASSES.warrior;
+  var slot=twEl('div','tw-slot r'+x.r);slot.setAttribute('data-u',x.u);
+  var bz=twEl('div','tw-bz');var bub=twEl('div','tw-bub');bub.hidden=true;bub.appendChild(twEl('span','tw-bt'));bz.appendChild(bub);slot.appendChild(bz);
+  var card=twEl('div','tw-card');var fr=twEl('div','tc-fr');var inn=twEl('div','tc-in');
+  var top=twEl('div','tc-top');var nm=BT.name(x.n,x.c,'tc-nm');if(x.n.length>11)nm.classList.add('long');if(x.n.length>16)nm.classList.add('xlong');top.appendChild(nm);var gem=twEl('div','tc-gem');gem.appendChild(twEl('span','',String(x.lv)));top.appendChild(gem);inn.appendChild(top);
+  var art=twEl('div','tc-art');art.appendChild(twEl('div','tc-rar',L.r[x.r]));art.appendChild(twEl('div','tc-medal',['','🥇','🥈','🥉'][x.r]));
+  var cv=document.createElement('canvas');var d=Math.min(2,Math.max(1,window.devicePixelRatio||1));cv._w=150;cv._h=190;cv._d=d*1.6;cv.width=Math.round(150*cv._d);cv.height=Math.round(190*cv._d);cv._ent=twEnt(x);twDraw(cv);art.appendChild(cv);
+  art.appendChild(twEl('div','tc-holo'));art.appendChild(twEl('div','tc-st '+(x.al?'ok':'fell'),x.al?'✔ '+L.ok:'💀 '+L.fell));inn.appendChild(art);
+  inn.appendChild(twEl('div','tc-ban',C.ic+' '+L2(C)+' · '+wName(x.cls,x.w)));
+  var box=twEl('div','tc-box');[['☠️',L.k,String(x.k)],['💥',L.d,String(x.d)],['🏅',L.sc,String(x.sc)]].forEach(function(r){var row=twEl('div','tc-row');row.appendChild(twEl('span','tc-ic',r[0]));row.appendChild(twEl('span','tc-l',r[1]));row.appendChild(twEl('b','',r[2]));box.appendChild(row);});inn.appendChild(box);
+  var mini=twEl('div','tc-mini');[['🛡️',L.def,x.def+'%'],['🎯',L.crit,x.crit+'%'],['💨',L.agi,x.agi+'%']].forEach(function(r){var s=twEl('span');s.appendChild(document.createTextNode(r[0]+' '+r[1]+' '));s.appendChild(twEl('b','',r[2]));mini.appendChild(s);});inn.appendChild(mini);
+  var ca=twEl('div','tc-corner tc-atk');ca.appendChild(twEl('b','',String(x.atk)));ca.appendChild(twEl('small','',L.atk));inn.appendChild(ca);
+  var ch=twEl('div','tc-corner tc-hp'+(x.al?'':' dead'));ch.appendChild(twEl('b','',x.al?x.hp+'/'+x.max:'0/'+x.max));ch.appendChild(twEl('small','',L.hp));inn.appendChild(ch);
+  inn.appendChild(twEl('div','tc-ser','#'+x.r+' · LAMMA ARENA'));
+  fr.appendChild(inn);card.appendChild(fr);slot.appendChild(card);return slot;}
+function top3Hud(end){var gs=$('gs');if(gs)gs.classList.add('tw-on');var list=A.obs?(P.top||[]):topCalc(),tb=A.obs?(P.tb||{}):TB;var ek='won'+P.lv+':'+list.map(function(x){return x.u+x.sc}).join(',')+':'+EN();
+  if(end._k!==ek){end._k=ek;A.clear(end);end.className='bt-win won ba-top3 n'+list.length;end.hidden=false;
+    end.appendChild(twEl('h3','tw-h',T('ba_won')));
+    var row=twEl('div','tw-row');[list[1],list[0],list[2]].forEach(function(x){if(x)row.appendChild(twCard(x));});end.appendChild(row);
+    var ft=twEl('div','tw-ft');ft.appendChild(twEl('p','tw-lv',T('ba_won_s',{l:P.lv})));
+    if(!A.obs){var br=twEl('div','ba-endbtns');
+      var rb=twEl('button','btn btn-ghost btn-sm','🔁 '+(EN()?'Replay the level':'إعادة المرحلة'));rb.type='button';rb.addEventListener('click',function(){if(E.again(false)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});br.appendChild(rb);
+      var nb=twEl('button','btn btn-main btn-sm','⏭ '+(EN()?'Next level':'المستوى التالي'));nb.type='button';nb.addEventListener('click',function(){if(E.again(true)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});br.appendChild(nb);
+      var lb2=twEl('button','btn btn-ghost btn-sm',EN()?'Lobby':'اللوبي');lb2.type='button';lb2.addEventListener('click',toLobby);br.appendChild(lb2);ft.appendChild(br);}
+    end.appendChild(ft);}
+  [].forEach.call(end.querySelectorAll('.tw-slot'),function(s){var u=s.getAttribute('data-u'),b=s.querySelector('.tw-bub'),m=tb[u];
+    if(!m){if(!b.hidden){b.hidden=true;b._n=0;}return;}if(b._n===m.n)return;b._n=m.n;b.querySelector('.tw-bt').textContent=m.t;b.hidden=false;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');});}
+/* the characters on the cards breathe (their idle animation), only while the cards are up */
+setInterval(function(){var end=$('baEnd');if(!end||end.hidden||!end.classList.contains('ba-top3'))return;[].forEach.call(end.querySelectorAll('.tc-art canvas'),twDraw);},100);
 function hudSoon(){setTimeout(function(){hud(true)},30);}
 function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* waves bar */
@@ -676,13 +724,13 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* the join timer (⚙ «وقت الدخول»): a countdown in the join box while it runs */
   jcSync();
   /* end card */
-  var end=$('baEnd');if(ph==='won'||ph==='lost'){var ek=ph+P.lv+fs.length;if(end._k!==ek){end._k=ek;A.clear(end);var h3=document.createElement('h3');h3.textContent=T(ph==='won'?'ba_won':'ba_lost');end.appendChild(h3);var sub=document.createElement('p');sub.textContent=T(ph==='won'?'ba_won_s':'ba_lost_s',{l:P.lv});end.appendChild(sub);
+  var end=$('baEnd');if(ph==='won'){top3Hud(end);}else if(ph==='lost'){if(end.classList.contains('ba-top3'))end._k='';var ek=ph+P.lv+fs.length;if(end._k!==ek){end._k=ek;A.clear(end);var h3=document.createElement('h3');h3.textContent=T(ph==='won'?'ba_won':'ba_lost');end.appendChild(h3);var sub=document.createElement('p');sub.textContent=T(ph==='won'?'ba_won_s':'ba_lost_s',{l:P.lv});end.appendChild(sub);
       var best=fs.slice().sort(function(a,b){return b[11]-a[11]})[0];if(best){var mv=document.createElement('div');mv.className='ba-mvp';mv.appendChild(document.createTextNode('👑 '+T('ba_mvp')+': '));mv.appendChild(headEl(best[1],best[3],best[2]));mv.appendChild(BT.name(best[2],best[3]));mv.appendChild(document.createTextNode(' · ☠'+best[11]));end.appendChild(mv);}
       if(!A.obs){var row=document.createElement('div');row.className='ba-endbtns';
         var rb=document.createElement('button');rb.type='button';rb.className='btn btn-ghost btn-sm';rb.textContent='🔁 '+(EN()?'Replay the level':'إعادة المرحلة');rb.addEventListener('click',function(){if(E.again(false)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(rb);
         var nb=document.createElement('button');nb.type='button';nb.className='btn btn-main btn-sm';nb.textContent='⏭ '+(EN()?'Next level':'المستوى التالي');nb.disabled=ph!=='won';nb.addEventListener('click',function(){if(E.again(true)){A.sfx('start');P=E.pub();A.publish(P);hud(true);}});row.appendChild(nb);
         var lb2=document.createElement('button');lb2.type='button';lb2.className='btn btn-ghost btn-sm';lb2.textContent=EN()?'Lobby':'اللوبي';lb2.addEventListener('click',toLobby);row.appendChild(lb2);end.appendChild(row);}
-      end.className='bt-win '+(ph==='won'?'won':'lost');end.hidden=false;}}else{end.hidden=true;end._k='';}
+      end.className='bt-win '+(ph==='won'?'won':'lost');end.hidden=false;}}else{end.hidden=true;end._k='';if(end.classList.contains('ba-top3'))A.clear(end);end.className='bt-win';}if(ph!=='won'&&$('gs'))$('gs').classList.remove('tw-on');if(ph!=='won'&&!A.obs){TB={};}
   /* control panel */
   if(!A.obs)ctrlHud(force);
 }
