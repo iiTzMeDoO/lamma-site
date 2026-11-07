@@ -44,7 +44,16 @@ var MOBS={
  ravager:{fam:'illager',atk:'melee',hp:72,dmg:11,def:.12,agi:.03,crit:.08,res:{melee:.7,blast:.8,magic:1.3,poison:1.2},trait:'roar',ar:'المدمّر',en:'Ravager'},
  creeper:{fam:'creature',atk:'blast',hp:30,dmg:12,def:.03,agi:.04,crit:0,res:{blast:.5,arrow:1.3,fire:1.2},trait:'explode',ar:'كريبر',en:'Creeper'},
  slime:{fam:'creature',atk:'melee',hp:40,dmg:5,def:.04,agi:.05,crit:.04,res:{melee:.7,arrow:.7,fire:1.3,magic:1.3,poison:0},trait:'split',ar:'سلايم',en:'Slime'},
- guardian:{fam:'creature',atk:'magic',hp:50,dmg:8,def:.1,agi:.06,crit:.06,res:{arrow:.8,fire:.7,blast:1.4},trait:'thorns',ar:'الحارس البحري',en:'Guardian'}
+ guardian:{fam:'creature',atk:'magic',hp:50,dmg:8,def:.1,agi:.06,crit:.06,res:{arrow:.8,fire:.7,blast:1.4},trait:'thorns',ar:'الحارس البحري',en:'Guardian'},
+ /* Nov 7 (Mohammad: «ضيف وحوش»): 8 new mobs with their own look and behaviour (snow / jungle / ocean maps and a few old ones) */
+ bogged:{fam:'undead',atk:'arrow',hp:34,dmg:6,def:.03,agi:.08,crit:.1,res:{arrow:.5,poison:0,blast:1.5,fire:1.2},trait:'poison',ar:'الهيكل المستنقعي',en:'Bogged'},
+ iceologer:{fam:'illager',atk:'magic',hp:40,dmg:8,def:.04,agi:.07,crit:.08,res:{magic:.6,fire:1.5,melee:1.2},trait:'chill',ar:'الساحر الجليدي',en:'Iceologer'},
+ polar:{fam:'creature',atk:'melee',hp:76,dmg:10,def:.1,agi:.03,crit:.06,res:{fire:1.4,melee:.85,arrow:.9},trait:'enrage',scale:1.15,ar:'الدب القطبي',en:'Polar bear'},
+ leapleaf:{fam:'creature',atk:'melee',hp:56,dmg:10,def:.08,agi:.05,crit:.08,res:{fire:1.6,poison:.5,blast:1.2},trait:'leap',ar:'القافز الورقي',en:'Leapleaf'},
+ whisperer:{fam:'creature',atk:'magic',hp:44,dmg:7,def:.05,agi:.08,crit:.06,res:{fire:1.7,poison:0,arrow:.8},trait:'roots',ar:'الهامس',en:'Whisperer'},
+ breeze:{fam:'creature',atk:'blast',hp:32,dmg:7,def:.03,agi:.2,crit:.08,res:{arrow:.3,magic:1.3,melee:1.1},trait:'gust',scale:1.25,ar:'النسيم',en:'Breeze'},
+ puffer:{fam:'creature',atk:'poison',hp:28,dmg:5,def:.04,agi:.1,crit:.05,res:{poison:0,fire:1.2,blast:1.5},trait:'puff',scale:1.35,ar:'السمكة المنتفخة',en:'Pufferfish'},
+ necro:{fam:'undead',atk:'magic',hp:44,dmg:7,def:.05,agi:.06,crit:.08,res:{poison:0,fire:1.3,magic:.7,blast:1.2},trait:'raise',ar:'مستحضر الموتى',en:'Necromancer'}
 };
 /* bosses: hp is the base before the party size / level / difficulty scaling (btcore); p2 = what happens at half HP */
 var BOSSES={
@@ -56,7 +65,10 @@ var BOSSES={
  ravagerk:{fam:'illager',atk:'melee',hp:1310,dmg:18,def:.14,agi:.03,crit:.1,scale:1.6,res:{melee:.7,arrow:1.2,magic:1.3},trait:'roar',p2:'charge',ar:'ملك المدمّرين',en:'Ravager King'},
  evokerm:{fam:'illager',atk:'magic',hp:1520,dmg:15,def:.08,agi:.08,crit:.1,scale:1.8,res:{magic:.4,melee:1.3,arrow:1.4},trait:'fangs',p2:'totem',ar:'سيد الاستحضار',en:'Evoker Lord'},
  blazek:{fam:'nether',atk:'fire',hp:1180,dmg:16,def:.1,agi:.08,crit:.1,scale:1.9,res:{fire:0,arrow:1.2,magic:1.6},trait:'burn',p2:'storm',ar:'ملك البليز',en:'Blaze King'},
- elder:{fam:'creature',atk:'magic',hp:1520,dmg:15,def:.15,agi:.05,crit:.08,scale:1.9,res:{arrow:.6,fire:.6,blast:1.4,poison:1.2},trait:'thorns',p2:'fatigue',ar:'الحارس العتيق',en:'Elder Guardian'}
+ elder:{fam:'creature',atk:'magic',hp:1520,dmg:15,def:.15,agi:.05,crit:.08,scale:1.9,res:{arrow:.6,fire:.6,blast:1.4,poison:1.2},trait:'thorns',p2:'fatigue',ar:'الحارس العتيق',en:'Elder Guardian'},
+ /* Nov 7: two new bosses */
+ abom:{fam:'creature',atk:'melee',atk2:'poison',hp:1180,dmg:16,def:.12,agi:.03,crit:.08,scale:1.9,res:{fire:1.6,poison:0,arrow:.7,melee:.9},trait:'roots',p2:'vines',ar:'وحش الأدغال',en:'Jungle Abomination'},
+ wraith:{fam:'undead',atk:'magic',atk2:'melee',hp:1000,dmg:17,def:.08,agi:.1,crit:.1,scale:1.8,res:{poison:0,magic:.6,fire:1.5,arrow:.8},trait:'chill',p2:'blizzard',ar:'الطيف الملعون',en:'Wretched Wraith'}
 };
 var TRAIT={
  '':{ar:'',en:''},
@@ -81,7 +93,14 @@ var TRAIT={
  explode:{ar:'ينفجر في الدور الثالث: ضرر ×2.5',en:'Explodes on its 3rd turn: ×2.5 damage'},
  thorns:{ar:'أشواك: يعيد إليك 20% من ضربات سيفك',en:'Thorns: reflects 20% of melee damage'},
  lifesteal:{ar:'امتصاص الصحة: يستعيد 30% من ضرباته',en:'Lifesteal: heals 30% of its hits'},
- sonic:{ar:'صرخة صوتية كل 3 أدوار: لا يمكن صدّها ولا تفاديها',en:'Sonic boom every 3rd turn: cannot be dodged or blocked'}
+ sonic:{ar:'صرخة صوتية كل 3 أدوار: لا يمكن صدّها ولا تفاديها',en:'Sonic boom every 3rd turn: cannot be dodged or blocked'},
+ chill:{ar:'كتلة جليد كل 3 أدوار: ضرر ×1.6 لا يُتفادى ويبطّئك',en:'Ice chunk every 3rd turn: ×1.6, cannot be dodged, slows you'},
+ enrage:{ar:'تحت نصف صحته يهيج: ضرر +35%',en:'Below half HP it goes wild: +35% damage'},
+ leap:{ar:'يقفز عليك: يضرب أولًا وضربته الأولى ×1.8',en:'Leaps at you: strikes first, first blow ×1.8'},
+ roots:{ar:'جذور: تمنع تفاديك ويستعيد 5% كل دور',en:'Roots: you cannot dodge, it heals 5% a turn'},
+ gust:{ar:'رياح: ضربته لا تُتفادى والسهام ترتد عنه',en:'Wind: its hits cannot be dodged, arrows bounce off'},
+ puff:{ar:'ينتفخ: من يضربه بالسيف يتسمم',en:'Puffs up: hit it in melee and you get poisoned'},
+ raise:{ar:'يُقيم هيكلًا كل 3 أدوار يرميك بسهم',en:'Raises a skeleton every 3rd turn that shoots you'}
 };
 var PHASE2={
  armour:{ar:'درع الذابل: السهام لا تؤثر + يضرب مرتين',en:'Wither armour: immune to arrows + hits twice'},
@@ -91,7 +110,10 @@ var PHASE2={
  charge:{ar:'هجمة: ضرر ×2 كل 3 أدوار',en:'Charge: ×2 damage every 3rd turn'},
  totem:{ar:'طوطم الخلود: ينهض مرة من الموت',en:'Totem of undying: rises once from death'},
  storm:{ar:'عاصفة نار: يضرب مرتين',en:'Fire storm: hits twice'},
- fatigue:{ar:'إرهاق: ينخفض هجومك 25%',en:'Mining fatigue: your attack −25%'}
+ fatigue:{ar:'إرهاق: ينخفض هجومك 25%',en:'Mining fatigue: your attack −25%'},
+ vines:{ar:'كروم: ضربة إضافية سامة ويستعيد 4% كل دور',en:'Vines: an extra poison hit and heals 4% a turn'},
+ blizzard:{ar:'عاصفة ثلجية: يضرب مرتين ويبطّئك',en:'Blizzard: hits twice and slows you'},
+ fury:{ar:'الغضب الأخير: ضرر +25%',en:'Last fury: +25% damage'}
 };
 var CLASSES={
  warrior:{ar:'محارب',en:'Warrior',ic:'⚔️',atk:'melee',hp:110,a:11,def:.12,spd:6,agi:.07,crit:.12,w:'sword'},
@@ -174,9 +196,13 @@ var MAPMOBS={
  desert:['husk','skeleton','creeper','spider','silverfish','pillager','ravager','vex','witch'],
  nether:['blaze','piglin','brute','zpiglin','wskel','magma','ghast','hoglin'],
  end:['enderman','endermite','shulker','phantom','vex','enderman'],
- cave:['zombie','drowned','skeleton','stray','cavespider','silverfish','creeper','slime','witch','guardian']
+ cave:['zombie','drowned','skeleton','stray','cavespider','silverfish','creeper','slime','witch','guardian','necro'],
+ snow:['stray','iceologer','polar','skeleton','breeze','vindicator','zombie'],
+ jungle:['leapleaf','whisperer','bogged','spider','cavespider','creeper','witch','zombie'],
+ ocean:['drowned','guardian','puffer','bogged','necro','skeleton','breeze']
 };
-var MAPBOSS={plains:['golem','ravagerk','evokerm'],desert:['king','evokerm','ravagerk'],nether:['wither','blazek'],end:['dragon'],cave:['warden','king','elder']};
+MAPMOBS.plains.push('breeze');MAPMOBS.desert.push('necro');
+var MAPBOSS={plains:['golem','ravagerk','evokerm'],desert:['king','evokerm','ravagerk'],nether:['wither','blazek'],end:['dragon','wraith'],cave:['warden','king','elder'],snow:['wraith','golem'],jungle:['abom','evokerm'],ocean:['elder','abom']};
 function strHash(s){s=String(s||'');var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 function fmt(s,o){return String(s).replace(/\{(\w+)\}/g,function(_,k){return o[k]!=null?o[k]:''});}
 function pct(v){return Math.round(v*100)+'%';}
@@ -193,10 +219,25 @@ function baseGear(user,lv){var h=strHash('g'+user);var at=lv>=20?5:lv>=17?4:lv>=
   return {a:at,ae:'',w:wt,we:'',items:lv>=12?['heal']:[]};}
 function mergeGear(base,g){if(!g)return base;return {a:Math.max(base.a,g.a||0),ae:g.ae||base.ae,w:Math.max(base.w,g.w||0),we:g.we||base.we,items:(g.items||base.items).slice(0,3)};}
 /* the full fighter sheet: everything the duel maths and the info card need */
-function sheet(user,lv,o){o=o||{};var ck=classOf(user,o.cls),C=CLASSES[ck];var g=mergeGear(baseGear(user,lv),o.gear);var A=ARMOUR[g.a],AE=ARM_ENCH[g.ae]||ARM_ENCH[''],W=WEAPON[g.w];
+/* Nov 7 (Mohammad: "I've played 3 days and the info never changes — every new game should be random"):
+   a fresh random loadout for every viewer at every new game — class (so the weapon), weapon / armour tier, maybe an enchant or a potion,
+   ±10% HP / attack, a little dodge / crit and two new perks. The level (XP) stays; it is the only thing that carries over. */
+function rngS(seed){var a=(seed>>>0)||1;return function(){a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};}
+var AEK=['fireprot','blastprot','projprot','antidote','magicprot','thorns'],WEK=['smite','bane','sharp','fireasp','knock','ender','raid'],ITK=['heal','heal','strength','apple','fireres','totem'];
+function tierRoll(x){return x<.4?0:x<.75?1:x<.93?2:3;}
+function rollLoadout(user,seed){var r=rngS(strHash(user+'#'+seed)*31+7);
+  var cls=CLASSK[Math.floor(r()*CLASSK.length)],w=tierRoll(r()),a=tierRoll(r()),ae=r()<.3?AEK[Math.floor(r()*AEK.length)]:'',we=r()<.3?WEK[Math.floor(r()*WEK.length)]:'';
+  var items=[];if(r()<.45)items.push(ITK[Math.floor(r()*ITK.length)]);
+  return {s:String(seed),cls:cls,gear:{a:a,ae:ae,w:w,we:we,items:items},hk:Math.round((.9+r()*.2)*100)/100,ak:Math.round((.9+r()*.2)*100)/100,ag:Math.round((r()-.5)*.04*1000)/1000,cr:Math.round((r()-.5)*.06*1000)/1000};}
+function sheet(user,lv,o){o=o||{};var R0=o.roll||null;var ck=classOf(user,o.cls||(R0&&R0.cls)),C=CLASSES[ck];var g=R0?mergeGear({a:0,ae:'',w:0,we:'',items:[]},o.gear||R0.gear):mergeGear(baseGear(user,lv),o.gear);var A=ARMOUR[g.a],AE=ARM_ENCH[g.ae]||ARM_ENCH[''],W=WEAPON[g.w];
   var res={};TYPES.forEach(function(t){var v=1;if(A.res[t]!=null)v*=A.res[t];if(AE.res[t]!=null)v*=AE.res[t];res[t]=Math.round(v*100)/100;});
   if(g.items.indexOf('fireres')>=0)res.fire=0;
-  var L=lv-10,hp=Math.round(C.hp*1.57*(1+L*.05)*(g.items.indexOf('apple')>=0?1.2:1));
+  var L=lv-10,apple=g.items.indexOf('apple')>=0?1.2:1;
+  if(R0){ /* Nov 7 balance: the level is a modest edge (LV20 ≈ +30% HP, +40% class damage), not ×2.5 like before */
+    return {cls:ck,atkT:C.atk,hp:Math.round(C.hp*1.57*(1+L*.03)*apple*R0.hk),atk:Math.round((C.a*1.6*(1+L*.04)+W.a*1.2)*1.57*R0.ak*10)/10,def:Math.min(.6,Math.round((C.def+A.def)*100)/100),spd:C.spd,
+      agi:Math.max(.01,Math.min(.45,Math.round((C.agi+L*.003+R0.ag)*1000)/1000)),crit:Math.max(.02,Math.min(.5,Math.round((C.crit+L*.004+R0.cr)*1000)/1000)),
+      res:res,perks:perksOf(user+'#'+R0.s,lv),gear:g,thorns:g.ae==='thorns'?.15:0,roll:R0};}
+  var hp=Math.round(C.hp*1.57*(1+L*.05)*apple);
   return {cls:ck,atkT:C.atk,hp:hp,atk:Math.round((C.a*1.6+1.5*L+W.a*1.2)*15.7)/10,def:Math.min(.6,Math.round((C.def+A.def)*100)/100),spd:C.spd,agi:Math.min(.45,Math.round((C.agi+L*.004)*1000)/1000),crit:Math.min(.5,Math.round((C.crit+L*.005)*1000)/1000),
     res:res,perks:perksOf(user,lv),gear:g,thorns:g.ae==='thorns'?.15:0};}
 function mobSheet(kind,boss){var S=boss?BOSSES[kind]:MOBS[kind];return S||null;}
@@ -206,7 +247,7 @@ function effWord(mult){return mult===0?'immune':mult>=1.4?'super':mult<=.7?'resi
 /* one blow. att / def: {atk|dmg, atkT, crit, agi, def, res, fam, perks, gear, buff…}; ctx: {r: rng, type, mult, noDodge, ignoreDef, event, avenged, isBoss}
    returns {n, crit, dodge, eff, mult} — n is already the HP taken */
 function hit(att,def,ctx){ctx=ctx||{};var r=ctx.r||Math.random,type=ctx.type||att.atkT||'melee',m=ctx.mult||1,ev=ctx.event||'';
-  var tm=resOf(def,type);if(def.phase2==='armour'&&type==='arrow')tm=0;if(def.trait==='teleport'&&type==='arrow')tm=0;
+  var tm=resOf(def,type);if(def.phase2==='armour'&&type==='arrow')tm=0;if((def.trait==='teleport'||def.trait==='gust')&&type==='arrow')tm=0;
   if(ev==='rain'&&type==='fire')m*=.5;if(ev==='night'&&att.fam==='undead')m*=1.25;if(ev==='blood'&&att.fam&&!att.u)m*=1.2;
   var pm=1,crit=false,first=false;
   (att.perks||[]).forEach(function(p){if(p.f!==def.fam)return;var v=perkVal(p);if(p.t==='slayer')pm*=v;if(p.t==='avenger'&&ctx.avenged)pm*=v;if(p.t==='oddcrit'&&att.hpNow%2===1)crit=true;});
@@ -225,6 +266,6 @@ function hit(att,def,ctx){ctx=ctx||{};var r=ctx.r||Math.random,type=ctx.type||at
 function weakList(S){var w=[],rs=[],im=[];TYPES.forEach(function(t){var v=resOf(S,t);if(v===0)im.push(t);else if(v>=1.2)w.push(t);else if(v<=.8)rs.push(t);});return {weak:w,res:rs,immune:im};}
 var api={TYPES:TYPES,TYPE:TYPE,FAMS:FAMS,FAM:FAM,MOBS:MOBS,BOSSES:BOSSES,TRAIT:TRAIT,PHASE2:PHASE2,CLASSES:CLASSES,CLASSK:CLASSK,PERKS:PERKS,PERKK:PERKK,ARMOUR:ARMOUR,ARM_ENCH:ARM_ENCH,
   WEAPON:WEAPON,WPN_NAME:WPN_NAME,WPN_ENCH:WPN_ENCH,ITEMS:ITEMS,EVENTS:EVENTS,EVENTK:EVENTK,MAPMOBS:MAPMOBS,MAPBOSS:MAPBOSS,
-  strHash:strHash,classOf:classOf,classFromWord:classFromWord,perksOf:perksOf,perkVal:perkVal,perkText:perkText,baseGear:baseGear,mergeGear:mergeGear,sheet:sheet,mobSheet:mobSheet,resOf:resOf,effWord:effWord,hit:hit,weakList:weakList,pct:pct,fmt:fmt};
+  strHash:strHash,rollLoadout:rollLoadout,rngS:rngS,classOf:classOf,classFromWord:classFromWord,perksOf:perksOf,perkVal:perkVal,perkText:perkText,baseGear:baseGear,mergeGear:mergeGear,sheet:sheet,mobSheet:mobSheet,resOf:resOf,effWord:effWord,hit:hit,weakList:weakList,pct:pct,fmt:fmt};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.BTR=api;
 })(typeof window!=='undefined'?window:globalThis);
