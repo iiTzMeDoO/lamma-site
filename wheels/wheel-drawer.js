@@ -10,6 +10,9 @@
   btn.addEventListener('click',function(){set(!b.classList.contains('drawer-open'));});
   if(x)x.addEventListener('click',function(){set(false);btn.focus();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.classList.contains('drawer-open'))set(false);});
+  /* classic wheel: a click on the stage while the drawer is open just closes the drawer (it doesn't spin) */
+  if(b.classList.contains('g-wheel-classic')){var stg=document.getElementById('stage');
+    if(stg)stg.addEventListener('click',function(e){if(!b.classList.contains('drawer-open'))return;if(e.target.closest&&e.target.closest('.w2-panel'))return;e.stopPropagation();e.preventDefault();set(false);},true);}
   /* شريط "تعديل الشكل / الخلفية" بيتعمل بـ layout.js فوق الستيج: منحطو بأول الدرج */
   var wrap=document.querySelector('.stage-wrap'),head=side.querySelector('.drawer-head');
   function grab(){var bar=wrap&&wrap.querySelector(':scope>.lay-bar');if(!bar)return false;side.insertBefore(bar,head?head.nextSibling:side.firstChild);return true;}
@@ -18,7 +21,8 @@
   /* أزرار التحكم السريع: الستريمر بيلعب من الصفحة بدون ما يفتح الدرج */
   var q=document.getElementById('dockQuick'),st=document.getElementById('dockStatus'),src=document.getElementById('wStatus'),mir=[];
   if(q){
-    [['wUndo',0],['wSkip',0],['wPause',0],['wRand',0],['wRespin',0],['whSpin',1]].forEach(function(d){
+    var ml=q.getAttribute('data-mirror'); /* the classic wheel puts its real buttons in the bar (data-mirror=""): nothing to mirror */
+    (ml==null?[['wUndo',0],['wSkip',0],['wPause',0],['wRand',0],['wRespin',0],['whSpin',1]]:ml.split(',').filter(Boolean).map(function(id){return [id,0]})).forEach(function(d){
       var o=document.getElementById(d[0]);if(!o)return;
       var m=document.createElement('button');m.type='button';m.className='dock-btn'+(d[1]?' dock-main':'');
       m.addEventListener('click',function(){o.click();sync();});

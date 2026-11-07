@@ -1,43 +1,43 @@
-/* عجلة الشخصنة: الستيج بيملا الشاشة، والإعدادات درج من اليسار بينفتح بزر تحت.
-   كل القواعد مقيّدة بـ body.g-wheel-pick وبتتعطّل بوضع OBS (?obs=1). */
+/* عجلة الشخصنة والعجلة الكلاسيك: الستيج بيملا الشاشة، والإعدادات درج من اليسار بينفتح بزر تحت.
+   كل القواعد مقيّدة بـ body:is(.g-wheel-pick,.g-wheel-classic) وبتتعطّل بوضع OBS (?obs=1). */
 :root{--dock-h:56px}
-html:not(.obs) body.g-wheel-pick{overflow:hidden;height:100vh;height:100dvh}
-html:not(.obs) body.g-wheel-pick .gp-head,
-html:not(.obs) body.g-wheel-pick footer.foot{display:none}
-html:not(.obs) body.g-wheel-pick .gp{max-width:none;margin:0;padding:0}
-html:not(.obs) body.g-wheel-pick .gp-grid{display:block}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic){overflow:hidden;height:100vh;height:100dvh}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .gp-head,
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) footer.foot{display:none}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .gp{max-width:none;margin:0;padding:0}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .gp-grid{display:block}
 
 /* الخلفية بتملا الشاشة كلها، والمحتوى 16:9 بالنص بين الهيدر والشريط التحتي (ما بيتغطى): نفس توزيع OBS بالضبط */
-html:not(.obs) body.g-wheel-pick .stage-wrap{position:fixed;inset:0;top:0;z-index:1;display:block;height:auto;background:var(--bg)}
-html:not(.obs) body.g-wheel-pick .stage-wrap>.stage{position:absolute;inset:0;width:auto;height:auto;aspect-ratio:auto;
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage-wrap{position:fixed;inset:0;top:0;z-index:1;display:block;height:auto;background:var(--bg)}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage-wrap>.stage{position:absolute;inset:0;width:auto;height:auto;aspect-ratio:auto;
   border:0;border-radius:0;box-shadow:none;container-type:size}
-html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{box-sizing:border-box;margin:auto;
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage-wrap>.stage>.wh2{box-sizing:border-box;margin:auto;
   inset:var(--hdr,64px) 0 var(--dock-h) 0;
   width:min(100cqw,calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));
   height:min(calc(100cqh - var(--hdr,64px) - var(--dock-h)),calc(100cqw * 9 / 16))}
 /* على الشاشات العريضة: المحتوى بيضل بحجمو الطبيعي (نفس شكل OBS)، بس اللي على اليسار بيلزق بحافة الشاشة اليسار،
    واللي على اليمين (اللوغو) بحافة اليمين، والعجلة بالنص. وبوضع "تعديل الشكل" بيضلوا بنفس المكان (نفس شكل الصفحة بالضبط). */
-html:not(.obs) body.g-wheel-pick .stage-wrap>.stage>.wh2{
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage-wrap>.stage>.wh2{
   --m:calc((100cqw - min(100cqw, calc((100cqh - var(--hdr,64px) - var(--dock-h)) * 16 / 9))) / 2)}
-html:not(.obs) body.g-wheel-pick .stage .wh2 [data-anchor=l]{translate:calc(var(--m) * -1) 0}
-html:not(.obs) body.g-wheel-pick .stage .wh2 [data-anchor=r]{translate:var(--m) 0}
-html:not(.obs) body.g-wheel-pick .stage-wrap>.lay-bar{display:none}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage .wh2 [data-anchor=l]{translate:calc(var(--m) * -1) 0}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage .wh2 [data-anchor=r]{translate:var(--m) 0}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage-wrap>.lay-bar{display:none}
 /* أزرار الشاشة الكاملة القديمة (جوا الستيج) مش لازمة: بالشريط التحتي زر شاشة كاملة للصفحة كلها */
-html:not(.obs) body.g-wheel-pick .stage .lay-fs,html:not(.obs) body.g-wheel-pick .stage .w-fs-gear{display:none!important}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage .lay-fs,html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .stage .w-fs-gear{display:none!important}
 
 /* الهيدر والشريط التحتي بيطفوا فوق الستيج وبيختفوا لما تخلّي الماوس ساكن */
-html:not(.obs) body.g-wheel-pick header.top{position:fixed;top:0;left:0;right:0}
-html:not(.obs) body.g-wheel-pick header.top,.fs-dock{transition:opacity .3s ease,transform .3s ease}
-html:not(.obs) body.g-wheel-pick.ui-idle:not(.drawer-open) header.top{opacity:0;pointer-events:none;transform:translateY(-100%)}
-html:not(.obs) body.g-wheel-pick.ui-idle:not(.drawer-open) .fs-dock{opacity:0;pointer-events:none;transform:translateY(100%)}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) header.top{position:fixed;top:0;left:0;right:0}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) header.top,.fs-dock{transition:opacity .3s ease,transform .3s ease}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic).ui-idle:not(.drawer-open) header.top{opacity:0;pointer-events:none;transform:translateY(-100%)}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic).ui-idle:not(.drawer-open) .fs-dock{opacity:0;pointer-events:none;transform:translateY(100%)}
 
 /* الدرج */
-html:not(.obs) body.g-wheel-pick .side{position:fixed;top:var(--hdr,64px);bottom:var(--dock-h);left:0;right:auto;
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .side{position:fixed;top:var(--hdr,64px);bottom:var(--dock-h);left:0;right:auto;
   width:min(430px,94vw);z-index:60;display:flex!important;flex-direction:column;gap:12px;padding:12px;
   overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border-right:1px solid var(--line2);
   box-shadow:14px 0 40px -10px rgba(0,0,0,.6);
   transform:translateX(-104%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
-html:not(.obs) body.g-wheel-pick.drawer-open .side{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic).drawer-open .side{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s}
 .drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 2px 4px}
 .drawer-head .dh-t{display:flex;flex-direction:column;gap:2px;min-width:0}
 .drawer-head .dh-t b{font-family:var(--disp);font-weight:400;font-size:1.25rem;line-height:1.2}
@@ -73,23 +73,23 @@ html[dir=rtl] .fs-dock .dock-btn,html[dir=rtl] .fs-dock .dock-status{direction:r
 .fs-dock .dock-fs{padding:0 12px;font-size:1.05rem}
 
 /* ---------- الإعدادات: أقسام بعناوين بدل قائمة وحدة طويلة ---------- */
-html:not(.obs) body.g-wheel-pick .w2-set{padding:6px 12px}
-html:not(.obs) body.g-wheel-pick .w2-set>summary{padding:6px 2px 8px;font-size:1rem}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp{margin-top:0;border-top:1px solid var(--line);padding:0}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set{padding:6px 12px}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>summary{padding:6px 2px 8px;font-size:1rem}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp{margin-top:0;border-top:1px solid var(--line);padding:0}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp>summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;
   padding:11px 2px;margin:0;font-weight:800;font-size:.92rem;color:var(--lav,#d6d9f6)}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>summary::-webkit-details-marker{display:none}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>summary::after{content:'';margin-inline-start:auto;width:7px;height:7px;
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp>summary::-webkit-details-marker{display:none}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp>summary::after{content:'';margin-inline-start:auto;width:7px;height:7px;
   border-inline-end:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);transition:transform .15s}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp[open]>summary::after{transform:rotate(-135deg)}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp[open]>summary{padding-bottom:6px}
-html:not(.obs) body.g-wheel-pick .w2-set>.w2-grp>.sgrp{padding-bottom:10px}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp[open]>summary::after{transform:rotate(-135deg)}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp[open]>summary{padding-bottom:6px}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set>.w2-grp>.sgrp{padding-bottom:10px}
 /* صفوف أرحب وحقول بعرض موحّد وما بتنقص */
-html:not(.obs) body.g-wheel-pick .w2-set .srow{min-height:42px;padding:4px 2px;gap:.9rem}
-html:not(.obs) body.g-wheel-pick .w2-set .ssel{min-width:10.5rem;max-width:12.5rem;height:32px;padding-inline:10px 28px;text-overflow:ellipsis}
-html:not(.obs) body.g-wheel-pick .w2-set .sinp{width:10.5rem;height:32px}
-html:not(.obs) body.g-wheel-pick .w2-set .tmr-row input{height:32px;min-height:32px}
-html:not(.obs) body.g-wheel-pick .w2-set .tsb{height:30px}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set .srow{min-height:42px;padding:4px 2px;gap:.9rem}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set .ssel{min-width:10.5rem;max-width:12.5rem;height:32px;padding-inline:10px 28px;text-overflow:ellipsis}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set .sinp{width:10.5rem;height:32px}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set .tmr-row input{height:32px;min-height:32px}
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set .tsb{height:30px}
 
 .fs-dock [hidden]{display:none!important}
 
@@ -107,3 +107,70 @@ html:not(.obs) body.g-wheel-pick .w2-set .tsb{height:30px}
 .w2-champ .fn-x:hover{background:rgba(255,255,255,.18)}
 .w2-champ .fn-x:focus-visible{outline:2px solid var(--wh-a,#d8b65e);outline-offset:2px}
 html.obs .w2-champ .fn-x{display:none}
+
+/* ---------- Nov 6 (Mohammad): العجلة الكلاسيك — نفس شكل عجلة الشخصنة، بس زر الإعدادات تحت على اليمين والدرج بيطلع من اليمين،
+   وأزرار التحكم الحقيقية بالشريط التحتي (تراجع مكان زر اللف)، والإضافة اليدوية فوق قائمة اللاعبين ---------- */
+html:not(.obs) body.g-wheel-classic .side{left:auto;right:0;border-right:0;border-left:1px solid var(--line2);
+  box-shadow:-14px 0 40px -10px rgba(0,0,0,.6);transform:translateX(104%)}
+html:not(.obs) body.g-wheel-classic.drawer-open .side{transform:none}
+.fs-dock-c{direction:rtl}
+html[dir=ltr] .fs-dock-c .dock-btn{direction:ltr}
+.fs-dock-c .dock-gap{flex:1 1 0;min-width:8px}
+.fs-dock-c .dock-btn .di{font-size:1.02em;line-height:1}
+.fs-dock-c .dock-quick{gap:8px}
+.fs-dock-c .dock-quick .dock-btn{padding:0 14px}
+.fs-dock-c .dock-undo{border-color:color-mix(in srgb,var(--ta2,#9AA0D0) 55%,var(--line2));background:color-mix(in srgb,var(--ta2,#9AA0D0) 14%,var(--card))}
+.fs-dock-c .dock-undo:hover:not(:disabled){background:color-mix(in srgb,var(--ta2,#9AA0D0) 24%,var(--card))}
+.fs-dock-c .dock-danger{color:#f4a3a8}
+.fs-dock-c .dock-danger.armed{background:#c4343f;border-color:#e0505b;color:#fff}
+/* الدخول مفتوح / مغلق */
+.fs-dock-c .dock-join .di{width:9px;height:9px;border-radius:50%;flex:none;background:#3ccf7a;box-shadow:0 0 0 3px rgba(60,207,122,.18)}
+.fs-dock-c .dock-join.is-open{border-color:rgba(60,207,122,.45)}
+.fs-dock-c .dock-join.is-closed{color:var(--mut);border-color:rgba(232,90,100,.45)}
+.fs-dock-c .dock-join.is-closed .di{background:#e85a64;box-shadow:0 0 0 3px rgba(232,90,100,.18)}
+.fs-dock-c .dock-btn:focus-visible{outline:2px solid var(--ta2,#9AA0D0);outline-offset:2px}
+@media (max-width:980px){
+  .fs-dock-c .dock-quick .dock-btn{padding:0 11px}
+  .fs-dock-c .dock-quick .dock-btn:not(.dock-join):not(.dock-undo) .dl{display:none}
+  .fs-dock-c .dock-quick .dock-btn .di{font-size:1.1em}
+}
+@media (max-width:760px){
+  .fs-dock-c{gap:6px;padding:0 6px}
+  .fs-dock-c .dock-btn{height:36px;padding:0 10px}
+  .fs-dock-c .dock-quick{gap:5px;margin-inline-start:0}
+  .fs-dock-c .dock-quick .dock-btn{padding:0 10px}
+  .fs-dock-c #drawerBtn .dl,.fs-dock-c .dock-quick .dock-btn .dl{display:none}
+  .fs-dock-c .dock-join{padding:0 12px}
+}
+/* الإضافة اليدوية: سطر فوق قائمة "بالعجلة" (مش بالـOBS) */
+.w2-add{display:flex;align-items:center;gap:.35em;margin:.15em 0 .55em;flex:0 0 auto;direction:inherit}
+.w2-add input{flex:1;min-width:0;height:2.2em;padding:0 .8em;border-radius:.7em;border:.07em solid var(--g2-line2,rgba(154,160,208,.35));
+  background:rgba(8,8,12,.55);color:inherit;font:inherit;font-size:.95em;font-weight:700;outline:none;transition:border-color .15s,box-shadow .15s}
+html[dir=rtl] .w2-add input:placeholder-shown{direction:rtl}
+.w2-add input::placeholder{color:var(--mut,#9a9db5);font-weight:600;opacity:.85}
+.w2-add input:focus{border-color:var(--ta2,#9AA0D0);box-shadow:0 0 0 .18em rgba(154,160,208,.22)}
+.w2-add-b{flex:none;width:2.2em;height:2.2em;padding:0;border-radius:.7em;border:.07em solid var(--g2-line2,rgba(154,160,208,.35));
+  background:rgba(154,160,208,.14);color:inherit;font:inherit;font-size:1.05em;font-weight:800;line-height:1;cursor:pointer}
+.w2-add-b:hover{background:rgba(154,160,208,.26)}
+html.obs .w2-add,html.ctrl-locked .w2-add{display:none!important}
+html:not(.obs) body.g-wheel-classic .lay-wheel .wh-wrap{cursor:pointer}
+
+/* موبايل (عمودي): العجلة كبيرة فوق، وقائمة اللاعبين مع خانة الإضافة تحتها بخط مقروء (بدل 16:9 الصغيرة) */
+@media (max-width:760px) and (orientation:portrait){
+  html:not(.obs) body.g-wheel-classic .stage-wrap>.stage>.wh2{width:100cqw;height:calc(100cqh - var(--hdr,64px) - var(--dock-h));--m:0px}
+  html:not(.obs) body.g-wheel-classic .wh2>.lay-el[data-lay=wheel]{left:5%!important;top:1.5%!important;width:90%!important;translate:none!important}
+  html:not(.obs) body.g-wheel-classic .wh2>.lay-el[data-lay=side]{left:3%!important;right:auto!important;top:auto!important;bottom:1.5%!important;
+    width:94%!important;height:calc(98.5% - 92cqw - 3%)!important;min-height:200px;translate:none!important;font-size:14px!important}
+  html:not(.obs) body.g-wheel-classic .wh2>.w2-fixlogo{display:none}
+  html:not(.obs) body.g-wheel-classic .w2-add input{font-size:16px;height:40px}
+  html:not(.obs) body.g-wheel-classic .w2-add-b{width:40px;height:40px;font-size:18px}
+}
+
+.fs-dock-c .dock-join .dl-s{display:none}
+@media (max-width:760px){.fs-dock-c .dock-join .dl{display:none}.fs-dock-c .dock-join .dl-s{display:inline}}
+
+/* بطاقة الفائز باللوحة: مضغوطة لتبان كاملة (🏆 + الاسم + الفائز!) */
+body.g-wheel-classic .w2-panel .w2-banner.win .winner-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15em;padding:.1em 0;height:100%;box-sizing:border-box}
+body.g-wheel-classic .w2-panel .w2-banner.win .winner-box .crown{font-size:1.5em;line-height:1;margin:0}
+body.g-wheel-classic .w2-panel .w2-banner.win .winner-box .s-mid{margin:0;line-height:1.2}
+body.g-wheel-classic .w2-panel .w2-banner.win .w2-win-row{line-height:1.25}

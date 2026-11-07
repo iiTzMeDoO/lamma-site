@@ -62,8 +62,12 @@ var RTL=/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/, LTRCH=/[A-Za-z\u00C0-\u024F
 function isRtl(s){var m=/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFFA-Za-z\u00C0-\u024F]/.exec(String(s));return !!(m&&RTL.test(m[0]))}
 
 if(FIX==='classic')A.strings({
- ar:{g_title:'العجلة الكلاسيك',g_how:'الشات بيدخل بـ !دخول أو !join وبتلف العجلة، واللي بتوقف عليه بيربح 🏆. بلا طرد. فيك تشيل الفائز بعد كل لفة، أو تعيد اللفة.'},
- en:{g_title:'Classic Wheel',g_how:'Chat joins with !join (or !دخول), you spin, and whoever it lands on wins 🏆. No kicks. You can remove the winner after each spin, or re-spin.'}});
+ ar:{w_join_open:'الدخول مفتوح',w_join_closed:'الدخول مغلق',w_join_open_s:'مفتوح',w_join_closed_s:'مغلق',w_join_tip_open:'الشات بيدخل بـ !دخول أو !join — اضغط لإغلاق الدخول',w_join_tip_closed:'الدخول مغلق — اضغط لفتحه',
+  w_add_ph:'أضف اسماً ↵',w_dup:'«{x}» موجود مسبقاً',w_spin_tip:'اضغط على العجلة لتلف (أو زر المسافة)',w_reset_c:'ريسيت',
+  g_title:'العجلة الكلاسيك',g_how:'الشات بيدخل بـ !دخول أو !join وبتلف العجلة، واللي بتوقف عليه بيربح 🏆. بلا طرد. فيك تشيل الفائز بعد كل لفة، أو تعيد اللفة.'},
+ en:{w_join_open:'Joining open',w_join_closed:'Joining closed',w_join_open_s:'Open',w_join_closed_s:'Closed',w_join_tip_open:'Chat joins with !join or !دخول — click to close joining',w_join_tip_closed:'Joining is closed — click to open it',
+  w_add_ph:'Add a name ↵',w_dup:'"{x}" is already there',w_spin_tip:'Click the wheel to spin (or press Space)',w_reset_c:'Reset',
+  g_title:'Classic Wheel',g_how:'Chat joins with !join (or !دخول), you spin, and whoever it lands on wins 🏆. No kicks. You can remove the winner after each spin, or re-spin.'}});
 else if(FIX==='elim')A.strings({ar:{g_title:'عجلة الشخصنة'},en:{g_title:'Personal Wheel'}});
 /* the FINAL (2 left): first to N landings wins */
 A.strings({ar:{w_fin_on:'النهائي لما يضلو 2',w_fin_to:'الفوز بـ',w_fin_tag:'النهائي',w_fin_first:'أول واحد بيوصل {t} بيربح',w_fin_round:'الجولة {r}',w_fin_mp:'نقطة الحسم!',w_fin_champ:'البطل',
@@ -90,10 +94,20 @@ var S={entries:[],out:[],wins:[],last:null,rmT:0,mode:FIX||'elim',open:true,rot:
   shOn:OD.sh,shStart:OD.shStart,picker:OD.picker,joinSecs:OD.join,joinUntil:0,pickSecs:OD.pick,timeoutAct:'streamer',autoNext:OD.auto,fin:null,finOn:OD.fin!==false,finTo:OD.finTo||3,phase:'idle',chooser:null,deadline:0,pausedLeft:0,paused:false,ev:null,evT:0,nextAt:0};
 var hist=[];
 function snap(){hist.push(JSON.stringify({e:S.entries,o:S.out,ph:S.phase,ch:S.chooser,w:S.winner,ev:S.ev,ws:S.wins,f:S.fin,el:S.elim}));if(hist.length>40)hist.shift();}
+/* classic (Nov 6): «تراجع» right after a result takes that result back (winner off the winners list, back on the wheel if it was
+   removed, its point taken back) — the same as «إعادة اللفة» without the new spin */
+function cancelLast(){var L=S.last;if(!L||S.phase!=='win')return false;clearTimeout(S.rmT);S.rmT=0;S.rmName='';S.last=null;
+  if(L.removed){var k=S.out.findIndex(function(e){return e.n===L.n});if(k>=0)S.entries.push(S.out.splice(k,1)[0]);}
+  if(S.wins.length&&S.wins[0].n===L.n)S.wins.shift();
+  if(L.u)A.award(L.u,L.n,-1);
+  S.winner=null;S.phase='idle';S.ev=null;save();changed();return true;}
 function undo(){
+  if(FIX==='classic'){if(S.spin)return;if(cancelLast())return;}
   var h=hist.pop();if(!h)return;var o=JSON.parse(h);
   if(S.spin)return;
+  var keep=FIX==='classic'?S.entries.filter(function(e){return !!e.u}):[]; /* classic: viewers who joined from chat after that step stay on the wheel */
   S.entries=o.e;S.out=o.o;S.chooser=o.ch;S.winner=o.w;S.ev=o.ev;S.evT=Date.now();if(o.ws)S.wins=o.ws;S.fin=o.f||null;S.elim=!!o.el;
+  keep.forEach(function(e){var has=function(x){return x.u===e.u||x.n===e.n};if(!S.entries.some(has)&&!S.out.some(has))S.entries.push(e);});
   S.phase=(o.ph==='choose'&&o.ch)?'choose':(o.ph==='win'?'win':'idle');
   if(S.phase==='choose'){S.deadline=S.pickSecs>0?Date.now()+S.pickSecs*1000:0;S.paused=false;}
   S.nextAt=0;save();changed();
@@ -290,7 +304,8 @@ var WC=window.LammaWheelCmds;
 function pickIdx(list,cmd){var i=find(list,cmd.rest);if(i<0&&cmd.num>0&&cmd.num<=list.length)i=cmd.num-1;return i;}
 A.onChat(function(m){
   if(!A.runsEngine())return;var cmd=WC?WC.resolve(m.text):null;if(!cmd)return;var c=cmd.cmd;
-  if((A.isCtrl(m)||(S.vipCtrl&&m.vip))&&!cmd.bare){ /* "الـVIP بيتحكموا بالعجلة" (off by default) gives VIPs the mod commands */
+  if((A.isCtrl(m)||(S.vipCtrl&&m.vip))&&!cmd.bare&&(FIX!=='classic'||A.obs)){ /* Nov 6 (Mohammad): no mod chat commands on the classic wheel, except in an overlay running on its own (nothing else could spin it) */
+    /* "الـVIP بيتحكموا بالعجلة" (off by default) gives VIPs the mod commands */
     if(c==='spin'){userSpin();return;}
     if(c==='clear'){resetAll();return;}
     if(c==='respin'){respin();return;}
@@ -628,6 +643,11 @@ function draw(P){cur=P;if(FIX!=='classic')applySh(P.sh);drawSide(P);drawPicker(P
 
 /* ---------- control panel ---------- */
 function rowBtn(txt,title,fn,cls){var b=el('button','mini'+(cls?' '+cls:''),txt);b.type='button';b.title=title;b.setAttribute('aria-label',title);b.addEventListener('click',fn);return b}
+/* classic: the bottom bar's «الدخول مفتوح / مغلق» toggle */
+function joinBtn(){var b=$('wJoinBtn');if(!b)return;var on=!!S.open,t=A.t(on?'w_join_open':'w_join_closed'),l=b.querySelector('.dl');
+  b.classList.toggle('is-open',on);b.classList.toggle('is-closed',!on);b.setAttribute('aria-pressed',String(on));
+  if(l&&l.textContent!==t)l.textContent=t;var ls=b.querySelector('.dl-s'),ts=A.t(on?'w_join_open_s':'w_join_closed_s');if(ls&&ls.textContent!==ts)ls.textContent=ts;
+  b.setAttribute('aria-label',t);b.title=A.t(on?'w_join_tip_open':'w_join_tip_closed');}
 var ctrlKey='';
 function renderCtrl(){
   if(A.obs)return;
@@ -637,15 +657,15 @@ function renderCtrl(){
   if(S.entries.length===1&&few)sp.disabled=false;
   sp.classList.toggle('is-off',few);sp.setAttribute('aria-disabled',few?'true':'false');if(few)sp.title=A.t('w_need2');else sp.removeAttribute('title');
   sp.textContent=endless?A.t('w_stop_spin'):(S.fin&&S.phase!=='win')?fmt(A.t('w_spin_fin'),{r:WO.finalRound(S.fin)}):(S.mode==='elim'&&S.entries.length===2&&S.phase!=='win')?A.t('w_spin_final'):A.t('w_spin');sp.classList.toggle('is-stop',endless);
-  $('wSkip').disabled=S.phase!=='choose';$('whOpen').checked=S.open;
+  $('wSkip').disabled=S.phase!=='choose';if($('whOpen'))$('whOpen').checked=S.open;if(FIX==='classic')joinBtn();
   var rs=$('wRespin');rs.hidden=!(S.mode==='classic'&&S.phase==='win'&&S.last&&!busy);
   $('wPause').disabled=S.phase!=='choose'||S.streamerPicks;$('wPause').textContent=S.paused?A.t('w_resume'):A.t('w_pause');
-  $('wRand').disabled=S.phase!=='choose';$('wUndo').disabled=!hist.length||busy;
-  $('wChooseHint').classList.toggle('on',S.phase==='choose');
+  $('wRand').disabled=S.phase!=='choose';$('wUndo').disabled=!(hist.length||(FIX==='classic'&&S.phase==='win'&&S.last))||busy;
+  if($('wChooseHint'))$('wChooseHint').classList.toggle('on',S.phase==='choose');
   document.querySelectorAll('#wModeSeg [data-wmode]').forEach(function(b){var on=b.getAttribute('data-wmode')===S.mode;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});
   document.getElementById('ctrl').classList.toggle('is-classic',S.mode==='classic');
   var oh=$('wOutH'),ok2=S.mode==='classic'?'w_out_c':'w_out';if(oh.getAttribute('data-i18n')!==ok2){oh.setAttribute('data-i18n',ok2);oh.textContent=A.t(ok2);}
-  var nb=$('wNew'),nk=S.mode==='classic'?'w_new_c':'w_new';if(nb.getAttribute('data-i18n')!==nk){nb.setAttribute('data-i18n',nk);nb.textContent=A.t(nk);}
+  var nb=$('wNew'),nk=S.mode==='classic'?'w_new_c':'w_new';nb=nb.querySelector('[data-i18n]')||nb;if(nb.getAttribute('data-i18n')!==nk){nb.setAttribute('data-i18n',nk);nb.textContent=A.t(nk);}
   var st=$('wStatus'),secs=S.phase==='choose'&&!S.paused?Math.max(0,Math.ceil((S.deadline-Date.now())/1000)):0;
   var stTxt=S.spin?A.t(S.spin.endless?'w_st_endless':'w_st_spin'):S.phase==='win'&&S.winner?fmt(A.t('w_st_win'),{x:S.winner.n}):S.phase==='choose'&&S.chooser?(S.streamerPicks?fmt(A.t('w_st_streamer'),{x:S.chooser.n}):(S.paused?A.t('w_paused')+' — '+S.chooser.n:fmt(A.t(S.deadline?'w_st_choose':'w_st_choose_nl'),{x:S.chooser.n,s:secs}))):A.t('w_st_idle');
   st.textContent=stTxt;st.className='w2-status ph-'+S.phase;
@@ -685,16 +705,17 @@ if(!A.obs){
   (sv.w||[]).forEach(function(e){if(e&&e.n)S.wins.push({n:String(e.n).slice(0,32),c:e.c||'',u:e.u||''})});/* saved before v13: shields were always on (sh = shields each, 0 = none) and timers had no "no limit"; shields now start OFF */
   var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:(sv.v>=18&&sv.auto!=null)?sv.auto:OD.auto,join:sv.join==null?OD.join:sv.join,fs:sv.fs==null?OD.fs:sv.fs,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
   S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finShow=so.fs;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;
+  if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;} /* Nov 6 (Mohammad): the classic wheel has no join window and no VIP control */
   (sv.e||[]).forEach(function(e){add(e.n,e.c,e.u,S.shOn?(e.sh==null?S.shStart:e.sh):0)});
   (sv.o||[]).forEach(function(e){S.out.push({n:e.n,c:e.c,u:e.u,sh:S.shOn?e.sh|0:0})});
   S.fin=sv.f&&sv.f.p&&sv.f.s?sv.f:null; /* a refresh mid-final keeps the score */
   S.remove=!!sv.remove;openJoin(sv.open!==false);S.title=sv.title||'';S.chatCols=sv.v>=16?!!sv.cc:true;S.avatar=!!sv.av;
-  $('whRemove').checked=S.remove;$('whOpen').checked=S.open;$('whTitle').value=S.title;$('whChatCols').checked=S.chatCols;$('whAvatar').checked=S.avatar;
+  $('whRemove').checked=S.remove;if($('whOpen'))$('whOpen').checked=S.open;$('whTitle').value=S.title;$('whChatCols').checked=S.chatCols;$('whAvatar').checked=S.avatar;
   $('whChatCols').addEventListener('change',function(){S.chatCols=this.checked;save();changed();});
   $('whAvatar').addEventListener('change',function(){S.avatar=this.checked;save();changed();});
-  $('wShields').value=String(S.shStart);$('wTimeout').value=S.timeoutAct;$('wShOn').checked=S.shOn;$('wPickerOn').checked=S.picker;
+  if(FIX!=='classic'){$('wShields').value=String(S.shStart);$('wTimeout').value=S.timeoutAct;$('wShOn').checked=S.shOn;$('wPickerOn').checked=S.picker;}
   /* each timer: "no limit" or a custom number of seconds typed by the streamer */
-  var tmr=function(id,key,def,after){var m=$(id+'Mode'),inp=$(id),u=inp.parentNode.querySelector('.tmr-u'),lim=WO?WO.LIM[key]:[1,3600];
+  var tmr=function(id,key,def,after){if(!$(id))return;var m=$(id+'Mode'),inp=$(id),u=inp.parentNode.querySelector('.tmr-u'),lim=WO?WO.LIM[key]:[1,3600];
     inp.min=String(lim[0]);inp.max=String(lim[1]);
     var sb=[].slice.call(inp.parentNode.querySelectorAll('.tsb'));sb.forEach(function(b){if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.addEventListener('click',function(){if(m.value===b.getAttribute('data-v'))return;m.value=b.getAttribute('data-v');m.dispatchEvent(new Event('change'));});});
     var show=function(){var v=S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow'}[key]];m.value=v>0?'1':'0';if(v>0)inp.value=String(v);else if(!inp.value)inp.value=String(def);inp.hidden=!(v>0);if(u)u.hidden=!(v>0);sb.forEach(function(b){var on=b.getAttribute('data-v')===m.value;if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});};
@@ -707,18 +728,18 @@ if(!A.obs){
     x.addEventListener('toggle',function(){try{localStorage.setItem(XK,x.open?'1':'0');}catch(e){}});})();
   tmr('wPick','pick',20,function(){if(S.phase==='choose'&&!S.paused&&!S.streamerPicks)S.deadline=S.pickSecs>0?Date.now()+S.pickSecs*1000:0;});
   tmr('whDur','dur',6);tmr('wAuto','auto',10);if($('wFinShow'))tmr('wFinShow','fs',6);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
-  $('wShOn').addEventListener('change',function(){snap();S.shOn=this.checked;S.entries.forEach(function(e){e.sh=startShields()});S.out.forEach(function(e){e.sh=0});save();changed();});
-  $('wPickerOn').addEventListener('change',function(){S.picker=this.checked;save();changed();});
+  if($('wShOn'))$('wShOn').addEventListener('change',function(){snap();S.shOn=this.checked;S.entries.forEach(function(e){e.sh=startShields()});S.out.forEach(function(e){e.sh=0});save();changed();});
+  if($('wPickerOn'))$('wPickerOn').addEventListener('change',function(){S.picker=this.checked;save();changed();});
   (function(){var fo=$('wFinOn'),ft=$('wFinTo');if(!fo||!ft)return;fo.checked=S.finOn;ft.value=String(S.finTo);
     var vis=function(){var r=ft.closest('.srow');if(r)r.hidden=!S.finOn;};vis();
     fo.addEventListener('change',function(){if(S.spin)return;S.finOn=this.checked;vis();save();changed();});
     ft.addEventListener('change',function(){S.finTo=Math.max(2,Math.min(9,+this.value||3));save();changed();});})();
   $('wSkip').addEventListener('click',skipPick);
-  $('wAddBtn').addEventListener('click',function(){var ta=$('whText');var added=0;snap();ta.value.split('\n').forEach(function(l){if(add(l))added++;});ta.value='';save();changed();});
-  $('whOpen').addEventListener('change',function(){openJoin(this.checked);save();changed();});
+  if($('wAddBtn'))$('wAddBtn').addEventListener('click',function(){var ta=$('whText');var added=0;snap();ta.value.split('\n').forEach(function(l){if(add(l))added++;});ta.value='';save();changed();});
+  if($('whOpen'))$('whOpen').addEventListener('change',function(){openJoin(this.checked);save();changed();});
   $('whRemove').addEventListener('change',function(){S.remove=this.checked;save();});
-  $('wShields').addEventListener('change',function(){S.shStart=+this.value;save();});
-  $('wTimeout').addEventListener('change',function(){S.timeoutAct=this.value;save();});
+  if($('wShields'))$('wShields').addEventListener('change',function(){S.shStart=+this.value;save();});
+  if($('wTimeout'))$('wTimeout').addEventListener('change',function(){S.timeoutAct=this.value;save();});
   $('whTitle').addEventListener('input',function(){S.title=this.value.slice(0,40);save();changed();});
   $('whSpin').addEventListener('click',function(){if(S.spin&&S.spin.endless)stopSpin();else userSpin();});
   $('wRespin').addEventListener('click',respin);
@@ -733,15 +754,29 @@ if(!A.obs){
     save();changed();});});
   $('whShuffle').addEventListener('click',function(){snap();S.entries=C.shuffle(S.entries);save();changed();});
   /* ↺ ريسيت: one tap arms it (button turns red "متأكد؟"), a second tap within 3 s wipes everything */
-  (function(){var b=$('whClear'),armT=0;b.addEventListener('click',function(){
-    if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent=A.t('w_reset_q');clearTimeout(armT);armT=setTimeout(function(){b.classList.remove('armed');b.textContent=A.t('w_reset');},3000);return;}
-    clearTimeout(armT);b.classList.remove('armed');b.textContent=A.t('w_reset');resetAll();});})();
-  $('wFinAuto').checked=S.finAuto;$('wFinAuto').addEventListener('change',function(){S.finAuto=this.checked;if(!S.finAuto)S.nextAt=0;save();changed();});
-  $('wFinDock').checked=S.finDock;$('wFinDock').addEventListener('change',function(){S.finDock=this.checked;save();changed();});
-  $('wVip').checked=S.vipCtrl;$('wVip').addEventListener('change',function(){S.vipCtrl=this.checked;save();changed();});
+  (function(){var b=$('whClear'),armT=0,bl=b.querySelector('.dl')||b,rk=bl.getAttribute('data-i18n')||'w_reset';b.addEventListener('click',function(){
+    if(!b.classList.contains('armed')){b.classList.add('armed');bl.textContent=A.t('w_reset_q');clearTimeout(armT);armT=setTimeout(function(){b.classList.remove('armed');bl.textContent=A.t(rk);},3000);return;}
+    clearTimeout(armT);b.classList.remove('armed');bl.textContent=A.t(rk);resetAll();});})();
+  if($('wFinAuto')){$('wFinAuto').checked=S.finAuto;$('wFinAuto').addEventListener('change',function(){S.finAuto=this.checked;if(!S.finAuto)S.nextAt=0;save();changed();});}
+  if($('wFinDock')){$('wFinDock').checked=S.finDock;$('wFinDock').addEventListener('change',function(){S.finDock=this.checked;save();changed();});}
+  if($('wVip')){$('wVip').checked=S.vipCtrl;$('wVip').addEventListener('change',function(){S.vipCtrl=this.checked;save();changed();});}
+  /* ---------- Nov 6 (Mohammad): classic wheel controls — the join toggle in the bottom bar, the add-name box on the players card ---------- */
+  if(FIX==='classic'){
+    var jb=$('wJoinBtn');if(jb)jb.addEventListener('click',function(){openJoin(!S.open);save();changed();});
+    var af=$('wAddForm'),ai=$('wAddName');
+    if(af&&ai){
+      af.addEventListener('click',function(e){e.stopPropagation();});
+      af.addEventListener('submit',function(e){e.preventDefault();
+        var v=ai.value.replace(/[\u0000-\u001f]/g,'').replace(/\s+/g,' ').trim().slice(0,32);if(!v){ai.value='';ai.focus();return;}
+        var lv=v.toLowerCase(),dup=S.entries.concat(S.out).some(function(x){return x.n.toLowerCase()===lv});
+        if(dup){toast(fmt(A.t('w_dup'),{x:v}));ai.select();ai.focus();return;}
+        snap();if(add(v)){A.sfx('pop');save();changed();}ai.value='';ai.focus();});
+    }
+    var lw=document.querySelector('.lay-wheel'),wt=function(){if(lw)lw.title=A.t('w_spin_tip');};wt();A.onLang(wt);
+  }
 }
 /* the overlay running on its own (mod chat commands, no dock) takes the options from its link: &tm= &sh= &pk= */
-if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;openJoin(true);}
+if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;}openJoin(true);}
 if(!A.obs&&WO&&A.obsExtra)A.obsExtra(function(){return WO.encodeObs(opts())});
 A.onLang(function(){sideKey='';ctrlKey='';pkKey='';fnKey='';chKey='';fdKey='';shApplied=null;applySh(S.shOn&&S.mode==='elim');changed();});
 /* on the control page's stage: during a pick on the shield wheel, clicking a name in the players list kicks it (shields count, same as ✖) */
@@ -776,7 +811,11 @@ if(!A.obs){(function(){
     if(box&&!box.hidden){closeSet();return;}
     var onWheel=!!t.closest('.lay-wheel');
     if(fsOn()||onWheel)spinOrStop();});
-  document.addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();spinOrStop();}if(e.key==='Escape'&&chEl&&!chEl.hidden&&!chEl.classList.contains('fn-off'))closeChamp();});
+  /* classic: Space spins too (not while typing, not inside the settings drawer) */
+  var spaceOk=function(e){if(FIX!=='classic'||!(e.key===' '||e.code==='Space')||e.ctrlKey||e.metaKey||e.altKey)return false;var t=e.target;
+    return !(t&&t.closest&&t.closest('input,textarea,select,[contenteditable],.side'))&&!editing();};
+  document.addEventListener('keyup',function(e){if(spaceOk(e))e.preventDefault();});
+  document.addEventListener('keydown',function(e){if(spaceOk(e)){e.preventDefault();if(!e.repeat)spinOrStop();return;}if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();spinOrStop();}if(e.key==='Escape'&&chEl&&!chEl.hidden&&!chEl.classList.contains('fn-off'))closeChamp();});
 })();}
 
 /* ---------- layout editor (layout.js): every public piece of the stage can be moved, resized or hidden.
@@ -791,7 +830,7 @@ var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('st
     {id:'players',code:'p',old:'p',ar:'اللاعبين',en:'Players',def:{f:6.4}},
     {id:'list2',code:'o',old:'o',label:function(){var cl=document.body.getAttribute('data-wmode')==='classic';return A.lang()==='en'?(cl?'Winners':'Out'):(cl?'الفايزين':'برا العجلة')},def:{f:FIX==='classic'?3.4:1.8}},
     {id:'event',code:'e',old:'e',ar:'سطر الأحداث',en:'Event line',def:{f:1,v:FIX!=='classic'}}, /* the classic wheel has no kick/shield events: hidden by default there */
-    {id:'banner',code:'b',old:'b',ar:'صندوق الدخول',en:'Join box',def:{f:1.9}}
+    {id:'banner',code:'b',old:'b',ar:'صندوق الدخول',en:'Join box',def:{f:FIX==='classic'?2.7:1.9}} /* classic: room for the winner card (🏆 + name + الفائز!) */
   ]},
   /* the final's scoreboard: small, in the gap above the panel / beside the wheel (no overlap with the default wheel); "النتيجة باللوحة اليسار" docks it instead */
   {id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
