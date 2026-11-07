@@ -62,11 +62,11 @@ var RTL=/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/, LTRCH=/[A-Za-z\u00C0-\u024F
 function isRtl(s){var m=/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFFA-Za-z\u00C0-\u024F]/.exec(String(s));return !!(m&&RTL.test(m[0]))}
 
 if(FIX==='classic')A.strings({
- ar:{w_join_open:'الدخول مفتوح',w_join_closed:'الدخول مغلق',w_join_open_s:'مفتوح',w_join_closed_s:'مغلق',w_join_tip_open:'الشات بيدخل بـ !دخول أو !join — اضغط لإغلاق الدخول',w_join_tip_closed:'الدخول مغلق — اضغط لفتحه',
-  w_add_ph:'أضف اسماً ↵',w_dup:'«{x}» موجود مسبقاً',w_spin_tip:'اضغط على العجلة لتلف (أو زر المسافة)',w_reset_c:'ريسيت',
+ ar:{w_join_open:'الدخول مفتوح',w_join_closed:'الدخول مغلق',w_join_open_s:'مفتوح',w_join_closed_s:'مغلق',w_join_tip_open:'الشات بيدخل بـ !دخول أو !join — اضغط لإغلاق الدخول (بيتسكّر لحاله لما تلف العجلة)',w_join_tip_closed:'الدخول مغلق — اضغط لفتحه',
+  w_add_ph:'أضف اسماً ↵',w_rm_name:'احذف «{x}» من العجلة',w_dup:'«{x}» موجود مسبقاً',w_spin_tip:'اضغط على العجلة لتلف (أو زر المسافة)',w_reset_c:'ريسيت',
   g_title:'العجلة الكلاسيك',g_how:'الشات بيدخل بـ !دخول أو !join وبتلف العجلة، واللي بتوقف عليه بيربح 🏆. بلا طرد. فيك تشيل الفائز بعد كل لفة، أو تعيد اللفة.'},
- en:{w_join_open:'Joining open',w_join_closed:'Joining closed',w_join_open_s:'Open',w_join_closed_s:'Closed',w_join_tip_open:'Chat joins with !join or !دخول — click to close joining',w_join_tip_closed:'Joining is closed — click to open it',
-  w_add_ph:'Add a name ↵',w_dup:'"{x}" is already there',w_spin_tip:'Click the wheel to spin (or press Space)',w_reset_c:'Reset',
+ en:{w_join_open:'Joining open',w_join_closed:'Joining closed',w_join_open_s:'Open',w_join_closed_s:'Closed',w_join_tip_open:'Chat joins with !join or !دخول — click to close joining (it closes by itself when the wheel spins)',w_join_tip_closed:'Joining is closed — click to open it',
+  w_add_ph:'Add a name ↵',w_rm_name:'Remove "{x}" from the wheel',w_dup:'"{x}" is already there',w_spin_tip:'Click the wheel to spin (or press Space)',w_reset_c:'Reset',
   g_title:'Classic Wheel',g_how:'Chat joins with !join (or !دخول), you spin, and whoever it lands on wins 🏆. No kicks. You can remove the winner after each spin, or re-spin.'}});
 else if(FIX==='elim')A.strings({ar:{g_title:'عجلة الشخصنة'},en:{g_title:'Personal Wheel'}});
 /* the FINAL (2 left): first to N landings wins */
@@ -169,6 +169,7 @@ function spin(){
     toast(A.t('w_need2'));return;}
   if(S.mode==='elim')S.spun=true;
   syncFin();
+  if(FIX==='classic'&&S.open){openJoin(false);save();} /* Nov 6 (Mohammad): a spin closes joining; it stays closed until the host reopens it */
   if(!(S.dur>0)){ /* spin time "no limit": the wheel keeps turning until the streamer (or a mod with !وقف / !stop) stops it */
     S.winner=null;S.ev=null;S.nextAt=0;S.phase='spinning';S.spin={start:Date.now()+150,endless:true,from:S.rot,speed:1.35};
     A.sfx('start');changed();clearTimeout(S.t);return;}
@@ -219,8 +220,20 @@ function finishWin(who){
   if(who.u&&S.mode==='elim')A.award(who.u,who.n,3);
   if(S.mode==='classic'){S.wins.unshift({n:who.n,c:who.c||'',u:who.u||''});if(S.wins.length>30)S.wins.length=30;S.last={n:who.n,u:who.u||'',removed:false};if(who.u)A.award(who.u,who.n,1);save();}
   A.sfx('win');changed();S.winAt=Date.now();
+  if(S.mode==='classic')winPop(who);
   if(!S.confT){A.confetti($('stage'),140);S.confT=setTimeout(function(){A.confetti($('stage'),90);setTimeout(function(){S.confT=0},1500)},900);}
 }
+/* بطاقة الفائز بنص الشاشة: شفافة شوي وبتختفي لحالها */
+function winPop(who){try{
+  var st=$('stage')||document.body,old=document.getElementById('winPop');if(old)old.remove();
+  var d=document.createElement('div');d.id='winPop';d.className='win-pop';
+  var lab=(document.documentElement.lang||'').indexOf('en')===0?'Winner':'الفائز';
+  var k=document.createElement('div');k.className='wp-k';k.textContent='🏆 '+lab;
+  var n=document.createElement('div');n.className='wp-n';n.textContent=who.n;if(who.c)n.style.color=who.c;
+  d.appendChild(k);d.appendChild(n);st.appendChild(d);
+  requestAnimationFrame(function(){d.classList.add('on')});
+  setTimeout(function(){d.classList.remove('on');setTimeout(function(){d.remove()},600)},3800);
+}catch(e){}}
 /* classic "remove the winner after the spin": the winner leaves the wheel 3.5 s after landing (or at once when the next spin starts) */
 function flushRemove(){
   clearTimeout(S.rmT);S.rmT=0;var nm=S.rmName;S.rmName='';if(!nm)return;
@@ -486,12 +499,16 @@ function drawSide(P){
   }
   A.clear($('whBanner')).appendChild(ban);
   if(ban.querySelector('.w2-win-row'))requestAnimationFrame(function(){fitText(ban.querySelectorAll('.w2-win-row > :last-child'),.4);});
-  var evs=A.clear($('whEvent'));evs.setAttribute('data-ph',A.t('w_lay_event_ph'));
+  var evs=$('whEvent'); /* Nov 6: the classic wheel has no event line (removed from its page) */
+  if(evs){A.clear(evs);evs.setAttribute('data-ph',A.t('w_lay_event_ph'));
   var et=evText(P.ev);
   if(et&&P.phase!=='win'){var evb=el('div','w2-ev ev-'+P.ev.t+(Date.now()-P.evT<1500?' fresh':''));evb.appendChild(document.createTextNode(et));evs.appendChild(evb);}
-  else evs.appendChild(el('div','w2-ev w2-ev-none',A.t('w_ev_none')));
+  else evs.appendChild(el('div','w2-ev w2-ev-none',A.t('w_ev_none')));}
   var inBox=el('div','w2-box');var ih=el('h3',null,A.t('w_in')+' ');ih.appendChild(el('span','cnt',String(P.entries.length)));inBox.appendChild(ih);
-  var ul=el('ul','w2-chips');P.entries.slice(0,60).forEach(function(e,i){ul.appendChild(chip(e,P.chooser&&e[0]===P.chooser.n?'is-chooser':'',P.mode==='elim'?i+1:0))});if(P.entries.length>60)ul.appendChild(el('li','w2-chip more','+'+(P.entries.length-60)));inBox.appendChild(ul);
+  var kx=!A.obs&&FIX==='classic'; /* Nov 6 (Mohammad): hover a name → a small ✕ on its left removes it from the wheel */
+  var ul=el('ul','w2-chips');P.entries.slice(0,60).forEach(function(e,i){var c=chip(e,P.chooser&&e[0]===P.chooser.n?'is-chooser':'',P.mode==='elim'?i+1:0);
+    if(kx){var xb=el('button','w2-kx','✕');xb.type='button';xb.setAttribute('data-n',e[0]);var xt=fmt(A.t('w_rm_name'),{x:e[0]});xb.title=xt;xb.setAttribute('aria-label',xt);c.appendChild(xb);}
+    ul.appendChild(c)});if(P.entries.length>60)ul.appendChild(el('li','w2-chip more','+'+(P.entries.length-60)));inBox.appendChild(ul);
   if(!P.entries.length)inBox.appendChild(el('p','w2-empty',A.t('w_empty')));
   A.clear($('whIn')).appendChild(inBox);
   if(!A.obs){$('whIn').classList.toggle('can-kick',P.mode==='elim'&&P.phase==='choose'&&!!P.chooser&&!P.spin);$('whIn').title=P.mode==='elim'&&P.phase==='choose'?A.t('w_click_kick'):'';}
@@ -664,13 +681,14 @@ function renderCtrl(){
   if($('wChooseHint'))$('wChooseHint').classList.toggle('on',S.phase==='choose');
   document.querySelectorAll('#wModeSeg [data-wmode]').forEach(function(b){var on=b.getAttribute('data-wmode')===S.mode;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});
   document.getElementById('ctrl').classList.toggle('is-classic',S.mode==='classic');
-  var oh=$('wOutH'),ok2=S.mode==='classic'?'w_out_c':'w_out';if(oh.getAttribute('data-i18n')!==ok2){oh.setAttribute('data-i18n',ok2);oh.textContent=A.t(ok2);}
+  var oh=$('wOutH'),ok2=S.mode==='classic'?'w_out_c':'w_out';if(oh&&oh.getAttribute('data-i18n')!==ok2){oh.setAttribute('data-i18n',ok2);oh.textContent=A.t(ok2);}
   var nb=$('wNew'),nk=S.mode==='classic'?'w_new_c':'w_new';nb=nb.querySelector('[data-i18n]')||nb;if(nb.getAttribute('data-i18n')!==nk){nb.setAttribute('data-i18n',nk);nb.textContent=A.t(nk);}
   var st=$('wStatus'),secs=S.phase==='choose'&&!S.paused?Math.max(0,Math.ceil((S.deadline-Date.now())/1000)):0;
   var stTxt=S.spin?A.t(S.spin.endless?'w_st_endless':'w_st_spin'):S.phase==='win'&&S.winner?fmt(A.t('w_st_win'),{x:S.winner.n}):S.phase==='choose'&&S.chooser?(S.streamerPicks?fmt(A.t('w_st_streamer'),{x:S.chooser.n}):(S.paused?A.t('w_paused')+' — '+S.chooser.n:fmt(A.t(S.deadline?'w_st_choose':'w_st_choose_nl'),{x:S.chooser.n,s:secs}))):A.t('w_st_idle');
   st.textContent=stTxt;st.className='w2-status ph-'+S.phase;
   var k=JSON.stringify([S.entries,S.out,S.phase,S.chooser,S.mode,S.shOn,A.lang()]);if(k===ctrlKey)return;ctrlKey=k;
-  var il=$('wInList');A.clear(il);$('wInN').textContent=S.entries.length;
+  var il=$('wInList');if(!il)return; /* Nov 6: the classic page has no «بالعجلة / ربحو وانشالو» lists in its drawer any more */
+  A.clear(il);$('wInN').textContent=S.entries.length;
   S.entries.forEach(function(e,i){
     var li=el('li','w2-row'+(S.chooser&&e.n===S.chooser.n?' is-chooser':''));li.appendChild(el('span','w2-no',String(i+1)));li.appendChild(avatar(e.u,e.n,e.c));li.appendChild(A.nameEl(e.n,e.c));
     if(S.mode==='elim'&&S.shOn){li.appendChild(el('span','w2-sh',(e.sh|0)>0?'🛡️'+((e.sh|0)>1?'×'+e.sh:''):'·'));
@@ -772,7 +790,12 @@ if(!A.obs){
         if(dup){toast(fmt(A.t('w_dup'),{x:v}));ai.select();ai.focus();return;}
         snap();if(add(v)){A.sfx('pop');save();changed();}ai.value='';ai.focus();});
     }
-    var lw=document.querySelector('.lay-wheel'),wt=function(){if(lw)lw.title=A.t('w_spin_tip');};wt();A.onLang(wt);
+    /* Nov 6: no native tooltip on the wheel any more (it popped up as a small dark box under the hub while the mouse rested on it); screen readers still get the tip */
+    var lw=document.querySelector('.lay-wheel'),wt=function(){if(lw){lw.removeAttribute('title');lw.setAttribute('aria-label',A.t('w_spin_tip'));}};wt();A.onLang(wt);
+    /* the ✕ on a name in the players card removes it from the wheel (undo brings it back) */
+    var wi=$('whIn');if(wi)wi.addEventListener('click',function(e){var xb=e.target.closest&&e.target.closest('.w2-kx');if(!xb)return;e.stopPropagation();e.preventDefault();
+      if(S.spin||editing())return;var nm=xb.getAttribute('data-n'),j=S.entries.findIndex(function(x){return x.n===nm});if(j<0)return;
+      snap();S.entries.splice(j,1);save();changed();});
   }
 }
 /* the overlay running on its own (mod chat commands, no dock) takes the options from its link: &tm= &sh= &pk= */
@@ -823,18 +846,19 @@ if(!A.obs){(function(){
    list, the event line and the join box), the wheel big in the centre of the rest, the title in its centre badge, the لَمّة logo fixed
    top-right. ---------- */
 var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:document.body.getAttribute('data-game')||'wheel',items:[
-  {id:'wheel',z:1,code:'w',kind:'scale',snapCenter:true,ar:'العجلة',en:'Wheel',def:{x:36.4,y:4.5,w:51},minW:12},
+  {id:'wheel',z:1,code:'w',kind:'scale',snapCenter:true,fixed:FIX==='classic',ar:'العجلة',en:'Wheel',def:{x:36.4,y:4.5,w:51},minW:12}, /* classic: no chip / no ✕ (the wheel can't be hidden), still moves and resizes */
   /* ONE panel on the left with sections (players, out / winners, event line, join box): hide any section and the rest fill the
      panel; drag the lines between sections to give one more room. Old links' p/o/e/b pieces map onto these sections. */
   {id:'side',z:2,code:'s',kind:'box',ar:'القائمة',en:'Side list',def:{x:1.6,y:3,w:24,h:86.5,s:1},minW:10,minH:18,sections:[
     {id:'players',code:'p',old:'p',ar:'اللاعبين',en:'Players',def:{f:6.4}},
     {id:'list2',code:'o',old:'o',label:function(){var cl=document.body.getAttribute('data-wmode')==='classic';return A.lang()==='en'?(cl?'Winners':'Out'):(cl?'الفايزين':'برا العجلة')},def:{f:FIX==='classic'?3.4:1.8}},
-    {id:'event',code:'e',old:'e',ar:'سطر الأحداث',en:'Event line',def:{f:1,v:FIX!=='classic'}}, /* the classic wheel has no kick/shield events: hidden by default there */
+    FIX==='classic'?null:{id:'event',code:'e',old:'e',ar:'سطر الأحداث',en:'Event line',def:{f:1,v:FIX!=='classic'}}, /* the classic wheel has no kick/shield events: hidden by default there */
     {id:'banner',code:'b',old:'b',ar:'صندوق الدخول',en:'Join box',def:{f:FIX==='classic'?2.7:1.9}} /* classic: room for the winner card (🏆 + name + الفائز!) */
-  ]},
-  /* the final's scoreboard: small, in the gap above the panel / beside the wheel (no overlap with the default wheel); "النتيجة باللوحة اليسار" docks it instead */
-  {id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
-]});
+  ].filter(Boolean)},
+  /* Nov 6 (Mohammad): classic has no event line and no scoreboard — neither piece nor chip.
+     the final's scoreboard: small, in the gap above the panel / beside the wheel (no overlap with the default wheel); "النتيجة باللوحة اليسار" docks it instead */
+  FIX==='classic'?null:{id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
+].filter(Boolean),bgObsOnly:FIX==='classic'}); /* classic: «مع خلفية / بلا خلفية» changes only the OBS link */
 if(LAYOUT&&!A.obs){var lr=$('gs');if(lr&&window.MutationObserver)new MutationObserver(function(){fnKey='';if(cur)drawFinal(cur);}).observe(lr,{attributes:true,attributeFilter:['class']});}
 changed();
 A.start();

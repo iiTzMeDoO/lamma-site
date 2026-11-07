@@ -55,14 +55,17 @@
     if(window.MutationObserver)new MutationObserver(lbl).observe(de,{attributes:true,attributeFilter:['lang']});
     lbl();
   }
-  /* الواجهة بتختفي بعد 3 ثواني بلا حركة وبترجع بأي حركة أو لمسة */
+  /* Nov 6 (Mohammad): on the site the header line and the bottom bar stay visible all the time.
+     Only in real fullscreen (⛶) they still fade after 3 s without movement and come back with any move or touch. */
   var idleT=null;
-  function arm(){clearTimeout(idleT);idleT=setTimeout(function(){
-    if(b.classList.contains('drawer-open')){arm();return;}
+  function fsOnNow(){return !!(document.fullscreenElement||document.webkitFullscreenElement);}
+  function arm(){clearTimeout(idleT);if(!fsOnNow())return;idleT=setTimeout(function(){
+    if(b.classList.contains('drawer-open')||!fsOnNow()){arm();return;}
     b.classList.add('ui-idle');},3000);}
   function wake(){b.classList.remove('ui-idle');arm();}
   ['mousemove','mousedown','touchstart','keydown','wheel'].forEach(function(ev){document.addEventListener(ev,wake,{passive:true});});
   document.addEventListener('focusin',wake);
+  document.addEventListener('fullscreenchange',wake);document.addEventListener('webkitfullscreenchange',wake);
   arm();
 
   /* كل عنصر بيلزق بالحافة الأقرب: يسار أو يمين (حسب مكانو بالتوزيع). العجلة بتضل بالنص */

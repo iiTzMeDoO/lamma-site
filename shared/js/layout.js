@@ -101,7 +101,7 @@ api.init=function(cfg){
 
   function scaleOf(it,p){if(it.kind==='box')return clamp(p.s||1,SMIN,SMAX);return clamp(p.w/it.def.w,.35,2.6)}
   function place(it){
-    var n=it.node,p=lay[it.id];if(!n||!p)return;
+    var n=it.node,p=lay[it.id];if(!n||!p)return;if(it.fixed)p.v=1; /* a "fixed" piece (e.g. the classic wheel) can move and resize but never hide */
     n.style.left=p.x+'%';n.style.top=p.y+'%';n.style.width=p.w+'%';n.style.height=it.kind==='box'?p.h+'%':'';
     n.style.setProperty('--ls',String(Math.round(scaleOf(it,p)*1000)/1000));
     n.classList.toggle('lay-off',p.v===0);n.style.zIndex=String(it.z||1);
@@ -134,7 +134,8 @@ api.init=function(cfg){
     return d;
   }
   function setSecVis(it,sid,v){lay[it.id].sec[sid].v=v?1:0;if(v&&lay[it.id].v===0)lay[it.id].v=1;place(it);save();renderBar();}
-  function applyAll(){items.forEach(place);if(stage){stage.classList.toggle('lay-nobg',!bg);stage.classList.toggle('lay-bg',bg);}renderBar();}
+  /* cfg.bgObsOnly (classic wheel, Nov 6): the site page always keeps its background; the choice only goes into the OBS link (&bg=) */
+  function applyAll(){items.forEach(place);if(stage){var sb=bg||(cfg.bgObsOnly&&!OBS);stage.classList.toggle('lay-nobg',!sb);stage.classList.toggle('lay-bg',sb);}renderBar();}
   function save(){LS.set(KEY,encode(lay,items));if(A&&A.updateObsUrl)A.updateObsUrl();}
   function saveBg(){LS.set(BGKEY,bg?'1':'0');if(A&&A.updateObsUrl)A.updateObsUrl();}
   if(A&&A.obsExtra)A.obsExtra(function(){var e=encode(lay,items);return (e?'&lay='+e:'')+'&bg='+(bg?'1':'0')});
@@ -176,7 +177,7 @@ api.init=function(cfg){
     var n=it.node;if(!n||n.querySelector(':scope>.lay-h'))return;
     var h=document.createElement('div');h.className='lay-h';h.setAttribute('aria-hidden','true');
     var tb=document.createElement('div');tb.className='lay-tb';var tag=document.createElement('span');tag.className='lay-tag';tb.appendChild(tag);
-    var x=mkBtn('lay-x','×',function(e){e.stopPropagation();setVis(it.id,0)});x.tabIndex=-1;tb.appendChild(x);h.appendChild(tb);
+    if(!it.fixed){var x=mkBtn('lay-x','×',function(e){e.stopPropagation();setVis(it.id,0)});x.tabIndex=-1;tb.appendChild(x);}h.appendChild(tb);
     (it.kind==='box'?['nw','ne','sw','se','n','s','e','w']:['nw','ne','sw','se']).forEach(function(c){var g=document.createElement('i');g.className='lay-g g-'+c+(c.length===1?' lay-edge':'');g.setAttribute('data-g',c);h.appendChild(g)});
     n.appendChild(h);n.tabIndex=0;
     if(it.sections)it.sections.forEach(function(sc){if(!sc.node||sc.node.querySelector(':scope>.lay-sx'))return;
@@ -234,7 +235,7 @@ api.init=function(cfg){
     function up(ev){if(ev.pointerId!==pid)return;it.node.removeEventListener('pointermove',mv);it.node.removeEventListener('pointerup',up);it.node.removeEventListener('pointercancel',up);it.node.classList.remove('lay-moving');hideGuides();save();}
     it.node.addEventListener('pointermove',mv);it.node.addEventListener('pointerup',up);it.node.addEventListener('pointercancel',up);
   }
-  function setVis(id,v){lay[id].v=v?1:0;if(!v&&sel&&sel.id===id)sel=null;place(byId[id]);save();renderBar();}
+  function setVis(id,v){if(byId[id]&&byId[id].fixed)v=1;lay[id].v=v?1:0;if(!v&&sel&&sel.id===id)sel=null;place(byId[id]);save();renderBar();}
   function reset(){lay=defaults(items);applyAll();save();}
   function setEdit(on){
     editing=!!on;R.classList.toggle('lay-editing',editing);if(stage)stage.classList.toggle('lay-editing',editing);
@@ -244,7 +245,7 @@ api.init=function(cfg){
   }
   R.addEventListener('keydown',function(e){if(!editing||!sel)return;var p=lay[sel.id],st=e.shiftKey?2:.5,k=e.key,done=true;
     if(k==='ArrowLeft')p.x=clamp(p.x-st,0,100-p.w);else if(k==='ArrowRight')p.x=clamp(p.x+st,0,100-p.w);else if(k==='ArrowUp')p.y=clamp(p.y-st,0,100);else if(k==='ArrowDown')p.y=clamp(p.y+st,0,100);
-    else if(k==='Delete'||k==='Backspace'){setVis(sel.id,0);e.preventDefault();return}else done=false;
+    else if(k==='Delete'||k==='Backspace'){if(!sel.fixed)setVis(sel.id,0);e.preventDefault();return}else done=false;
     if(done){e.preventDefault();place(sel);save();}});
   document.addEventListener('pointerdown',function(e){if(editing&&!e.target.closest('.lay-el,.lay-bar'))select(null)});
 
@@ -257,13 +258,15 @@ api.init=function(cfg){
     var row=document.createElement('div');row.className='lay-row';
     var seg=document.createElement('div');seg.className='lay-seg';seg.setAttribute('role','radiogroup');seg.setAttribute('aria-label',t('الخلفية','Background'));
     [[1,t('مع خلفية','With background')],[0,t('بلا خلفية','No background')]].forEach(function(o){var b=mkBtn('seg'+((bg?1:0)===o[0]?' on':''),o[1],function(){bg=!!o[0];saveBg();applyAll()});b.setAttribute('role','radio');b.setAttribute('aria-checked',String((bg?1:0)===o[0]));seg.appendChild(b)});
+    if(cfg.bgObsOnly){var bl=document.createElement('span');bl.className='lay-bgl';bl.textContent=t('خلفية رابط OBS:','OBS link background:');row.appendChild(bl);}
     row.appendChild(seg);
     var eb=mkBtn('btn btn-sm '+(editing?'btn-main':'btn-ghost')+' lay-editbtn',editing?t('تم ✓','Done ✓'):t('✏️ تعديل الشكل','✏️ Edit layout'),function(){setEdit(!editing)});eb.setAttribute('aria-pressed',String(editing));row.appendChild(eb);
     bar.appendChild(row);
     if(editing){
       var r2=document.createElement('div');r2.className='lay-row lay-items';
-      items.forEach(function(it){var on=lay[it.id].v!==0;var b=mkBtn('lay-chip'+(on?' on':''),(on?'✓ ':'+ ')+label(it),function(){setVis(it.id,!on)},on?t('شيل','Hide')+' '+label(it):t('رجّع','Add back')+' '+label(it));b.setAttribute('aria-pressed',String(on));r2.appendChild(b);
-        (it.sections||[]).forEach(function(sc){if(!sc.node)return;var so=lay[it.id].sec[sc.id].v!==0;var sb=mkBtn('lay-chip lay-chip-sec'+(so?' on':''),(so?'✓ ':'+ ')+secLabel(sc),function(){setSecVis(it,sc.id,!so)},so?t('شيل','Hide')+' '+secLabel(sc):t('رجّع','Add back')+' '+secLabel(sc));sb.setAttribute('aria-pressed',String(so));r2.appendChild(sb)});});
+      var secChips=function(it){(it.sections||[]).forEach(function(sc){if(!sc.node)return;var so=lay[it.id].sec[sc.id].v!==0;var sb=mkBtn('lay-chip lay-chip-sec'+(so?' on':''),(so?'✓ ':'+ ')+secLabel(sc),function(){setSecVis(it,sc.id,!so)},so?t('شيل','Hide')+' '+secLabel(sc):t('رجّع','Add back')+' '+secLabel(sc));sb.setAttribute('aria-pressed',String(so));r2.appendChild(sb)});};
+      items.forEach(function(it){var on=lay[it.id].v!==0;if(it.fixed){secChips(it);return;}var b=mkBtn('lay-chip'+(on?' on':''),(on?'✓ ':'+ ')+label(it),function(){setVis(it.id,!on)},on?t('شيل','Hide')+' '+label(it):t('رجّع','Add back')+' '+label(it));b.setAttribute('aria-pressed',String(on));r2.appendChild(b);
+        secChips(it);});
       r2.appendChild(mkBtn('lay-chip lay-reset','↺ '+t('أعِد الأصلي','Reset'),reset));
       bar.appendChild(r2);
       var hp=document.createElement('p');hp.className='lay-help';hp.textContent=t('اسحب أي شيء لتحريكه: سيلتصق بمنتصف العجلة وبالخطوط. أطراف المربع (أعلى، أسفل، يمين، يسار) تطيله أو توسّعه والكلام يبقى بنفس الحجم، والزوايا تكبّر كل شيء. الخطوط بين أقسام القائمة تُسحب للأعلى وللأسفل، و× على القسم يزيله والباقي يكبر تلقائيًا. Alt = بلا لصق. بعد أن تنتهي انسخ رابط OBS من جديد.','Drag anything to move it: it snaps to the wheel centre and the guide lines. A box\'s edges (top, bottom, left, right) make it taller or wider and the text keeps its size; the corners resize all of it. Drag the lines between the list sections up or down; × on a section hides it and the rest grow to fill. Hold Alt to place freely. When you are done, copy the OBS link again.');bar.appendChild(hp);

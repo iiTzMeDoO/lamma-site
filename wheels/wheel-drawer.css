@@ -174,3 +174,23 @@ body.g-wheel-classic .w2-panel .w2-banner.win .winner-box{display:flex;flex-dire
 body.g-wheel-classic .w2-panel .w2-banner.win .winner-box .crown{font-size:1.5em;line-height:1;margin:0}
 body.g-wheel-classic .w2-panel .w2-banner.win .winner-box .s-mid{margin:0;line-height:1.2}
 body.g-wheel-classic .w2-panel .w2-banner.win .w2-win-row{line-height:1.25}
+
+/* Nov 6 (Mohammad): classic players card — hover a name → a small ✕ on its left removes it from the wheel */
+body.g-wheel-classic #whIn .w2-chip{position:relative}
+body.g-wheel-classic #whIn .w2-kx{flex:0 0 auto;display:inline-grid;place-items:center;width:1.5em;height:1.5em;margin-inline-start:auto;padding:0;border:0;border-radius:50%;
+  background:transparent;color:var(--g2-mut,#9a9cb0);font:900 .82em/1 system-ui,sans-serif;cursor:pointer;opacity:0;transition:opacity .15s,background .15s,color .15s}
+body.g-wheel-classic #whIn .w2-chip:hover .w2-kx,body.g-wheel-classic #whIn .w2-kx:focus-visible{opacity:1;color:#f0a5ab;background:rgba(224,112,122,.14)}
+body.g-wheel-classic #whIn .w2-chip .w2-kx:hover,body.g-wheel-classic #whIn .w2-kx:focus-visible{background:#e0707a;color:#fff;outline:none}
+body.g-wheel-classic #whIn .w2-chip:hover{border-color:rgba(154,160,208,.35)}
+@media (hover:none){body.g-wheel-classic #whIn .w2-kx{opacity:.5;width:1.6em;height:1.6em}}
+html.obs #whIn .w2-kx,.lay-editing #whIn .w2-kx{display:none!important}
+/* the editor bar: «خلفية رابط OBS:» label before the background switch (classic) */
+.lay-bar .lay-bgl{font-size:12px;font-weight:700;color:var(--g2-mut,#9a9cb0);white-space:nowrap}
+
+/* بطاقة الفائز بنص الشاشة */
+.win-pop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.85);z-index:60;pointer-events:none;opacity:0;transition:opacity .45s ease,transform .45s ease;
+  min-width:min(70%,520px);max-width:90%;padding:1.1em 2em;border-radius:22px;text-align:center;font-family:Cairo,sans-serif;
+  background:rgba(11,11,15,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(232,190,90,.55);box-shadow:0 10px 50px rgba(0,0,0,.5)}
+.win-pop.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.win-pop .wp-k{color:#e8be5a;font-weight:800;font-size:clamp(18px,2.4vw,30px);letter-spacing:.02em}
+.win-pop .wp-n{color:#fff;font-weight:900;font-size:clamp(34px,6vw,84px);line-height:1.15;word-break:break-word;text-shadow:0 3px 18px rgba(0,0,0,.6)}
