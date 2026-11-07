@@ -88,12 +88,12 @@ var KEY='lamma-ba-'+A.channel,store=BT.store(KEY),sv=A.obs?null:store.get();
 var CFG={card:0,bot:false,waves:5,diff:'normal',brk:4,map:'nether',boss:'auto',size:10,join:0,pwR:'normal',giOn:true,giX:null,giY:null,giW:0,giS:1,av:true,autoF:false,speak:true,events:true,loot:true};
 if(sv&&sv.cfg)Object.keys(CFG).forEach(function(k){if(sv.cfg[k]!=null)CFG[k]=sv.cfg[k]});
 var Q=A.Q;if(A.obs){if(Q.get('map')&&(MAPS.indexOf(Q.get('map'))>=0||Q.get('map')==='random'))CFG.map=Q.get('map');if(Q.get('wv')!=null)CFG.waves=+Q.get('wv')||0;if(Q.get('df'))CFG.diff=Q.get('df');if(Q.get('av'))CFG.av=Q.get('av')==='1';if(Q.get('bs'))CFG.boss=Q.get('bs');if(Q.get('af'))CFG.autoF=Q.get('af')==='1';if(Q.get('wc')!=null)CFG.card=+Q.get('wc')||0;if(Q.get('gi')==='0')CFG.giOn=false;if(Q.get('gx')!=null&&Q.get('gy')!=null){CFG.giX=+Q.get('gx');CFG.giY=+Q.get('gy');}if(Q.get('gw'))CFG.giW=+Q.get('gw');if(Q.get('gs'))CFG.giS=+Q.get('gs');}
-var E=new BT.Arena({cfg:{cardSecs:+CFG.card||0,waves:CFG.waves,diff:CFG.diff,squadMax:+CFG.size||10,map:realMap(CFG.map),boss:CFG.boss,autoPower:false,pwRate:CFG.pwR||'normal',autoFight:!!CFG.autoF,breakSecs:CFG.brk,speak:CFG.speak,events:CFG.events,loot:CFG.loot}});
+var E=new BT.Arena({cfg:{cardSecs:+CFG.card||0,waves:CFG.waves,diff:CFG.diff,squadMax:+CFG.size||10,map:realMap(CFG.map),boss:CFG.boss,autoPower:false,pwRate:'calm',autoFight:!!CFG.autoF,breakSecs:CFG.brk,speak:CFG.speak,events:CFG.events,loot:CFG.loot}});
 if(sv){E.levels=sv.levels||{};E.xp=sv.xp||{};} /* Nov 7: gear / classes no longer carry over — every game rolls a new loadout */
 /* «عشوائي»: a real map is drawn at the start of every game (never the same one twice in a row) */
 function realMap(m){return MAPS.indexOf(m)>=0?m:(E&&MAPS.indexOf(E.cfg.map)>=0?E.cfg.map:MAPS[Math.floor(Math.random()*MAPS.length)]);}
 function pickMap(){if(CFG.map!=='random')return false;var last=E.cfg.map,pool=MAPS.filter(function(m){return m!==last});E.cfg.map=pool[Math.floor(Math.random()*pool.length)];return true;}
-function applyCfg(){E.cfg.cardSecs=+CFG.card||0;E.cfg.autoFight=!!CFG.autoF;if(E.phase==='pick')E.toPick();E.cfg.waves=+CFG.waves;E.cfg.diff=CFG.diff;E.cfg.squadMax=+CFG.size||10;if(CFG.map!=='random')E.cfg.map=CFG.map;E.cfg.boss=CFG.boss;E.cfg.autoPower=false;E.cfg.pwRate=CFG.pwR||'normal';E.cfg.breakSecs=+CFG.brk;E.cfg.speak=!!CFG.speak;E.cfg.events=!!CFG.events;E.cfg.loot=!!CFG.loot;}
+function applyCfg(){E.cfg.cardSecs=+CFG.card||0;E.cfg.autoFight=!!CFG.autoF;if(E.phase==='pick')E.toPick();E.cfg.waves=+CFG.waves;E.cfg.diff=CFG.diff;E.cfg.squadMax=+CFG.size||10;if(CFG.map!=='random')E.cfg.map=CFG.map;E.cfg.boss=CFG.boss;E.cfg.autoPower=false;E.cfg.pwRate='calm';E.cfg.breakSecs=+CFG.brk;E.cfg.speak=!!CFG.speak;E.cfg.events=!!CFG.events;E.cfg.loot=!!CFG.loot;}
 function save(){if(A.obs)return;store.set({cfg:CFG,levels:E.levels,xp:E.xp});A.updateObsUrl();}
 A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&bs='+CFG.boss+'&av='+(CFG.av?1:0)+'&af='+(CFG.autoF?1:0)+'&wc='+(+CFG.card||0)+(CFG.giOn===false?'&gi=0':'')+(CFG.giX!=null&&CFG.giY!=null?'&gx='+(+CFG.giX).toFixed(3)+'&gy='+(+CFG.giY).toFixed(3):'')+(CFG.giW?'&gw='+(+CFG.giW).toFixed(3):'')+(CFG.giS&&CFG.giS!==1?'&gs='+(+CFG.giS).toFixed(2):'');});
 var P=E.pub(); /* the state both sides draw */
@@ -114,8 +114,8 @@ A.onMirror(function(s){if(s&&s.f){P=s;if(s.jp){var nw=Date.now();JUMPM={};Object
 /* Nov 6 (Mohammad): a click anywhere outside the !معلومات card closes it (inside it you move / resize it) */
 if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(!el||el.hidden||el.contains(ev.target))return;var t=ev.target;if(t.closest&&t.closest('#side,.ba-help,.ba-cmenu'))return;closeInfo();},true);
 A.allowSolo();
-function startBattle(){applyCfg();var rnd=pickMap();if(!E.start()){status(T('ba_need'));baToast(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);if(rnd)setTimeout(function(){banner(T('ba_rmap')+' '+T('map_'+E.cfg.map),true);},400);}
-function nextOrAgain(){var again=E.phase==='won'||E.phase==='lost',rnd=again&&pickMap();E.next();P=E.pub();A.publish(P);hud(true);if(rnd&&E.inRaid())setTimeout(function(){banner(T('ba_rmap')+' '+T('map_'+E.cfg.map),true);},400);}
+function startBattle(){applyCfg();var rnd=pickMap();if(!E.start()){status(T('ba_need'));baToast(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);/* Nov 7: no random-map banner */}
+function nextOrAgain(){var again=E.phase==='won'||E.phase==='lost',rnd=again&&pickMap();E.next();P=E.pub();A.publish(P);hud(true);/* Nov 7: no random-map banner */}
 function pauseT(){if(!E.inRaid())return;E.paused=!E.paused;P=E.pub();A.publish(P);hud(true);}
 function toLobby(){var keep=E.squad.slice();if(E.phase!=='lobby'&&E.phase!=='won'&&E.phase!=='lost')E.gameNo++; /* a game stopped half-way also counts: the next one rolls new loadouts */E.reset();E.squad=keep;fillSquad();V={};P=E.pub();A.publish(P);hud(true);}
 /* Nov 6 (Mohammad): no waiting list — whoever types !دخول / !join goes straight into the squad; the host can kick anyone.
@@ -234,7 +234,7 @@ function onEvent(e){
   else if(e.k==='send'){banner('⚔',false,e.name,e.c);A.sfx('go');}
   else if(e.k==='kill'){var mv=vOf(e.mid),kv=vOf(e.fid);if(mv){var kd=mv;later(260,function(){addParts(kd.x,kd.y,.7,e.boss?70:22,['#ddd','#bbb','#fff','#999'],e.boss?4:2.6,e.boss?.14:.09,e.boss?1.4:.8);fx.push({k:'poof',x:kd.x,y:kd.y,t:0,life:e.boss?1.2:.8,big:e.boss?1:0,seed:Math.random()*99});if(kv)for(var oi=0;oi<(e.boss?10:4);oi++)fx.push({k:'orb_xp',x:kd.x,y:kd.y,tx:kv.x,ty:kv.y,t:-oi*.06,life:.7});});mv.gone=1;}floatTxt(e.fid,'+'+e.xp+'xp','#7dff7a',false);if(e.boss){shake=1;flashT=.4;A.sfx('win');}else A.sfx('pop');}
   else if(e.k==='die'){var fv=vOf(e.fid);if(fv){var dv=fv;later(250,function(){addParts(dv.x,dv.y,.8,22,['#fff','#ddd','#f66'],2.8,.09,.9);fx.push({k:'poof',x:dv.x,y:dv.y,t:0,life:.8,seed:Math.random()*99});});}A.sfx('bad');}
-  else if(e.k==='pwready'){floatTxt(e.fid,'⚡ '+T('ba_pw_full'),'#ffcf7a',false,true);var pv=vOf(e.fid);if(pv){addParts(pv.x,pv.y,1.6,10,['#ffd27a','#d9a066','#fff'],1.2,.06,.8);}A.sfx('tick');}
+  else if(e.k==='pwready'){var pv=vOf(e.fid);if(pv){addParts(pv.x,pv.y,1.6,10,['#ffd27a','#d9a066','#fff'],1.2,.06,.8);}A.sfx('tick');}
   else if(e.k==='armed'){floatTxt(e.fid,T('ba_pw_armed'),'#ffcf7a',false,true);}
   else if(e.k==='regen'){floatTxt(e.to,'+'+e.n,'#7dff7a',false,true);var rv=vOf(e.to);if(rv)addParts(rv.x,rv.y,.6,5,['#7dff7a','#3a8a2a'],.8,.05,.6);}
   else if(e.k==='power'){PWH[e.fid]=performance.now();A.sfx('go');var f1=vOf(e.fid),m1=vOf(e.mid);if(f1&&m1){fx.push({k:'p_'+e.p,x:f1.x,y:f1.y,tx:m1.x,ty:m1.y,t:0,life:e.p==='shield'?.8:e.p==='freeze'?1:.8});
@@ -360,12 +360,13 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
     var p=iso.p(e.x,e.y,v.h+(e.z||0)+(e.kind==='blaze'?.6:0)),y=p[1]-4;
     if(e.F){var f=e.F,frac=f[6]/Math.max(1,f[7]);v.hpT=v.hpT==null||v.hpT<frac?frac:Math.max(frac,v.hpT-dt*.5);
       var bw=Math.max(44,iso.tw*1.25),bh=Math.max(6,Math.round(fs(13)*.45)),pbh=Math.max(5,Math.round(bh*.85)),pc=Math.max(0,Math.min(1,(f[26]||0)/100)),full=pc>=1&&f[10];
-      var hc=Math.max(1.9,(bh+pbh+8)/8),hw=9*hc;var pbw=bw,x0=p[0]-(bw+hw+3)/2;
-      /* power bar + heart */
-      var py=y-pbh;pbar(x0,py,pbw,pbh,pc,full?'#d9a066':'#9a5c28',full?'#ffd9a0':'#b8763a',null,full?(.6+Math.sin(t*6)*.4):0);
-      var hx0=x0+bw+3,hy0=py+pbh-(bh+pbh+2)/2-4*hc;drawHHeart(hx0,hy0,hc,pc,full);
+      /* Nov 7: no power bar and no «!قوة» tag — only the brown heart right of the HP bar, filling smoothly */
+      v.pcS=v.pcS==null?pc:(pc<v.pcS?pc:v.pcS+(pc-v.pcS)*Math.min(1,dt*.6));
+      var hc=Math.max(2,(bh+9)/8),hw=9*hc;var pbw=bw,x0=p[0]-(bw+hw+4)/2;
+      var hy=y-bh-1;
+      var hx0=x0+bw+4,hy0=hy+bh/2-4*hc;drawHHeart(hx0,hy0,hc,v.pcS,full);
       /* HP bar */
-      var hy=py-2-bh;pbar(x0,hy,pbw,bh,frac,frac>.6?'#4cc85a':frac>.3?'#f2c230':'#ff5a4a',frac>.6?'#8af08a':frac>.3?'#ffe27a':'#ff9a8a',v.hpT,0);
+      pbar(x0,hy,pbw,bh,frac,frac>.6?'#4cc85a':frac>.3?'#f2c230':'#ff5a4a',frac>.6?'#8af08a':frac>.3?'#ffe27a':'#ff9a8a',v.hpT,0);
       /* name pill: LV + name in the chat colour */
       var nsz=fs(14),nmY=hy-3;ctx.font='800 '+nsz+'px Cairo,system-ui,sans-serif';ctx.direction='auto';var nw=ctx.measureText(f[2]).width;var lvT='LV'+f[8];ctx.font='900 '+Math.round(nsz*.78)+'px Cairo,system-ui,sans-serif';var lw2=ctx.measureText(lvT).width;
       var padX=nsz*.45,pillW=nw+lw2+padX*3,pillH=nsz*1.32,pX=p[0]-pillW/2,pY=nmY-pillH;var col=MC.readableColor(f[3]||'#cfd3ff');
@@ -374,7 +375,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
       ctx.font='800 '+nsz+'px Cairo,system-ui,sans-serif';ctx.direction='auto';ctx.textAlign='center';ctx.fillStyle=col;ctx.fillText(f[2],pX+padX*2+lw2+nw/2,pY+pillH/2+1);ctx.textBaseline='bottom';ctx.direction='ltr';
       var topY=pY-2;
       var tag='';if(f[14])tag+='★'+f[14]; /* !قفز now makes the character really jump (no arrow over the head) */
-      if(full){var bob=Math.abs(Math.sin(t*4+f[0]))*iso.tw*.07,rt=f[27]?T('ba_pw_armed'):(EN()?'⚡ !power':'⚡ !قوة'),rs=fs(12);ctx.font='900 '+rs+'px Cairo,system-ui,sans-serif';ctx.direction=f[27]&&!EN()?'rtl':'ltr';var rw=ctx.measureText(rt).width+rs*1.1,rh=rs*1.45,ry=topY-rh-bob;
+      if(false&&full){var bob=Math.abs(Math.sin(t*4+f[0]))*iso.tw*.07,rt=f[27]?T('ba_pw_armed'):(EN()?'⚡ !power':'⚡ !قوة'),rs=fs(12);ctx.font='900 '+rs+'px Cairo,system-ui,sans-serif';ctx.direction=f[27]&&!EN()?'rtl':'ltr';var rw=ctx.measureText(rt).width+rs*1.1,rh=rs*1.45,ry=topY-rh-bob;
         ctx.save();ctx.shadowColor='rgba(255,190,110,.9)';ctx.shadowBlur=8+Math.sin(t*6)*3;ctx.fillStyle='rgba(58,32,12,.92)';rr(p[0]-rw/2,ry,rw,rh,rh/2);ctx.fill();ctx.restore();ctx.strokeStyle='#e8be5a';ctx.lineWidth=1.5;rr(p[0]-rw/2,ry,rw,rh,rh/2);ctx.stroke();
         ctx.textBaseline='middle';ctx.fillStyle='#ffe2a8';ctx.fillText(rt,p[0],ry+rh/2+1);ctx.textBaseline='bottom';ctx.direction='ltr';topY=ry-2;}
       if(tag){var bob2=Math.abs(Math.sin(t*5+f[0]))*iso.tw*.08;label(p[0],topY-bob2,tag,'#ffd23d',fs(13),900);}}
@@ -445,7 +446,7 @@ function hitMob(ev){var r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.
     if(Math.abs(mx-cx)<hw&&Math.abs(my-cy)<hh){var d=Math.abs(mx-cx)+Math.abs(my-cy);if(d<bd){bd=d;best=m[0];}}});return best;}
 /* Mohammad #4: a click on a character opens a small menu — «هجوم» (send them to duel) or «معلومات الشخصية»; the streamer chooses */
 if(!A.obs){var lcEl=$('baLobbyCard');if(lcEl)lcEl.addEventListener('click',function(e){var li=e.target.closest&&e.target.closest('li[data-u]');if(!li||E.phase!=='lobby')return;var u=li.getAttribute('data-u');
-  if(li.getAttribute('data-a')==='rem'){kick(u);return;}if(!E.pick(u)){baToast(T('ba_m_full'));return;}P=E.pub();A.publish(P);hud(true);});}
+  if(li.getAttribute('data-a')==='rem'){if(e.target.closest('.lq-x'))kick(u);return;} /* Nov 7: only the ✕ removes a player */if(!E.pick(u)){baToast(T('ba_m_full'));return;}P=E.pub();A.publish(P);hud(true);});}
 /* Nov 6: in the lobby a click on a candidate on the field puts them in the squad (or takes them out) — the lists live in ⚙ now */
 function lobbyMenu(u,ev){var w=E.waiting[u],st=$('stage'),r0=st.getBoundingClientRect();var m=document.createElement('div');m.id='baCMenu';m.className='ba-cmenu';
   var hd=document.createElement('div');hd.className='cm-h';hd.appendChild(BT.name(w.name,w.color));m.appendChild(hd);
@@ -669,7 +670,7 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
     if(ph==='lobby'){var lc=$('baLobbyCard');A.clear(lc);
       /* the squad, in the middle of the lobby (control page: click a name = kick) */
       if((P.sq||[]).length){var sh=document.createElement('div');sh.className='ba-qh ba-sqh2';sh.textContent=T('ba_picked',{n:P.sq.length,m:A.obs?P.sq.length:E.cfg.squadMax});lc.appendChild(sh);var su=document.createElement('ul');su.className='ba-ql ba-sq2';
-        P.sq.forEach(function(s){var li=document.createElement('li');li.setAttribute('data-u',s[0]);li.setAttribute('data-a','rem');if(!A.obs)li.title=T('ba_m_rem');li.appendChild(BT.name(s[1],s[2]));if(!A.obs){var x=document.createElement('span');x.className='lq-x';x.textContent='✕';li.appendChild(x);}su.appendChild(li);});lc.appendChild(su);}}}
+        P.sq.forEach(function(s){var li=document.createElement('li');li.setAttribute('data-u',s[0]);li.setAttribute('data-a','rem');li.appendChild(BT.name(s[1],s[2]));if(!A.obs){var x=document.createElement('span');x.className='lq-x';x.textContent='✕';x.title=T('ba_m_rem');li.appendChild(x);}su.appendChild(li);});lc.appendChild(su);}}}
   $('baLobbyCard').hidden=!(ph==='lobby'&&(P.sq||[]).length); /* Nov 6: no empty «0 waiting» card on an idle screen */
   lb.classList.toggle('off',ph!=='lobby'||!!P.wc); /* Nov 6 (10:06 PM): the join box is only in the lobby — it disappears the moment the battle starts */
   /* the join timer (⚙ «وقت الدخول»): a countdown in the join box while it runs */

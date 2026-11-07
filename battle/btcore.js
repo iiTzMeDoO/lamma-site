@@ -277,7 +277,7 @@ Arena.prototype.next=function(){if(this.phase==='won')return this.again(true);if
 /* Nov 7 (Mohammad): the power («القوة», the brown heart) fills SLOWLY like an HP bar — every blow you strike, every blow you take and,
    a little, every turn a teammate fights — and it NEVER fires by itself: the viewer types !قوة / !power once it is full.
    Typed while full but not fighting, it is "armed" and goes off on their first turn in their next duel. */
-var PWG={slow:.7,normal:1,fast:1.4},PWC={own:.13,hit:.05,ally:.012};api.PWC=PWC;
+var PWG={calm:.5,slow:.7,normal:1,fast:1.4},PWC={own:.13,hit:.05,ally:.012};api.PWC=PWC;
 function charge(s,f,v){if(!f||!f.alive||f.pc>=1)return;f.pc=Math.min(1,Math.round(((f.pc||0)+v*(PWG[s.cfg.pwRate]||1))*1000)/1000);if(f.pc>=1)s.emit({k:'pwready',fid:f.id,u:f.u,name:f.name,c:f.color});}
 Arena.prototype.fTurn=function(f,m){var s=this;charge(this,f,PWC.own);this.f.forEach(function(x){if(x!==f)charge(s,x,PWC.ally);});
   if(f.armed&&f.pc>=1){this.firePower(f);if(this.duel.end)return;}
