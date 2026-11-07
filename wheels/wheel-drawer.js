@@ -10,8 +10,8 @@
   btn.addEventListener('click',function(){set(!b.classList.contains('drawer-open'));});
   if(x)x.addEventListener('click',function(){set(false);btn.focus();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.classList.contains('drawer-open'))set(false);});
-  /* classic wheel: a click on the stage while the drawer is open just closes the drawer (it doesn't spin) */
-  if(b.classList.contains('g-wheel-classic')){var stg=document.getElementById('stage');
+  /* both wheels: a click on the stage while the drawer is open just closes the drawer (it doesn't spin) */
+  if(b.classList.contains('g-wheel-classic')||b.classList.contains('g-wheel-pick')){var stg=document.getElementById('stage');
     if(stg)stg.addEventListener('click',function(e){if(!b.classList.contains('drawer-open'))return;if(e.target.closest&&e.target.closest('.w2-panel'))return;e.stopPropagation();e.preventDefault();set(false);},true);}
   /* شريط "تعديل الشكل / الخلفية" بيتعمل بـ layout.js فوق الستيج: منحطو بأول الدرج */
   var wrap=document.querySelector('.stage-wrap'),head=side.querySelector('.drawer-head');

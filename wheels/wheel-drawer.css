@@ -110,9 +110,9 @@ html.obs .w2-champ .fn-x{display:none}
 
 /* ---------- Nov 6 (Mohammad): العجلة الكلاسيك — نفس شكل عجلة الشخصنة، بس زر الإعدادات تحت على اليمين والدرج بيطلع من اليمين،
    وأزرار التحكم الحقيقية بالشريط التحتي (تراجع مكان زر اللف)، والإضافة اليدوية فوق قائمة اللاعبين ---------- */
-html:not(.obs) body.g-wheel-classic .side{left:auto;right:0;border-right:0;border-left:1px solid var(--line2);
+html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .side{left:auto;right:0;border-right:0;border-left:1px solid var(--line2);
   box-shadow:-14px 0 40px -10px rgba(0,0,0,.6);transform:translateX(104%)}
-html:not(.obs) body.g-wheel-classic.drawer-open .side{transform:none}
+html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick).drawer-open .side{transform:none}
 .fs-dock-c{direction:rtl}
 html[dir=ltr] .fs-dock-c .dock-btn{direction:ltr}
 .fs-dock-c .dock-gap{flex:1 1 0;min-width:8px}
@@ -153,36 +153,36 @@ html[dir=rtl] .w2-add input:placeholder-shown{direction:rtl}
   background:rgba(154,160,208,.14);color:inherit;font:inherit;font-size:1.05em;font-weight:800;line-height:1;cursor:pointer}
 .w2-add-b:hover{background:rgba(154,160,208,.26)}
 html.obs .w2-add,html.ctrl-locked .w2-add{display:none!important}
-html:not(.obs) body.g-wheel-classic .lay-wheel .wh-wrap{cursor:pointer}
+html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .lay-wheel .wh-wrap{cursor:pointer}
 
 /* موبايل (عمودي): العجلة كبيرة فوق، وقائمة اللاعبين مع خانة الإضافة تحتها بخط مقروء (بدل 16:9 الصغيرة) */
 @media (max-width:760px) and (orientation:portrait){
-  html:not(.obs) body.g-wheel-classic .stage-wrap>.stage>.wh2{width:100cqw;height:calc(100cqh - var(--hdr,64px) - var(--dock-h));--m:0px}
-  html:not(.obs) body.g-wheel-classic .wh2>.lay-el[data-lay=wheel]{left:5%!important;top:1.5%!important;width:90%!important;translate:none!important}
-  html:not(.obs) body.g-wheel-classic .wh2>.lay-el[data-lay=side]{left:3%!important;right:auto!important;top:auto!important;bottom:1.5%!important;
+  html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .stage-wrap>.stage>.wh2{width:100cqw;height:calc(100cqh - var(--hdr,64px) - var(--dock-h));--m:0px}
+  html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .wh2>.lay-el[data-lay=wheel]{left:5%!important;top:1.5%!important;width:90%!important;translate:none!important}
+  html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .wh2>.lay-el[data-lay=side]{left:3%!important;right:auto!important;top:auto!important;bottom:1.5%!important;
     width:94%!important;height:calc(98.5% - 92cqw - 3%)!important;min-height:200px;translate:none!important;font-size:14px!important}
-  html:not(.obs) body.g-wheel-classic .wh2>.w2-fixlogo{display:none}
-  html:not(.obs) body.g-wheel-classic .w2-add input{font-size:16px;height:40px}
-  html:not(.obs) body.g-wheel-classic .w2-add-b{width:40px;height:40px;font-size:18px}
+  html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .wh2>.w2-fixlogo{display:none}
+  html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .w2-add input{font-size:16px;height:40px}
+  html:not(.obs) body:is(.g-wheel-classic,.g-wheel-pick) .w2-add-b{width:40px;height:40px;font-size:18px}
 }
 
 .fs-dock-c .dock-join .dl-s{display:none}
 @media (max-width:760px){.fs-dock-c .dock-join .dl{display:none}.fs-dock-c .dock-join .dl-s{display:inline}}
 
 /* بطاقة الفائز باللوحة: مضغوطة لتبان كاملة (🏆 + الاسم + الفائز!) */
-body.g-wheel-classic .w2-panel .w2-banner.win .winner-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15em;padding:.1em 0;height:100%;box-sizing:border-box}
-body.g-wheel-classic .w2-panel .w2-banner.win .winner-box .crown{font-size:1.5em;line-height:1;margin:0}
-body.g-wheel-classic .w2-panel .w2-banner.win .winner-box .s-mid{margin:0;line-height:1.2}
-body.g-wheel-classic .w2-panel .w2-banner.win .w2-win-row{line-height:1.25}
+body:is(.g-wheel-classic,.g-wheel-pick) .w2-panel .w2-banner.win .winner-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15em;padding:.1em 0;height:100%;box-sizing:border-box}
+body:is(.g-wheel-classic,.g-wheel-pick) .w2-panel .w2-banner.win .winner-box .crown{font-size:1.5em;line-height:1;margin:0}
+body:is(.g-wheel-classic,.g-wheel-pick) .w2-panel .w2-banner.win .winner-box .s-mid{margin:0;line-height:1.2}
+body:is(.g-wheel-classic,.g-wheel-pick) .w2-panel .w2-banner.win .w2-win-row{line-height:1.25}
 
 /* Nov 6 (Mohammad): classic players card — hover a name → a small ✕ on its left removes it from the wheel */
-body.g-wheel-classic #whIn .w2-chip{position:relative}
-body.g-wheel-classic #whIn .w2-kx{flex:0 0 auto;display:inline-grid;place-items:center;width:1.5em;height:1.5em;margin-inline-start:auto;padding:0;border:0;border-radius:50%;
+body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-chip{position:relative}
+body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-kx{flex:0 0 auto;display:inline-grid;place-items:center;width:1.5em;height:1.5em;margin-inline-start:auto;padding:0;border:0;border-radius:50%;
   background:transparent;color:var(--g2-mut,#9a9cb0);font:900 .82em/1 system-ui,sans-serif;cursor:pointer;opacity:0;transition:opacity .15s,background .15s,color .15s}
-body.g-wheel-classic #whIn .w2-chip:hover .w2-kx,body.g-wheel-classic #whIn .w2-kx:focus-visible{opacity:1;color:#f0a5ab;background:rgba(224,112,122,.14)}
-body.g-wheel-classic #whIn .w2-chip .w2-kx:hover,body.g-wheel-classic #whIn .w2-kx:focus-visible{background:#e0707a;color:#fff;outline:none}
-body.g-wheel-classic #whIn .w2-chip:hover{border-color:rgba(154,160,208,.35)}
-@media (hover:none){body.g-wheel-classic #whIn .w2-kx{opacity:.5;width:1.6em;height:1.6em}}
+body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-chip:hover .w2-kx,body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-kx:focus-visible{opacity:1;color:#f0a5ab;background:rgba(224,112,122,.14)}
+body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-chip .w2-kx:hover,body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-kx:focus-visible{background:#e0707a;color:#fff;outline:none}
+body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-chip:hover{border-color:rgba(154,160,208,.35)}
+@media (hover:none){body:is(.g-wheel-classic,.g-wheel-pick) #whIn .w2-kx{opacity:.5;width:1.6em;height:1.6em}}
 html.obs #whIn .w2-kx,.lay-editing #whIn .w2-kx{display:none!important}
 /* the editor bar: «خلفية رابط OBS:» label before the background switch (classic) */
 .lay-bar .lay-bgl{font-size:12px;font-weight:700;color:var(--g2-mut,#9a9cb0);white-space:nowrap}
@@ -194,3 +194,21 @@ html.obs #whIn .w2-kx,.lay-editing #whIn .w2-kx{display:none!important}
 .win-pop.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .win-pop .wp-k{color:#e8be5a;font-weight:800;font-size:clamp(18px,2.4vw,30px);letter-spacing:.02em}
 .win-pop .wp-n{color:#fff;font-weight:900;font-size:clamp(34px,6vw,84px);line-height:1.15;word-break:break-word;text-shadow:0 3px 18px rgba(0,0,0,.6)}
+
+/* ---------- Nov 6 (Mohammad): عجلة الشخصنة بنفس شكل الكلاسيك — الإعدادات المخفية، «عجلة تلقائية» وأزرار الدور بالشريط ---------- */
+html:not(.obs) body:is(.g-wheel-pick,.g-wheel-classic) .w2-set .srow[hidden],.w2-auto-in[hidden]{display:none!important}
+.w2-set .srow-l .srow-s{display:block;margin-top:2px;font-size:.72rem;font-weight:600;color:var(--mut,#9a9db5);line-height:1.35;opacity:.9}
+.w2-auto-in{margin:2px 0 0;padding:2px 0 2px 0;border-inline-start:2px solid color-mix(in srgb,var(--ta2,#9AA0D0) 45%,transparent);padding-inline-start:10px}
+.w2-auto-in .srow{min-height:40px}
+.fs-dock-c .dock-pick{border-color:color-mix(in srgb,#d8b65e 45%,var(--line2));background:color-mix(in srgb,#d8b65e 10%,var(--card))}
+.fs-dock-c .dock-pick:hover:not(:disabled){background:color-mix(in srgb,#d8b65e 18%,var(--card))}
+/* personal wheel: the banner's small event line (who kicked whom), and the chooser highlighted in the players card */
+body.g-wheel-pick .w2-banner .w2-b-ev{margin:.2em 0 0;color:var(--g2-mut,#b4b7cf);font-size:.82em;line-height:1.3}
+html:not(.obs) body.g-wheel-pick #whIn.can-kick .w2-chip:not(.is-chooser):not(.more):hover .w2-kx{background:#e0707a;color:#fff;opacity:1}
+body.g-wheel-pick.w-fin-on .w2-add{display:none!important}
+/* «عجلة تلقائية»: its own row at the top of the settings, its four timers indented under it while it is on */
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-auto{border-top:1px solid var(--line);padding:6px 0 8px}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-auto>.srow{min-height:48px}
+html:not(.obs) body.g-wheel-pick .w2-set>.w2-auto>.srow .srow-l>span{font-weight:800;font-size:.92rem;color:var(--lav,#d6d9f6)}
+/* the landed player (choosing now) stands out in the players card */
+body.g-wheel-pick .w2-panel #whIn .w2-chip.is-chooser{background:rgba(216,182,94,.16);border-color:var(--g2-gold,#d8b65e)}

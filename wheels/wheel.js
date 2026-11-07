@@ -61,25 +61,36 @@ function isLight(hex){var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5
 var RTL=/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/, LTRCH=/[A-Za-z\u00C0-\u024F]/;
 function isRtl(s){var m=/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFFA-Za-z\u00C0-\u024F]/.exec(String(s));return !!(m&&RTL.test(m[0]))}
 
-if(FIX==='classic')A.strings({
+/* Nov 6 (Mohammad): both wheel pages share the classic look — the bottom bar's join toggle, the add-name box, hover ✕ */
+var CL=FIX==='classic'||FIX==='elim';
+if(CL)A.strings({
  ar:{w_join_open:'الدخول مفتوح',w_join_closed:'الدخول مغلق',w_join_open_s:'مفتوح',w_join_closed_s:'مغلق',w_join_tip_open:'الشات بيدخل بـ !دخول أو !join — اضغط لإغلاق الدخول (بيتسكّر لحاله لما تلف العجلة)',w_join_tip_closed:'الدخول مغلق — اضغط لفتحه',
   w_add_ph:'أضف اسماً ↵',w_rm_name:'احذف «{x}» من العجلة',w_dup:'«{x}» موجود مسبقاً',w_spin_tip:'اضغط على العجلة لتلف (أو زر المسافة)',w_reset_c:'ريسيت',
-  g_title:'العجلة الكلاسيك',g_how:'الشات بيدخل بـ !دخول أو !join وبتلف العجلة، واللي بتوقف عليه بيربح 🏆. بلا طرد. فيك تشيل الفائز بعد كل لفة، أو تعيد اللفة.'},
+  w_reset_c:'ريسيت'},
  en:{w_join_open:'Joining open',w_join_closed:'Joining closed',w_join_open_s:'Open',w_join_closed_s:'Closed',w_join_tip_open:'Chat joins with !join or !دخول — click to close joining (it closes by itself when the wheel spins)',w_join_tip_closed:'Joining is closed — click to open it',
   w_add_ph:'Add a name ↵',w_rm_name:'Remove "{x}" from the wheel',w_dup:'"{x}" is already there',w_spin_tip:'Click the wheel to spin (or press Space)',w_reset_c:'Reset',
-  g_title:'Classic Wheel',g_how:'Chat joins with !join (or !دخول), you spin, and whoever it lands on wins 🏆. No kicks. You can remove the winner after each spin, or re-spin.'}});
-else if(FIX==='elim')A.strings({ar:{g_title:'عجلة الشخصنة'},en:{g_title:'Personal Wheel'}});
+  w_reset_c:'Reset'}});
+if(FIX==='classic')A.strings({
+ ar:{g_title:'العجلة الكلاسيك',g_how:'الشات بيدخل بـ !دخول أو !join وبتلف العجلة، واللي بتوقف عليه بيربح 🏆. بلا طرد. فيك تشيل الفائز بعد كل لفة، أو تعيد اللفة.'},
+ en:{g_title:'Classic Wheel',g_how:'Chat joins with !join (or !دخول), you spin, and whoever it lands on wins 🏆. No kicks. You can remove the winner after each spin, or re-spin.'}});
+else if(FIX==='elim')A.strings({
+ ar:{g_title:'عجلة الشخصنة',w_g_auto:'عجلة تلقائية',w_auto_on:'عجلة تلقائية',w_auto_on_s:'الدخول بيسكّر لحالو وبعدين العجلة بتلف لحالها لحد ما يطلع الفائز',
+  w_to_self:'يطلع هو نفسه',w_ev_self:'خلص وقت {x} وما اختار، فطلع هو',w_ev_self_sh:'🛡️ خلص وقت {x}: انكسر شيلدو وضل بالعجلة',w_rm_name:'طلّع «{x}» من العجلة',w_kick_for:'{x} بيطلع (عن {y})',w_new:'جولة جديدة',
+  w_fin_auto:'لف تلقائي بالنهائي',w_auto:'لف تلقائي بعد كل طرد',w_join_t:'وقت الدخول'},
+ en:{g_title:'Personal Wheel',w_g_auto:'Auto wheel',w_auto_on:'Auto wheel',w_auto_on_s:'Joining closes by itself, then the wheel spins by itself until there is a winner',
+  w_to_self:'They leave themselves',w_ev_self:'{x} ran out of time without picking, so they are out',w_ev_self_sh:'🛡️ {x} ran out of time: their shield broke and they stay',w_rm_name:'Take "{x}" off the wheel',w_kick_for:'Kick {x} (for {y})',w_new:'New round',
+  w_fin_auto:'Auto-spin in the final',w_auto:'Auto-spin after each kick',w_join_t:'Join window'}});
 /* the FINAL (2 left): first to N landings wins */
 A.strings({ar:{w_fin_on:'النهائي لما يضلو 2',w_fin_to:'الفوز بـ',w_fin_tag:'النهائي',w_fin_first:'أول واحد بيوصل {t} بيربح',w_fin_round:'الجولة {r}',w_fin_mp:'نقطة الحسم!',w_fin_champ:'البطل',
   w_fin_ban:'النهائي! أول واحد بيوصل {t} بيربح 🏆',w_fin_spin:'الجولة {r}… 🏆',w_spin_fin:'لفّ الجولة {r} 🏆',w_ev_fpoint:'🔥 نقطة لـ {x} ({y})'},
  en:{w_fin_on:'Final when 2 are left',w_fin_to:'Win at',w_fin_tag:'FINAL',w_fin_first:'First to {t} wins',w_fin_round:'Round {r}',w_fin_mp:'Match point!',w_fin_champ:'CHAMPION',
   w_fin_ban:'Final! First to {t} wins 🏆',w_fin_spin:'Round {r}… 🏆',w_spin_fin:'Spin round {r} 🏆',w_ev_fpoint:'🔥 Point to {x} ({y})'}});
 /* shield wording only exists while "إضافة شيلدات / Add shields" is on: these keys swap between the two sets */
-var STR_NOSH={ar:{g_how:'الشات بيدخل بـ !دخول أو !join. العجلة بتوقف على حدا، بتطلع قائمة كبيرة عالشاشة فيها كل اللي بالعجلة، وهو بيختار مين يطلع بـ !طرد رقم أو اسم (أو !kick). بيقدر يطلع لحالو بـ !خروج. لما يضلو 2، آخر لفة بتعطي الفائز.',w_choose_hint:'وقت الاختيار: اضغط ✖ جنب أي اسم (أو على اسمو بالقائمة عالشاشة) لتختار عنو. برّا وقت الاختيار: ✖ بيطرد مباشرة و↩ بيرجّع مباشرة.',w_lay_event_ph:'سطر الأحداث (طرد، رجعة)',w_m_elim:'إقصاء'},en:{g_how:'Chat joins with !join (or !دخول). The wheel lands on someone, a big on-screen list of everyone on the wheel opens, and they pick who leaves with !kick number or name. Anyone can leave with !leave. When 2 are left, the last spin crowns the winner.',w_choose_hint:'During a pick: press ✖ next to a name (or click it in the on-screen list) to choose for them. Outside a pick: ✖ removes directly and ↩ brings back directly.',w_lay_event_ph:'Event line (kick, revive)',w_m_elim:'Elimination'}},STR_SH={
- ar:{g_how:'الشات بيدخل بـ !دخول أو !join. العجلة بتوقف على حدا، بتطلع قائمة كبيرة عالشاشة فيها كل اللي بالعجلة، وهو بيختار مين يطلع بـ !طرد رقم أو اسم (أو !kick). كل واحد معو 🛡️ شيلد بيحميه، أو بيرجّع فيه حدا من برا بـ !رجع اسم (أو !revive). بيقدر يطلع لحالو بـ !خروج. لما يضلو 2، آخر لفة بتعطي الفائز.',
+var STR_NOSH={ar:{g_how:'الشات بيدخل بـ !دخول أو !join. العجلة بتوقف على حدا، وهو بيختار مين يطلع بـ !طرد رقم أو اسم (أو !kick). بيقدر يطلع لحالو بـ !خروج. لما يضلو 2، آخر لفة بتعطي الفائز.',w_choose_hint:'وقت الاختيار: اضغط ✖ جنب أي اسم (أو على اسمو بالقائمة عالشاشة) لتختار عنو. برّا وقت الاختيار: ✖ بيطرد مباشرة و↩ بيرجّع مباشرة.',w_lay_event_ph:'سطر الأحداث (طرد، رجعة)',w_m_elim:'إقصاء'},en:{g_how:'Chat joins with !join (or !دخول). The wheel lands on someone and they pick who leaves with !kick number or name. Anyone can leave with !leave. When 2 are left, the last spin crowns the winner.',w_choose_hint:'During a pick: press ✖ next to a name (or click it in the on-screen list) to choose for them. Outside a pick: ✖ removes directly and ↩ brings back directly.',w_lay_event_ph:'Event line (kick, revive)',w_m_elim:'Elimination'}},STR_SH={
+ ar:{g_how:'الشات بيدخل بـ !دخول أو !join. العجلة بتوقف على حدا، وهو بيختار مين يطلع بـ !طرد رقم أو اسم (أو !kick). كل واحد معو 🛡️ شيلد بيحميه، أو بيرجّع فيه حدا من برا بـ !رجع اسم (أو !revive). بيقدر يطلع لحالو بـ !خروج. لما يضلو 2، آخر لفة بتعطي الفائز.',
   w_choose_hint:'وقت الاختيار: اضغط ✖ جنب أي اسم (أو على اسمو بالقائمة عالشاشة) لتختار عنو (الشيلد بينحسب)، أو ↩ لترجّع حدا بشيلدو. برّا وقت الاختيار: ✖ بيطرد مباشرة و↩ بيرجّع مباشرة.',
   w_lay_event_ph:'سطر الأحداث (طرد، شيلد، رجعة)',w_m_elim:'إقصاء + شيلد'},
- en:{g_how:'Chat joins with !join (or !دخول). The wheel lands on someone, a big on-screen list of everyone on the wheel opens, and they pick who leaves with !kick number or name. Everyone has a 🛡️ shield that protects them, or that they can use to bring someone back with !revive name. Anyone can leave with !leave. When 2 are left, the last spin crowns the winner.',
+ en:{g_how:'Chat joins with !join (or !دخول). The wheel lands on someone and they pick who leaves with !kick number or name. Everyone has a 🛡️ shield that protects them, or that they can use to bring someone back with !revive name. Anyone can leave with !leave. When 2 are left, the last spin crowns the winner.',
   w_choose_hint:'During a pick: press ✖ next to a name (or click it in the on-screen list) to choose for them (shields count), or ↩ to revive someone with their shield. Outside a pick: ✖ removes directly and ↩ brings back directly.',
   w_lay_event_ph:'Event line (kick, shield, revive)',w_m_elim:'Elimination + shields'}};
 var shApplied=null;
@@ -90,7 +101,7 @@ function applySh(on){on=!!on&&FIX!=='classic';if(on===shApplied)return;shApplied
 
 /* ---------- state ---------- */
 var OD=WO?WO.DEF:{sh:false,shStart:1,picker:true,pick:20,dur:6,auto:7,join:0};
-var S={entries:[],out:[],wins:[],last:null,rmT:0,mode:FIX||'elim',open:true,rot:0,spin:null,winner:null,remove:false,dur:OD.dur,title:'',chatCols:true,avatar:false,elim:false,finAuto:false,vipCtrl:false,finDock:true,
+var S={autoOn:false,autoTo:'self',finAutoSecs:5,entries:[],out:[],wins:[],last:null,rmT:0,mode:FIX||'elim',open:true,rot:0,spin:null,winner:null,remove:false,dur:OD.dur,title:'',chatCols:true,avatar:true,elim:false,finAuto:false,vipCtrl:false,finDock:true,
   shOn:OD.sh,shStart:OD.shStart,picker:OD.picker,joinSecs:OD.join,joinUntil:0,pickSecs:OD.pick,timeoutAct:'streamer',autoNext:OD.auto,fin:null,finOn:OD.fin!==false,finTo:OD.finTo||3,phase:'idle',chooser:null,deadline:0,pausedLeft:0,paused:false,ev:null,evT:0,nextAt:0};
 var hist=[];
 function snap(){hist.push(JSON.stringify({e:S.entries,o:S.out,ph:S.phase,ch:S.chooser,w:S.winner,ev:S.ev,ws:S.wins,f:S.fin,el:S.elim}));if(hist.length>40)hist.shift();}
@@ -116,7 +127,15 @@ function pub(){return {entries:S.entries.slice(0,300).map(function(e){return [e.
   mode:S.mode,wins:S.mode==='classic'?S.wins.slice(0,12):[],open:S.open,rot:S.rot,spin:S.spin,winner:S.winner,title:S.title,chatCols:!!S.chatCols,avatar:!!S.avatar,phase:S.phase,chooser:S.chooser,
   left:S.phase==='choose'&&!S.paused&&S.deadline?Math.max(0,S.deadline-Date.now()):(S.paused?S.pausedLeft:0),pick:S.pickSecs,paused:S.paused,streamerPicks:!!S.streamerPicks,ev:S.ev,evT:S.evT,lang:A.lang(),
   sh:S.mode==='elim'&&!!S.shOn,picker:!!S.picker,fin:S.mode==='elim'?S.fin:null,finDock:!!S.finDock,finShow:S.finShow|0,champOff:S.champOff||'',joinLeft:S.open&&S.joinUntil?Math.max(0,S.joinUntil-Date.now()):0}}
-function opts(){return {sh:S.shOn,shStart:S.shStart,picker:S.picker,pick:S.pickSecs,dur:S.dur,auto:S.autoNext,join:S.joinSecs,fin:S.finOn,finTo:S.finTo,fa:S.finAuto,vip:S.vipCtrl,fd:S.finDock,fs:S.finShow}}
+function opts(){return {sh:S.shOn,shStart:S.shStart,picker:S.picker,pick:S.pickSecs,dur:S.dur,auto:S.autoNext,join:S.joinSecs,fin:S.finOn,finTo:S.finTo,fa:S.finAuto,vip:S.vipCtrl,fd:S.finDock,fs:S.finShow,ao:S.autoOn,fx:S.finAutoSecs,at:S.autoTo}}
+/* Nov 6 (Mohammad), عجلة الشخصنة: «عجلة تلقائية» (off by default) holds the join window, the auto-spin after a kick, what happens when the
+   pick time runs out (default: the chooser leaves himself) and the auto-spin in the final. Off = the host spins by hand, nothing runs by itself. */
+var AUTO=FIX==='elim';
+function autoOn(){return !AUTO||!!S.autoOn}
+function joinWin(){return AUTO?(S.autoOn?S.joinSecs:0):S.joinSecs}
+function autoNextSecs(){return AUTO?(S.autoOn?S.autoNext:0):S.autoNext}
+function finAutoMs(){if(AUTO)return S.autoOn&&S.finAutoSecs>0?S.finAutoSecs*1000:0;return S.finAuto?FIN_AUTO_MS:0}
+function timeoutAct(){return AUTO&&S.autoOn?S.autoTo:S.timeoutAct}
 /* the FINAL starts by itself when exactly 2 are left (setting on); leaves when the pair changes (a leave, a revive, undo, new round) */
 /* Nov 4 (Mohammad): the final never opens just because 2 joined, nor while people are still joining — only once the streamer started
    the wheel and eliminations brought the wheel down to 2 (S.elim: someone was kicked out during this round) */
@@ -146,9 +165,9 @@ function add(name,color,user,sh){
   if(S.entries.some(dup)||S.out.some(dup))return false;
   S.entries.push({n:name,c:color||'',u:user||'',sh:sh==null?startShields():sh});return true;
 }
-function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,fs:S.finShow,v:19}));if(A.updateObsUrl)A.updateObsUrl();}}
+function save(){if(!A.obs){A.LS.set(SKEY,JSON.stringify({e:S.entries.slice(0,300),o:S.out.slice(0,300),w:S.wins.slice(0,30),mode:S.mode,remove:S.remove,dur:S.dur,open:S.open,title:S.title,cc:S.chatCols?1:0,av:S.avatar?1:0,sh:S.shStart,shOn:S.shOn?1:0,pk:S.picker?1:0,join:S.joinSecs,pick:S.pickSecs,to:S.timeoutAct,auto:S.autoNext,fo:S.finOn?1:0,ft:S.finTo,f:S.fin,el:S.elim?1:0,fa:S.finAuto?1:0,vip:S.vipCtrl?1:0,fd:S.finDock?1:0,fs:S.finShow,ao:S.autoOn?1:0,fx:S.finAutoSecs,at:S.autoTo,v:20}));if(A.updateObsUrl)A.updateObsUrl();}}
 /* join window: joining closes by itself N s after it opens (0 = stays open) */
-function openJoin(on){S.open=!!on;S.joinUntil=S.open&&S.joinSecs>0?Date.now()+S.joinSecs*1000:0;}
+function openJoin(on){S.open=!!on;var js=joinWin();S.joinUntil=S.open&&js>0?Date.now()+js*1000:0;}
 function event(type,x,y){S.ev={t:type,x:x||'',y:y||''};S.evT=Date.now();}
 
 /* ---------- spin ---------- */
@@ -169,7 +188,7 @@ function spin(){
     toast(A.t('w_need2'));return;}
   if(S.mode==='elim')S.spun=true;
   syncFin();
-  if(FIX==='classic'&&S.open){openJoin(false);save();} /* Nov 6 (Mohammad): a spin closes joining; it stays closed until the host reopens it */
+  if(CL&&S.open){openJoin(false);save();} /* Nov 6 (Mohammad): a spin closes joining; it stays closed until the host reopens it (both wheels) */
   if(!(S.dur>0)){ /* spin time "no limit": the wheel keeps turning until the streamer (or a mod with !وقف / !stop) stops it */
     S.winner=null;S.ev=null;S.nextAt=0;S.phase='spinning';S.spin={start:Date.now()+150,endless:true,from:S.rot,speed:1.35};
     A.sfx('start');changed();clearTimeout(S.t);return;}
@@ -199,7 +218,7 @@ function landed(){
   if(sp.fin&&S.fin&&WO){ /* the final: +1 for the landed player; first to N wins (then the normal winner flow) */
     snap();S.fin=WO.finalPoint(S.fin,who.n,Date.now());S.chooser=null;
     if(S.fin.w>=0){finishWin(who);save();return;}
-    S.phase='idle';event('fpoint',who.n,S.fin.s[0]+' - '+S.fin.s[1]);if(S.finAuto)S.nextAt=Date.now()+FIN_AUTO_MS;save();changed();return;}
+    S.phase='idle';event('fpoint',who.n,S.fin.s[0]+' - '+S.fin.s[1]);var fa=finAutoMs();if(fa)S.nextAt=Date.now()+fa;save();changed();return;}
   if(sp.final){finishWin(who);
     if(S.mode==='classic'&&S.remove){clearTimeout(S.rmT);S.rmT=0;S.rmName='';S.rmName=sp.name;S.rmT=setTimeout(function(){flushRemove();changed();},3500);}
     return;}
@@ -254,8 +273,9 @@ function afterAction(){
   S.phase='idle';S.chooser=null;S.streamerPicks=false;S.paused=false;
   if(S.entries.length===1&&S.mode==='elim'){finishWin(S.entries[0]);save();return;}
   syncFin();
-  if(S.autoNext>0&&S.entries.length>1&&!finActive())S.nextAt=Date.now()+S.autoNext*1000;
-  else if(S.finAuto&&finActive()&&S.fin&&S.fin.w<0)S.nextAt=Date.now()+FIN_AUTO_MS; /* "لفّ تلقائي بالنهائي" (off by default) */
+  var an=autoNextSecs(),fa=finAutoMs();
+  if(an>0&&S.entries.length>1&&!finActive())S.nextAt=Date.now()+an*1000;
+  else if(fa&&finActive()&&S.fin&&S.fin.w<0)S.nextAt=Date.now()+fa; /* "لفّ تلقائي بالنهائي" (under «عجلة تلقائية» on the personal wheel) */
   save();changed();
 }
 /* the landed player (or the streamer for them) kicks a target */
@@ -280,19 +300,26 @@ function randomKick(){
   else{S.entries.splice(ti,1);S.out.unshift(tgt);S.elim=true;event('timeout',S.chooser?S.chooser.n:'',tgt.n);A.sfx('boom');}
   afterAction();
 }
+/* «يطلع هو نفسه»: the landed player who did not pick in time leaves the wheel himself (a shield, when shields are on, saves him once) */
+function selfKick(){var ti=S.entries.findIndex(function(e){return S.chooser&&e.n===S.chooser.n});if(ti<0){afterAction();return;}var me=S.entries[ti];
+  snap();if((me.sh|0)>0){me.sh--;event('selfsh',me.n,me.n);A.sfx('bad');}
+  else{S.entries.splice(ti,1);S.out.unshift(me);S.elim=true;event('self',me.n,me.n);A.sfx('boom');}
+  afterAction();}
 function timeUp(){
-  if(S.timeoutAct==='random')randomKick();
-  else if(S.timeoutAct==='skip'){snap();event('skip',S.chooser?S.chooser.n:'','');afterAction();}
+  var act=timeoutAct();
+  if(act==='self')selfKick();
+  else if(act==='random')randomKick();
+  else if(act==='skip'){snap();event('skip',S.chooser?S.chooser.n:'','');afterAction();}
   else{S.streamerPicks=true;S.deadline=0;changed();}
 }
 /* the streamer (or a mod with !تخطي / !skip) passes the landed player's turn: nobody leaves (needed with no pick-time limit) */
 function skipPick(){if(S.phase!=='choose'||!S.chooser)return;snap();event('pass',S.chooser.n,'');A.sfx('pop');afterAction();}
 /* ↺ reset: names, out list, winners / scores, the final, events and timers — a clean wheel */
 function resetAll(){snap();clearTimeout(S.rmT);clearTimeout(S.t);S.rmT=0;S.rmName='';S.spin=null;S.entries=[];S.out=[];S.wins=[];S.last=null;S.winner=null;S.fin=null;S.elim=false;S.spun=false;
-  S.phase='idle';S.chooser=null;S.streamerPicks=false;S.paused=false;S.deadline=0;S.nextAt=0;S.ev=null;S.evT=Date.now();if(S.open)openJoin(true);save();changed();}
+  S.phase='idle';S.chooser=null;S.streamerPicks=false;S.paused=false;S.deadline=0;S.nextAt=0;S.ev=null;S.evT=Date.now();if(S.open||(AUTO&&S.autoOn))openJoin(true);save();changed();}
 function newRound(){
   snap();S.out.forEach(function(e){S.entries.push(e)});S.out=[];
-  S.entries.forEach(function(e){e.sh=startShields()});if(S.joinSecs>0&&S.open)openJoin(true);
+  S.entries.forEach(function(e){e.sh=startShields()});if(AUTO&&S.autoOn)openJoin(true);else if(joinWin()>0&&S.open)openJoin(true); /* auto wheel: a new round opens joining again and starts its window */
   S.phase='idle';S.winner=null;S.chooser=null;S.ev=null;S.fin=null;S.elim=false;S.spun=false;S.nextAt=0;S.last=null;clearTimeout(S.rmT);S.rmT=0;S.rmName='';save();changed();
 }
 function togglePause(){
@@ -306,7 +333,10 @@ setInterval(function(){
   if(!A.runsEngine())return;
   if(S.phase==='choose'&&!S.paused&&S.deadline&&Date.now()>=S.deadline){S.deadline=0;timeUp();return;}
   if(S.phase==='idle'&&S.nextAt&&Date.now()>=S.nextAt){S.nextAt=0;spin();return;}
-  if(S.open&&S.joinUntil){if(Date.now()>=S.joinUntil){S.open=false;S.joinUntil=0;save();changed();return;}
+  if(S.open&&S.joinUntil){if(Date.now()>=S.joinUntil){S.open=false;S.joinUntil=0;
+      /* auto wheel: the join window is over → the game starts by itself (with fewer than 2 on the wheel the window starts again) */
+      if(AUTO&&S.autoOn&&S.phase!=='choose'&&!S.spin&&!S.fin&&S.phase!=='win'){if(S.entries.length>=2){save();spin();return;}openJoin(true);}
+      save();changed();return;}
     var js=Math.ceil((S.joinUntil-Date.now())/1000);if(js!==S._lastJ){S._lastJ=js;changed();}}
   if(S.phase==='choose'&&!S.paused&&S.deadline){var s=Math.ceil((S.deadline-Date.now())/1000);if(s!==S._lastS){S._lastS=s;if(s<=5&&s>0)A.sfx('tick');changed();}}
 },200);
@@ -468,7 +498,7 @@ var AV=window.LammaAvatars;
 function avatar(login,name,color){if(AV)return AV.el(login,name,A.readable(color)||'');var s=el('span','av');s.textContent=(Array.from(String(name||'?'))[0]||'?').toUpperCase();return s}
 function chip(e,cls,no){var s=el('li','w2-chip'+(cls?' '+cls:''));if(no)s.appendChild(el('span','w2-no',String(no)));s.appendChild(avatar(e[3],e[0],e[1]));s.appendChild(A.nameEl(e[0],e[1]));if(e[2]>0)s.appendChild(el('span','w2-sh',e[2]>1?'🛡️×'+e[2]:'🛡️'));return s}
 if(AV)AV.onChange(function(){sideKey='';ctrlKey='';if(cur)drawSide(cur);renderCtrl();});
-function evText(ev){if(!ev)return '';var k={kick:'w_ev_kick',shield:'w_ev_shield',revive:'w_ev_revive',timeout:'w_ev_timeout',skip:'w_ev_skip',pass:'w_ev_pass',mkick:'w_ev_manual_kick',mrevive:'w_ev_manual_revive',fpoint:'w_ev_fpoint'}[ev.t];return k?fmt(A.t(k),{x:'\u2068'+ev.x+'\u2069',y:'\u2068'+ev.y+'\u2069'}):''}
+function evText(ev){if(!ev)return '';var k={kick:'w_ev_kick',shield:'w_ev_shield',revive:'w_ev_revive',timeout:'w_ev_timeout',skip:'w_ev_skip',pass:'w_ev_pass',mkick:'w_ev_manual_kick',mrevive:'w_ev_manual_revive',fpoint:'w_ev_fpoint',self:'w_ev_self',selfsh:'w_ev_self_sh'}[ev.t];return k?fmt(A.t(k),{x:'\u2068'+ev.x+'\u2069',y:'\u2068'+ev.y+'\u2069'}):''}
 function drawSide(P){
   var secs=P.phase==='choose'?Math.ceil((P.left||0)/1000):0;
   var jsecs=P.open&&P.joinLeft?Math.ceil(P.joinLeft/1000):0;
@@ -495,7 +525,9 @@ function drawSide(P){
   else{
     var msg=P.fin?fmt(A.t('w_fin_ban'),{t:P.fin.to}):P.entries.length<=2&&P.entries.length>0&&P.mode==='elim'&&P.ev?A.t('w_ready_final'):(P.ev?A.t('w_ready'):(P.open?A.t('w_join'):A.t('w_closed')));
     ban.appendChild(A.rich('p','w2-b-big',msg));
-    if(P.open&&jsecs>0&&!P.ev)ban.appendChild(el('p','w2-b-sub w2-join-left',fmt(A.t('w_join_left'),{s:jsecs})));
+    if(P.open&&jsecs>0&&(!P.ev||FIX==='elim'))ban.appendChild(el('p','w2-b-sub w2-join-left',fmt(A.t('w_join_left'),{s:jsecs})));
+    /* personal wheel: no event line any more — the last kick / shield / time-out shows as a small line in this box */
+    else if(FIX==='elim'&&P.ev&&P.ev.t!=='fpoint'){var et0=evText(P.ev);if(et0)ban.appendChild(el('p','w2-b-sub w2-b-ev',et0));}
   }
   A.clear($('whBanner')).appendChild(ban);
   if(ban.querySelector('.w2-win-row'))requestAnimationFrame(function(){fitText(ban.querySelectorAll('.w2-win-row > :last-child'),.4);});
@@ -505,9 +537,9 @@ function drawSide(P){
   if(et&&P.phase!=='win'){var evb=el('div','w2-ev ev-'+P.ev.t+(Date.now()-P.evT<1500?' fresh':''));evb.appendChild(document.createTextNode(et));evs.appendChild(evb);}
   else evs.appendChild(el('div','w2-ev w2-ev-none',A.t('w_ev_none')));}
   var inBox=el('div','w2-box');var ih=el('h3',null,A.t('w_in')+' ');ih.appendChild(el('span','cnt',String(P.entries.length)));inBox.appendChild(ih);
-  var kx=!A.obs&&FIX==='classic'; /* Nov 6 (Mohammad): hover a name → a small ✕ on its left removes it from the wheel */
-  var ul=el('ul','w2-chips');P.entries.slice(0,60).forEach(function(e,i){var c=chip(e,P.chooser&&e[0]===P.chooser.n?'is-chooser':'',P.mode==='elim'?i+1:0);
-    if(kx){var xb=el('button','w2-kx','✕');xb.type='button';xb.setAttribute('data-n',e[0]);var xt=fmt(A.t('w_rm_name'),{x:e[0]});xb.title=xt;xb.setAttribute('aria-label',xt);c.appendChild(xb);}
+  var kx=!A.obs&&CL; /* Nov 6 (Mohammad): hover a name → a small ✕ on its left removes it from the wheel (both wheels) */
+  var ul=el('ul','w2-chips');P.entries.slice(0,60).forEach(function(e,i){var isCh=!!(P.chooser&&e[0]===P.chooser.n);var c=chip(e,isCh?'is-chooser':'',P.mode==='elim'?i+1:0);
+    if(kx&&!(isCh&&P.phase==='choose')){var xb=el('button','w2-kx','✕');xb.type='button';xb.setAttribute('data-n',e[0]);var xt=P.mode==='elim'&&P.phase==='choose'&&P.chooser?fmt(A.t('w_kick_for'),{x:e[0],y:P.chooser.n}):fmt(A.t('w_rm_name'),{x:e[0]});xb.title=xt;xb.setAttribute('aria-label',xt);c.appendChild(xb);}
     ul.appendChild(c)});if(P.entries.length>60)ul.appendChild(el('li','w2-chip more','+'+(P.entries.length-60)));inBox.appendChild(ul);
   if(!P.entries.length)inBox.appendChild(el('p','w2-empty',A.t('w_empty')));
   A.clear($('whIn')).appendChild(inBox);
@@ -617,14 +649,15 @@ function fitFinal(){if(!fnEl)return;var c=fnEl.parentNode;if(!c||!c.getBoundingC
   fnEl.style.fontSize=Math.max(8,Math.min(r.width/12.5,r.height/5.6))+'px';}
 function drawFinal(P){
   if(!fnEl)return;var M=WO&&P.fin?WO.finalModel(P.fin):{open:false};var dock=P.finDock!==false&&sideShown(); /* docked by default; falls back to the floating piece when the left panel is hidden or in fullscreen */
-  document.body.classList.toggle('w-fin-dock',dock);
+  document.body.classList.toggle('w-fin-dock',dock);document.body.classList.toggle('w-fin-on',!!M.open); /* personal wheel: nobody joins during the final, so the add-name box steps aside for the scoreboard */
   var vis=M.open?finVisible(P,M):(fnSeenKey='',true);
   /* champion card (centre) */
   if(chEl){if(M.open&&M.won>=0){var ck=JSON.stringify([M.p,M.s,M.won,A.lang()]);if(ck!==chKey){chKey=ck;buildChamp(M);requestAnimationFrame(function(){fitText(chEl.querySelectorAll('.fn-nm,.fn-cn'),.45);});}chEl.hidden=false;chEl.classList.toggle('fn-off',!champVisible(P,JSON.stringify([M.p,M.s,M.won])));}else if(!chEl.hidden){chEl.hidden=true;A.clear(chEl);chKey='';chSeenKey='';curChamp='';}}
   /* docked copy on the left panel */
   if(fdEl){if(M.open&&dock){var dk=JSON.stringify([M.p,M.s,M.to,M.won,A.lang()]);if(dk!==fdKey){fdKey=dk;buildScore(fdEl,M,'w2-final w2-findock');requestAnimationFrame(function(){fitText(fdEl.querySelectorAll('.fn-nm'),.5);});}fdEl.hidden=false;fdEl.classList.toggle('fn-off',!vis);}else if(!fdEl.hidden){fdEl.hidden=true;A.clear(fdEl);fdKey='';}}
-  if(!M.open&&!dock&&editing()&&!A.obs){M=finSample();}   /* the editor shows a sample so the piece can be placed */
-  if(!M.open||dock){if(!fnEl.hidden){fnEl.hidden=true;fnEl.className='w2-final';A.clear(fnEl);fnKey='';}return;}
+  var edS=!M.open&&editing()&&!A.obs&&(!dock||FIX==='elim'); /* personal wheel: the editor always shows the floating board's sample (it is used when the score isn't docked, and in fullscreen) */
+  if(edS){M=finSample();}   /* the editor shows a sample so the piece can be placed */
+  if(!M.open||(dock&&!edS)){if(!fnEl.hidden){fnEl.hidden=true;fnEl.className='w2-final';A.clear(fnEl);fnKey='';}return;}
   var k=JSON.stringify([M.p,M.s,M.to,M.won,A.lang(),P.phase]);
   if(k!==fnKey){fnKey=k;buildScore(fnEl,M,'w2-final');}
   fnEl.hidden=false;fnEl.classList.toggle('fn-off',!vis);fitFinal();requestAnimationFrame(function(){fitText(fnEl.querySelectorAll('.fn-nm'),.5);});
@@ -674,9 +707,10 @@ function renderCtrl(){
   if(S.entries.length===1&&few)sp.disabled=false;
   sp.classList.toggle('is-off',few);sp.setAttribute('aria-disabled',few?'true':'false');if(few)sp.title=A.t('w_need2');else sp.removeAttribute('title');
   sp.textContent=endless?A.t('w_stop_spin'):(S.fin&&S.phase!=='win')?fmt(A.t('w_spin_fin'),{r:WO.finalRound(S.fin)}):(S.mode==='elim'&&S.entries.length===2&&S.phase!=='win')?A.t('w_spin_final'):A.t('w_spin');sp.classList.toggle('is-stop',endless);
-  $('wSkip').disabled=S.phase!=='choose';if($('whOpen'))$('whOpen').checked=S.open;if(FIX==='classic')joinBtn();
+  $('wSkip').disabled=S.phase!=='choose';if($('whOpen'))$('whOpen').checked=S.open;if(CL)joinBtn();
+  if(FIX==='elim'){var ch=S.phase==='choose'&&!busy;['wSkip','wRand'].forEach(function(id){$(id).hidden=!ch;});$('wPause').hidden=!ch||S.streamerPicks||!(S.pickSecs>0);} /* the pick buttons show in the bar only while someone is choosing */
   var rs=$('wRespin');rs.hidden=!(S.mode==='classic'&&S.phase==='win'&&S.last&&!busy);
-  $('wPause').disabled=S.phase!=='choose'||S.streamerPicks;$('wPause').textContent=S.paused?A.t('w_resume'):A.t('w_pause');
+  $('wPause').disabled=S.phase!=='choose'||S.streamerPicks;(function(pb){var pl=pb.querySelector('.dl')||pb,pt=S.paused?A.t('w_resume'):A.t('w_pause');if(pl.textContent!==pt)pl.textContent=pt;var pi=pb.querySelector('.di');if(pi)pi.textContent=S.paused?'▶':'⏸';})($('wPause'));
   $('wRand').disabled=S.phase!=='choose';$('wUndo').disabled=!(hist.length||(FIX==='classic'&&S.phase==='win'&&S.last))||busy;
   if($('wChooseHint'))$('wChooseHint').classList.toggle('on',S.phase==='choose');
   document.querySelectorAll('#wModeSeg [data-wmode]').forEach(function(b){var on=b.getAttribute('data-wmode')===S.mode;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});
@@ -724,20 +758,25 @@ if(!A.obs){
   var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:(sv.v>=18&&sv.auto!=null)?sv.auto:OD.auto,join:sv.join==null?OD.join:sv.join,fs:sv.fs==null?OD.fs:sv.fs,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
   S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finShow=so.fs;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;
   if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;} /* Nov 6 (Mohammad): the classic wheel has no join window and no VIP control */
+  if(FIX==='elim'){ /* Nov 6 (Mohammad): personal wheel — the final at 2 is always on, no VIP control, no big kick list; the timers live under «عجلة تلقائية» */
+    S.vipCtrl=false;S.finOn=true;S.picker=false;S.autoOn=sv.v>=20&&!!sv.ao;S.autoTo=/^(self|streamer|random|skip)$/.test(sv.at||'')?sv.at:'self';
+    S.finAutoSecs=sv.v>=20&&sv.fx!=null?(WO?WO.clampT('fx',sv.fx):sv.fx):5;
+    if(!(sv.v>=20)){S.joinSecs=so.join>0?so.join:60;S.autoNext=so.auto>0?so.auto:3;}}
   (sv.e||[]).forEach(function(e){add(e.n,e.c,e.u,S.shOn?(e.sh==null?S.shStart:e.sh):0)});
   (sv.o||[]).forEach(function(e){S.out.push({n:e.n,c:e.c,u:e.u,sh:S.shOn?e.sh|0:0})});
   S.fin=sv.f&&sv.f.p&&sv.f.s?sv.f:null; /* a refresh mid-final keeps the score */
-  S.remove=!!sv.remove;openJoin(sv.open!==false);S.title=sv.title||'';S.chatCols=sv.v>=16?!!sv.cc:true;S.avatar=!!sv.av;
-  $('whRemove').checked=S.remove;if($('whOpen'))$('whOpen').checked=S.open;$('whTitle').value=S.title;$('whChatCols').checked=S.chatCols;$('whAvatar').checked=S.avatar;
+  S.remove=!!sv.remove;openJoin(sv.open!==false);S.title=sv.title||'';S.chatCols=sv.v>=16?!!sv.cc:true;
+  S.avatar=sv.v>=20?!!sv.av:true; /* Nov 6 (Mohammad): the channel's picture in the wheel's centre is ON by default on both wheels; a choice saved since then wins */
+  if($('whRemove'))$('whRemove').checked=S.remove;if($('whOpen'))$('whOpen').checked=S.open;$('whTitle').value=S.title;$('whChatCols').checked=S.chatCols;$('whAvatar').checked=S.avatar;
   $('whChatCols').addEventListener('change',function(){S.chatCols=this.checked;save();changed();});
   $('whAvatar').addEventListener('change',function(){S.avatar=this.checked;save();changed();});
-  if(FIX!=='classic'){$('wShields').value=String(S.shStart);$('wTimeout').value=S.timeoutAct;$('wShOn').checked=S.shOn;$('wPickerOn').checked=S.picker;}
+  if(FIX!=='classic'){$('wShields').value=String(S.shStart);$('wTimeout').value=S.timeoutAct;$('wShOn').checked=S.shOn;if($('wPickerOn'))$('wPickerOn').checked=S.picker;}
   /* each timer: "no limit" or a custom number of seconds typed by the streamer */
   var tmr=function(id,key,def,after){if(!$(id))return;var m=$(id+'Mode'),inp=$(id),u=inp.parentNode.querySelector('.tmr-u'),lim=WO?WO.LIM[key]:[1,3600];
     inp.min=String(lim[0]);inp.max=String(lim[1]);
     var sb=[].slice.call(inp.parentNode.querySelectorAll('.tsb'));sb.forEach(function(b){if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.addEventListener('click',function(){if(m.value===b.getAttribute('data-v'))return;m.value=b.getAttribute('data-v');m.dispatchEvent(new Event('change'));});});
-    var show=function(){var v=S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow'}[key]];m.value=v>0?'1':'0';if(v>0)inp.value=String(v);else if(!inp.value)inp.value=String(def);inp.hidden=!(v>0);if(u)u.hidden=!(v>0);sb.forEach(function(b){var on=b.getAttribute('data-v')===m.value;if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});};
-    var set=function(v){S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow'}[key]]=WO?WO.clampT(key,v):v;show();save();if(after)after();changed();};
+    var show=function(){var v=S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow',fx:'finAutoSecs'}[key]];m.value=v>0?'1':'0';if(v>0)inp.value=String(v);else if(!inp.value)inp.value=String(def);inp.hidden=!(v>0);if(u)u.hidden=!(v>0);sb.forEach(function(b){var on=b.getAttribute('data-v')===m.value;if(b.getAttribute('data-v')==='0')b.title=m.options[0].textContent;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));b.setAttribute('role','radio');});};
+    var set=function(v){S[{pick:'pickSecs',dur:'dur',auto:'autoNext',join:'joinSecs',fs:'finShow',fx:'finAutoSecs'}[key]]=WO?WO.clampT(key,v):v;show();save();if(after)after();changed();};
     m.addEventListener('change',function(){set(m.value==='1'?(+inp.value||def):0);if(m.value==='1')inp.focus();});
     inp.addEventListener('change',function(){if(m.value==='1')set(+inp.value||def);});
     show();};
@@ -745,17 +784,26 @@ if(!A.obs){
   (function(){var x=$('wXtra');if(!x)return;var XK='lamma-wxtra';try{x.open=localStorage.getItem(XK)==='1';}catch(e){}
     x.addEventListener('toggle',function(){try{localStorage.setItem(XK,x.open?'1':'0');}catch(e){}});})();
   tmr('wPick','pick',20,function(){if(S.phase==='choose'&&!S.paused&&!S.streamerPicks)S.deadline=S.pickSecs>0?Date.now()+S.pickSecs*1000:0;});
-  tmr('whDur','dur',6);tmr('wAuto','auto',10);if($('wFinShow'))tmr('wFinShow','fs',6);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
+  tmr('whDur','dur',6);tmr('wAuto','auto',FIX==='elim'?3:10);if($('wFinShow'))tmr('wFinShow','fs',6);tmr('wJoin','join',60,function(){if(S.open)openJoin(true);});
+  if(FIX==='elim'){tmr('wFinAuto','fx',5,function(){if(!finAutoMs()&&S.fin)S.nextAt=0;});
+    /* «عجلة تلقائية»: its four rows show only while it is on */
+    var ao=$('wAutoOn'),ab=$('wAutoBox'),tr=$('wTimeoutRow'),at=$('wAutoTo');
+    var aVis=function(){if(ab)ab.hidden=!S.autoOn;if(tr)tr.hidden=!!S.autoOn;};
+    if(at){at.value=S.autoTo;at.addEventListener('change',function(){S.autoTo=this.value;save();});}
+    if(ao){ao.checked=S.autoOn;aVis();ao.addEventListener('change',function(){S.autoOn=this.checked;aVis();
+      if(S.autoOn){if(S.open&&S.phase!=='choose'&&!S.spin)openJoin(true);} /* on: an open join starts its window now */
+      else{S.nextAt=0;S.joinUntil=0;} /* off: nothing runs by itself */
+      save();changed();});}}
   if($('wShOn'))$('wShOn').addEventListener('change',function(){snap();S.shOn=this.checked;S.entries.forEach(function(e){e.sh=startShields()});S.out.forEach(function(e){e.sh=0});save();changed();});
   if($('wPickerOn'))$('wPickerOn').addEventListener('change',function(){S.picker=this.checked;save();changed();});
-  (function(){var fo=$('wFinOn'),ft=$('wFinTo');if(!fo||!ft)return;fo.checked=S.finOn;ft.value=String(S.finTo);
+  (function(){var fo=$('wFinOn'),ft=$('wFinTo');if(!ft)return;ft.value=String(S.finTo);
     var vis=function(){var r=ft.closest('.srow');if(r)r.hidden=!S.finOn;};vis();
-    fo.addEventListener('change',function(){if(S.spin)return;S.finOn=this.checked;vis();save();changed();});
+    if(fo){fo.checked=S.finOn;fo.addEventListener('change',function(){if(S.spin)return;S.finOn=this.checked;vis();save();changed();});}
     ft.addEventListener('change',function(){S.finTo=Math.max(2,Math.min(9,+this.value||3));save();changed();});})();
   $('wSkip').addEventListener('click',skipPick);
   if($('wAddBtn'))$('wAddBtn').addEventListener('click',function(){var ta=$('whText');var added=0;snap();ta.value.split('\n').forEach(function(l){if(add(l))added++;});ta.value='';save();changed();});
   if($('whOpen'))$('whOpen').addEventListener('change',function(){openJoin(this.checked);save();changed();});
-  $('whRemove').addEventListener('change',function(){S.remove=this.checked;save();});
+  if($('whRemove'))$('whRemove').addEventListener('change',function(){S.remove=this.checked;save();});
   if($('wShields'))$('wShields').addEventListener('change',function(){S.shStart=+this.value;save();});
   if($('wTimeout'))$('wTimeout').addEventListener('change',function(){S.timeoutAct=this.value;save();});
   $('whTitle').addEventListener('input',function(){S.title=this.value.slice(0,40);save();changed();});
@@ -775,11 +823,11 @@ if(!A.obs){
   (function(){var b=$('whClear'),armT=0,bl=b.querySelector('.dl')||b,rk=bl.getAttribute('data-i18n')||'w_reset';b.addEventListener('click',function(){
     if(!b.classList.contains('armed')){b.classList.add('armed');bl.textContent=A.t('w_reset_q');clearTimeout(armT);armT=setTimeout(function(){b.classList.remove('armed');bl.textContent=A.t(rk);},3000);return;}
     clearTimeout(armT);b.classList.remove('armed');bl.textContent=A.t(rk);resetAll();});})();
-  if($('wFinAuto')){$('wFinAuto').checked=S.finAuto;$('wFinAuto').addEventListener('change',function(){S.finAuto=this.checked;if(!S.finAuto)S.nextAt=0;save();changed();});}
+  if($('wFinAuto')&&$('wFinAuto').type==='checkbox'){$('wFinAuto').checked=S.finAuto;$('wFinAuto').addEventListener('change',function(){S.finAuto=this.checked;if(!S.finAuto)S.nextAt=0;save();changed();});}
   if($('wFinDock')){$('wFinDock').checked=S.finDock;$('wFinDock').addEventListener('change',function(){S.finDock=this.checked;save();changed();});}
   if($('wVip')){$('wVip').checked=S.vipCtrl;$('wVip').addEventListener('change',function(){S.vipCtrl=this.checked;save();changed();});}
   /* ---------- Nov 6 (Mohammad): classic wheel controls — the join toggle in the bottom bar, the add-name box on the players card ---------- */
-  if(FIX==='classic'){
+  if(CL){
     var jb=$('wJoinBtn');if(jb)jb.addEventListener('click',function(){openJoin(!S.open);save();changed();});
     var af=$('wAddForm'),ai=$('wAddName');
     if(af&&ai){
@@ -795,11 +843,20 @@ if(!A.obs){
     /* the ✕ on a name in the players card removes it from the wheel (undo brings it back) */
     var wi=$('whIn');if(wi)wi.addEventListener('click',function(e){var xb=e.target.closest&&e.target.closest('.w2-kx');if(!xb)return;e.stopPropagation();e.preventDefault();
       if(S.spin||editing())return;var nm=xb.getAttribute('data-n'),j=S.entries.findIndex(function(x){return x.n===nm});if(j<0)return;
+      if(S.mode==='elim'){
+        /* personal wheel: while someone is choosing, ✕ picks that name for them (shields count); before the game it just takes the
+           name off; once the game is under way the name goes to «برا العجلة» (undo brings it back) */
+        if(S.phase==='choose'&&S.chooser){if(nm!==S.chooser.n)doKick(j,S.chooser.n);return;}
+        snap();var gone=S.entries.splice(j,1)[0];
+        if(S.spun){S.out.unshift(gone);S.elim=true;event('mkick','',gone.n);}
+        if(S.spun&&S.entries.length===1&&S.phase!=='win'){finishWin(S.entries[0]);save();return;}
+        save();changed();return;}
       snap();S.entries.splice(j,1);save();changed();});
   }
 }
 /* the overlay running on its own (mod chat commands, no dock) takes the options from its link: &tm= &sh= &pk= */
-if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;}openJoin(true);}
+if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;}
+  if(FIX==='elim'){S.vipCtrl=false;S.finOn=true;S.picker=false;S.autoOn=!!oo.ao;S.finAutoSecs=oo.fx;S.autoTo=oo.at||'self';}openJoin(true);}
 if(!A.obs&&WO&&A.obsExtra)A.obsExtra(function(){return WO.encodeObs(opts())});
 A.onLang(function(){sideKey='';ctrlKey='';pkKey='';fnKey='';chKey='';fdKey='';shApplied=null;applySh(S.shOn&&S.mode==='elim');changed();});
 /* on the control page's stage: during a pick on the shield wheel, clicking a name in the players list kicks it (shields count, same as ✖) */
@@ -835,7 +892,7 @@ if(!A.obs){(function(){
     var onWheel=!!t.closest('.lay-wheel');
     if(fsOn()||onWheel)spinOrStop();});
   /* classic: Space spins too (not while typing, not inside the settings drawer) */
-  var spaceOk=function(e){if(FIX!=='classic'||!(e.key===' '||e.code==='Space')||e.ctrlKey||e.metaKey||e.altKey)return false;var t=e.target;
+  var spaceOk=function(e){if(!CL||!(e.key===' '||e.code==='Space')||e.ctrlKey||e.metaKey||e.altKey)return false;var t=e.target;
     return !(t&&t.closest&&t.closest('input,textarea,select,[contenteditable],.side'))&&!editing();};
   document.addEventListener('keyup',function(e){if(spaceOk(e))e.preventDefault();});
   document.addEventListener('keydown',function(e){if(spaceOk(e)){e.preventDefault();if(!e.repeat)spinOrStop();return;}if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();spinOrStop();}if(e.key==='Escape'&&chEl&&!chEl.hidden&&!chEl.classList.contains('fn-off'))closeChamp();});
@@ -845,20 +902,22 @@ if(!A.obs){(function(){
    Default (Nov 2026, after Mohammad's reference): one slim sidebar on the LEFT (players with the count on top, then the out / winners
    list, the event line and the join box), the wheel big in the centre of the rest, the title in its centre badge, the لَمّة logo fixed
    top-right. ---------- */
-var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:document.body.getAttribute('data-game')||'wheel',items:[
-  {id:'wheel',z:1,code:'w',kind:'scale',snapCenter:true,fixed:FIX==='classic',ar:'العجلة',en:'Wheel',def:{x:36.4,y:4.5,w:51},minW:12}, /* classic: no chip / no ✕ (the wheel can't be hidden), still moves and resizes */
+var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:FIX==='elim'?'wheel-p2':(document.body.getAttribute('data-game')||'wheel'), /* the personal wheel's new default layout (Nov 6) starts fresh */items:[
+  {id:'wheel',z:1,code:'w',kind:'scale',snapCenter:true,fixed:CL,ar:'العجلة',en:'Wheel',def:{x:36.4,y:4.5,w:51},minW:12}, /* classic: no chip / no ✕ (the wheel can't be hidden), still moves and resizes */
   /* ONE panel on the left with sections (players, out / winners, event line, join box): hide any section and the rest fill the
      panel; drag the lines between sections to give one more room. Old links' p/o/e/b pieces map onto these sections. */
   {id:'side',z:2,code:'s',kind:'box',ar:'القائمة',en:'Side list',def:{x:1.6,y:3,w:24,h:86.5,s:1},minW:10,minH:18,sections:[
     {id:'players',code:'p',old:'p',ar:'اللاعبين',en:'Players',def:{f:6.4}},
     {id:'list2',code:'o',old:'o',label:function(){var cl=document.body.getAttribute('data-wmode')==='classic';return A.lang()==='en'?(cl?'Winners':'Out'):(cl?'الفايزين':'برا العجلة')},def:{f:FIX==='classic'?3.4:1.8}},
-    FIX==='classic'?null:{id:'event',code:'e',old:'e',ar:'سطر الأحداث',en:'Event line',def:{f:1,v:FIX!=='classic'}}, /* the classic wheel has no kick/shield events: hidden by default there */
+    CL?null:{id:'event',code:'e',old:'e',ar:'سطر الأحداث',en:'Event line',def:{f:1,v:FIX!=='classic'}}, /* the classic wheel has no kick/shield events: hidden by default there */
     {id:'banner',code:'b',old:'b',ar:'صندوق الدخول',en:'Join box',def:{f:FIX==='classic'?2.7:1.9}} /* classic: room for the winner card (🏆 + name + الفائز!) */
   ].filter(Boolean)},
   /* Nov 6 (Mohammad): classic has no event line and no scoreboard — neither piece nor chip.
      the final's scoreboard: small, in the gap above the panel / beside the wheel (no overlap with the default wheel); "النتيجة باللوحة اليسار" docks it instead */
-  FIX==='classic'?null:{id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
-].filter(Boolean),bgObsOnly:FIX==='classic'}); /* classic: «مع خلفية / بلا خلفية» changes only the OBS link */
+  /* personal wheel (Nov 6): the scoreboard's default sits in the free corner between the list and the wheel, clear of the wheel and its
+     centre; it shows only during the final (and as a sample while «تعديل الشكل» is open) */
+  FIX==='classic'?null:{id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:FIX==='elim'?{x:26.4,y:2,w:14.6,h:16.5,s:1}:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
+].filter(Boolean),bgObsOnly:CL}); /* both wheels: «مع خلفية / بلا خلفية» changes only the OBS link */
 if(LAYOUT&&!A.obs){var lr=$('gs');if(lr&&window.MutationObserver)new MutationObserver(function(){fnKey='';if(cur)drawFinal(cur);}).observe(lr,{attributes:true,attributeFilter:['class']});}
 changed();
 A.start();

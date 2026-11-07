@@ -8,8 +8,8 @@
    - pickerModel(P): what the on-screen kick list shows for a published wheel state (open or closed, the chooser, numbered cards). */
 (function(root){
 'use strict';
-var DEF={sh:false,shStart:1,picker:true,pick:20,dur:6,auto:0,join:0,fs:6,fin:true,finTo:3,fa:false,vip:false,fd:true};
-var LIM={pick:[3,600],dur:[2,120],auto:[1,600],join:[5,3600],fs:[2,60]};
+var DEF={sh:false,shStart:1,picker:true,pick:20,dur:6,auto:0,join:0,fs:6,fin:true,finTo:3,fa:false,vip:false,fd:true,ao:false,fx:5,at:'self'};
+var LIM={pick:[3,600],dur:[2,120],auto:[1,600],join:[5,3600],fs:[2,60],fx:[1,600]};
 var LET={pick:'p',dur:'d',auto:'a',join:'j',fs:'f'};
 function clampT(k,v){v=Math.round(+v);if(!isFinite(v)||v<=0)return 0;var l=LIM[k];return Math.max(l[0],Math.min(l[1],v));}
 function norm(o){o=o||{};var r={};for(var k in DEF)r[k]=DEF[k];
@@ -18,15 +18,18 @@ function norm(o){o=o||{};var r={};for(var k in DEF)r[k]=DEF[k];
   if(o.fin!=null)r.fin=!!o.fin;if(o.finTo!=null){var ft=Math.round(+o.finTo);r.finTo=isFinite(ft)?Math.max(2,Math.min(9,ft)):3;}
   if(o.fa!=null)r.fa=!!o.fa;if(o.vip!=null)r.vip=!!o.vip;if(o.fd!=null)r.fd=!!o.fd;
   for(var t in LET)if(o[t]!=null)r[t]=clampT(t,o[t]);
+  /* personal wheel «عجلة تلقائية»: on/off, the final's auto-spin seconds, what a time-out does */
+  if(o.ao!=null)r.ao=!!o.ao;if(o.fx!=null)r.fx=clampT('fx',o.fx);if(o.at!=null&&/^(self|streamer|random|skip)$/.test(String(o.at)))r.at=String(o.at);
   return r;}
 function encodeObs(o){o=norm(o);var tm='';for(var t in LET)tm+=LET[t]+o[t];
-  return '&tm='+tm+(o.sh?'&sh='+o.shStart:'')+(o.picker?'':'&pk=0')+(o.fin?(o.finTo!==3?'&fn='+o.finTo:''):'&fn=0')+(o.fa?'&fa=1':'')+(o.vip?'&vp=1':'')+(o.fd?'':'&fd=0');}
+  return '&tm='+tm+(o.sh?'&sh='+o.shStart:'')+(o.picker?'':'&pk=0')+(o.fin?(o.finTo!==3?'&fn='+o.finTo:''):'&fn=0')+(o.fa?'&fa=1':'')+(o.vip?'&vp=1':'')+(o.fd?'':'&fd=0')+(o.ao?'&ao=1&fx='+o.fx+(o.at!=='self'?'&at='+o.at:''):'');}
 /* get(name) reads a URL param (URLSearchParams.get bound, or a plain object lookup) */
 function decodeObs(get){var o={};if(typeof get!=='function'){var src=get||{};get=function(k){return src[k]==null?null:String(src[k])};}
   var tm=get('tm');if(tm&&/^([pdajf]\d{1,4})+$/.test(tm)){var m,re=/([pdajf])(\d{1,4})/g;while((m=re.exec(tm))){for(var t in LET)if(LET[t]===m[1])o[t]=+m[2];}}
   var sh=get('sh');if(sh&&/^[1-3]$/.test(sh)){o.sh=true;o.shStart=+sh;}
   if(get('pk')==='0')o.picker=false;
   var fn=get('fn');if(fn==='0')o.fin=false;else if(fn&&/^[2-9]$/.test(fn)){o.fin=true;o.finTo=+fn;}
+  if(get('ao')==='1')o.ao=true;var fx=get('fx');if(fx!=null&&/^\d{1,4}$/.test(fx))o.fx=+fx;var at=get('at');if(at)o.at=at;
   if(get('fa')==='1')o.fa=true;if(get('vp')==='1')o.vip=true;if(get('fd')==='1')o.fd=true;else if(get('fd')==='0')o.fd=false;
   return norm(o);}
 function entryShields(o){o=norm(o);return o.sh?o.shStart:0}
