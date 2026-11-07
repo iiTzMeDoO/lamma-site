@@ -31,7 +31,7 @@ function lootName(it,cls){if(!it)return '';var en=A.lang()==='en';if(it.t==='w')
 A.strings({
  ar:{g_title:'معركة الساحة',g_how:'الشات يدخل بـ !دخول فيصير في الفريق مباشرة.  وفي كل موجة تختار من يخرج ليقاتل واحدًا ضد واحد في المنتصف، وفي الآخر الزعيم. من يقاتل يطلق قوته بـ !قوة.',
   ba_start:'ابدأ المعركة',ba_again:'معركة جديدة',ba_pause:'وقف',ba_resume:'تابع',ba_next:'التالي ⚔️',ba_boss:'اذهب إلى الزعيم',ba_reset:'رجوع إلى اللوبي',ba_squad:'الفريق',ba_wait:'في الانتظار',
-  ba_add_j:'أضف من قفزوا ⬆',ba_add_r:'أضف عشوائيًا',ba_empty:'أفرغ الفريق',ba_hint:'من يكتب !دخول يدخل الفريق مباشرة. قبل الغارة: اضغط على اسم لتطرده. وقت الغارة: اضغط على مقاتل (في الساحة أو هنا ⚔) ليخرج للقتال واحدًا ضد واحد. ⬆ = كتب !قفز.',
+  ba_add_j:'أضف من قفزوا ⬆',ba_add_r:'أضف عشوائيًا',ba_empty:'أفرغ الفريق',ba_hint:'من يكتب !دخول يدخل الفريق مباشرة. قبل الغارة: اضغط على اسم لتطرده. وقت الغارة: اضغط على مقاتل (في الساحة أو هنا ⚔) ليخرج للقتال واحدًا ضد واحد. اضغط على وحش أو الزعيم لترى معلوماته.',ba_noleave:'لا يمكن الخروج بعد بدء المعركة',
   bt_settings:'الإعدادات',ba_wcard:'شاشة الموجة تُغلق تلقائيًا بعد',ba_bot:'الرد في الشات (يحتاج حساب بوت)',ba_bot_n:'عند التفعيل يرسل البوت ردّ !معلومات في شات تويتش بدل الشاشة. يلزم ربط حساب بوت يكتب في الشات، وحتى يُربط تبقى البطاقة على الشاشة.',ba_waves:'عدد الموجات',ba_diff:'الصعوبة',ba_d_easy:'سهل',ba_d_normal:'عادي',ba_d_hard:'صعب',ba_d_hell:'جحيم',ba_break:'الموجة القادمة تلقائيًا بعد',bt_more:'خيارات إضافية',
   ba_bosssel:'الزعيم',ba_b_auto:'حسب الخريطة',boss_wither:'الذابل',boss_dragon:'تنين النهاية',boss_golem:'الحارس الحديدي',boss_king:'ملك الزومبي',boss_warden:'حارس الأعماق',boss_ravagerk:'ملك المدمّرين',boss_evokerm:'سيد الاستحضار',boss_blazek:'ملك البليز',boss_elder:'الحارس العتيق',ba_size:'حجم الفريق',bt_join_t:'وقت الدخول',
   ba_autop:'تنطلق القوة تلقائيًا إذا لم يكتب !قوة',bt_av:'صور تويتش على الرأس',bt_map:'الخريطة',bt_nolimit:'بلا وقت',bt_manual:'أنت تضغط',bt_sec:'ث',
@@ -40,13 +40,13 @@ A.strings({
   ba_won_s:'أصبح المستوى {l}',ba_lost_s:'عاد المستوى إلى {l}',ba_mvp:'الأقوى',ba_kills:'القتلى',ba_join1:'اكتب {a} لتدخل',ba_join2:'{a} اخترني · {b} لا تخترني · {c} اسم',ba_inq:'في الانتظار: {n}',ba_picked:'الفريق ({n}/{m})',
   ba_fight_j:'{a} اخترني · {c} اسم · {b} أثناء قتالك',ba_none:'لم يدخل أحد بعد',ba_st_lobby:'اللوبي: {s} في الفريق. اضغط "ابدأ المعركة" حين تكون جاهزًا.',ba_st_fight:'الموجة {w}: اختر من يخرج للقتال (اضغط عليه في الساحة أو في القائمة، أو "التالي"). {a} أحياء، {m} أعداء.',ba_st_duel:'{f} يقاتل {m}…',ba_st_break:'استراحة… الموجة القادمة بعد قليل.',ba_st_break_m:'تم تطهير الموجة. اضغط "التالي".',ba_autof:'قتال تلقائي (التالي يظهر تلقائيًا)',ba_pick_t:'من يخرج للقتال؟',ba_dodge:'تفادى!',ba_crit:'ضربة حرجة!',ba_block:'صد!',ba_frozen:'متجمد',ba_party:'الفريق',
   ba_st_won:'انتصرنا! أصبح المستوى {l}.',ba_st_lost:'خسرنا. عاد المستوى إلى {l}.',ba_st_paused:'متوقفة',ba_need:'لا يوجد أحد في الفريق بعد',ba_power_ready:'القوة جاهزة',ba_gion:'كرت معلومات الشخصية على الشاشة',ba_gion_n:'أطفئه إذا كنت تعتمد على رد البوت في الشات. حين يظهر الكرت: ✥ لتحريكه، ⤡ لتكبيره أو تصغيره، ↺ لإرجاعه بجانب الشخصية. يُحفظ كل ذلك تلقائيًا.',ba_pwt:'وقت شحن القوة بعد استخدامها',ba_pwt_n:'{n} أدوار',
-  bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر، وإلا تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.',bt_c_join:'اكتب !دخول لتدخل الفريق مباشرة وتظهر في الساحة.',bt_c_jump:'تطوّع للقتال: يقفز شخصك في الساحة وتكون أول من يخرج للمبارزة التالية.',bt_c_hide:'ليس أنا الآن: يصبح شخصك شبه شفاف وتخرج للمبارزة في الآخر.',bt_c_vote:'صوّت لمن يخرج للمبارزة التالية، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه.',bt_c_power:'أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.',bt_c_focus:'اختر العدو الذي تريد مواجهته حين يخرجك الستريمر، مثل: !ركز زعيم أو !ركز هيكل.',bt_c_start:'ابدأ المعركة',bt_c_pause:'إيقاف / استئناف',bt_c_next:'أخرج المقاتل التالي',bt_c_boss:'اذهب إلى موجة الزعيم',ba_eff_super:'فعّال جدًا!',ba_eff_resist:'مقاوم',ba_eff_immune:'مناعة!',ba_st_burn:'🔥 احتراق',ba_st_poison:'🧪 تسمم',ba_st_wither:'💀 ذبول',ba_stun:'💫 دائخ',ba_split:'انقسم!',ba_totem:'🗿 قام من الموت!',ba_save:'❤ نجا!',ba_phase:'المرحلة الثانية!',ba_loot:'🎁 غنيمة:',ba_boom:'💥 انفجر!',ba_mheal:'🧪 شربت جرعة!',ba_sp_sonic:'صرخة صوتية!',ba_sp_roar:'زئير!',ba_sp_charge:'هجمة!',bt_c_info:'يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. واكتب اسم لاعب بعده لترى بطاقته.',bt_c_cancel:'تراجع عن !قفز إذا غيّرت رأيك قبل دورك.',bt_c_class:'غيّر صنفك',ba_speak:'المرشحون يتحدثون (كلامهم فوق رؤوسهم)',ba_events:'أحداث الموجات (ليل، مطر، كنز…)',ba_lootopt:'غنائم بعد كل موجة',ba_resetgear:'امسح العدّة والأصناف',ba_resetq:'هل أنت متأكد؟ ستعود عدّة الجميع إلى البداية',gi_hp:'صحة',gi_atk:'هجوم',gi_def:'دفاع',gi_spd:'سرعة',gi_agi:'تفادي',gi_crit:'ضربة حرجة',gi_xp:'خبرة',gi_perks:'القدرات',gi_res:'مقاوم',gi_weak:'ضعيف أمام',gi_imm:'مناعة',gi_gear:'العدّة',gi_items:'أغراض',gi_power:'القوة',gi_used:'استُخدمت',gi_ready:'جاهزة',gi_kills:'القتلى',gi_fam:'الفصيلة',gi_trait:'ميزة',gi_p2:'بنصف صحته',gi_boss:'زعيم',gi_none:'لا شيء',gi_out:'ليس في الفريق',gi_dmg:'ضرر',gi_armour:'درع',gi_type:'ضربه',gi_max:'أعلى مستوى',ba_card_t:'!معلومات',bt_c_infomob:'',
+  bt_c_skin:'اختر سكن ماينكرافت الخاص بك، مثل !سكن Dream. يعمل بعد الوصول إلى المستوى الذي يحدده الستريمر، وإلا تبقى شخصيتك ستيف. !سكن وحدها تعيدك إلى ستيف.',bt_c_join:'اكتب !دخول لتدخل الفريق مباشرة وتظهر في الساحة.',bt_c_jump:'يقفز شخصك في الساحة لمدة 5 ثوانٍ ثم يتوقف.',bt_c_hide:'ليس أنا الآن: يصبح شخصك شبه شفاف وتخرج للمبارزة في الآخر.',bt_c_vote:'صوّت لمن يخرج للمبارزة التالية، مثل: !صوت محمد. يظهر عدد الأصوات ★ فوق رأسه.',bt_c_power:'أثناء مبارزتك فقط: تطلق قوتك الخاصة (برق، شفاء، TNT…). تبدأ المبارزة وقوتك جاهزة: أيقونتها تتوهج بجانب شريط صحتك. بعد استخدامها تُشحن من جديد خلال عدد من أدوارك يحدده الستريمر؛ تمتلئ الدائرة حول الأيقونة ويظهر عدد الأدوار الباقية، وحين تمتلئ تتوهج من جديد ويمكنك استخدامها مرة أخرى.',bt_c_focus:'اختر العدو الذي تريد مواجهته حين يخرجك الستريمر، مثل: !ركز زعيم أو !ركز هيكل.',bt_c_start:'ابدأ المعركة',bt_c_pause:'إيقاف / استئناف',bt_c_next:'أخرج المقاتل التالي',bt_c_boss:'اذهب إلى موجة الزعيم',ba_eff_super:'فعّال جدًا!',ba_eff_resist:'مقاوم',ba_eff_immune:'مناعة!',ba_st_burn:'🔥 احتراق',ba_st_poison:'🧪 تسمم',ba_st_wither:'💀 ذبول',ba_stun:'💫 دائخ',ba_split:'انقسم!',ba_totem:'🗿 قام من الموت!',ba_save:'❤ نجا!',ba_phase:'المرحلة الثانية!',ba_loot:'🎁 غنيمة:',ba_boom:'💥 انفجر!',ba_mheal:'🧪 شربت جرعة!',ba_sp_sonic:'صرخة صوتية!',ba_sp_roar:'زئير!',ba_sp_charge:'هجمة!',bt_c_info:'يعرض بطاقتك: الصنف والمستوى والصحة والهجوم والدفاع والقدرات والعدّة. واكتب اسم لاعب بعده لترى بطاقته.',bt_c_cancel:'',bt_c_class:'غيّر صنفك',ba_speak:'المرشحون يتحدثون (كلامهم فوق رؤوسهم)',ba_events:'أحداث الموجات (ليل، مطر، كنز…)',ba_lootopt:'غنائم بعد كل موجة',ba_resetgear:'امسح العدّة والأصناف',ba_resetq:'هل أنت متأكد؟ ستعود عدّة الجميع إلى البداية',gi_hp:'صحة',gi_atk:'هجوم',gi_def:'دفاع',gi_spd:'سرعة',gi_agi:'تفادي',gi_crit:'ضربة حرجة',gi_xp:'خبرة',gi_perks:'القدرات',gi_res:'مقاوم',gi_weak:'ضعيف أمام',gi_imm:'مناعة',gi_gear:'العدّة',gi_items:'أغراض',gi_power:'القوة',gi_used:'استُخدمت',gi_ready:'جاهزة',gi_kills:'القتلى',gi_fam:'الفصيلة',gi_trait:'ميزة',gi_p2:'بنصف صحته',gi_boss:'زعيم',gi_none:'لا شيء',gi_out:'ليس في الفريق',gi_dmg:'ضرر',gi_armour:'درع',gi_type:'ضربه',gi_max:'أعلى مستوى',ba_card_t:'!معلومات',bt_c_infomob:'',
   ba_help_t:'شرح اللعبة والأوامر',ba_help_how:'طريقة اللعب',ba_help_all:'أوامر الشات للجميع',ba_help_mod:'للستريمر والمشرفين',ba_help_keys:'اختصارات لوحة المفاتيح',ba_add_j2:'أضف من قفزوا',ba_lobby_b:'اللوبي',ba_next2:'التالي',ba_jcount:'تبدأ المعركة بعد {s} ث',
   ba_m_add:'➕ أضفه إلى الفريق',ba_m_rem:'⛔ طرد',ba_m_full:'الفريق ممتلئ',ba_gi_drag:'اسحب للتحريك',ba_gi_rs:'اسحب لتكبير البطاقة أو تصغيرها',ba_gi_rt:'أرجعها بجانب الشخصية',ba_fs:'شاشة كاملة',ba_fs_x:'الخروج من الشاشة الكاملة',ba_close:'إغلاق',
   ba_h1:'يكتب المشاهدون !دخول فيدخلون الفريق مباشرة ويظهرون في الساحة.',ba_h2:'تستطيع طرد أي لاعب: اضغط على اسمه في الساحة أو في ⚙ ثم «طرد». وحين تكون جاهزًا اضغط «ابدأ المعركة».',ba_h3:'كل موجة: تختار من يخرج إلى منتصف الجسر ليبارز وحشًا واحدًا ضد واحد، ضربة بضربة. ومن يبارز يطلق قوته بـ !قوة حين يتوهّج القلب البني.',ba_h4:'بعد كل موجة استراحة وغنائم، والموجة الأخيرة فيها الزعيم (له مرحلة ثانية عند نصف صحته).',ba_h5:'الفوز: اهزموا الزعيم فيرتفع مستوى الخريطة. وإذا سقط الفريق كله تخسرون ويرجع المستوى.'},
  en:{g_title:'Arena Battle',g_how:'Chat joins with !join and goes straight into the squad. In every wave you choose who walks out for a 1v1 duel in the middle, then the boss. The one fighting fires their power with !power.',
   ba_start:'Start battle',ba_again:'New battle',ba_pause:'Pause',ba_resume:'Resume',ba_next:'Next ⚔️',ba_boss:'Go to the boss',ba_reset:'Back to lobby',ba_squad:'Squad',ba_wait:'Waiting',
-  ba_add_j:'Add jumpers ⬆',ba_add_r:'Add random',ba_empty:'Empty squad',ba_hint:'Whoever types !join is in the squad right away. Before the raid: click a name to kick it. During the raid: click a fighter (on the map or here ⚔) to send them out for a 1v1. ⬆ = typed !jump.',
+  ba_add_j:'Add jumpers ⬆',ba_add_r:'Add random',ba_empty:'Empty squad',ba_hint:'Whoever types !join is in the squad right away. Before the raid: click a name to kick it. During the raid: click a fighter (on the map or here ⚔) to send them out for a 1v1. Click a mob or the boss to see its stats.',ba_noleave:'can’t leave once the battle has started',
   bt_settings:'Settings',ba_wcard:'Wave screen closes by itself after',ba_bot:'Reply in chat (needs a bot account)',ba_bot_n:'When on, a bot posts the !getinfo answer in Twitch chat instead of the screen. It needs a bot account that can write in chat; until one is linked the card stays on screen.',ba_waves:'Waves',ba_diff:'Difficulty',ba_d_easy:'Easy',ba_d_normal:'Normal',ba_d_hard:'Hard',ba_d_hell:'Hell',ba_break:'Next wave by itself after',bt_more:'More options',
   ba_bosssel:'Boss',ba_b_auto:'From the map',boss_wither:'The Wither',boss_dragon:'Ender Dragon',boss_golem:'Iron Guardian',boss_king:'Zombie King',boss_warden:'Deep Warden',boss_ravagerk:'Ravager King',boss_evokerm:'Evoker Lord',boss_blazek:'Blaze King',boss_elder:'Elder Guardian',ba_size:'Squad size',bt_join_t:'Join time',
   ba_autop:'Power fires by itself if nobody types !power',bt_av:'Twitch pictures on heads',bt_map:'Map',bt_nolimit:'No limit',bt_manual:'You press',bt_sec:'s',
@@ -55,7 +55,7 @@ A.strings({
   ba_won_s:'Level is now {l}',ba_lost_s:'Level back to {l}',ba_mvp:'MVP',ba_kills:'kills',ba_join1:'Type {a} to join',ba_join2:'{a} pick me · {b} not me · {c} name',ba_inq:'Waiting: {n}',ba_picked:'Squad ({n}/{m})',
   ba_fight_j:'{a} pick me · {c} name · {b} in your duel',ba_none:'Nobody joined yet',ba_st_lobby:'Lobby: {s} in the squad. Press "Start battle" when you are ready.',ba_st_fight:'Wave {w}: choose who walks out (click them on the map or in the list, or "Next"). {a} alive, {m} enemies.',ba_st_duel:'{f} is fighting {m}…',ba_st_break:'Break… next wave soon.',ba_st_break_m:'Wave cleared. Press "Next".',ba_autof:'Auto fight (next fighter goes by itself)',ba_pick_t:'Who walks out to fight?',ba_dodge:'DODGE',ba_crit:'CRIT',ba_block:'BLOCK',ba_frozen:'Frozen',ba_party:'Party',
   ba_st_won:'Victory! Level is now {l}.',ba_st_lost:'Defeated. Level back to {l}.',ba_st_paused:'Paused',ba_need:'Nobody in the squad yet',ba_power_ready:'Power ready',ba_gion:'Character info card on screen',ba_gion_n:'Turn it off if you rely on the bot reply in chat. When the card shows: ✥ moves it, ⤡ makes it bigger or smaller, ↺ puts it back beside the character. All saved automatically.',ba_pwt:'Power recharge after use',ba_pwt_n:'{n} turns',
-  bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve. !skin alone goes back to Steve.',bt_c_join:'Type !join to go straight into the squad and appear on the field.',bt_c_jump:'Volunteer to fight: your character jumps on the field and you go first in the next duel.',bt_c_hide:'Not me for now: your character turns see-through and you fight last.',bt_c_vote:'Vote who goes out for the next duel, e.g. !vote Mohammad. The vote count ★ shows over their head.',bt_c_power:'Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.',bt_c_focus:'Choose which enemy you face when the streamer sends you out, e.g. !focus boss or !focus skeleton.',bt_c_start:'start the battle',bt_c_pause:'pause / resume',bt_c_next:'send the next fighter',bt_c_boss:'go to the boss wave',ba_eff_super:'Super effective!',ba_eff_resist:'Resisted',ba_eff_immune:'Immune!',ba_st_burn:'🔥 Burning',ba_st_poison:'🧪 Poisoned',ba_st_wither:'💀 Withering',ba_stun:'💫 Stunned',ba_split:'Split!',ba_totem:'🗿 Rose from death!',ba_save:'❤ Survived!',ba_phase:'Phase two!',ba_loot:'🎁 Loot:',ba_boom:'💥 Exploded!',ba_mheal:'🧪 Drank a potion!',ba_sp_sonic:'Sonic boom!',ba_sp_roar:'Roar!',ba_sp_charge:'Charge!',bt_c_info:'Shows your card: class, level, HP, attack, defence, abilities and gear. Add a player name to see theirs.',bt_c_cancel:'Take back your !jump if you change your mind before your turn.',bt_c_class:'Change your class',ba_speak:'Candidates can speak (their chat over their head)',ba_events:'Wave events (night, rain, treasure…)',ba_lootopt:'Loot after every wave',ba_resetgear:'Reset gear and classes',ba_resetq:'Sure? Everyone’s gear goes back to the start',gi_hp:'HP',gi_atk:'ATK',gi_def:'DEF',gi_spd:'SPD',gi_agi:'Dodge',gi_crit:'Crit',gi_xp:'XP',gi_perks:'Abilities',gi_res:'Resists',gi_weak:'Weak to',gi_imm:'Immune',gi_gear:'Gear',gi_items:'Items',gi_power:'Power',gi_used:'used',gi_ready:'ready',gi_kills:'kills',gi_fam:'Family',gi_trait:'Trait',gi_p2:'At half HP',gi_boss:'Boss',gi_none:'none',gi_out:'not in the squad',gi_dmg:'DMG',gi_armour:'Armour',gi_type:'Hits with',gi_max:'max level',ba_card_t:'!getinfo',bt_c_infomob:'',
+  bt_c_skin:'Use your own Minecraft skin, e.g. !skin Dream. Works once you reach the level the streamer set; until then you are Steve. !skin alone goes back to Steve.',bt_c_join:'Type !join to go straight into the squad and appear on the field.',bt_c_jump:'Your character bounces on the field for 5 seconds, then stops.',bt_c_hide:'Not me for now: your character turns see-through and you fight last.',bt_c_vote:'Vote who goes out for the next duel, e.g. !vote Mohammad. The vote count ★ shows over their head.',bt_c_power:'Only during your duel: fire your own power (bolt, heal, TNT…). It starts ready: its icon glows next to your HP bar. After use it recharges over a number of your turns set by the streamer; the ring around the icon fills and shows the turns left, then it glows again and you can use it again.',bt_c_focus:'Choose which enemy you face when the streamer sends you out, e.g. !focus boss or !focus skeleton.',bt_c_start:'start the battle',bt_c_pause:'pause / resume',bt_c_next:'send the next fighter',bt_c_boss:'go to the boss wave',ba_eff_super:'Super effective!',ba_eff_resist:'Resisted',ba_eff_immune:'Immune!',ba_st_burn:'🔥 Burning',ba_st_poison:'🧪 Poisoned',ba_st_wither:'💀 Withering',ba_stun:'💫 Stunned',ba_split:'Split!',ba_totem:'🗿 Rose from death!',ba_save:'❤ Survived!',ba_phase:'Phase two!',ba_loot:'🎁 Loot:',ba_boom:'💥 Exploded!',ba_mheal:'🧪 Drank a potion!',ba_sp_sonic:'Sonic boom!',ba_sp_roar:'Roar!',ba_sp_charge:'Charge!',bt_c_info:'Shows your card: class, level, HP, attack, defence, abilities and gear. Add a player name to see theirs.',bt_c_cancel:'',bt_c_class:'Change your class',ba_speak:'Candidates can speak (their chat over their head)',ba_events:'Wave events (night, rain, treasure…)',ba_lootopt:'Loot after every wave',ba_resetgear:'Reset gear and classes',ba_resetq:'Sure? Everyone’s gear goes back to the start',gi_hp:'HP',gi_atk:'ATK',gi_def:'DEF',gi_spd:'SPD',gi_agi:'Dodge',gi_crit:'Crit',gi_xp:'XP',gi_perks:'Abilities',gi_res:'Resists',gi_weak:'Weak to',gi_imm:'Immune',gi_gear:'Gear',gi_items:'Items',gi_power:'Power',gi_used:'used',gi_ready:'ready',gi_kills:'kills',gi_fam:'Family',gi_trait:'Trait',gi_p2:'At half HP',gi_boss:'Boss',gi_none:'none',gi_out:'not in the squad',gi_dmg:'DMG',gi_armour:'Armour',gi_type:'Hits with',gi_max:'max level',ba_card_t:'!getinfo',bt_c_infomob:'',
   ba_help_t:'How to play & commands',ba_help_how:'How to play',ba_help_all:'Chat commands for everyone',ba_help_mod:'Streamer & mods',ba_help_keys:'Keyboard shortcuts',ba_add_j2:'Add jumpers',ba_lobby_b:'Lobby',ba_next2:'Next',ba_jcount:'Battle starts in {s} s',
   ba_m_add:'➕ Add to the squad',ba_m_rem:'⛔ Kick',ba_m_full:'The squad is full',ba_gi_drag:'Drag to move',ba_gi_rs:'Drag to make the card bigger or smaller',ba_gi_rt:'Back beside the character',ba_fs:'Fullscreen',ba_fs_x:'Exit fullscreen',ba_close:'Close',
   ba_h1:'Viewers type !join and go straight into the squad, on the field.',ba_h2:'You can kick anyone: click their name on the field or in ⚙, then «Kick». When you are ready press “Start battle”.',ba_h3:'Every wave you choose who walks to the middle of the bridge for a 1v1 duel with one mob, blow for blow. The fighter fires their power with !power when the brown heart glows.',ba_h4:'After each wave comes a short break and loot; the last wave holds the boss (it gets a second phase at half HP).',ba_h5:'To win: beat the boss and the map level goes up. If the whole squad falls you lose and the level drops back.'}
@@ -74,7 +74,7 @@ function save(){if(A.obs)return;store.set({cfg:CFG,levels:E.levels,xp:E.xp,gear:
 A.obsExtra(function(){return '&map='+CFG.map+'&wv='+CFG.waves+'&df='+CFG.diff+'&bs='+CFG.boss+'&av='+(CFG.av?1:0)+'&af='+(CFG.autoF?1:0)+'&wc='+(+CFG.card||0)+(CFG.giOn===false?'&gi=0':'')+(CFG.giX!=null&&CFG.giY!=null?'&gx='+(+CFG.giX).toFixed(3)+'&gy='+(+CFG.giY).toFixed(3):'')+(CFG.giW?'&gw='+(+CFG.giW).toFixed(3):'')+(CFG.giS&&CFG.giS!==1?'&gs='+(+CFG.giS).toFixed(2):'');});
 var P=E.pub(); /* the state both sides draw */
 /* Nov 6: every publish from the control page carries where the host put the !معلومات card, so the OBS overlay follows live */
-if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;}return _pub.apply(this,arguments);};}
+if(!A.obs&&A.publish){var _pub=A.publish;A.publish=function(s){if(s&&typeof s==='object'){s.gp=[CFG.giX,CFG.giY,CFG.giS||1];s.jp=jumpList();s.jc=joinEnd&&E.phase==='lobby'?Math.max(0,Math.ceil((joinEnd-Date.now())/1000)):0;}return _pub.apply(this,arguments);};}
 
 /* ---------- engine loop (control, or overlay alone) ---------- */
 var lastT=performance.now(),pubAt=0,joinEnd=0;
@@ -85,11 +85,11 @@ setInterval(function(){var now=performance.now(),dt=(now-lastT)/1000;lastT=now;i
   P=E.pub();if(now-pubAt>120){pubAt=now;A.publish(P);}
   if(E.phase==='lobby'&&joinEnd&&Date.now()>=joinEnd){joinEnd=0;startBattle();}
 },33);
-A.onMirror(function(s){if(s&&s.f){P=s;if(s.gp&&A.obs){CFG.giX=s.gp[0];CFG.giY=s.gp[1];CFG.giS=s.gp[2]||1;}}});
+A.onMirror(function(s){if(s&&s.f){P=s;if(s.jp){var nw=Date.now();JUMPM={};Object.keys(s.jp).forEach(function(u){JUMPM[u]=nw+(+s.jp[u]||0);});}if(s.gp&&A.obs){CFG.giX=s.gp[0];CFG.giY=s.gp[1];CFG.giS=s.gp[2]||1;}}});
 /* Nov 6 (Mohammad): a click anywhere outside the !معلومات card closes it (inside it you move / resize it) */
 if(!A.obs)document.addEventListener('pointerdown',function(ev){if(!P.gi)return;var el=$('baInfo');if(giEditing())return;if(!el||el.hidden||el.contains(ev.target))return;var t=ev.target;if(t.closest&&t.closest('#side,.ba-help,.ba-cmenu'))return;closeInfo();},true);
 A.allowSolo();
-function startBattle(){applyCfg();if(!E.start()){status(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);}
+function startBattle(){applyCfg();if(!E.start()){status(T('ba_need'));baToast(T('ba_need'));return;}A.roundStart();A.sfx('start');P=E.pub();A.publish(P);hud(true);}
 function pauseT(){if(!E.inRaid())return;E.paused=!E.paused;P=E.pub();A.publish(P);hud(true);}
 function toLobby(){var keep=E.squad.slice();E.reset();E.squad=keep;fillSquad();V={};P=E.pub();A.publish(P);hud(true);}
 /* Nov 6 (Mohammad): no waiting list — whoever types !دخول / !join goes straight into the squad; the host can kick anyone.
@@ -104,10 +104,13 @@ function kick(u){if(E.inRaid())return false;var ok=E.leave(u);if(ok){P=E.pub();A
 A.onChat(function(m){if(!engine())return;var c=BT.cmd(m.text);
   if(!c){if(E.say(m.user,m.text))hudSoon();return;}
   if(BT.MODK[c.k]&&A.isCtrl(m)){if(c.k==='start'){if(E.inRaid()){if(E.paused)pauseT();}else startBattle();}else if(c.k==='pause')pauseT();else if(c.k==='next'){E.next();P=E.pub();A.publish(P);}else if(c.k==='boss')E.summonBoss();else if(c.k==='reset')toLobby();return;}
-  /* Kukoro's !stop from a candidate = take back the !jump (a mod's !وقف pauses, above) */
-  if(c.k==='pause'||c.k==='cancel'){E.cancel(m.user);hudSoon();return;}
-  if(BT.MODK[c.k])return;
-  if(c.k==='join')joinNow(m.user,m.name,m.color);else if(c.k==='leave')E.leave(m.user);else if(c.k==='jump'){E.jump(m.user,m.name,m.color);joinNow(m.user);}else if(c.k==='hide'){E.hide(m.user);joinNow(m.user);}
+  /* Nov 6 (Mohammad): !الغي / !stop are gone (a viewer's !وقف / !stop / !الغي does nothing; a mod's !وقف still pauses, above) */
+  if(c.k==='cancel'||BT.MODK[c.k])return;
+  if(c.k==='join')joinNow(m.user,m.name,m.color);
+  else if(c.k==='leave'){ /* Nov 6 (Mohammad): once the battle has started nobody can leave; in the lobby !خروج still works */
+    if(E.phase!=='lobby'){if(E.waiting[m.user])baToast('⛔ '+(E.waiting[m.user].name||m.name)+' — '+T('ba_noleave'));return;}E.leave(m.user);}
+  else if(c.k==='jump'){jumpFx(m.user);return;} /* Nov 6 (Mohammad): !قفز = your character bounces for 5 s, nothing else */
+  else if(c.k==='hide'){E.hide(m.user);joinNow(m.user);}
   else if(c.k==='vote')E.vote(m.user,c.arg);else if(c.k==='power')E.power(m.user);else if(c.k==='focus')E.focus(m.user,c.arg);else if(c.k==='info'){if(c.arg&&!playerArg(c.arg)){hudSoon();return;} /* Nov 6 (Mohammad): no more enemy cards — «!معلومات زومبي» does nothing; only your own card or a player's */if(!(CFG.bot&&BT.bot.ready()&&BT.bot.say(infoText(m.user,c.arg))))E.askInfo(m.user,c.arg,m.name,m.color);}
   hudSoon();});
 /* the streamer sends one fighter into the middle (click on the map, the list, or "التالي") */
@@ -117,6 +120,14 @@ function playerArg(arg){var a=String(arg||'').trim().replace(/^@/,'');if(!a)retu
 function infoText(u,arg){var g=null;try{E.askInfo(u,arg,'','');g=E.infoQ.length?E.infoQ.pop():(E.info&&E.info.u===u?E.info:null);if(g===E.info)E.info=null;}catch(x){}
   if(!g)return '';if(g.t==='m'){var S=g.boss?BTR.BOSSES[g.kind]:BTR.MOBS[g.kind];return (S?(EN()?S.en:S.ar):g.kind)+' · LV '+g.lv+' · ❤️ '+g.hp+'/'+g.max+' · 🗡️ '+g.dmg+' · 🛡️ '+g.def+'%';}
   var C=BTR.CLASSES[g.cls]||{};return '@'+g.name+' · '+(C.ic||'')+' '+(EN()?C.en:C.ar)+' · LV '+g.lv+' · ❤️ '+g.hp+'/'+g.max+' · 🗡️ '+g.atk+' · 🛡️ '+g.def+'% · 🎯 '+g.crit+'%';}
+/* !قفز / !jump: the player's character hops on the spot for 5 seconds, then stops. It changes nothing in the game.
+   The control page holds the clock and every publish carries who is hopping (and for how long) so the OBS overlay hops too. */
+var JUMP={},JUMPM={},JUMP_MS=5000;
+function jumpFx(u){if(!E.waiting[u]&&!E.fOf(u))return false;JUMP[u]=Date.now()+JUMP_MS;P.jp=jumpList();return true;}
+function jumpList(){var now=Date.now(),o={};Object.keys(JUMP).forEach(function(u){var r=JUMP[u]-now;if(r>0)o[u]=r;else delete JUMP[u];});return o;}
+function isJumping(u){var now=Date.now();return engine()?(JUMP[u]||0)>now:(JUMPM[u]||0)>now;}
+/* in the lobby the characters aren't on the field yet, so the name in the squad card hops instead */
+setInterval(function(){var l=document.querySelectorAll('#baLobbyCard li[data-u]');for(var i=0;i<l.length;i++){var on=isJumping(l[i].getAttribute('data-u'));if(l[i].classList.contains('ba-hop')!==on)l[i].classList.toggle('ba-hop',on);}},150);
 function sendF(u){if(E.phase!=='pick')return false;var ok=E.send(u);if(ok){P=E.pub();A.publish(P);hud(true);}return ok;}
 
 /* ---------- view state ---------- */
@@ -209,7 +220,7 @@ function frame(now){requestAnimationFrame(frame);size();if(!W)return;var dt=Math
     var face=mv?(v.dir<0?0:1):(f[12]==='duel'||f[12]==='out'||f[0]===duelF?1:1);
     var lx=0,ly=0;if(v.lunge>0){var m2=duelM&&V['m'+duelM];if(m2){var ddx=m2.x-v.x,ddy=m2.y-v.y,dd=Math.sqrt(ddx*ddx+ddy*ddy)||1;var l=Math.sin(v.lunge*Math.PI)*.55;lx=ddx/dd*l;ly=ddy/dd*l;}v.lunge=Math.max(0,v.lunge-dt*3.2);}
     v.flash=Math.max(0,v.flash-dt);
-    list.push({kind:'player',scale:SC,x:v.x+lx,y:v.y+ly,face:face,name:f[2],color:f[3],look:BT.lookOf(f[1],f[3]),avatar:avatarImg(f[1]),weapon:WMAP[(BTR.CLASSES[f[18]]||BTR.CLASSES.warrior).w],wcol:WCOL[f[21]||0],armour:BTR.ARMOUR[f[20]||0].col,anim:{walk:mv?v.walk:0,atk:v.lunge,flash:v.flash>0?.6:0},z:(f[13]&&!dead&&!mv)?Math.max(0,Math.sin(t*6.5+f[0]*1.7))*.7:0,F:f,V:v,dead:dead,glow:f[0]===duelF&&!f[16]?'#7fd0ff':null});});
+    list.push({kind:'player',scale:SC,x:v.x+lx,y:v.y+ly,face:face,name:f[2],color:f[3],look:BT.lookOf(f[1],f[3]),avatar:avatarImg(f[1]),weapon:WMAP[(BTR.CLASSES[f[18]]||BTR.CLASSES.warrior).w],wcol:WCOL[f[21]||0],armour:BTR.ARMOUR[f[20]||0].col,anim:{walk:mv?v.walk:0,atk:v.lunge,flash:v.flash>0?.6:0},z:(!dead&&isJumping(f[1]))?Math.abs(Math.sin(t*7.5+f[0]*1.7))*.85:0,F:f,V:v,dead:dead,glow:f[0]===duelF&&!f[16]?'#7fd0ff':null});});
   (P.m||[]).forEach(function(m){var key='m'+m[0];seen[key]=1;var v=V[key];if(!v){v=V[key]={nx:m[2],ny:m[3],walk:0,dir:-1,lunge:0,flash:0,born:now};}
     var mv=moveV(v,m[2],m[3],dt);var w=FLD.toWorld(v.nx,v.ny);v.x=w[0];v.y=w[1];v.h=(MC.MOBH[m[1]]||(m[7]?2.4:2.1))*SC*m[8];
     var lx=0,ly=0;if(v.lunge>0){var f2=duelF&&V['f'+duelF];if(f2){var ddx=f2.x-v.x,ddy=f2.y-v.y,dd=Math.sqrt(ddx*ddx+ddy*ddy)||1;var l=Math.sin(v.lunge*Math.PI)*.55;lx=ddx/dd*l;ly=ddy/dd*l;}v.lunge=Math.max(0,v.lunge-dt*3.2);}
@@ -322,8 +333,10 @@ function openCMenu(u,ev){closeCMenu();var f=E.fOf(u);if(E.phase==='lobby'&&E.wai
   st.appendChild(m);var x=ev.clientX-r0.left+10,y=ev.clientY-r0.top-10;var mw=m.offsetWidth,mh=m.offsetHeight;x=Math.max(6,Math.min(r0.width-mw-6,x));y=Math.max(6,Math.min(r0.height-mh-6,y));m.style.left=x+'px';m.style.top=y+'px';}
 if(!A.obs){document.addEventListener('pointerdown',function(ev){var m=$('baCMenu');if(m&&!m.contains(ev.target))closeCMenu();},true);
   cv.addEventListener('click',function(ev){if(document.body.classList.contains('lay-editing'))return;var u=hitTest(ev);if(u){openCMenu(u,ev);return;}
-    /* Nov 6 (Mohammad): enemy cards removed — a click on a mob does nothing */});
-  cv.addEventListener('mousemove',function(ev){var u=E.inRaid()||E.phase==='lobby'?hitTest(ev):null;hoverU=u||'';cv.style.cursor=u?'pointer':'';});}
+    /* Nov 6 (Mohammad, 10:06 PM): monster / boss stats are the streamer's alone — a click on a mob or the boss opens its card
+       (chat has no command for it). Only on this control page, never from the OBS overlay. */
+    var mid=hitMob(ev);if(mid&&engine()){E.closeInfo();if(E.enemyInfo(mid)){P=E.pub();A.publish(P);hud(true);}}});
+  cv.addEventListener('mousemove',function(ev){var u=E.inRaid()||E.phase==='lobby'?hitTest(ev):null;hoverU=u||'';cv.style.cursor=(u||hitMob(ev))?'pointer':'';});}
 
 
 /* ---------- !معلومات / !getinfo card: big and clear on stream, next to the character (Kukoro shows the same sheet) ---------- */
@@ -385,16 +398,20 @@ var giKey='';
 function closeInfo(){if(engine()){E.closeInfo();P=E.pub();A.publish(P);}var el=$('baInfo');if(el){el.hidden=true;}giKey='';}
 function renderInfo(){var el=$('baInfo');if(!el)return;var g=P.gi;if(!g){if(giKey){el.hidden=true;giKey='';}return;}
   if(CFG.giOn===false){if(!el.hidden){el.hidden=true;giKey='';}return;} /* «كرت المعلومات على الشاشة» off: rely on the bot's reply in chat */
-  var k=JSON.stringify([g.key,g.hp,g.max,g.pwUsed,g.kills,g.phase2,EN(),CFG.av]);if(!A.obs&&giEditing()){return;}if(k!==giKey){var was=!el.hidden&&giKey;giKey=k;A.clear(el);var cd=buildCard(g);el.appendChild(cd);lastCard=cd;el.hidden=false;el.className='ba-info'+(g.t==='m'?' mob':'')+(was?' no-anim':'');giTools(el);}
+  var k=JSON.stringify([g.key,g.hp,g.max,g.pwUsed,g.kills,g.phase2,EN(),CFG.av]);if(!A.obs&&giEditing()){return;}if(k!==giKey){var was=!el.hidden&&giKey;giKey=k;A.clear(el);var cd=buildCard(g);el.appendChild(cd);lastCard=cd;el.hidden=false;el.className='ba-info'+(g.t==='m'?' ba-info-mob':'') /* not «mob»: the site's global .mob class (styles.css) squashed the card */+(was?' no-anim':'');giTools(el);}
   placeInfo();}
-function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0,gap=0;el.style.transform='';el.style.width='';el.style.fontSize='';var g=P.gi,v=g.id?V[(g.t==='p'?'f':'m')+g.id]:null,sw=STG.clientWidth,sh=STG.clientHeight,cw=el.offsetWidth,ch=el.offsetHeight,x,y;
-  if(v&&v.x!=null){var p=iso.p(v.x,v.y,(v.h||2)*.6);var r1=cv.getBoundingClientRect(),r0=STG.getBoundingClientRect();px=p[0]+(r1.left-r0.left);var py=p[1]+(r1.top-r0.top);gap=Math.max(24,iso.tw*.9);
-    x=px<sw/2?px+gap:px-gap-cw;y=py-ch/2;}else{x=(sw-cw)/2;y=sh*.24;}
-  var k=Math.min((CFG.giS||1)*Math.min(1,(sh*.84)/Math.max(1,ch),(sw*.96)/Math.max(1,cw)),(sh*.88)/Math.max(1,ch),(sw*.96)/Math.max(1,cw));el.style.transform=Math.abs(k-1)>.001?'scale('+k.toFixed(3)+')':'';el.style.transformOrigin='0 0';cw*=k;ch*=k;
+function placeInfo(){var el=$('baInfo');if(!el||el.hidden||!P.gi)return;var px=0,gap=0;el.style.transform='';el.style.width='';el.style.fontSize='';
+  var g=P.gi,v=g.id?V[(g.t==='p'?'f':'m')+g.id]:null,Ar=giArea(el),sw=Ar.w,sh=Ar.h,avH=Math.max(60,Ar.bot-Ar.top),cw=el.offsetWidth,ch=el.offsetHeight,x,y;
+  var bar=el.querySelector('.gi-wbar'),bh=bar?bar.offsetHeight+4:0; /* the window bar sits on top of the card (host page only) */
+  if(v&&v.x!=null){var p=iso.p(v.x,v.y,(v.h||2)*.6);var r1=cv.getBoundingClientRect(),r0=(el.offsetParent||STG).getBoundingClientRect();px=p[0]+(r1.left-r0.left);var py=p[1]+(r1.top-r0.top);gap=Math.max(24,iso.tw*.9);
+    x=px<sw/2?px+gap:px-gap-cw;y=py-ch/2;}else{x=(sw-cw)/2;y=Ar.top+avH*.12;}
+  var fit=Math.min(1,(avH*.9)/Math.max(1,ch+bh),(sw*.96)/Math.max(1,cw)),kmax=Math.min((avH)/Math.max(1,ch+bh),(sw*.98)/Math.max(1,cw));
+  var k=Math.min((CFG.giS||1)*fit,kmax);el._fit=fit;el._kmax=kmax;el._k=k;
+  el.style.transform=Math.abs(k-1)>.001?'scale('+k.toFixed(3)+')':'';el.style.transformOrigin='0 0';cw*=k;ch*=k;var th=bh*k;
   if(v&&v.x!=null&&px>=sw/2)x=px-gap-cw;
-  var tb=el.querySelector('.gi-tools'),th=tb?(tb.offsetHeight+10)*k:0; /* keep the ✥ ⤡ ↺ bar under the card on screen */
-  if(CFG.giX!=null&&CFG.giY!=null){x=CFG.giX*sw;y=CFG.giY*sh;x=Math.max(0,Math.min(sw-cw,x));y=Math.max(0,Math.min(sh-ch-th,y));}
-  else{x=Math.max(6,Math.min(sw-cw-6,x));y=Math.max(6,Math.min(sh-ch-th-6,y));}el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
+  if(CFG.giX!=null&&CFG.giY!=null){x=CFG.giX*sw;y=CFG.giY*sh;}
+  x=Math.max(4,Math.min(sw-cw-4,x));y=Math.max(Ar.top+th,Math.min(Ar.bot-ch,y));
+  el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
 /* Mohammad Nov 4 (2nd pass): no buttons on the live card. In «تعديل الشكل» a fixed copy of the card appears (it does not close):
    drag it to move it, drag its corner to make it bigger/smaller, ↺ puts it back beside the character. Saved with the settings. */
 var lastCard=null;
@@ -402,25 +419,46 @@ var lastCard=null;
    make it bigger / smaller, ↺ puts it back beside the character, a click outside closes it. The place and size are saved and go
    to the OBS overlay (live, and in the OBS link). While the pointer is on the card it doesn't time out. */
 var giHold=false,giDrag=null;
-function giTools(el){if(A.obs)return;var rs=document.createElement('div');rs.className='gi-rs';rs.title=T('ba_gi_rs');rs.setAttribute('aria-hidden','true');el.appendChild(rs);
-  var rt=document.createElement('button');rt.type='button';rt.className='gi-rt';rt.textContent='↺';rt.title=T('ba_gi_rt');rt.setAttribute('aria-label',T('ba_gi_rt'));rt.hidden=CFG.giX==null&&(CFG.giS||1)===1;el.appendChild(rt);
-  var hd=el.querySelector('.gi-hd');if(hd)hd.title=T('ba_gi_drag');}
+/* Nov 6 (Mohammad, 10:06 PM: «بدي ياه يكون سهل التحكم فيه»): the card is a proper little window on the host's page.
+   A bar on top of it: ⠿ drag here (mouse or finger), ↺ back beside the character, ✕ close. The ◢ corner resizes it.
+   It always stays inside the screen, between the header and the bottom bar (also after the window is resized), and a click
+   outside it closes it. Place and size are saved, so it opens where you left it, and go to the OBS overlay. */
+function giTools(el){if(A.obs)return;var en=EN();
+  var bar=document.createElement('div');bar.className='gi-wbar';bar.title=T('ba_gi_drag');
+  var gr=document.createElement('span');gr.className='gi-grip';gr.setAttribute('aria-hidden','true');gr.textContent='⠿';bar.appendChild(gr);
+  var tt=document.createElement('span');tt.className='gi-wt';tt.textContent=(P.gi&&P.gi.t==='m')?(en?'Mob info':'معلومات الوحش'):(en?'Info':'معلومات');bar.appendChild(tt);
+  var rt=document.createElement('button');rt.type='button';rt.className='gi-wb gi-rt';rt.textContent='↺';rt.title=T('ba_gi_rt');rt.setAttribute('aria-label',T('ba_gi_rt'));bar.appendChild(rt);
+  var x=document.createElement('button');x.type='button';x.className='gi-wb gi-wx';x.textContent='✕';x.title=en?'Close':'إغلاق';x.setAttribute('aria-label',x.title);bar.appendChild(x);
+  el.insertBefore(bar,el.firstChild);
+  var rs=document.createElement('div');rs.className='gi-rs';rs.title=T('ba_gi_rs');rs.setAttribute('aria-hidden','true');el.appendChild(rs);}
+/* the free area for the card, in the card's own parent coordinates: the whole stage minus the header on top and the bar at the bottom */
+function giArea(el){var op=(el&&el.offsetParent)||STG,r0=op.getBoundingClientRect(),top=0,bot=r0.height;
+  if(!A.obs){var hd=document.querySelector('header.top');if(hd){var hr=hd.getBoundingClientRect();if(hr.height&&hr.bottom>r0.top)top=Math.max(top,hr.bottom-r0.top);}
+    var dk=$('baDock');if(dk){var dr=dk.getBoundingClientRect();if(dr.height&&dr.top<r0.bottom)bot=Math.min(bot,dr.top-r0.top);}}
+  return {w:r0.width,h:r0.height,top:top+6,bot:bot-6};}
 if(!A.obs){(function(){var el=$('baInfo');if(!el)return;
   el.addEventListener('pointerenter',function(){giHold=true;});el.addEventListener('pointerleave',function(){if(!giDrag)giHold=false;});
-  el.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.gi-rt');if(!b)return;e.stopPropagation();CFG.giX=null;CFG.giY=null;CFG.giW=0;CFG.giS=1;b.hidden=true;placeInfo();save();});
-  el.addEventListener('pointerdown',function(e){if(e.button>0||giEditing())return;var t=e.target;if(t.closest('.gi-x,.gi-rt'))return;var rs=t.closest('.gi-rs'),hd=t.closest('.gi-hd,.gi-cap');if(!rs&&!hd)return;
-    e.preventDefault();e.stopPropagation();var r=el.getBoundingClientRect(),r0=STG.getBoundingClientRect();
-    giDrag={rs:!!rs,x:e.clientX,y:e.clientY,l:r.left-r0.left,t:r.top-r0.top,w:r.width,gs:CFG.giS||1,sw:r0.width,sh:r0.height};giHold=true;el.classList.add('gi-drag');
-    if(CFG.giX==null||CFG.giY==null){CFG.giX=giDrag.l/giDrag.sw;CFG.giY=giDrag.t/giDrag.sh;}
+  el.addEventListener('click',function(e){var t=e.target;
+    if(t.closest&&t.closest('.gi-wx')){e.stopPropagation();closeInfo();return;}
+    if(t.closest&&t.closest('.gi-rt')){e.stopPropagation();CFG.giX=null;CFG.giY=null;CFG.giW=0;CFG.giS=1;placeInfo();save();P.gp=[null,null,1];A.publish(P);}});
+  el.addEventListener('pointerdown',function(e){if((e.pointerType==='mouse'&&e.button!==0)||giEditing())return;var t=e.target;if(t.closest('.gi-wb,.gi-x'))return;
+    var rs=t.closest('.gi-rs'),hd=t.closest('.gi-wbar,.gi-hd,.gi-cap');if(!rs&&!hd)return;
+    e.preventDefault();e.stopPropagation();var A0=giArea(el),r=el.getBoundingClientRect();
+    giDrag={rs:!!rs,id:e.pointerId,x:e.clientX,y:e.clientY,l:el.offsetLeft,t:el.offsetTop,vw:r.width,k:el._k||1,fit:el._fit||1,kmax:el._kmax||1.8,A:A0};
+    giHold=true;el.classList.add('gi-drag');document.body.classList.add('gi-dragging');
+    if(!rs){CFG.giX=giDrag.l/Math.max(1,A0.w);CFG.giY=giDrag.t/Math.max(1,A0.h);}
     try{el.setPointerCapture(e.pointerId)}catch(_){}});
-  el.addEventListener('pointermove',function(e){var d=giDrag;if(!d)return;var dx=e.clientX-d.x,dy=e.clientY-d.y;
-    if(d.rs){var k=(dx+dy)/2;CFG.giW=0;CFG.giS=Math.max(.6,Math.min(1.8,d.gs*(1+k/Math.max(120,d.w))));}
-    else{CFG.giX=(d.l+dx)/d.sw;CFG.giY=(d.t+dy)/d.sh;}
-    placeInfo();var rt=el.querySelector('.gi-rt');if(rt)rt.hidden=false;});
-  function up(e){if(!giDrag)return;giDrag=null;el.classList.remove('gi-drag');
-    /* keep the saved place inside the stage */var sw=STG.clientWidth,sh=STG.clientHeight;CFG.giX=Math.max(0,Math.min(1,el.offsetLeft/Math.max(1,sw)));CFG.giY=Math.max(0,Math.min(1,el.offsetTop/Math.max(1,sh)));
+  el.addEventListener('pointermove',function(e){var d=giDrag;if(!d||e.pointerId!==d.id)return;e.preventDefault();var dx=e.clientX-d.x,dy=e.clientY-d.y;
+    if(d.rs){var want=d.k*Math.max(.3,(d.vw+(dx+dy)/2)/Math.max(1,d.vw));want=Math.min(want,d.kmax);CFG.giW=0;CFG.giS=Math.max(.6,Math.min(1.8,want/Math.max(.05,d.fit)));}
+    else{CFG.giX=(d.l+dx)/Math.max(1,d.A.w);CFG.giY=(d.t+dy)/Math.max(1,d.A.h);}
+    placeInfo();});
+  function up(e){var d=giDrag;if(!d||(e&&e.pointerId!==d.id))return;giDrag=null;el.classList.remove('gi-drag');document.body.classList.remove('gi-dragging');
+    try{el.releasePointerCapture(d.id)}catch(_){}
+    placeInfo();var A1=giArea(el);if(CFG.giX!=null){CFG.giX=Math.max(0,Math.min(1,el.offsetLeft/Math.max(1,A1.w)));CFG.giY=Math.max(0,Math.min(1,el.offsetTop/Math.max(1,A1.h)));}
     giHold=el.matches(':hover');save();P.gp=[CFG.giX,CFG.giY,CFG.giS];A.publish(P);}
-  el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);})();}
+  el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up);
+  /* a window change (resize, fullscreen, rotate) never leaves the card off-screen or under the bar */
+  function re(){setTimeout(placeInfo,30);}window.addEventListener('resize',re);document.addEventListener('fullscreenchange',re);window.addEventListener('orientationchange',re);})();}
 function giEditing(){return STG.classList.contains('lay-editing')||document.body.classList.contains('lay-editing');}
 function giGhost(){var gh=$('baInfoEd');if(gh)return gh;gh=document.createElement('div');gh.id='baInfoEd';gh.className='ba-info ba-info-ed';gh.hidden=true;STG.appendChild(gh);
   var body=document.createElement('div');body.className='gie-body';gh.appendChild(body);
@@ -457,6 +495,10 @@ function jcSecs(){if(P.ph!=='lobby')return 0;if(engine())return joinEnd?Math.max
 function jcSync(){var lb=$('baLobby');if(!lb)return;var jc=lb.querySelector('.ba-jc'),js=jcSecs();
   if(js>0){if(!jc){jc=document.createElement('div');jc.className='ba-jc';lb.appendChild(jc);}var t='⏳ '+T('ba_jcount',{s:js});if(jc.textContent!==t)jc.textContent=t;}else if(jc)jc.remove();}
 setInterval(jcSync,250);
+/* Nov 6 (10:06 PM): the join pill never touches the bottom bar — on a short window it is lifted just above it */
+function jbClear(){if(A.obs)return;var lb=$('baLobby'),lc=lb&&lb.parentNode,dk=$('baDock');if(!lc||!dk)return;if(giEditing()){lc.style.transform='';return;}
+  lc.style.transform='';var r=lb.getBoundingClientRect(),d=dk.getBoundingClientRect();if(!r.height||!d.height)return;var over=r.bottom-(d.top-12);if(over>0)lc.style.transform='translateY('+(-Math.ceil(over))+'px)';}
+setInterval(jbClear,500);window.addEventListener('resize',function(){setTimeout(jbClear,40);});
 function hudSoon(){setTimeout(function(){hud(true)},30);}
 function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
   /* waves bar */
@@ -492,7 +534,7 @@ function hud(force){var ph=P.ph,EN_=EN();renderInfo();renderWave();
       if((P.sq||[]).length){var sh=document.createElement('div');sh.className='ba-qh ba-sqh2';sh.textContent=T('ba_picked',{n:P.sq.length,m:A.obs?P.sq.length:E.cfg.squadMax});lc.appendChild(sh);var su=document.createElement('ul');su.className='ba-ql ba-sq2';
         P.sq.forEach(function(s){var li=document.createElement('li');li.setAttribute('data-u',s[0]);li.setAttribute('data-a','rem');if(!A.obs)li.title=T('ba_m_rem');li.appendChild(BT.name(s[1],s[2]));if(!A.obs){var x=document.createElement('span');x.className='lq-x';x.textContent='✕';li.appendChild(x);}su.appendChild(li);});lc.appendChild(su);}}}
   $('baLobbyCard').hidden=!(ph==='lobby'&&(P.sq||[]).length); /* Nov 6: no empty «0 waiting» card on an idle screen */
-  lb.classList.toggle('off',ph==='break'||ph==='won'||ph==='lost'||!!P.wc); /* Nov 6: no join line over the wave screen, the break or the end card */
+  lb.classList.toggle('off',ph!=='lobby'||!!P.wc); /* Nov 6 (10:06 PM): the join box is only in the lobby — it disappears the moment the battle starts */
   /* the join timer (⚙ «وقت الدخول»): a countdown in the join box while it runs */
   jcSync();
   /* end card */
@@ -551,16 +593,15 @@ if(window.LammaAvatars&&LammaAvatars.onChange)LammaAvatars.onChange(function(){h
    every chat command, and ⚙ = the settings drawer (squad & waiting lists, maps, settings, layout editor, OBS link).
    Bottom bar: ⛶ fullscreen, the status line, and only the buttons that make sense right now. */
 var HELP={all:[['!دخول','!join','ادخل الفريق مباشرة.','Go straight into the squad.'],
-  ['!قفز','!jump','تطوّع: تخرج أولًا للمبارزة التالية.','Volunteer: you go first in the next duel.'],
+  ['!قفز','!jump','يقفز شخصك في الساحة لمدة 5 ثوانٍ.','Your character bounces on the field for 5 seconds.'],
   ['!اختبي','!hide','ليس أنا الآن: تخرج للمبارزة في الآخر.','Not me for now: you fight last.'],
-  ['!الغي','!cancel','تراجع عن !قفز قبل دورك.','Take back your !jump before your turn.'],
   ['!صوت اسم','!vote name','صوّت لمن يخرج للمبارزة التالية (★ فوق رأسه).','Vote who fights the next duel (★ over their head).'],
   ['!قوة','!power','أثناء مبارزتك: أطلق قوتك حين يتوهّج القلب البني.','During your duel: fire your power when the brown heart glows.'],
-  ['!معلومات','!getinfo','بطاقتك: الصنف والمستوى والصحة والعدّة. أو اكتب بعده اسم لاعب.','Your card: class, level, HP and gear. Or add a player’s name.'],
+  ['!معلومات','!getinfo','بطاقتك: الصنف والمستوى والصحة والعدّة. أو اكتب بعده اسم لاعب (معلومات الوحوش للستريمر فقط).','Your card: class, level, HP and gear. Or add a player’s name (monster stats are for the streamer only).'],
   ['!سكن اسم','!skin name','سكن ماينكرافت الخاص بك، من مستوى يحدده الستريمر.','Your own Minecraft skin, from a level the streamer sets.'],
-  ['!خروج','!leave','اخرج من الفريق قبل بدء المعركة.','Leave the squad before the battle starts.']],
+  ['!خروج','!leave','اخرج من الفريق — في اللوبي فقط، لا خروج بعد بدء المعركة.','Leave the squad — lobby only, no leaving once the battle starts.']],
  mod:[['!ابدأ','!start','ابدأ المعركة','Start the battle'],['!وقف','!pause','إيقاف / استئناف','Pause / resume'],['!التالي','!next','المقاتل التالي','Next fighter'],['!زعيم','!boss','اذهب إلى الزعيم','Go to the boss'],['!جديد','!reset','رجوع إلى اللوبي','Back to the lobby']],
- keys:[['Space','Space','إيقاف / استئناف','Pause / resume'],['N','N','المقاتل التالي','Next fighter'],['F','F','شاشة كاملة','Fullscreen'],['Esc','Esc','إغلاق النوافذ','Close popups']]};
+ keys:[['🖱 وحش','🖱 Mob','اضغط على وحش أو الزعيم في الساحة لتفتح بطاقة معلوماته (للستريمر فقط، لا أمر لها في الشات).','Click a mob or the boss on the field to open its stats card (streamer only, no chat command).'],['Space','Space','إيقاف / استئناف','Pause / resume'],['N','N','المقاتل التالي','Next fighter'],['F','F','شاشة كاملة','Fullscreen'],['Esc','Esc','إغلاق النوافذ','Close popups']]};
 function closeHelp(){var m=$('baHelp');if(m){m.remove();var b=$('baHelpBtn');if(b){b.setAttribute('aria-expanded','false');b.focus();}}}
 function openHelp(){if(A.obs)return;if($('baHelp')){closeHelp();return;}setDrawer(false);var en=EN();
   var ov=document.createElement('div');ov.id='baHelp';ov.className='ba-help';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-labelledby','baHelpT');ov.dir=en?'ltr':'rtl';

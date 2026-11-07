@@ -153,3 +153,45 @@ html:not(.obs) body.g-battle-arena.drawer-open .ba-corner{left:calc(min(430px,94
   box-shadow:0 8px 24px rgba(0,0,0,.5);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;transition:opacity .2s,transform .2s}
 .ba-toast.on{opacity:1;transform:translate(-50%,0)}
 html.obs .ba-toast{display:none}
+
+/* ---------- Nov 6, 10:06 PM (Mohammad: «شوف شلون مو ظابطة») ---------- */
+/* the join box: a light, clean pill, text dead-centre, only in the lobby (hidden the moment the battle starts) */
+.g-battle-arena [data-lay=lobby]>.lay-c{display:flex;align-items:center;justify-content:center}
+.g-battle-arena [data-lay=lobby]>.lay-c>.ba-lobby.slim{height:auto!important;width:auto;max-width:100%;min-height:0;
+  display:inline-flex;flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:center;gap:.6em;
+  padding:.45em 1.45em;border-radius:999px;border:1.5px solid rgba(154,160,208,.55);
+  background:linear-gradient(180deg,rgba(40,42,56,.78),rgba(22,23,32,.78));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  box-shadow:0 .35em 1.1em rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.07);
+  font-size:max(14px,1em);font-weight:800;line-height:1.25;color:#eef0fb;white-space:nowrap;overflow:visible}
+.g-battle-arena .ba-lobby.slim .bt-join-l{display:inline-flex;align-items:center;gap:.4em;line-height:1.25;margin:0;padding:0}
+.g-battle-arena .ba-lobby.slim .cmd{display:inline-flex;align-items:center;line-height:1.2;padding:.12em .55em;border-radius:.5em;
+  background:rgba(216,182,94,.16);border:1px solid rgba(216,182,94,.7);color:#ffe2a0;font-weight:900}
+.g-battle-arena .ba-lobby.slim .ba-jc{margin:0;padding-inline-start:.6em;border-inline-start:1px solid rgba(154,160,208,.35);line-height:1.25}
+.g-battle-arena .ba-lobby.off{display:none!important}
+.g-battle-arena .lay-editing .ba-lobby.off{display:inline-flex!important;opacity:.45}
+html:not(.obs) body.g-battle-arena .lay-c{transition:none}
+@media (max-width:520px){.g-battle-arena [data-lay=lobby]>.lay-c>.ba-lobby.slim{padding:.4em 1.1em}}
+
+/* the !معلومات card as a window (host page): a bar on top — ⠿ drag · ↺ · ✕ — and a clear ◢ corner */
+html:not(.obs) .g-battle-arena .ba-info .gi-x,html:not(.obs) .g-battle-arena .ba-info .gi-cap{display:none}
+.g-battle-arena .ba-info .gi-wbar{position:absolute;left:0;right:0;bottom:100%;margin-bottom:.25em;display:flex;align-items:center;gap:.35em;
+  height:2.1em;padding:0 .3em 0 .6em;border-radius:.55em .55em .3em .3em;background:rgba(28,30,40,.94);border:1px solid rgba(154,160,208,.45);
+  box-shadow:0 .25em .7em rgba(0,0,0,.45);color:#dfe1f3;font-weight:800;font-size:.9em;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;pointer-events:auto}
+.g-battle-arena .ba-info.gi-drag .gi-wbar{cursor:grabbing;border-color:#d8b65e}
+.g-battle-arena .ba-info .gi-grip{font-size:1.1em;opacity:.8;letter-spacing:-.1em}
+.g-battle-arena .ba-info .gi-wt{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.9}
+.g-battle-arena .ba-info .gi-wb{position:static;flex:0 0 auto;width:1.75em;height:1.75em;border-radius:.45em;border:1px solid rgba(154,160,208,.4);background:rgba(255,255,255,.07);
+  color:#fff;font:inherit;font-weight:900;font-size:.95em;line-height:1;display:grid;place-items:center;padding:0;cursor:pointer;inset:auto}
+.g-battle-arena .ba-info .gi-wb:hover{background:rgba(154,160,208,.3)}
+.g-battle-arena .ba-info .gi-wx:hover{background:#e04a4a;border-color:#e04a4a}
+.g-battle-arena .ba-info .gi-rs{position:absolute;right:-.45em;bottom:-.45em;left:auto;top:auto;width:1.6em;height:1.6em;z-index:4;cursor:nwse-resize;touch-action:none;
+  border-radius:.4em;background:#868cbc;border:.12em solid #0b0b10;box-shadow:0 .15em .45em rgba(0,0,0,.5);opacity:.95;pointer-events:auto}
+.g-battle-arena .ba-info .gi-rs::after{content:'';position:absolute;inset:.3em;background:linear-gradient(135deg,transparent 0 45%,#14151d 46% 56%,transparent 57% 68%,#14151d 69% 79%,transparent 80%)}
+.g-battle-arena .ba-info .gi-rs:hover{opacity:1;background:#a3a8d6}
+html:not(.obs) .g-battle-arena .ba-info .gi-hd{cursor:grab}
+body.gi-dragging,body.gi-dragging *{user-select:none!important;-webkit-user-select:none!important}
+body.gi-dragging{cursor:grabbing}
+html.obs .g-battle-arena .ba-info .gi-wbar,html.obs .g-battle-arena .ba-info .gi-rs{display:none}
+/* !قفز: in the lobby the player's name in the squad card hops for the 5 s */
+@keyframes baHop{0%,100%{transform:translateY(0)}45%{transform:translateY(-.55em)}60%{transform:translateY(-.45em)}}
+.g-battle-arena .ba-lobbycard li.ba-hop{animation:baHop .42s ease-in-out infinite;border-color:rgba(216,182,94,.8)}
