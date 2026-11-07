@@ -1,5 +1,5 @@
 /* معركة الساحة — Nov 6 (Mohammad): the page is the game, full screen like the wheels.
-   Header on top, the 16:9 game in the middle, a slim bar at the bottom (⛶, status, the buttons that fit the moment),
+   The game fills the whole window; the header on top and a slim bar at the bottom float over it (⛶, status, the buttons that fit the moment),
    «?» and ⚙ in the top-left corner, settings as a drawer from the left. Everything here is scoped to the arena page and off in OBS. */
 :root{--dock-h:56px}
 html:not(.obs) body.g-battle-arena{overflow:hidden;height:100vh;height:100dvh}
@@ -8,11 +8,18 @@ html:not(.obs) body.g-battle-arena .gp{max-width:none;margin:0;padding:0}
 html:not(.obs) body.g-battle-arena .gp-grid{display:block}
 html:not(.obs) body.g-battle-arena header.top{position:fixed;top:0;left:0;right:0;z-index:62}
 
-/* the game: as big as fits between the header and the bar, always 16:9 (the same layout as OBS) */
+/* the game: the WHOLE window, edge to edge (Nov 6, Mohammad: «مو فول سكرين»). The map is drawn for the window's own size
+   (more ground shows on a taller screen — no black bars); the header and the bottom bar float over it like the wheels */
 html:not(.obs) body.g-battle-arena .stage-wrap{position:fixed;inset:0;z-index:1;display:block;height:auto;background:var(--bg,#0c0d12)}
-html:not(.obs) body.g-battle-arena .stage-wrap>.stage{position:absolute;inset:var(--hdr,64px) 0 var(--dock-h) 0;margin:auto;
-  width:min(100vw,calc((100dvh - var(--hdr,64px) - var(--dock-h)) * 16 / 9));height:min(calc(100dvh - var(--hdr,64px) - var(--dock-h)),calc(100vw * 9 / 16));
+html:not(.obs) body.g-battle-arena .stage-wrap>.stage{position:absolute;inset:0;margin:0;width:auto;height:auto;
   aspect-ratio:auto;max-width:none;border:0;border-radius:0;box-shadow:none}
+/* one Lamma logo only: the header's (top right). The in-game one stays for OBS, where there is no header */
+html:not(.obs) body.g-battle-arena #btLogo{display:none!important}
+html:not(.obs) body.g-battle-arena header.top{background:linear-gradient(180deg,rgba(7,6,13,.72),rgba(7,6,13,.45));border-bottom-color:rgba(154,160,208,.12)}
+/* the join box: one line «اكتب !دخول لتدخل» (the join timer, when set, sits on the same line) */
+.g-battle-arena .ba-lobby.slim{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;column-gap:.7em;text-align:center}
+.g-battle-arena .ba-lobby.slim .ba-jc{margin-top:0}
+.g-battle-arena .ba-lists1{grid-template-columns:1fr!important}
 html:not(.obs) body.g-battle-arena .stage-wrap>.lay-bar{display:none}
 html:not(.obs) body.g-battle-arena .stage .lay-fs,html:not(.obs) body.g-battle-arena .stage .w-fs-gear{display:none!important}
 /* only what the moment needs: the waves bar from the first wave on, the join line hidden on the wave card / break / end */
@@ -138,6 +145,11 @@ html:not(.obs) .g-battle-arena .ba-lobbycard{pointer-events:auto}
 html:not(.obs) body.g-battle-arena #ctrl .btn-row:has(#baGo),html:not(.obs) body.g-battle-arena #ctrl .btn-row:has(#baNext){display:none}
 html:not(.obs) body.g-battle-arena.drawer-open .ba-corner{left:calc(min(430px,94vw) + 12px)}
 @media (max-width:520px){html:not(.obs) body.g-battle-arena.drawer-open .ba-corner{opacity:0;pointer-events:none}}
-/* phones held upright: the game sits at the top under «?» ⚙ instead of floating in the middle */
-@media (max-aspect-ratio:4/5){html:not(.obs) body.g-battle-arena .stage-wrap>.stage{inset:calc(var(--hdr,64px) + 58px) 0 auto 0;margin:0 auto}}
 .g-battle-arena .ba-wave .bw-in{background:linear-gradient(180deg,rgba(36,38,48,.97),rgba(17,18,24,.97));box-shadow:inset 0 0 0 .14em rgba(154,160,208,.28),0 .8em 2em rgba(0,0,0,.6)}
+
+/* a short note over the bottom bar (e.g. «الفريق ممتلئ» when someone types !دخول into a full squad) */
+.ba-toast{position:fixed;left:50%;bottom:calc(var(--dock-h) + 14px);z-index:95;transform:translate(-50%,10px);opacity:0;pointer-events:none;
+  padding:9px 18px;border-radius:999px;background:rgba(20,21,28,.94);border:1px solid rgba(216,182,94,.55);color:#ffe7a6;font-weight:800;font-size:.95rem;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;transition:opacity .2s,transform .2s}
+.ba-toast.on{opacity:1;transform:translate(-50%,0)}
+html.obs .ba-toast{display:none}
