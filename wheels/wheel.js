@@ -530,6 +530,9 @@ function drawSide(P){
     else if(FIX==='elim'&&P.ev&&P.ev.t!=='fpoint'){var et0=evText(P.ev);if(et0)ban.appendChild(el('p','w2-b-sub w2-b-ev',et0));}
   }
   A.clear($('whBanner')).appendChild(ban);
+  /* Nov 6 (Mohammad): pick wheel — no «اكتب !دخول أو join!» box any more; the box shows only while someone is choosing (who, countdown,
+     !طرد) or while the auto-wheel join window counts down, so «برا العجلة» gets the room the rest of the time */
+  if(FIX==='elim'){var bs=$('whBanner').closest('.w2-sec');if(bs)bs.classList.toggle('ban-idle',!(P.phase==='choose'&&P.chooser)&&!(P.open&&jsecs>0));}
   if(ban.querySelector('.w2-win-row'))requestAnimationFrame(function(){fitText(ban.querySelectorAll('.w2-win-row > :last-child'),.4);});
   var evs=$('whEvent'); /* Nov 6: the classic wheel has no event line (removed from its page) */
   if(evs){A.clear(evs);evs.setAttribute('data-ph',A.t('w_lay_event_ph'));
@@ -756,7 +759,7 @@ if(!A.obs){
   if(FIX){var seg=$('wModeSeg');if(seg&&seg.parentNode)seg.parentNode.removeChild(seg);}
   (sv.w||[]).forEach(function(e){if(e&&e.n)S.wins.push({n:String(e.n).slice(0,32),c:e.c||'',u:e.u||''})});/* saved before v13: shields were always on (sh = shields each, 0 = none) and timers had no "no limit"; shields now start OFF */
   var so=WO?WO.norm({sh:sv.v>=13?!!sv.shOn:false,shStart:sv.sh>0?sv.sh:1,picker:sv.pk==null?true:!!sv.pk,pick:sv.pick==null?OD.pick:sv.pick,dur:sv.dur==null?OD.dur:sv.dur,auto:(sv.v>=18&&sv.auto!=null)?sv.auto:OD.auto,join:sv.join==null?OD.join:sv.join,fs:sv.fs==null?OD.fs:sv.fs,fin:sv.fo==null?true:!!sv.fo,finTo:sv.ft||3}):OD;
-  S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finShow=so.fs;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;
+  S.shOn=FIX==='classic'?false:so.sh;S.shStart=so.shStart;S.picker=so.picker;S.pickSecs=so.pick;S.dur=so.dur;S.autoNext=so.auto;S.joinSecs=so.join;S.finShow=so.fs;S.finOn=so.fin!==false;S.finTo=so.finTo||3;S.timeoutAct=sv.v>=16&&sv.to?sv.to:'streamer';S.finAuto=!!sv.fa;S.vipCtrl=!!sv.vip;S.finDock=sv.v>=17?!!sv.fd:true;S.elim=!!sv.el;if(FIX==='elim'){S.finDock=false;S.finShow=5;} /* Nov 6 (Mohammad): pick wheel — scoreboard always centred, 5 s after each result or until a spin; both settings removed */
   if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;} /* Nov 6 (Mohammad): the classic wheel has no join window and no VIP control */
   if(FIX==='elim'){ /* Nov 6 (Mohammad): personal wheel — the final at 2 is always on, no VIP control, no big kick list; the timers live under «عجلة تلقائية» */
     S.vipCtrl=false;S.finOn=true;S.picker=false;S.autoOn=sv.v>=20&&!!sv.ao;S.autoTo=/^(self|streamer|random|skip)$/.test(sv.at||'')?sv.at:'self';
@@ -855,7 +858,7 @@ if(!A.obs){
   }
 }
 /* the overlay running on its own (mod chat commands, no dock) takes the options from its link: &tm= &sh= &pk= */
-if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;}
+if(A.obs&&WO){var oo=WO.decodeObs(function(k){return A.Q.get(k)});S.shOn=FIX==='classic'?false:oo.sh;S.shStart=oo.shStart;S.picker=oo.picker;S.pickSecs=oo.pick;S.dur=oo.dur;S.autoNext=oo.auto;S.joinSecs=oo.join;S.finShow=oo.fs;S.finOn=oo.fin!==false;S.finTo=oo.finTo||3;S.finAuto=!!oo.fa;S.vipCtrl=!!oo.vip;S.finDock=oo.fd!==false;if(FIX==='elim'){S.finDock=false;S.finShow=5;}if(FIX==='classic'){S.joinSecs=0;S.vipCtrl=false;}
   if(FIX==='elim'){S.vipCtrl=false;S.finOn=true;S.picker=false;S.autoOn=!!oo.ao;S.finAutoSecs=oo.fx;S.autoTo=oo.at||'self';}openJoin(true);}
 if(!A.obs&&WO&&A.obsExtra)A.obsExtra(function(){return WO.encodeObs(opts())});
 A.onLang(function(){sideKey='';ctrlKey='';pkKey='';fnKey='';chKey='';fdKey='';shApplied=null;applySh(S.shOn&&S.mode==='elim');changed();});
@@ -902,7 +905,14 @@ if(!A.obs){(function(){
    Default (Nov 2026, after Mohammad's reference): one slim sidebar on the LEFT (players with the count on top, then the out / winners
    list, the event line and the join box), the wheel big in the centre of the rest, the title in its centre badge, the لَمّة logo fixed
    top-right. ---------- */
-var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:FIX==='elim'?'wheel-p2':(document.body.getAttribute('data-game')||'wheel'), /* the personal wheel's new default layout (Nov 6) starts fresh */items:[
+/* Nov 6 (Mohammad): the pick wheel's scoreboard now defaults to the CENTRE of the wheel. New layout key 'wheel-p3'; his saved
+   'wheel-p2' layout is carried over once with only the scoreboard piece dropped, so it takes the new centred default. */
+function pickLayKey(){try{var ch=A.channel||'',nk='lamma-lay-'+ch+'-wheel-p3',ok='lamma-lay-'+ch+'-wheel-p2';
+  if(!A.obs&&A.LS.get(nk,null)==null){var s=String(A.LS.get(ok,'')||'');
+    if(s.charAt(0)==='c'){var o='c',j=1;while(j<s.length){var c=s.charAt(j);if(c>='A'&&c<='Z'){o+=s.substr(j,4);j+=4;continue;}if(c!=='f')o+=s.substr(j,12);j+=12;}s=o.length>1?o:'';}else s='';
+    A.LS.set(nk,s);var ob=A.LS.get('lamma-bg-'+ch+'-wheel-p2',null);if(ob!=null&&A.LS.get('lamma-bg-'+ch+'-wheel-p3',null)==null)A.LS.set('lamma-bg-'+ch+'-wheel-p3',ob);}}catch(e){}
+  return 'wheel-p3';}
+var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('stage'),key:FIX==='elim'?pickLayKey():(document.body.getAttribute('data-game')||'wheel'), /* the personal wheel's new default layout (Nov 6) starts fresh */items:[
   {id:'wheel',z:1,code:'w',kind:'scale',snapCenter:true,fixed:CL,ar:'العجلة',en:'Wheel',def:{x:36.4,y:4.5,w:51},minW:12}, /* classic: no chip / no ✕ (the wheel can't be hidden), still moves and resizes */
   /* ONE panel on the left with sections (players, out / winners, event line, join box): hide any section and the rest fill the
      panel; drag the lines between sections to give one more room. Old links' p/o/e/b pieces map onto these sections. */
@@ -916,7 +926,7 @@ var LAYOUT=window.LammaLayout&&window.LammaLayout.init({root:$('gs'),stage:$('st
      the final's scoreboard: small, in the gap above the panel / beside the wheel (no overlap with the default wheel); "النتيجة باللوحة اليسار" docks it instead */
   /* personal wheel (Nov 6): the scoreboard's default sits in the free corner between the list and the wheel, clear of the wheel and its
      centre; it shows only during the final (and as a sample while «تعديل الشكل» is open) */
-  FIX==='classic'?null:{id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:FIX==='elim'?{x:26.4,y:2,w:14.6,h:16.5,s:1}:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
+  FIX==='classic'?null:{id:'final',z:4,code:'f',kind:'box',ar:'لوحة النتيجة',en:'Scoreboard',def:FIX==='elim'?{x:48.9,y:37.8,w:26,h:24,s:1}:{x:26.2,y:1.5,w:16.5,h:19,s:1},minW:8,minH:7}
 ].filter(Boolean),bgObsOnly:CL}); /* both wheels: «مع خلفية / بلا خلفية» changes only the OBS link */
 if(LAYOUT&&!A.obs){var lr=$('gs');if(lr&&window.MutationObserver)new MutationObserver(function(){fnKey='';if(cur)drawFinal(cur);}).observe(lr,{attributes:true,attributeFilter:['class']});}
 changed();

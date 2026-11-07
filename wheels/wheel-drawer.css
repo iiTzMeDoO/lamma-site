@@ -212,3 +212,14 @@ html:not(.obs) body.g-wheel-pick .w2-set>.w2-auto>.srow{min-height:48px}
 html:not(.obs) body.g-wheel-pick .w2-set>.w2-auto>.srow .srow-l>span{font-weight:800;font-size:.92rem;color:var(--lav,#d6d9f6)}
 /* the landed player (choosing now) stands out in the players card */
 body.g-wheel-pick .w2-panel #whIn .w2-chip.is-chooser{background:rgba(216,182,94,.16);border-color:var(--g2-gold,#d8b65e)}
+
+/* Nov 6 (Mohammad): pick wheel — the join box is gone (it shows only during a turn / the auto join countdown); the final scoreboard
+   sits over the wheel centre and never catches the click that spins the wheel */
+body.g-wheel-pick .lay-root:not(.lay-editing) .w2-sec.ban-idle,body.g-wheel-pick .wh2:not(.lay-editing) .w2-sec.ban-idle{display:none!important}
+body.g-wheel-pick .wh2:not(.lay-editing) .lay-el[data-lay=final],body.g-wheel-pick .wh2:not(.lay-editing) .lay-el[data-lay=final] *{pointer-events:none!important}
+body.g-wheel-pick .lay-el[data-lay=final] .w2-final{align-items:center}
+body.g-wheel-pick .w2-final .fn-box{background:linear-gradient(180deg,rgba(18,14,34,.9),rgba(10,8,20,.9))}
+/* the two lists share the card by their content first (nothing cut while both fit), then by the shares set in «تعديل الشكل» */
+body.g-wheel-pick .w2-panel>.w2-sec.lay-sec{flex-basis:auto!important;flex-shrink:1;min-height:0}
+body.g-wheel-pick .w2-panel>.w2-sec.lay-sec[data-sec=banner]{flex:0 0 auto!important}
+body.g-wheel-pick .w2-panel>.w2-sec.lay-sec[data-sec=list2]{min-height:min(6.2em,30%)}

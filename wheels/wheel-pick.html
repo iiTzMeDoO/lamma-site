@@ -51,7 +51,7 @@
           <div class="w2-fixlogo" id="whLogo" aria-label="لَمّة LAMMA"></div>
           <div class="lay-el lay-wheel" data-lay="wheel"><div class="lay-c"><div class="wh-wrap"><canvas id="whCanvas" width="1000" height="1000" aria-label="wheel"></canvas><span class="wh-pointer" aria-hidden="true"></span><span class="wh-hub"><b class="wh-hub-t" id="whHubT" dir="auto">لَمّة</b></span></div></div></div>
           <div class="lay-el" data-lay="side"><div class="lay-c"><div class="w2-panel" id="whPanel">
-            <section class="w2-sec" data-sec="players"><div class="w2-findock" id="whFinDock" hidden></div><form class="w2-add" id="wAddForm" autocomplete="off"><input id="wAddName" type="text" maxlength="32" dir="auto" spellcheck="false" enterkeyhint="done" data-i18n-ph="w_add_ph" data-i18n-aria="w_add_ph" placeholder="أضف اسماً ↵" aria-label="أضف اسماً ↵" title="Enter ↵"><button type="submit" class="w2-add-b" data-i18n-aria="w_add" aria-label="ضيف">+</button></form><div class="w2-sec-in" id="whIn"></div></section>
+            <section class="w2-sec" data-sec="players"><form class="w2-add" id="wAddForm" autocomplete="off"><input id="wAddName" type="text" maxlength="32" dir="auto" spellcheck="false" enterkeyhint="done" data-i18n-ph="w_add_ph" data-i18n-aria="w_add_ph" placeholder="أضف اسماً ↵" aria-label="أضف اسماً ↵" title="Enter ↵"><button type="submit" class="w2-add-b" data-i18n-aria="w_add" aria-label="ضيف">+</button></form><div class="w2-sec-in" id="whIn"></div></section>
             <section class="w2-sec" data-sec="list2"><div class="w2-sec-in" id="whList2"></div></section>
             <section class="w2-sec" data-sec="banner"><div class="w2-sec-in" id="whBanner"></div></section>
           </div></div></div>
@@ -90,8 +90,6 @@
           
           <details class="w2-grp"><summary data-i18n="w_g_final">النهائي</summary><div class="sgrp">
             <label class="srow"><span class="srow-l" data-i18n="w_fin_to"></span><select id="wFinTo" class="ssel"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
-            <label class="srow sw"><span class="srow-l" data-i18n="w_fin_dock"></span><input type="checkbox" role="switch" id="wFinDock"></label>
-            <div class="srow tmr"><span class="srow-l" data-i18n="w_fin_show"></span><div class="tmr-row"><div class="tseg" role="radiogroup"><button type="button" class="tsb" data-v="0" data-i18n-aria="w_always" aria-label="">∞</button><button type="button" class="tsb" data-v="1" data-i18n="w_seconds">ث</button></div><select id="wFinShowMode" class="tmr-sel" tabindex="-1" aria-hidden="true"><option value="0" data-i18n="w_always"></option><option value="1" data-i18n="w_custom">وقت مخصص</option></select><input id="wFinShow" type="number" min="1" max="3600" step="1" inputmode="numeric" data-i18n-aria="w_fin_show" aria-label=""></div></div>
           </div></details>
           <details class="w2-grp"><summary data-i18n="w_g_look">الشكل</summary><div class="sgrp">
             <label class="srow sw"><span class="srow-l" data-i18n="w_chatcols"></span><input type="checkbox" role="switch" id="whChatCols"></label>
